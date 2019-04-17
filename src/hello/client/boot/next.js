@@ -79,7 +79,7 @@ winit.initNext = function () {
 				root.cfg.hscale = 0.25;
 				root.cfg.wscale = 0;
 
-				root.addWidget(document.body, 'pi-ui-root');
+				util.addWidget(document.body, 'pi-ui-root');
 				root.popNew('hello-client-app-view-main');
 
 				document.body.removeChild(div);
