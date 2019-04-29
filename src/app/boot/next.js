@@ -38,7 +38,18 @@ winit.initNext = function () {
 		// divProcess.style.width = (modProcess.value + dirProcess.value) * 100 + "%";
 	});
 
-	var suffixCfg = { png: "download", jpg: "download", jpeg: "download", webp: "download", gif: "download", svg: "download", mp3: "download", ogg: "download", aac: "download" }
+	var suffixCfg = { 
+		png: "download", 
+		jpg: "download", 
+		jpeg: "download", 
+		webp: "download", 
+		gif: "download", 
+		svg: "download", 
+		mp3: "download", 
+		ogg: "download", 
+		aac: "download" 
+	};
+	
 	pi_modules.commonjs.exports.require(["pi/util/html", "pi/widget/util","pi/util/lang"], {}, function (mods, fm) {
 		var html = mods[0], util = mods[1];
 		// 判断是否第一次进入,决定是显示片头界面还是开始界面
@@ -54,10 +65,10 @@ winit.initNext = function () {
 		//加载APP部分代码，实际项目中会分的更细致
 		var loadChatApp = function () {
 			var sourceList = [
-				"pi/lang/", 
-				"pi/net/", 
-				"pi/ui/", 
-				"pi/util/",
+				"pi/ui/root.js",
+				"pi/ui/root.tpl",
+				"pi/ui/html.js",
+				"pi/ui/html.tpl",
 				"app/view/"
 			];
 			util.loadDir(sourceList, flags, fm, suffixCfg, function (fileMap) {
@@ -90,5 +101,5 @@ winit.initNext = function () {
 (winit.init = function () {
 	if (!winit) return;
 	winit.deps && self.pi_modules && self.pi_modules.butil && self._babelPolyfill && winit.initNext();
-	(!self._babelPolyfill) && setTimeout(winit.init, 100);
+	(!self._babelPolyfill) && setTimeout(winit.init, 17);
 })();
