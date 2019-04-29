@@ -69,6 +69,7 @@ winit.initNext = function () {
 				"pi/ui/root.tpl",
 				"pi/ui/html.js",
 				"pi/ui/html.tpl",
+				"app/net/",
 				"app/view/"
 			];
 			util.loadDir(sourceList, flags, fm, suffixCfg, function (fileMap) {
@@ -77,6 +78,9 @@ winit.initNext = function () {
 				// 将预加载的资源缓冲90秒，释放
 				tab.timeout = 90000;
 				tab.release();
+				// 登录
+				var openConnect = pi_modules.commonjs.exports.relativeGet("app/net/login").exports.openConnect;
+				openConnect();
 				// 加载根组件
 				var root = pi_modules.commonjs.exports.relativeGet("pi/ui/root").exports;
 				root.cfg.full = false; //PC模式
