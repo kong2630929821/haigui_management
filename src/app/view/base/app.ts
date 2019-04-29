@@ -1,11 +1,10 @@
 
-
 /**
  * 首页
  */
 // ================================ 导入
-import { Forelet } from "../../../pi/widget/forelet";
-import { Widget } from "../../../pi/widget/widget";
+import { Forelet } from '../../../pi/widget/forelet';
+import { Widget } from '../../../pi/widget/widget';
 
 // ================================ 导出
 // tslint:disable-next-line:no-reserved-keywords
@@ -13,6 +12,7 @@ declare var module: any;
 export const forelet = new Forelet();
 export const WIDGET_NAME = module.id.replace(/\//g, '-');
 
+// tslint:disable-next-line:completed-docs
 export class App extends Widget {
     public props:any;
     public old: any = {};
@@ -28,23 +28,23 @@ export class App extends Widget {
             old: this.old,
             tabBarList: [
                 {
-                    text: "商城",
+                    text: '商城',
                     icon: 'play.png',
                     iconActive: 'play_active.png',
                     components: 'app-view-mall-home-home'
                 },{
-                    text: "购物车",
+                    text: '购物车',
                     icon: 'chat.png',
                     iconActive: 'chat_active.png',
                     components: 'app-view-shoppingCart-home-home'
                 },{
                     modulName: 'APP_EARN',
-                    text: "会员",
+                    text: '会员',
                     icon: 'earn.png',
                     iconActive: 'earn_active.png',
                     components: 'app-view-member-home-home'
                 },{
-                    text: "我的",
+                    text: '我的',
                     icon: 'wallet.png',
                     iconActive: 'wallet_active.png',
                     components: 'app-view-mine-home-home'
@@ -67,4 +67,3 @@ export class App extends Widget {
 // ===================================================== 本地
 
 // ===================================================== 立即执行
-

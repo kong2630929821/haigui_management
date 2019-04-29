@@ -22,8 +22,8 @@
 <div w-class="ga-bottom-tab-bar-container" class="{{it.tabBarAnimateClasss}}" >
     <div style=" display: flex;height: 110px;width: 100%;">
         {{for index,item of it.tabBarList}}
-        <div w-class="ga-tab-bar-item {{it.isActive == item.modulName ? 'ga-tab-bar-item-active' : ''}}" on-down="tabBarChangeListener(e,{{index}})">
-            <img src="../../res/image1/{{it.isActive == item.modulName ? item.iconActive : item.icon}}" w-class="ga-tab-bar-icon" />
+        <div w-class="ga-tab-bar-item {{it.isActive == index ? 'ga-tab-bar-item-active' : ''}}" on-down="tabBarChangeListener(e,{{index}})">
+            <img src="../../res/image/{{it.isActive == index ? item.iconActive : item.icon}}" w-class="ga-tab-bar-icon" />
             <span w-class="ga-tab-bar-text">
                 {{item.text}}
             </span>
