@@ -15,4 +15,4 @@ node_modules
 *.s.ts
 *.p.ts
 package-lock.json
-/src/app
+
