@@ -1,29 +1,29 @@
 <div>
-    <div w-class="tab">
-        <div w-class="row" style="margin-bottom:50px;">
-            <div>
-                <div w-class="title">权益升级</div>
-                <div w-class="desc">海宝会员</div>
+    {{if it.userType == 0}}
+        <widget w-tag="app-view-member-home-powerCard">{name:"海宝升级",money:399}</widget>
+    {{else}}
+        <div w-class="top">
+            {{for i,v of it.tabList}}
+            <div w-class="tab">
+                <div w-class="amount">{{v.amount}}</div>
+                <div>{{v.total}}</div>
             </div>
-            <div w-class="money">399</div>
+            {{end}}
         </div>
-        <div w-class="row">
-            <div w-class="more">· 更多专享 · 更多专属 · 更多权益</div>
-            <div w-class="update">立即升级</div>
-        </div>
-    </div>
 
-    <div w-class="tab">
-        <div w-class="row" style="margin-bottom:50px;">
-            <div>
-                <div w-class="title">权益升级</div>
-                <div w-class="desc">海宝会员</div>
+        <div w-class="title">我的权益</div>
+        <div w-class="content">
+            {{for i,v of it.powerList}}
+            <div w-class="item" on-tap="itemClick({{i}})">
+                <img src="{{v.img}}" w-class="image"/>
+                <span w-class="text">{{v.name}}</span>
             </div>
-            <div w-class="money">10000</div>
+            {{end}}
         </div>
-        <div w-class="row">
-            <div w-class="more">· 更多专享 · 更多专属 · 更多权益</div>
-            <div w-class="update">立即升级</div>
-        </div>
-    </div>
+    {{end}}
+
+    {{if it.userType < 2}}
+    <widget w-tag="app-view-member-home-powerCard" style="margin-top:60px;">{name:"海王升级",money:10000}</widget>
+    {{end}}
+    
 </div>

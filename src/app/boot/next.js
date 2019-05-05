@@ -70,7 +70,8 @@ winit.initNext = function () {
 				"pi/ui/html.js",
 				"pi/ui/html.tpl",
 				"app/net/",
-				"app/view/"
+				"app/view/",
+				"app/res/base.css"
 			];
 			util.loadDir(sourceList, flags, fm, suffixCfg, function (fileMap) {
 				console.log("first load dir time:", Date.now() - startTime, fileMap, Date.now());
