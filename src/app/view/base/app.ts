@@ -19,6 +19,7 @@ export class App extends Widget {
     public create() {
         super.create();
         this.init();
+        
     }
 
     public init(): void {
