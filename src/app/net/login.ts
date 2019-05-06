@@ -4,6 +4,7 @@
 
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
+import { getGroups } from './pull';
 // tslint:disable-next-line:max-line-length
 
 /**
@@ -101,5 +102,6 @@ const userLogin = () => {
     console.log('userLogin = ',msg);
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
+        getGroups();
     });
 };
