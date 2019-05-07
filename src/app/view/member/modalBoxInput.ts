@@ -1,9 +1,9 @@
 import { Widget } from '../../../pi/widget/widget';
 
 /**
- * 升级会员等级
+ * 填信息输入框弹窗
  */
-export class UpgradeUser extends Widget {
+export class ModalBoxInput extends Widget {
     public ok:() => void;
     public cancel:() => void;
     public props:any;

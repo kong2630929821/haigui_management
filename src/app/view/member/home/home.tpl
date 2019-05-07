@@ -11,9 +11,9 @@
                 <div>{{v.title}}</div>
             </div>
             {{end}}
-            <div w-class="row">
-                <div w-class="name">{{it.userType==2 ? "海王" :""}}会员</div>
-                <div w-class="code">我的邀请码&nbsp;12345678</div>
+            <div w-class="row" on-tap="goDetail">
+                <div w-class="name">{{it.userType==2 ? "海王" :"海宝"}}会员</div>
+                <div w-class="code">我的邀请码&nbsp;{{it.code}}</div>
             </div>
         </div>
 

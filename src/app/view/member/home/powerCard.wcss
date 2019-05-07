@@ -50,3 +50,9 @@
     line-height:50px;
     text-align: center;
 }
+.code{
+    height:50px;
+    font-size:28px;
+    color:rgba(244,241,184,1);
+    line-height:50px;
+}

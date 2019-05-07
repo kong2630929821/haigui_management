@@ -1,3 +1,4 @@
+import { popNew } from '../../../../pi/ui/root';
 import { Widget } from '../../../../pi/widget/widget';
 
 /**
@@ -20,5 +21,9 @@ export class Home extends Widget {
             ...props
         };
         super.setProps(this.props);
+    }
+
+    public goAddress() {
+        popNew('app-view-mine-freight');
     }
 }

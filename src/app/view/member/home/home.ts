@@ -5,6 +5,7 @@ interface Props {
     userType:number;  // 用户会员等级 0 普通 1 海宝 2 海王
     powerList:any[]; // 权益列表
     tabList:any[];  // tab列表
+    code:string;   // 邀请码
 }
 /**
  * 收益
@@ -23,7 +24,8 @@ export class Home extends Widget {
             { amount:12000,title:'现金总收益',fg:'cash' },
             { amount:10,title:'我的伙伴',fg:'friend' },
             { amount:100,title:'海贝总收益',fg:'shell' }
-        ]
+        ],
+        code:'123456'
     };
 
     public setProps(props:any) {
@@ -41,11 +43,17 @@ export class Home extends Widget {
         }
     }
 
+    // 当前用户的会员等级
+    public goDetail() {
+        popNew('app-view-member-powerDetail',{ userType:this.props.userType, code:this.props.code });
+    }
+
     // 会员等级介绍
     public powerDetail(num:number) {
         popNew('app-view-member-powerDetail',{ userType:num });
     }
 
+    // 收益标签
     public tabClick(num:number) {
         switch (num) {
             case 0: case 2:
@@ -57,4 +65,5 @@ export class Home extends Widget {
             default:
         }
     }
+
 }

@@ -29,7 +29,7 @@
         {{end}}
     </div>
     <div w-class="divideLine"></div>
-    <div w-class="row" style="border-bottom:1px solid #E5E5E5">
+    <div w-class="row" style="border-bottom:1px solid #E5E5E5" on-tap="goAddress">
         <img src="../../../res/image/address.png"/>
         <div w-class="text">收货地址</div>
         <img src="../../../res/image/arrowRight.png"/>
