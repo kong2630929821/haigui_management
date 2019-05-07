@@ -1,11 +1,11 @@
+import { notify } from '../../../pi/widget/event';
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
 import { Swiper } from '../../res/js/swiper.min';
-import { Level1Groups, MallImages } from '../../store/memstore';
+import { Level1Groups } from '../../store/memstore';
 
 interface Props {
-    list:Level1Groups[] | MallImages[];   // Level1Groups,只展示location为特定的位置的分组 | image path列表
-    clickAble:boolean;    // 首页面特殊分组可点击，跳转到分类页，详情页无法点击
+    list:Level1Groups[];   // image path列表
 }
 /**
  * 轮播图组件
@@ -42,5 +42,9 @@ export class ImgSwiper extends Widget {
                 }
             });   
         },100);
+    }
+
+    public clickSlide(e:any) {
+        notify(e.node,'ev-click-slide',this.props.list[this.props.activeIndex].id);
     }
 }

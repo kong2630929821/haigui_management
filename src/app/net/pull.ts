@@ -9,8 +9,8 @@ export const getGroups = () => {
     return new Promise(resolve => {
         setTimeout(() => {
             const groups = new Map<number, Level1Groups>();
-
-            for (let i = 0;i < 10;i++) {
+            console.time('getGroups');
+            for (let i = 0;i < 40;i++) {
                 const childs = new Map<number, Level2Groups>();
                 for (let j = 0;j < 10;j++) {
                     const goods = [];
@@ -69,11 +69,12 @@ export const getGroups = () => {
                     type:true,
                     images:[image],
                     detail:`这是分组${l1id}的描述`,
-                    location:Math.floor(Math.random() * 10) % 3,
+                    location:Math.floor(Math.random() * 10) % 3 + 1,
                     childs
                 };
                 groups.set(l1id,level1Groups);
             }
+            console.timeEnd('getGroups');
             setStore('mall/groups',groups);
             resolve(groups);
         },100);
