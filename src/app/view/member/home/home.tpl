@@ -1,14 +1,20 @@
 <div>
     {{if it.userType == 0}}
-        <widget w-tag="app-view-member-home-powerCard">{name:"海宝升级",money:399}</widget>
+    <div on-tap="powerDetail(1)">
+        <widget w-tag="app-view-member-home-powerCard">{name:"海宝会员",money:399}</widget>
+    </div>
     {{else}}
         <div w-class="top">
             {{for i,v of it.tabList}}
-            <div w-class="tab">
+            <div w-class="tab" on-tap="tabClick({{i}})">
                 <div w-class="amount">{{v.amount}}</div>
-                <div>{{v.total}}</div>
+                <div>{{v.title}}</div>
             </div>
             {{end}}
+            <div w-class="row">
+                <div w-class="name">{{it.userType==2 ? "海王" :""}}会员</div>
+                <div w-class="code">我的邀请码&nbsp;12345678</div>
+            </div>
         </div>
 
         <div w-class="title">我的权益</div>
@@ -23,7 +29,9 @@
     {{end}}
 
     {{if it.userType < 2}}
-    <widget w-tag="app-view-member-home-powerCard" style="margin-top:60px;">{name:"海王升级",money:10000}</widget>
+    <div on-tap="powerDetail(2)">
+        <widget w-tag="app-view-member-home-powerCard" style="margin-top:60px;">{name:"海王会员",money:10000}</widget>
+    </div>
     {{end}}
     
 </div>

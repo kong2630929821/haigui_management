@@ -13,16 +13,16 @@ export class Home extends Widget {
     public props:Props = {
         userType:1,
         powerList:[
-            { name:'免费试用装',img:'../../../res/image/chat.png',tpl:'app-view-member-logList' },
-            { name:'线下课程',img:'../../../res/image/chat.png',tpl:'' },
-            { name:'邀请返利',img:'../../../res/image/chat.png',tpl:'' },
-            { name:'新品预留',img:'../../../res/image/chat.png',tpl:'' }
+            { name:'免费试用装',img:'../../../res/image/income_active.png',tpl:'app-view-member-upgradeUser' },
+            { name:'线下课程',img:'../../../res/image/income_active.png',tpl:'' },
+            { name:'邀请返利',img:'../../../res/image/income_active.png',tpl:'' },
+            { name:'新品预留',img:'../../../res/image/income_active.png',tpl:'' }
         ],
         tabList:[
-            { amount:12,total:'我的海宝' },
-            { amount:12000,total:'现金总收益' },
-            { amount:10,total:'我的伙伴' },
-            { amount:100,total:'海贝总收益' }
+            { amount:12,title:'我的海宝',fg:'baby' },
+            { amount:12000,title:'现金总收益',fg:'cash' },
+            { amount:10,title:'我的伙伴',fg:'friend' },
+            { amount:100,title:'海贝总收益',fg:'shell' }
         ]
     };
 
@@ -34,9 +34,27 @@ export class Home extends Widget {
         super.setProps(this.props);
     }
 
+    // 权益
     public itemClick(ind:number) {
         if (this.props.powerList[ind].tpl) {
-            popNew(this.props.powerList[ind].tpl);
+            popNew(this.props.powerList[ind].tpl,{});
+        }
+    }
+
+    // 会员等级介绍
+    public powerDetail(num:number) {
+        popNew('app-view-member-powerDetail',{ userType:num });
+    }
+
+    public tabClick(num:number) {
+        switch (num) {
+            case 0: case 2:
+                popNew('app-view-member-logList',this.props.tabList[num]);
+                break;
+            case 1: case 3:
+                popNew('app-view-member-cashList',this.props.tabList[num]);
+                break;
+            default:
         }
     }
 }

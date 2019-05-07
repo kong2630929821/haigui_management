@@ -1,8 +1,12 @@
 <div class="new-page" w-class="page">
-    {{if it.hasTitle}}
+    {{if it.title}}
         <div w-class="title">
-            <div w-class="amount">12</div>
-            <div w-class="total">我的海宝总数</div>
+            <div w-class="amount">{{it.amount}}</div>
+            <div w-class="total">{{it.title}}</div>
+            <div w-class="selectBox" on-tap="selectMon">
+                <span style="margin-right:20px;">{{it.select.value.join(".")}}</span>
+                <img src="../../res/image/arrowDown.png"/>
+            </div>
         </div>
     {{end}}
 

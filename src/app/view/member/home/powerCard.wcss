@@ -34,11 +34,11 @@
     line-height: 110px;
 }
 .more{
-    height:28px;
+    vertical-align: bottom;
     font-size:20px;
-    font-weight:400;
     color:rgba(136,136,136,1);
-    line-height:28px;
+    height: 28px;
+    margin-top: 80px;
 }
 .update{
     width:150px;
