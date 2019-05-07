@@ -16,5 +16,4 @@ export const run = (cb): void =>  {
     setTimeout(() => {
         if (cb) cb();
     }, 100);
-
 };

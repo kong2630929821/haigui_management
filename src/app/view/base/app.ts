@@ -1,7 +1,4 @@
 
-/**
- * 首页
- */
 // ================================ 导入
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
@@ -12,13 +9,17 @@ declare var module: any;
 export const forelet = new Forelet();
 export const WIDGET_NAME = module.id.replace(/\//g, '-');
 
-// tslint:disable-next-line:completed-docs
+/**
+ * 首页
+ */
 export class App extends Widget {
+
     public props:any;
     public old: any = {};
     public create() {
         super.create();
         this.init();
+        
     }
 
     public init(): void {
