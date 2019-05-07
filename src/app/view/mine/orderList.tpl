@@ -11,7 +11,7 @@
     <div w-class="content">
         {{for i,v of it.list}}
         <div ev-btn-click="btnClick(e,{{i}})" ev-item-click="itemClick({{i}})">
-            <widget w-tag="app-view-mine-orderItem"></widget>
+            <widget w-tag="app-view-mine-orderItem">{orderType:{{it.active}} }</widget>
         </div>
         {{end}}
     </div>

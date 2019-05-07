@@ -1,8 +1,10 @@
 <div>
+    {{if it.orderType < 4}}
     <div w-class="row row1">
         <div w-class="order">订单号:e201523358595626</div>
-        <div w-class="status">商品已发货</div>
+        <div w-class="status">{{it.statusList[it.orderType]}}</div>
     </div>
+    {{end}}
     <div w-class="row" style="margin:20px 30px;" on-tap="itemClick">
         <img src="../../res/image/classify_active.png" w-class="goodsImg"/>
         <div w-class="column">
@@ -23,8 +25,10 @@
 
     <div w-class="row1">
         <div w-class="total">
-            <div w-class="btn" on-tap="btnClick(e,0)">查看物流</div>
-            <div w-class="btn btn1" on-tap="btnClick(e,1)">确认收货</div>
+            {{if it.btnList[it.orderType].btn1}}
+            <div w-class="btn" on-tap="btnClick(e,0)">{{it.btnList[it.orderType].btn1}}</div>
+            {{end}}
+            <div w-class="btn btn1" on-tap="btnClick(e,1)">{{it.btnList[it.orderType].btn2}}</div>
         </div>
     </div>
 </div>

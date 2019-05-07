@@ -1,5 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { OrderType } from './orderItem';
 
 /**
  * 订单列表
@@ -14,8 +15,16 @@ export class OrderList extends Widget {
             { name:'退货',img:'return.png' }
         ],
         list:[1,2],
-        active:0
+        active: OrderType.pay
     };
+
+    public setProps(props:any) {
+        this.props = {
+            ...this.props,
+            ...props
+        };
+        super.setProps(this.props);
+    }
 
     // 切换订单类型
     public typeClick(num:number) {
@@ -25,10 +34,11 @@ export class OrderList extends Widget {
 
     // 点击订单
     public itemClick(num:number) {
-        popNew('app-view-mine-freight');
+        popNew('app-view-mine-freight',{ num:num });
     }
 
+    // 点击按钮
     public btnClick(e:any,num:number) {
-        // 点击按钮
+        console.log(e.value, num);
     }
 }

@@ -47,7 +47,7 @@
 }
 .btn{
     font-size: 26px;
-    width:150px;
+    min-width:150px;
     height:60px;
     background:rgba(248,248,248,1);
     border-radius:6px;
@@ -55,6 +55,7 @@
     line-height: 60px;
     display: inline-block;
     text-align: center;
+    padding: 0 20px;
 }
 .btn1{
     color: #8D3FED;

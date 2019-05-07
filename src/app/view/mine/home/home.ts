@@ -28,6 +28,6 @@ export class Home extends Widget {
     }
 
     public itemClick(num:number) {
-        popNew('app-view-mine-orderList');
+        popNew('app-view-mine-orderList',{ active: num });
     }
 }
