@@ -1,7 +1,7 @@
 <div class="new-page" w-class="page">
     <div w-class="title">
-        <div w-class="amount">12</div>
-        <div w-class="total">我的海宝总数</div>
+        <div w-class="amount">{{it.amount}}</div>
+        <div w-class="total">{{it.title}}总数</div>
     </div>
 
     {{for i,v of it.list}}
