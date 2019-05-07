@@ -12,8 +12,8 @@
         <img src="../../../res/image/arrowRight.png" w-class="arrow"/>
     </div>
     <div w-class="orderType">
-        {{for i,v of it.list}}
-        <div w-class="item">
+        {{for i,v of it.orderType}}
+        <div w-class="item" on-tap="itemClick({{i}})">
             <img src="../../../res/image/{{v.img}}"/>
             <div w-class="name">{{v.name}}</div>
         </div>
