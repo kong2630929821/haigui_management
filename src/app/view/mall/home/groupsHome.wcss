@@ -37,6 +37,15 @@
     flex-wrap: wrap;
     align-content:flex-start;
     padding-top: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    font-size:20px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(136,136,136,1);
+    line-height:28px;
 }
 .group2-item{
     width: 33.3%;

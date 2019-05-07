@@ -23,12 +23,13 @@ export const getGroups = () => {
                         };
                         const good:GoodsDetails = {
                             id:goodsId,
-                            name:`商品${goodsId}`,
+                            name:Math.random() > 0.5 ? `商品名字很短${goodsId}` : `商品名字很长商品名字很长商品名字很长商品名字很长${goodsId}`,
                             pay_type:1,
-                            cost:1000,
-                            tax:0,
+                            rebate:200,
                             origin:1200,
-                            discount:1100,
+                            discount:Math.random() > 0.5 ? 800 : 0,
+                            vip_origin:Math.random() > 0.5 ? 1000 : 0,
+                            tax:0,
                             images:[image],
                             intro:`商品${goodsId}的详细介绍`,
                             labels:undefined,

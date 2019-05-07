@@ -15,7 +15,9 @@ const isObject = (value: any) => {
 export const deepCopy = (v: any): any => {
     if (!v || v instanceof Promise || !isObject(v)) return v;
     if (v instanceof Map) {
-        return new Map(JSON.parse(JSON.stringify(v)));
+        return v;  // TODO 暂不对map做处理
+
+        // return new Map(JSON.parse(JSON.stringify(v)));
     }
 
     const newobj = v.constructor === Array ? [] : {};
@@ -129,10 +131,11 @@ export interface GoodsDetails {
     id:number;	   // 商品id
     name:string;   // 商品名称
     pay_type:number;	// 	支付类型，1现金，2积分，3表示同时支持现金和积分
-    cost:number;	// 	商品成本价，单位分
-    tax:number;		// 商品税费，单位分
-    origin:number;		// 商品原价，单位分
+    origin:number;   // 	商品原价，单位分
+    vip_origin:number;  // 会员商品原价，单位分
     discount:number;	// 商品折后价，单位分，即原价 + 税费 - 折扣
+    rebate:number;    // 返利（仅限海王）
+    tax:number;		// 商品税费，单位分
     images:MallImages[];	 // 商品包含的图片列表
     intro:string;		// 商品介绍
 
