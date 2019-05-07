@@ -1,3 +1,4 @@
+import { popNew } from '../../../../pi/ui/root';
 import { Widget } from '../../../../pi/widget/widget';
 
 /**
@@ -5,7 +6,7 @@ import { Widget } from '../../../../pi/widget/widget';
  */
 export class Home extends Widget {
     public props:any = {
-        list:[
+        orderType:[
             { name:'待付款',img:'wallet.png' },
             { name:'待发货',img:'goods.png' },
             { name:'待收货',img:'truck.png' },
@@ -20,5 +21,13 @@ export class Home extends Widget {
             ...props
         };
         super.setProps(this.props);
+    }
+
+    public goAddress() {
+        popNew('app-view-mine-addressList');
+    }
+
+    public itemClick(num:number) {
+        popNew('app-view-mine-orderList',{ active: num });
     }
 }

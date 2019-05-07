@@ -12,8 +12,8 @@
         <img src="../../../res/image/arrowRight.png" w-class="arrow"/>
     </div>
     <div w-class="orderType">
-        {{for i,v of it.list}}
-        <div w-class="item">
+        {{for i,v of it.orderType}}
+        <div w-class="item" on-tap="itemClick({{i}})">
             <img src="../../../res/image/{{v.img}}"/>
             <div w-class="name">{{v.name}}</div>
         </div>
@@ -29,7 +29,7 @@
         {{end}}
     </div>
     <div w-class="divideLine"></div>
-    <div w-class="row" style="border-bottom:1px solid #E5E5E5">
+    <div w-class="row" style="border-bottom:1px solid #E5E5E5" on-tap="goAddress">
         <img src="../../../res/image/address.png"/>
         <div w-class="text">收货地址</div>
         <img src="../../../res/image/arrowRight.png"/>
