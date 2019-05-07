@@ -1,7 +1,8 @@
+import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { GroupsLocation } from '../../../config';
-import { Level1Groups, register } from '../../../store/memstore';
+import { Level1Groups, Level2Groups, register } from '../../../store/memstore';
 
 export const forelet = new Forelet();
 
@@ -29,16 +30,25 @@ export class MallHome extends Widget {
     // 位置1轮播图点击事件
     public slideClick(id:number) {
         console.log('轮播图被点击 ====',id);
+        this.gotoGoodsList(id);
     }
 
     // 位置2分组点击
     public groupsOneClick(id:number) {
         console.log('groupsOne ====',id);
+        this.gotoGoodsList(id);
     }
 
     // 位置3分组点击
     public groupsTwoClick(id:number) {
         console.log('groupsTow ====',id);
+        this.gotoGoodsList(id);
+    }
+
+    public gotoGoodsList(id:number) {
+        const selectedLevel1Groups = this.state.groups.get(id);
+        const selectedLevel2Groups = [...selectedLevel1Groups.childs][0][1];
+        popNew('app-view-mall-goodsList',{ selectedLevel1Groups,selectedLevel2Groups });
     }
 }
 
