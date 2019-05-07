@@ -16,6 +16,11 @@ export const getGroups = () => {
                     const goods = [];
                     for (let k = 0;k < 10;k++) {
                         const goodsId = Math.floor(Math.random() * 100000);
+                        const image:MallImages = {
+                            path:`a${goodsId % 4 + 1}.png`,
+                            type:1,
+                            style:1
+                        };
                         const good:GoodsDetails = {
                             id:goodsId,
                             name:`商品${goodsId}`,
@@ -24,7 +29,7 @@ export const getGroups = () => {
                             tax:0,
                             origin:1200,
                             discount:1100,
-                            images:[`a${goodsId % 4 + 1}.png`],
+                            images:[image],
                             intro:`商品${goodsId}的详细介绍`,
                             labels:undefined,
                             brand:undefined,

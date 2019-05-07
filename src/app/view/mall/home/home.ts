@@ -5,6 +5,10 @@ import { Level1Groups, register } from '../../../store/memstore';
 
 export const forelet = new Forelet();
 
+interface Props {
+    isActive:boolean;
+}
+
 /**
  * 商城首页
  */
@@ -13,6 +17,13 @@ export class MallHome extends Widget {
     public create() {
         super.create();
         this.state = STATE;
+    }
+
+    public setProps(props:Props,oldProps:Props) {
+        this.props = {
+            ...props
+        };
+        super.setProps(this.props);
     }
 
     // 位置1轮播图点击事件
@@ -38,7 +49,8 @@ const STATE = {
     thirdGroups:[]                            // 位置3的分组信息
 };
 
-register('mall/groups',(groups:Map<number, Level1Groups>) => {
+// 分组信息监听
+register('mall/groups',(groups:Map<number, Level1Groups>) => {   
     console.log('mall groups =',groups);
     const firstGroups = [];
     const secondGroups = [];

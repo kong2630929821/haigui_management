@@ -24,7 +24,7 @@ export class App extends Widget {
     public init(): void {
         this.props = {
             type: 2, // 用户可以单击选项，来切换卡片。支持3种模式，惰性加载0-隐藏显示切换，切换采用加载1-销毁模式，一次性加载2-隐藏显示切换。
-            isActive:0,
+            isActive:1,
             old: this.old,
             tabBarList: [
                 {
@@ -37,7 +37,7 @@ export class App extends Widget {
                     text: '分类',
                     icon: 'classify.png',
                     iconActive: 'classify_active.png',
-                    components: 'app-view-shoppingCart-home-home'
+                    components: 'app-view-mall-home-groupsHome'
                 },{
                     text: '购物车',
                     icon: 'shoppingCart.png',

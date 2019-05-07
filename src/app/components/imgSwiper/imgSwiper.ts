@@ -18,7 +18,6 @@ export class ImgSwiper extends Widget {
             activeIndex:1
         };
         super.setProps(this.props,oldProps);
-        console.log('----------------------------',props);
     }
     public afterUpdate() {
         super.afterUpdate();

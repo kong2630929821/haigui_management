@@ -10,9 +10,10 @@ interface Props {
  * 首页显示分组样式1
  */
 export class GroupsOne extends Widget {
+    // tslint:disable-next-line:no-unnecessary-override
     public setProps(props:Props,oldProps:Props) {
         super.setProps(props,oldProps);
-        console.log('GroupsOne ----------------',props);
+        // console.log('GroupsOne ----------------',props);
     }
 
     public clickItem(e:any,index:number) {
