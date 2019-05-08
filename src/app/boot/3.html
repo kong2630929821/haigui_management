@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="http://oss.sheetjs.com/js-xlsx/xlsx.full.min.js"></script>
+    </head>
+
+    <body>
+        <form action="">
+            <input type="file" onchange="importf(this)"/>
+            <div id="demo"></div>
+            <div id="demo1"></div>
+            <button onclick="upload()" id='kc'>导出库存表</button>
+        </form>
+        <script>
+            /*
+            FileReader共有4种读取方法：
+            1.readAsArrayBuffer(file)：将文件读取为ArrayBuffer。
+            2.readAsBinaryString(file)：将文件读取为二进制字符串
+            3.readAsDataURL(file)：将文件读取为Data URL
+            4.readAsText(file, [encoding])：将文件读取为文本，encoding缺省值为'UTF-8'
+                         */
+            var wb;//读取完成的数据
+            var rABS = false; //是否将文件读取为ArrayBuffer
+            var json;
+
+            function importf(obj) {//导入
+                if(!obj.files) {
+                    return;
+                }
+                var f = obj.files[0];
+                var reader = new FileReader();
+                reader.onload = function(e) {//onload在读取完成时触发
+                    var data = e.target.result;//取到读取的内容或是二进制或是arraybuffer
+                    if(rABS) {//拿到excel中内容
+                        wb = XLSX.read(btoa(fixdata(data)), {//手动转化
+                            type: 'base64'
+                        });
+                    } else {
+                        wb = XLSX.read(data, {
+                            type: 'binary'
+                        });
+                    }
+                    //wb.SheetNames[0]是获取Sheets中第一个Sheet的名字
+                    //wb.Sheets[Sheet名]获取第一个Sheet的数据
+                    document.getElementById("demo").innerHTML= XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[1]])[0].out[0];
+                    document.getElementById("demo1").innerHTML= JSON.stringify( XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[1]]));
+                    str = JSON.stringify( XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
+                    
+                    var out = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[1]]);
+                    for(let i = 0;i < out.length;i++){
+                        out[i].out = out[i].out.split('，');   
+                    }
+                    json = JSON.parse(JSON.stringify(out));
+                    alert(json);
+                };
+                if(rABS) {
+                    reader.readAsArrayBuffer(f);//开始读取文件，将文件内容读成arraybuffer保存在result中
+                } else {
+                    reader.readAsBinaryString(f);//开始读取文件，将文件内容读成二进制保存在result中
+                }
+            }
+
+            function fixdata(data) { //文件流转BinaryString
+                var o = "",
+                    l = 0,
+                    w = 10240;
+                for(; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)));
+                o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)));
+                return o;
+            }
+
+            function upload(){
+                //json提交给后台
+                alert(json);
+                var fileName = document.getElementById("kc").innerHTML;
+                JSONToExcelConvertor(json,fileName);
+            }
+
+            //json数据转excel
+            function JSONToExcelConvertor(JSONData, FileName) {
+                if(JSONData === undefined){
+                    alert('导出为空表');
+                    return;
+                }
+                //先转化json
+                var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+                var excel = '<table>';
+                var row = "<tr>";
+                //设置表头
+                var keys = Object.keys(arrData[0]);
+                keys.forEach(function (item) {
+                    row += "<th>" + item + '</th>';
+                });
+                //换行
+                excel += row + "</tr>";
+                //设置数据
+                for (var i = 0; i < arrData.length; i++) {
+                    var row = "<tr>";
+                    for (var index in arrData[i]) {
+                        console.log(arrData[i][index]);
+                        //var value = arrData[i][index] === "." ? "" : arrData[i][index];
+                        row += '<td>' + arrData[i][index] + '</td>';
+                    }
+                    excel += row + "</tr>";
+                }
+
+                excel += "</table>";
+
+                var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
+                excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
+                excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel';
+                excelFile += '; charset=UTF-8">';
+                excelFile += "<head>";
+                excelFile += "<!--[if gte mso 9]>";
+                excelFile += "<xml>";
+                excelFile += "<x:ExcelWorkbook>";
+                excelFile += "<x:ExcelWorksheets>";
+                excelFile += "<x:ExcelWorksheet>";
+                excelFile += "<x:Name>";
+                excelFile += "{worksheet}";
+                excelFile += "</x:Name>";
+                excelFile += "<x:WorksheetOptions>";
+                excelFile += "<x:DisplayGridlines/>";
+                excelFile += "</x:WorksheetOptions>";
+                excelFile += "</x:ExcelWorksheet>";
+                excelFile += "</x:ExcelWorksheets>";
+                excelFile += "</x:ExcelWorkbook>";
+                excelFile += "</xml>";
+                excelFile += "<![endif]-->";
+                excelFile += "</head>";
+                excelFile += "<body>";
+                excelFile += excel;
+                excelFile += "</body>";
+                excelFile += "</html>";
+
+                var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(excelFile);
+
+                var link = document.createElement("a");
+                link.href = uri;
+
+                link.style = "visibility:hidden";
+                link.download = FileName + ".xls";
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+        </script>
+    </body>
+
+
+</html>
