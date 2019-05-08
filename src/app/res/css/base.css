@@ -12,9 +12,17 @@ div{
     top: 0;
     bottom: 0;
     right: 0;
-    background-color: #f9f9f9;
+    background-color: #fff;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
+}
+
+.bg-img{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50%;
+    width: 100%;
+    height: 100%;
 }

@@ -1,0 +1,25 @@
+.row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.title{
+    border-bottom:1px solid #E5E5E5;
+    margin-bottom: 10px;
+    margin-left: 40px;
+}
+.wxName{
+    height:67px;
+    font-size:48px;
+    font-weight:500;
+    color:rgba(0,0,0,1);
+    line-height:67px;
+    margin:30px 40px 20px;
+}
+.left,.right{
+    height:40px;
+    font-size:28px;
+    color:rgba(136,136,136,1);
+    line-height:40px;
+    margin: 20px 40px 0;
+}
