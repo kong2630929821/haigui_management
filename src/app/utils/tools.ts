@@ -1,63 +1,42 @@
 /**
  * 常用工具
  */
-import { popNew } from '../../pi/ui/root';
-import { GoodsDetails } from '../store/memstore';
-
-// 弹出提示框
-export const popNewMessage = (content: any) => {
-    popNew('app-components-message-message', { content });
-};
-
-// 弹出loading
-export const popNewLoading = (text: any) => {
-    return popNew('app-components-loading-loading', { text });
-};
-
-let vipLevel;
-// 获取vip等级
-export const getVipLevel = () => {
-    if (vipLevel !== undefined) return vipLevel;
-    const random = Math.random();
-    if (random > 0.7) {
-        vipLevel = 2;
-    } else if (random > 0.4) {
-        vipLevel = 1;
-    } else {
-        vipLevel = 0;
-    }
-    
-    return vipLevel;
-};
-
-// 计算打折力度
-export const calcDiscount = (discount:number,origin:number) => {
-    return Number((discount / origin * 10).toFixed(1));
-};
-
-// 价钱格式化  单位分
-export const priceFormate = (price:number) => {
-    return (price / 100).toFixed(2);
-};
-// 计算价格相关  （包括折扣 购价 返利）
-export const calcPrices = (goods:GoodsDetails) => {
-    const vipLevel = getVipLevel();
-    const ret = {
-        origin:priceFormate(goods.origin),   // 原价
-        sale:priceFormate(goods.origin),   // 售价
-        discount:0,           // 几折
-        rebate:''              // 返利
+declare var XLSX;
+export const importRead = (f,ok) => { // 导入将excel读成json格式
+    let wb;// 读取完成的数据
+    const rABS = false; // 是否将文件读取为ArrayBuffer
+    const reader = new FileReader();
+    reader.onload = (e) =>  {// onload在读取完成时触发
+        const data = e.target.result;// 取到读取的内容或是二进制或是arraybuffer
+        if (rABS) {// 拿到excel中内容
+            wb = XLSX.read(btoa(fixdata(data)), {// 手动转化
+                type: 'base64'
+            });
+        } else {
+            wb = XLSX.read(data, {
+                type: 'binary'
+            });
+        }
+        // wb.SheetNames[0]是获取Sheets中第一个Sheet的名字
+        // wb.Sheets[Sheet名]获取第一个Sheet的数据
+        
+        const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+        ok && ok(json);
     };
-    if (vipLevel === 1) { // 海宝
-        ret.discount = goods.discount ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
-        ret.sale = goods.discount ? priceFormate(goods.discount) : priceFormate(goods.vip_origin ? goods.vip_origin : goods.origin);
-    } else if (vipLevel === 2) { // 海王
-        ret.discount = goods.discount ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
-        ret.sale = goods.discount ? priceFormate(goods.discount) : priceFormate(goods.vip_origin ? goods.vip_origin : goods.origin);
-        ret.rebate = priceFormate(goods.rebate);
-    } else {   // 非vip
-
+    if (rABS) {
+        reader.readAsArrayBuffer(f);// 开始读取文件，将文件内容读成arraybuffer保存在result中
+    } else {
+        reader.readAsBinaryString(f);// 开始读取文件，将文件内容读成二进制保存在result中
     }
+};
 
-    return ret;
+// 文件流转BinaryString
+const fixdata = (data) => { 
+    let o = '',
+        l = 0;
+    const w = 10240;
+    for (; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)));
+    o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)));
+
+    return o;
 };

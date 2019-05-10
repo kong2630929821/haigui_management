@@ -1,7 +1,10 @@
 
 // ================================ 导入
 import { Forelet } from '../../../pi/widget/forelet';
+import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
+import { importArea, importBrand, importFreight, importGoods, importGoodsCate, importSupplier, importInventory } from '../../net/pull';
+import { importRead } from '../../utils/tools';
 
 // ================================ 导出
 // tslint:disable-next-line:no-reserved-keywords
@@ -13,61 +16,92 @@ export const WIDGET_NAME = module.id.replace(/\//g, '-');
  * 首页
  */
 export class App extends Widget {
-
-    public props:any;
-    public old: any = {};
-    public create() {
-        super.create();
-        this.init();
-    }
-
-    public init(): void {
-        this.props = {
-            type: 2, // 用户可以单击选项，来切换卡片。支持3种模式，惰性加载0-隐藏显示切换，切换采用加载1-销毁模式，一次性加载2-隐藏显示切换。
-            isActive:0,
-            old: this.old,
-            tabBarList: [
-                {
-                    text: '商城',
-                    icon: 'mall.png',
-                    iconActive: 'mall_active.png',
-                    components: 'app-view-mall-home-home'
-                },
-                {
-                    text: '分类',
-                    icon: 'classify.png',
-                    iconActive: 'classify_active.png',
-                    components: 'app-view-mall-home-groupsHome'
-                },{
-                    text: '购物车',
-                    icon: 'shoppingCart.png',
-                    iconActive: 'shoppingCart_active.png',
-                    components: 'app-view-shoppingCart-home-home'
-                },{
-                    modulName: 'APP_EARN',
-                    text: '会员',
-                    icon: 'income.png',
-                    iconActive: 'income_active.png',
-                    components: 'app-view-member-home-home'
-                },{
-                    text: '我的',
-                    icon: 'mine.png',
-                    iconActive: 'mine_active.png',
-                    components: 'app-view-mine-home-home'
-                }
-            ],
-            tabBarAnimateClasss:''
-        };
+    // 导入运费
+    public imFreight(e:any) {
+        const dom = getRealNode(e.node);
+        if (!dom.files) {
+            return;
+        }
+        const f = dom.files[0];
+        importRead(f,(res) => {
+            importFreight(res);
+        });
         
     }
-
-    public tabBarChangeListener(event: any, index: number) {
-        if (this.props.isActive === index) return;
-        this.props.isActive = index;
-        this.old[index] = true;
-        this.paint();
+    // 导入分类
+    public imGoodsCate(e:any) {
+        const dom = getRealNode(e.node);
+        if (!dom.files) {
+            return;
+        }
+        const f = dom.files[0];
+        importRead(f,(res) => {
+            importGoodsCate(res,'141001');// 导入分类141001
+            importGoodsCate(res,'141002');// 导入分类141002
+            importGoodsCate(res,'141003');// 导入分类141003
+        });
+        
     }
-
+    // 导入商品
+    public imGoods(e:any) {
+        const dom = getRealNode(e.node);
+        if (!dom.files) {
+            return;
+        }
+        const f = dom.files[0];
+        importRead(f,(res) => {
+            importGoods(res);
+        });
+        
+    }
+    // 导入供应商
+    public imSupplier(e:any) {
+        const dom = getRealNode(e.node);
+        if (!dom.files) {
+            return;
+        }
+        const f = dom.files[0];
+        importRead(f,(res) => {
+            importSupplier(res);
+        });
+        
+    }
+    // 导入地区信息
+    public imArea(e:any) {
+        const dom = getRealNode(e.node);
+        if (!dom.files) {
+            return;
+        }
+        const f = dom.files[0];
+        importRead(f,(res) => {
+            importArea(res);
+        });
+        
+    }
+    // 导入品牌信息
+    public imBrand(e:any) {
+        const dom = getRealNode(e.node);
+        if (!dom.files) {
+            return;
+        }
+        const f = dom.files[0];
+        importRead(f,(res) => {
+            importBrand(res);
+        });
+        
+    }
+    // 导入库存信息
+    public imInventory(e:any) {
+        const dom = getRealNode(e.node);
+        if (!dom.files) {
+            return;
+        }
+        const f = dom.files[0];
+        importRead(f,(res) => {
+            importInventory(res);
+        });
+        
+    }
 }
 
 // ===================================================== 本地
