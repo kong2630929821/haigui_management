@@ -11,11 +11,11 @@ import { importRead } from '../../utils/tools';
 declare var module: any;
 export const forelet = new Forelet();
 export const WIDGET_NAME = module.id.replace(/\//g, '-');
-
 /**
  * 首页
  */
 export class App extends Widget {
+    
     // 导入运费
     public imFreight(e:any) {
         const dom = getRealNode(e.node);
