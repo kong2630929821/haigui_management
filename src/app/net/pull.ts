@@ -46,9 +46,15 @@ export const cate = (res) => {
         } 
         id1 = id2;
     } 
-    arr0.forEach(async (e) => {
-        await importGoodsCate(e);
-    });
+    let index = 0;
+    const func = () => {
+        if (index < arr0.length) {
+            importGoodsCate(arr0[index++]).then(() => {
+                func();
+            });
+        } 
+    };
+    func();
 
 };
  // 解析并导入分类信息
