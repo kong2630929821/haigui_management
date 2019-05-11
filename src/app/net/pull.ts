@@ -60,8 +60,8 @@ export const importGoodsCate = (res,str) => {
         arr[i] = inputL;
     } 
     const paramStr = JSON.stringify(arr);
-    const paramLoc = arr2[0].位置;
-    const paramRoot = arr2[0].根id;
+    const paramLoc = parseInt(arr2[0].位置,10);
+    const paramRoot = parseInt(arr2[0].根id,10);
     const msg = { 
         type: 'set_group', 
         param: { 
@@ -71,10 +71,11 @@ export const importGoodsCate = (res,str) => {
         } 
     };
     console.log('msg = ',msg);
-    requestAsync(msg).then(r => {
+    
+    return requestAsync(msg).then(r => {
         console.log(r);
     }).catch((e) => {
-        console.log(e);
+        // console.log(e);
     });
 };
 
