@@ -65,7 +65,7 @@ export const cate = (res) => {
             childs.push(Number(v1.id));
             content = content.concat(v1.input);
         }
-        const root = [Number(k),'',true,true,[],'',[childs.join(',')]];
+        const root = [Number(k),'',true,true,[],'',childs];
         reqArray.push({ root:Number(k),value:JSON.stringify([root,...content]) });
     }
 
