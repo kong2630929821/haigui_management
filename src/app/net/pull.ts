@@ -28,15 +28,32 @@ export const importFreight = (res) => {
     });
 };
 
- // 解析并导入分类信息
-export const importGoodsCate = (res,str) => { 
-    const arr = [];
-    const arr2 = [];
+export const cate = (res) => {
+    const arr0 = [];// 存放分组
+    let arr2 = [];// 存放同一个分组
+    let id1 = res[0].分组id; 
+    let id2 = '';
     for (let i = 0;i < res.length;i++) {
-        if (res[i].分组id.startsWith(str)) {
-            arr2.push(res[i]);
+        if (res[i].一级分组名) {
+            id2 = res[i].分组id;
         }
+        if (id1 !== id2) {
+            arr0.push(arr2);
+            arr2 = [];
+        }
+        if (res[i].分组id.startsWith(id2)) {
+            arr2.push(res[i]);
+        } 
+        id1 = id2;
     } 
+    arr0.forEach(async (e) => {
+        await importGoodsCate(e);
+    });
+
+};
+ // 解析并导入分类信息
+export const importGoodsCate = (arr2) => {
+    const arr = [];
     for (let i = 0;i < arr2.length;i++) {
         const id = parseInt(arr2[i].分组id,10);
         const name = arr2[i].一级分组名 || arr2[i].二级分组名;
@@ -48,6 +65,8 @@ export const importGoodsCate = (res,str) => {
         const detail = arr2[i].分组详细描述;
         const childs = [];
         if (!arr2[i].子商品) {
+            const arr3 = [parseInt(arr2[i].根id,10),'',true,true,[],'',[parseInt(arr2[i].分组id,10)]];
+            arr[i] = arr3;
             for (let j = 1;j < arr2.length;j++) {
                 childs.push(parseInt(arr2[j].分组id,10));
             }
@@ -57,7 +76,7 @@ export const importGoodsCate = (res,str) => {
             });
         }
         const inputL = [id,name,goodsType,is_show,images,detail,childs];
-        arr[i] = inputL;
+        arr[i + 1] = inputL;
     } 
     const paramStr = JSON.stringify(arr);
     const paramLoc = parseInt(arr2[0].位置,10);
@@ -71,11 +90,11 @@ export const importGoodsCate = (res,str) => {
         } 
     };
     console.log('msg = ',msg);
-    
+
     return requestAsync(msg).then(r => {
         console.log(r);
     }).catch((e) => {
-        // console.log(e);
+        console.log(e);
     });
 };
 
