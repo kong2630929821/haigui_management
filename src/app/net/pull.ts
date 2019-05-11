@@ -20,6 +20,7 @@ export const importFreight = (res) => {
             input:str
         } 
     };
+    
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
         console.log(r);
@@ -29,6 +30,7 @@ export const importFreight = (res) => {
 };
 
 export const cate = (res) => {
+    const data = {};
     const arr0 = [];// 存放分组
     let arr2 = [];// 存放同一个分组
     let id1 = res[0].分组id; 
@@ -46,16 +48,54 @@ export const cate = (res) => {
         } 
         id1 = id2;
     } 
+    
+    for (let i = 0;i < arr0.length;i++) {
+        const ls = importGoodsCate(arr0[i]);
+        if (!data[ls.root]) {
+            data[ls.root] = [];
+        }
+        data[ls.root].push({ input:ls.input,id:arr0[i][0].分组id });
+    }
+    const reqArray = [];
+    for (const k in data) {
+        const childs = [];
+        let content = [];
+        const v = data[k];
+        for (const v1 of v) {
+            childs.push(Number(v1.id));
+            content = content.concat(v1.input);
+        }
+        const root = [Number(k),'',true,true,[],'',[childs.join(',')]];
+        reqArray.push({ root:Number(k),value:JSON.stringify([root,...content]) });
+    }
+
     let index = 0;
     const func = () => {
-        if (index < arr0.length) {
-            importGoodsCate(arr0[index++]).then(() => {
+        if (index < reqArray.length) {
+            importGoodsCate1(reqArray[index++]).then(() => {
                 func();
             });
         } 
     };
     func();
+};
 
+export const importGoodsCate1 = (data) => {
+    const msg = { 
+        type: 'set_group', 
+        param: { 
+            location:data.root,
+            root:data.root,
+            input:data.value
+        } 
+    };
+    console.log('msg = ',msg);
+
+    return requestAsync(msg).then(r => {
+        console.log(r);
+    }).catch((e) => {
+        console.log(e);
+    });
 };
  // 解析并导入分类信息
 export const importGoodsCate = (arr2) => {
@@ -71,8 +111,9 @@ export const importGoodsCate = (arr2) => {
         const detail = arr2[i].分组详细描述;
         const childs = [];
         if (!arr2[i].子商品) {
-            const arr3 = [parseInt(arr2[i].根id,10),'',true,true,[],'',[parseInt(arr2[i].分组id,10)]];
-            arr[i] = arr3;
+
+            // const arr3 = [parseInt(arr2[i].根id,10),'',true,true,[],'',[parseInt(arr2[i].分组id,10)]];
+            // arr[i] = arr3;
             for (let j = 1;j < arr2.length;j++) {
                 childs.push(parseInt(arr2[j].分组id,10));
             }
@@ -82,26 +123,18 @@ export const importGoodsCate = (arr2) => {
             });
         }
         const inputL = [id,name,goodsType,is_show,images,detail,childs];
-        arr[i + 1] = inputL;
+        arr[i] = inputL;
     } 
-    const paramStr = JSON.stringify(arr);
+    // const paramStr = JSON.stringify(arr);
     const paramLoc = parseInt(arr2[0].位置,10);
     const paramRoot = parseInt(arr2[0].根id,10);
-    const msg = { 
-        type: 'set_group', 
-        param: { 
-            location:paramLoc,
-            root:paramRoot,
-            input:paramStr
-        } 
-    };
-    console.log('msg = ',msg);
 
-    return requestAsync(msg).then(r => {
-        console.log(r);
-    }).catch((e) => {
-        console.log(e);
-    });
+    return { 
+        location:paramLoc,
+        root:paramRoot,
+        input:arr
+    }; 
+    
 };
 
  // 解析并导入商品信息
