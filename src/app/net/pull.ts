@@ -110,15 +110,18 @@ export const dealGroup = (arr2) => {
         if (arr2[i].主图) images.push([arr2[i].主图,2,1]);
         const detail = arr2[i].分组详细描述;
         const childs = [];
-        if (!arr2[i].子商品) {
+        if (arr2[i].一级分组名) {
             for (let j = 1;j < arr2.length;j++) {
                 childs.push(parseInt(arr2[j].分组id,10));
             }
-        } else {
-            arr2[i].子商品.split('/').forEach(e => {
-                childs.push(parseInt(e,10));
-            });
-        }
+        } 
+        if (arr2[i].二级分组名) {
+            if (arr2[i].子商品) {
+                arr2[i].子商品.split('/').forEach(e => {
+                    childs.push(parseInt(e,10));
+                });
+            }
+        } 
         const inputL = [id,name,goodsType,is_show,images,detail,childs];
         arr[i] = inputL;
     } 
@@ -160,7 +163,7 @@ export const importGoods = (res) => {
         if (res[i].主图) {
             res[i].主图.split(',').forEach(e => {
                 e = e.replace(/\n/,'');
-                images.push([e,3,3]);
+                images.push([e,2,1]);
             });
         }
         if (res[i].详情图) {
@@ -223,7 +226,7 @@ export const importArea = (res) => {
         const name = res[i].地区名;
         const detail = '';
         const images = [];
-        images.push([res[i].国旗小图,1,1]);
+        images.push([res[i].国旗小图,4,1]);
         const tmp = [id,name,detail,images];
         arr[i] = tmp;
     } 
@@ -249,9 +252,9 @@ export const importBrand = (res) => {
         const name = res[i].品牌名;
         const detail = res[i].品牌详细信息;
         const images = [];
-        images.push([res[i].小图,1,1]);
-        images.push([res[i].缩略图,2,1]);
-        images.push([res[i].主图,3,1]);
+        images.push([res[i].小图,4,1]);
+        images.push([res[i].缩略图,1,1]);
+        images.push([res[i].主图,2,1]);
         const tmp = [id,name,detail,images];
         arr[i] = tmp;
     } 
