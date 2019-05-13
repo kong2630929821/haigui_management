@@ -9,7 +9,7 @@ export const importFreight = (res) => {
     for (let i = 0;i < res.length;i++) {
         const id = parseInt(res[i].id,10);
         const price_type = parseInt(res[i].price_type,10);
-        const price = parseFloat(res[i].price);
+        const price = Math.floor(Number(res[i].price) * 10);
         const tmp = [id,res[i].area,price_type,price];
         arr[i] = tmp;
     } 
@@ -29,7 +29,7 @@ export const importFreight = (res) => {
     });
 };
 
-export const cate = (res) => {
+export const importGoodsCate = (res) => { 
     const data = {};
     const arr0 = [];// 存放分组
     let arr2 = [];// 存放同一个分组
@@ -50,11 +50,11 @@ export const cate = (res) => {
     } 
     
     for (let i = 0;i < arr0.length;i++) {
-        const ls = importGoodsCate(arr0[i]);
-        if (!data[ls.root]) {
-            data[ls.root] = [];
+        const group = dealGroup(arr0[i]);
+        if (!data[group.root]) {
+            data[group.root] = [];
         }
-        data[ls.root].push({ input:ls.input,id:arr0[i][0].分组id });
+        data[group.root].push({ input:group.input,id:arr0[i][0].分组id });
     }
     const reqArray = [];
     for (const k in data) {
@@ -97,8 +97,8 @@ export const importGoodsCate1 = (data) => {
         console.log(e);
     });
 };
- // 解析并导入分类信息
-export const importGoodsCate = (arr2) => {
+ // 解析一个分组
+export const dealGroup = (arr2) => {
     const arr = [];
     for (let i = 0;i < arr2.length;i++) {
         const id = parseInt(arr2[i].分组id,10);
@@ -106,26 +106,25 @@ export const importGoodsCate = (arr2) => {
         const goodsType = (arr2[i].子商品 === undefined) ? true : false;// 组类型，分为子组和叶组，子组可以包含任意的其它子组或叶组，叶组只允许包含商品
         const is_show = (arr2[i].是否可见 === 'YES') ? true : false;
         const images = []; 
-        if (arr2[i].缩略图 !== 'NULL') images.push([arr2[i].缩略图,1,1]);
-        if (arr2[i].主图 !== 'NULL') images.push([arr2[i].主图,3,3]);
+        if (arr2[i].缩略图) images.push([arr2[i].缩略图,1,1]);
+        if (arr2[i].主图) images.push([arr2[i].主图,2,1]);
         const detail = arr2[i].分组详细描述;
         const childs = [];
-        if (!arr2[i].子商品) {
-
-            // const arr3 = [parseInt(arr2[i].根id,10),'',true,true,[],'',[parseInt(arr2[i].分组id,10)]];
-            // arr[i] = arr3;
+        if (arr2[i].一级分组名) {
             for (let j = 1;j < arr2.length;j++) {
                 childs.push(parseInt(arr2[j].分组id,10));
             }
-        } else {
-            arr2[i].子商品.split('/').forEach(e => {
-                childs.push(parseInt(e,10));
-            });
-        }
+        } 
+        if (arr2[i].二级分组名) {
+            if (arr2[i].子商品) {
+                arr2[i].子商品.split('/').forEach(e => {
+                    childs.push(parseInt(e,10));
+                });
+            }
+        } 
         const inputL = [id,name,goodsType,is_show,images,detail,childs];
         arr[i] = inputL;
     } 
-    // const paramStr = JSON.stringify(arr);
     const paramLoc = parseInt(arr2[0].位置,10);
     const paramRoot = parseInt(arr2[0].根id,10);
 
@@ -147,35 +146,35 @@ export const importGoods = (res) => {
         const areaId = parseInt(res[i].地区id,10);
         const supplierId = parseInt(res[i].供应商id,10);
         const pay_type = parseInt(res[i].支付类型,10);
-        const cost = parseFloat(res[i].成本价);
-        const supCost = parseFloat(res[i].供货价);
-        const origin = parseFloat(res[i].普通售价);
-        const vip_price = parseFloat(res[i].会员价);
+        const cost = Math.floor(Number(res[i].成本价) * 10);
+        const supCost = Math.floor(Number(res[i].供货价) * 10);
+        const origin = Math.floor(Number(res[i].普通售价) * 10);
+        const vip_price = Math.floor(Number(res[i].会员价) * 10);
         const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
-        const tax = parseFloat(res[i].税费);
-        const discount = parseFloat(res[i].折后价);
+        const tax = Math.floor(Number(res[i].税费) * 10);
+        const discount = res[i].折后价 === undefined ? origin : Math.floor(Number(res[i].折后价) * 10);
         const labels = [];
         res[i].标签.split(',').forEach(e => {
             e = e.replace(/\n/,'');
-            labels.push([e.split(':')[0],parseFloat(e.split(':')[1])]);
+            labels.push([e.split(':')[0],Math.floor(Number(e.split(':')[1]) * 10)]);
         });
         const images = []; 
-        if (res[i].缩略图 !== 'NULL') images.push([res[i].缩略图,1,1]);
-        if (res[i].主图 !== 'NULL') {
+        if (res[i].缩略图) images.push([res[i].缩略图,1,1]);
+        if (res[i].主图) {
             res[i].主图.split(',').forEach(e => {
                 e = e.replace(/\n/,'');
-                images.push([e,3,3]);
+                images.push([e,2,1]);
             });
         }
-        if (res[i].详情图 !== 'NULL') {
+        const intro = '';
+        const spec = [];
+        const detail = [];
+        if (res[i].详情图) {
             res[i].详情图.split(',').forEach(e => {
                 e = e.replace(/\n/,'');
-                images.push([e,3,3]);
+                detail.push(['','',[e,3,1]]);
             });
         }
-        const intro = '商品介绍';
-        const spec = [['色调','棕色'],['重量','300g']];
-        const detail = [];
         const tmp = [id,name,brandId,areaId,supplierId,pay_type,supCost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
         arr[i] = tmp;
     } 
@@ -227,7 +226,7 @@ export const importArea = (res) => {
         const name = res[i].地区名;
         const detail = '';
         const images = [];
-        images.push([res[i].国旗小图,1,1]);
+        images.push([res[i].国旗小图,4,1]);
         const tmp = [id,name,detail,images];
         arr[i] = tmp;
     } 
@@ -253,9 +252,9 @@ export const importBrand = (res) => {
         const name = res[i].品牌名;
         const detail = res[i].品牌详细信息;
         const images = [];
-        images.push([res[i].小图,1,1]);
-        images.push([res[i].缩略图,2,1]);
-        images.push([res[i].主图,3,1]);
+        images.push([res[i].小图,4,1]);
+        images.push([res[i].缩略图,1,1]);
+        images.push([res[i].主图,2,1]);
         const tmp = [id,name,detail,images];
         arr[i] = tmp;
     } 
@@ -298,6 +297,64 @@ export const importInventory = (res) => {
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
         console.log(r);
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+ // 解析并导入运单信息
+export const importTransport = (res) => {
+    const arr = [];
+    for (let i = 0;i < res.length;i++) {
+        const supplierId = Number(res[i].供货商ID);
+        const uid = Number(res[i].订单用户ID);
+        const oid = Number(res[i].订单编号);
+        const sid = res[i].物流单号 ? res[i].物流单号 : '';
+        arr.push([supplierId,uid,oid,sid]);
+    }
+    const str = JSON.stringify(arr);
+    const msg = {
+        type: 'set_supplier_order', 
+        param: { 
+            input:str
+        } 
+    };
+    console.log('msg = ',msg);
+    requestAsync(msg).then(r => {
+        console.log(r);
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+// 获取所有有未发货订单的供应商
+export const selSupplier = () => {
+    const msg = { 
+        type: 'select_supplier',
+        param: { 
+        } 
+    };
+    const r = ['1hao','2hao'];
+    requestAsync(msg).then(r => {
+        console.log('r=',r);
+        console.log('所有有未发货订单的供应商:',r.value);
+
+        // getOrder(1011001,2);
+    }).catch((e) => {
+        console.log(e);
+    });
+
+    return r;
+};
+// 获取指定供应商指定类型的订单
+export const getOrder  = (supplier,Ordertype) => {
+    const msg = { 
+        type: 'select_supplier_order',
+        param: { 
+            id:supplier,
+            type:Ordertype
+        } 
+    };
+    requestAsync(msg).then(r => {
+        console.log('r=',r);
     }).catch((e) => {
         console.log(e);
     });

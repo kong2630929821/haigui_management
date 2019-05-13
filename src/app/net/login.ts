@@ -61,7 +61,6 @@ export const openConnect = () => {
  */
 const conSuccess = () => {
     console.log('con Success');
-    userLogin();
 };
 
 /**
