@@ -3,8 +3,8 @@
 import { Forelet } from '../../../pi/widget/forelet';
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
-import { cate, importArea, importBrand, importFreight, importGoods, importGoodsCate, importInventory, importSupplier } from '../../net/pull';
-import { importRead } from '../../utils/tools';
+import { importArea, importBrand, importFreight, importGoods, importGoodsCate, importInventory, importSupplier, selSupplier } from '../../net/pull';
+import { importRead, jsonToExcelConvertor } from '../../utils/tools';
 
 // ================================ 导出
 // tslint:disable-next-line:no-reserved-keywords
@@ -37,7 +37,7 @@ export class App extends Widget {
         }
         const f = dom.files[0];
         importRead(f,(res) => {
-            cate(res);
+            importGoodsCate(res);
         });
         
     }
@@ -99,8 +99,19 @@ export class App extends Widget {
         importRead(f,(res) => {
             importInventory(res);
         });
-        
     }
+    // 获取所有有未发货订单的供应商
+    public select_supplier() {
+        selSupplier();
+    }
+    // 导出该供应商的所有有未发货订单信息
+    public exSupplier() {
+        // 调用接口得到json数据JSONData
+        const JSONData = '[["订单编号","商品ID","商品名称","商品SKU","商品规格","供货商ID","订单状态"],[1000,100000001, "六角眉笔头", "CK-255da", "177/188", 15231, "待付款"],[2000,200000001, "六角眉笔", "CK-255da", "177/188", 15231, "待付款"]]';
+        const FileName = '未发货订单';
+        jsonToExcelConvertor(JSONData,FileName);
+    }
+    
 }
 
 // ===================================================== 本地
