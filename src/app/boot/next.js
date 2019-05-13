@@ -69,6 +69,7 @@ winit.initNext = function () {
 				"pi/ui/root.tpl",
 				"pi/ui/html.js",
 				"pi/ui/html.tpl",
+				"pi/components/message",
 				"app/net/",
 				"app/view/",
 				"app/components/",
@@ -85,6 +86,8 @@ winit.initNext = function () {
 				openConnect();
 				// 加载根组件
 				var root = pi_modules.commonjs.exports.relativeGet("pi/ui/root").exports;
+				root.cfg.width = 1800;
+				root.cfg.height = 900;
 				root.cfg.full = false; //PC模式
 				var index = pi_modules.commonjs.exports.relativeGet("app/view/base/main").exports;
 				index.run(function () {

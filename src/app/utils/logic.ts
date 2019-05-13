@@ -1,3 +1,5 @@
+import { popNew } from '../../pi/ui/root';
+
 /**
  * 本地方法
  */
@@ -71,4 +73,13 @@ export const shareToGround = (title,link,imgUrl,cb?) => {
             }
         });
     });
+};
+
+/**
+ * 弹窗提示
+ * @param content mess
+ * @param itype success | warn | error | notice
+ */
+export const popNewMessage = (content:string, itype:string = 'success') => {
+    popNew('pi-components-message-message', { type: itype, content: content, center: true });
 };
