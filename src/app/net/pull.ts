@@ -9,7 +9,7 @@ export const importFreight = (res) => {
     for (let i = 0;i < res.length;i++) {
         const id = parseInt(res[i].id,10);
         const price_type = parseInt(res[i].price_type,10);
-        const price = parseFloat(res[i].price);
+        const price = Math.floor(Number(res[i].price) * 10);
         const tmp = [id,res[i].area,price_type,price];
         arr[i] = tmp;
     } 
@@ -151,12 +151,12 @@ export const importGoods = (res) => {
         const origin = Math.floor(Number(res[i].普通售价) * 10);
         const vip_price = Math.floor(Number(res[i].会员价) * 10);
         const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
-        const tax = parseFloat(res[i].税费);
+        const tax = Math.floor(Number(res[i].税费) * 10);
         const discount = res[i].折后价 === undefined ? origin : Math.floor(Number(res[i].折后价) * 10);
         const labels = [];
         res[i].标签.split(',').forEach(e => {
             e = e.replace(/\n/,'');
-            labels.push([e.split(':')[0],parseFloat(e.split(':')[1])]);
+            labels.push([e.split(':')[0],Math.floor(Number(e.split(':')[1]) * 10)]);
         });
         const images = []; 
         if (res[i].缩略图) images.push([res[i].缩略图,1,1]);
@@ -290,6 +290,30 @@ export const importInventory = (res) => {
     const str = JSON.stringify(arr);
     const msg = { 
         type: 'set_inventory', 
+        param: { 
+            input:str
+        } 
+    };
+    console.log('msg = ',msg);
+    requestAsync(msg).then(r => {
+        console.log(r);
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+ // 解析并导入运单信息
+export const importTransport = (res) => {
+    const arr = [];
+    for (let i = 0;i < res.length;i++) {
+        const supplierId = Number(res[i].供货商ID);
+        const uid = Number(res[i].订单用户ID);
+        const oid = Number(res[i].订单编号);
+        const sid = res[i].物流单号 ? res[i].物流单号 : '';
+        arr.push([supplierId,uid,oid,sid]);
+    }
+    const str = JSON.stringify(arr);
+    const msg = {
+        type: 'set_supplier_order', 
         param: { 
             input:str
         } 
