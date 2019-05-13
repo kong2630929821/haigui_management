@@ -29,7 +29,7 @@ export const importFreight = (res) => {
     });
 };
 
-export const cate = (res) => {
+export const importGoodsCate = (res) => { 
     const data = {};
     const arr0 = [];// 存放分组
     let arr2 = [];// 存放同一个分组
@@ -50,11 +50,11 @@ export const cate = (res) => {
     } 
     
     for (let i = 0;i < arr0.length;i++) {
-        const ls = importGoodsCate(arr0[i]);
-        if (!data[ls.root]) {
-            data[ls.root] = [];
+        const group = dealGroup(arr0[i]);
+        if (!data[group.root]) {
+            data[group.root] = [];
         }
-        data[ls.root].push({ input:ls.input,id:arr0[i][0].分组id });
+        data[group.root].push({ input:group.input,id:arr0[i][0].分组id });
     }
     const reqArray = [];
     for (const k in data) {
@@ -97,8 +97,8 @@ export const importGoodsCate1 = (data) => {
         console.log(e);
     });
 };
- // 解析并导入分类信息
-export const importGoodsCate = (arr2) => {
+ // 解析一个分组
+export const dealGroup = (arr2) => {
     const arr = [];
     for (let i = 0;i < arr2.length;i++) {
         const id = parseInt(arr2[i].分组id,10);
@@ -111,9 +111,6 @@ export const importGoodsCate = (arr2) => {
         const detail = arr2[i].分组详细描述;
         const childs = [];
         if (!arr2[i].子商品) {
-
-            // const arr3 = [parseInt(arr2[i].根id,10),'',true,true,[],'',[parseInt(arr2[i].分组id,10)]];
-            // arr[i] = arr3;
             for (let j = 1;j < arr2.length;j++) {
                 childs.push(parseInt(arr2[j].分组id,10));
             }
@@ -125,7 +122,6 @@ export const importGoodsCate = (arr2) => {
         const inputL = [id,name,goodsType,is_show,images,detail,childs];
         arr[i] = inputL;
     } 
-    // const paramStr = JSON.stringify(arr);
     const paramLoc = parseInt(arr2[0].位置,10);
     const paramRoot = parseInt(arr2[0].根id,10);
 
@@ -298,6 +294,39 @@ export const importInventory = (res) => {
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
         console.log(r);
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+// 获取所有有未发货订单的供应商
+export const selSupplier = () => {
+    const msg = { 
+        type: 'select_supplier',
+        param: { 
+        } 
+    };
+    requestAsync(msg).then(r => {
+        console.log('r=',r);
+        console.log('所有有未发货订单的供应商:',r.value);
+
+        return r;
+        // getOrder(1011001,2);
+    }).catch((e) => {
+        console.log(e);
+    });
+
+};
+// 获取指定供应商指定类型的订单
+export const getOrder  = (supplier,Ordertype) => {
+    const msg = { 
+        type: 'select_supplier_order',
+        param: { 
+            id:supplier,
+            type:Ordertype
+        } 
+    };
+    requestAsync(msg).then(r => {
+        console.log('r=',r);
     }).catch((e) => {
         console.log(e);
     });

@@ -12,7 +12,7 @@ export const sourcePort = window.location.port;
 export const erlangLogicIp = sourceIp; 
 
 // erlang逻辑服务器port
-export const erlangLogicPort = '2089';
+export const erlangLogicPort = '2090';
 
 // websock连接url
 export const wsUrl = `ws://${erlangLogicIp}:${erlangLogicPort}`;
