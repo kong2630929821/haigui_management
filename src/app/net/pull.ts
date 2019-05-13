@@ -106,8 +106,8 @@ export const dealGroup = (arr2) => {
         const goodsType = (arr2[i].子商品 === undefined) ? true : false;// 组类型，分为子组和叶组，子组可以包含任意的其它子组或叶组，叶组只允许包含商品
         const is_show = (arr2[i].是否可见 === 'YES') ? true : false;
         const images = []; 
-        if (arr2[i].缩略图 !== 'NULL') images.push([arr2[i].缩略图,1,1]);
-        if (arr2[i].主图 !== 'NULL') images.push([arr2[i].主图,3,3]);
+        if (arr2[i].缩略图) images.push([arr2[i].缩略图,1,1]);
+        if (arr2[i].主图) images.push([arr2[i].主图,2,1]);
         const detail = arr2[i].分组详细描述;
         const childs = [];
         if (!arr2[i].子商品) {
@@ -143,34 +143,34 @@ export const importGoods = (res) => {
         const areaId = parseInt(res[i].地区id,10);
         const supplierId = parseInt(res[i].供应商id,10);
         const pay_type = parseInt(res[i].支付类型,10);
-        const cost = parseFloat(res[i].成本价);
-        const supCost = parseFloat(res[i].供货价);
-        const origin = parseFloat(res[i].普通售价);
-        const vip_price = parseFloat(res[i].会员价);
+        const cost = Math.floor(Number(res[i].成本价) * 10);
+        const supCost = Math.floor(Number(res[i].供货价) * 10);
+        const origin = Math.floor(Number(res[i].普通售价) * 10);
+        const vip_price = Math.floor(Number(res[i].会员价) * 10);
         const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
         const tax = parseFloat(res[i].税费);
-        const discount = parseFloat(res[i].折后价);
+        const discount = res[i].折后价 === undefined ? origin : Math.floor(Number(res[i].折后价) * 10);
         const labels = [];
         res[i].标签.split(',').forEach(e => {
             e = e.replace(/\n/,'');
             labels.push([e.split(':')[0],parseFloat(e.split(':')[1])]);
         });
         const images = []; 
-        if (res[i].缩略图 !== 'NULL') images.push([res[i].缩略图,1,1]);
-        if (res[i].主图 !== 'NULL') {
+        if (res[i].缩略图) images.push([res[i].缩略图,1,1]);
+        if (res[i].主图) {
             res[i].主图.split(',').forEach(e => {
                 e = e.replace(/\n/,'');
                 images.push([e,3,3]);
             });
         }
-        if (res[i].详情图 !== 'NULL') {
+        if (res[i].详情图) {
             res[i].详情图.split(',').forEach(e => {
                 e = e.replace(/\n/,'');
                 images.push([e,3,3]);
             });
         }
-        const intro = '商品介绍';
-        const spec = [['色调','棕色'],['重量','300g']];
+        const intro = '';
+        const spec = [];
         const detail = [];
         const tmp = [id,name,brandId,areaId,supplierId,pay_type,supCost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
         arr[i] = tmp;
@@ -305,16 +305,17 @@ export const selSupplier = () => {
         param: { 
         } 
     };
+    const r = ['1hao','2hao'];
     requestAsync(msg).then(r => {
         console.log('r=',r);
         console.log('所有有未发货订单的供应商:',r.value);
 
-        return r;
         // getOrder(1011001,2);
     }).catch((e) => {
         console.log(e);
     });
 
+    return r;
 };
 // 获取指定供应商指定类型的订单
 export const getOrder  = (supplier,Ordertype) => {
