@@ -126,7 +126,8 @@ export class App extends Widget {
         jsonToExcelConvertor(JSONData,FileName);
     }
     // 显示该供应商的所有有未发货订单信息
-    public showSupplier() {
+    public showSupplier(e:any) {
+        console.log(e.value);
         // 调用接口得到json数据JSONData
         const JSONData = '[["订单编号","商品ID","商品名称","商品SKU","商品规格","供货商ID","订单状态"],[1000,100000001, "六角眉笔头", "CK-255da", "177/188", 15231, "待付款"],[2000,200000001, "六角眉笔", "CK-255da", "177/188", 15231, "待付款"]]';
         const arr = JSON.parse(JSONData);
