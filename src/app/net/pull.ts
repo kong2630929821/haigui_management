@@ -166,15 +166,15 @@ export const importGoods = (res) => {
                 images.push([e,2,1]);
             });
         }
-        if (res[i].详情图) {
-            res[i].详情图.split(',').forEach(e => {
-                e = e.replace(/\n/,'');
-                images.push([e,3,3]);
-            });
-        }
         const intro = '';
         const spec = [];
         const detail = [];
+        if (res[i].详情图) {
+            res[i].详情图.split(',').forEach(e => {
+                e = e.replace(/\n/,'');
+                detail.push(['','',[e,3,1]]);
+            });
+        }
         const tmp = [id,name,brandId,areaId,supplierId,pay_type,supCost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
         arr[i] = tmp;
     } 
