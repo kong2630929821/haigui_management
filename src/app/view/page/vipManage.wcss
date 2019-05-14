@@ -1,0 +1,83 @@
+
+.page{
+    background: #F0F2F5;
+    padding: 20px 60px;
+    color:#354052;
+}
+.tabRow{
+    display: flex;
+}
+.tab{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    margin-right: 30px;
+    align-items: center;
+    height: 120px;
+    width:300px;
+    background:rgba(255,255,255,1);
+}
+.tabTitle{
+    height:28px;
+    font-size:20px;
+    font-weight:500;
+    color:rgba(53,64,82,1);
+    line-height:28px;
+}
+.amount{
+    height:50px;
+    font-size:36px;
+    font-weight:500;
+    color:rgba(25,145,235,1);
+    line-height:50px;
+    text-align: right;
+}
+.tabImg{
+    width: 60px;
+    height: 60px;
+}
+.tabBar{
+    width:120px;
+    height:48px;
+    border:1px solid rgba(0,0,0,0.1);
+    font-size: 18px;
+    line-height: 48px;
+    text-align: center;
+    margin-right: 20px;
+    background: #fff;
+}
+.activeTab{
+    background: #273142;
+    color:#fff;
+}
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
+}
+.searchBox{
+    margin:20px 0;
+    height: 150px;
+    background: #fff;
+}
+.input{
+    width:200px;
+    height:48px;
+    margin: 25px;
+    border:1px solid rgba(0,0,0,0.1);
+    display: inline-block;
+}
+.search{
+    width:150px;
+    height:48px;
+    line-height: 48px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    background:#1991EB;
+    float: right;
+    margin: 25px;
+}

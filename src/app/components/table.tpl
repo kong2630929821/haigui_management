@@ -1,0 +1,74 @@
+<div>
+    {{if it.title}}
+    <div w-class="header" >
+        <table w-class="table">
+            <thead w-class="has-gutter">
+                <tr style="background:#fff;">
+                    {{if it.needCheckBox}}
+                    <th w-class="th" style="width:80px;">选择</th>
+                    {{end}}
+                    {{for i,v of it.title}}
+                    <th w-class="th">{{v}}</th>
+                    {{end}}
+
+                    {{if it.inlineBtn1 || it.inlineBtn2}}
+                    <th w-class="th">操作</th>
+                    {{end}}
+                </tr>
+            </thead>
+        </table>
+    </div>
+    {{end}}    
+
+    <div w-class="body">
+        <table w-class="table">
+            <tbody>
+                {{for i,v of it.datas}}
+                <tr style="background:#fff;">
+                    {{if it.needCheckBox}}
+                    <td w-class="td" style="width:80px;" on-tap="checked({{i}})">
+                        <img src="../res/images/{{it.selectList.indexOf(i)>-1?'selectBox_active.png':'selectBox.png'}}" />
+                    </td>
+                    {{end}}
+                    
+                    {{for j,r of v}}
+                    <td w-class="td">{{r}}</td>
+                    {{end}}
+
+                    {{if it.inlineBtn1 || it.inlineBtn2}}
+                    <td w-class="td">
+                        {{if it.inlineBtn1}}
+                        <div w-class="btn" style="margin-left:0;" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                        {{end}}
+
+                        {{if it.inlineBtn2}}
+                        <div w-class="btn" style="margin-left:0;" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
+                        {{end}}
+                    </td>
+                    {{end}}
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+
+    </div>
+
+    <div w-class="bottom">
+        {{if it.needCheckBox}}
+        <div w-class="allCheck" on-tap="allChecked">
+            <img src="../res/images/{{it.allChecked?'selectBox_active.png':'selectBox.png'}}"/>
+            <span style="margin-left:10px;">全选</span>
+        </div>
+        {{end}}
+
+        <div w-class="btns">
+            {{if it.btn1}}
+            <div w-class="btn" on-tap="clickBtn(e,1)">{{it.btn1}}</div>
+            {{end}}
+
+            {{if it.btn2}}
+            <div w-class="btn" on-tap="clickBtn(e,2)">{{it.btn2}}</div>
+            {{end}}
+        </div>
+    </div>
+</div>
