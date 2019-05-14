@@ -48,6 +48,7 @@ export const importGoodsCate = (res) => {
         } 
         id1 = id2;
     } 
+    arr0.push(arr2);
     
     for (let i = 0;i < arr0.length;i++) {
         const group = dealGroup(arr0[i]);
