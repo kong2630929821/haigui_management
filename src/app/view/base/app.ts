@@ -125,10 +125,11 @@ export class App extends Widget {
     }
     // 获取所有有未发货订单的供应商
     public select_supplier() {
-        const supplier = selSupplier();
-        this.props.pageList = supplier;
-        this.paint();
-        this.showSupplier(null,supplier[0]);
+        selSupplier();
+        // const supplier = selSupplier();
+        // this.props.pageList = supplier;
+        // this.paint();
+        // this.showSupplier(null,supplier[0]);
     }
     // 导出该供应商的所有有未发货订单信息
     public exSupplier() {
