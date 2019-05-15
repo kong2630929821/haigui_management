@@ -11,7 +11,7 @@
                     <th w-class="th">{{v}}</th>
                     {{end}}
 
-                    {{if it.inlineBtn1 || it.inlineBtn2}}
+                    {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
                     <th w-class="th">操作</th>
                     {{end}}
                 </tr>
@@ -37,15 +37,22 @@
                     </td>
                     {{end}}
 
-                    {{if it.inlineBtn1 || it.inlineBtn2}}
+                    {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
                     <td w-class="td">
+                        {{if it.inputFile}}
+                        <div style="margin-left:0;">
+                            <input type="file" on-change="importExcel(e,{{i}})"/>
+                        </div>
+                        {{end}}
+                        
                         {{if it.inlineBtn1}}
-                        <div w-class="btn" style="margin-left:0;" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                        <div w-class="btn" style="margin-left:0;" on-tap="importExcel(e,{{i}})">{{it.inlineBtn1}}</div>
                         {{end}}
 
                         {{if it.inlineBtn2}}
                         <div w-class="btn" style="margin-left:0;" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
                         {{end}}
+                       
                     </td>
                     {{end}}
                 </tr>

@@ -1,7 +1,11 @@
 // tslint:disable-next-line:missing-jsdoc
+import { ToneMapping } from 'three';
 import { deepCopy } from '../../pi/util/util';
 import { notify } from '../../pi/widget/event';
+import { getRealNode } from '../../pi/widget/painter';
 import { Widget } from '../../pi/widget/widget';
+import { importArea, importBrand, importFreight, importGoods, importGoodsCate, importInventory, importSupplier } from '../net/pull';
+import { importRead } from '../utils/tools';
 
 interface Props {
     title:any[];// 表格标题
@@ -13,6 +17,7 @@ interface Props {
     btn2:string;
     inlineBtn1:string;
     inlineBtn2:string;
+    inputFile:string;
 }
 // tslint:disable-next-line:completed-docs
 export class Table extends Widget {
@@ -25,7 +30,8 @@ export class Table extends Widget {
         btn1:'',
         btn2:'',
         inlineBtn1:'',
-        inlineBtn2:''
+        inlineBtn2:'',
+        inputFile:''
     };
     
     public setProps(props:any) {
@@ -69,4 +75,10 @@ export class Table extends Widget {
     public goDetail(e:any,num:number,fg:number) {
         notify(e.node,'ev-table-detail',{ value:this.props.datas[num], fg:fg });
     }
+
+    // 导入excel
+    public importExcel(e:any,num:number) {
+        notify(e.node,'ev-table-detail',{ value:num });
+    }
+
 }
