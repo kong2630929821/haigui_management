@@ -333,24 +333,58 @@ export const selSupplier = () => {
         param: { 
         } 
     };
-    requestAsync(msg).then(r => {
-        console.log('r=',r);
+
+    return requestAsync(msg).then(r => {
         console.log('所有有未发货订单的供应商:',r.value);
+        const supplier = JSON.parse(r.value);
+        console.log('所有有未发货订单的供应商:',supplier[0]);
+        const supplierId = [];
+        for (const v of supplier) {
+            supplierId.push(v[0]);
+        }
+        
+        return supplierId;
     }).catch((e) => {
         console.log(e);
+
+        return [];
     });
+
 };
 // 获取指定供应商指定类型的订单
 export const getOrder  = (supplier,Ordertype) => {
     const msg = { 
         type: 'select_supplier_order',
         param: { 
-            id:supplier,
-            type:Ordertype
+            // id:supplier,
+            // type:Ordertype
+            id:1011002,
+            type:2
         } 
     };
     requestAsync(msg).then(r => {
         console.log('r=',r);
+
+        return r;
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+// 获取用户退货记录
+export const getRreturnGoods = () => {
+    const msg = { 
+        type: 'get_return_goods',
+        param: { 
+            // id:supplier,
+            // type:Ordertype
+            id:1011002,
+            type:2
+        } 
+    };
+    requestAsync(msg).then(r => {
+        console.log('r=',r);
+
+        return r;
     }).catch((e) => {
         console.log(e);
     });
