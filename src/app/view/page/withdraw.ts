@@ -1,3 +1,4 @@
+import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeWithdrawState, getWithdrawApply } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
@@ -22,7 +23,7 @@ export class Withdraw extends Widget {
         showDataList:[
             // ['123456','￥500.00','现金','2017-12-25 14:35','申请中']
         ],
-        showTitleList:['用户ID','提现金额','支付方式','提交时间','受理状态'],
+        showTitleList:['用户ID','提现金额','手续费','提现渠道','提交时间','受理状态'],
         activeTab:0,
         datas:[],
         btn:'同意提现'
@@ -42,15 +43,16 @@ export class Withdraw extends Widget {
                 this.props.datas = r.value;
                 list = r.value.map(item => {
                     return [
-                        item[1],
-                        item[3],
+                        item[0],
                         item[2],
-                        item[4],
-                        Status[item[5]]
+                        item[3],
+                        '微信',
+                        item[5],
+                        Status[item[4]]
                     ];
                 });
-                list = list.filter(item => {
-                    return item[4] === Status[this.props.activeTab];
+                list = list.filter(t => {
+                    return t[5] === Status[this.props.activeTab];
                 });
             }
             
