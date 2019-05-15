@@ -125,9 +125,11 @@ export class App extends Widget {
     }
     // 获取所有有未发货订单的供应商
     public select_supplier() {
-        const supplier = selSupplier();
-        this.props.pageList = supplier;
-        this.paint();
+        selSupplier();
+        // const supplier = selSupplier();
+        // this.props.pageList = supplier;
+        // this.paint();
+        // this.showSupplier(null,supplier[0]);
     }
     // 导出该供应商的所有有未发货订单信息
     public exSupplier() {
@@ -137,12 +139,22 @@ export class App extends Widget {
         jsonToExcelConvertor(JSONData,FileName);
     }
     // 显示该供应商的所有有未发货订单信息
-    public showSupplier(e:any) {
-        const dom = getRealNode(e.node);
+    public showSupplier(e:any,data:any) {
         let JSONData = '';
+        if (data) {
+            JSONData = '[["订单编号","商品ID","商品名称","商品SKU","商品规格","供货商ID","订单状态","订单用户ID","用户姓名","用户电话","用户地址","物流单号"]]';
+            const arr = JSON.parse(JSONData);
+            console.log('arr=',arr);
+            this.props.supplierList = arr;
+            this.paint();
+            
+            return;
+        } 
+        const dom = getRealNode(e.node);
+        
         if (dom.value === '1hao') {
             JSONData = '[["订单编号","商品ID","商品名称","商品SKU","商品规格","供货商ID","订单状态","订单用户ID","用户姓名","用户电话","用户地址","物流单号"],[1000,100000001, "六角眉笔头", "CK-255da", "177/188", 15231, "待付款",11101,"张三","131234597","四川省成都市"],[2000,200000001, "六角眉笔", "CK-255da", "177/188", 15231, "待付款",11101,"李四","131234597","四川省成都市"]]';
-        } else {
+        } else if (dom.value === '2hao') {
             JSONData = '[["订单编号","商品ID","商品名称","商品SKU","商品规格","供货商ID","订单状态","订单用户ID","用户姓名","用户电话","用户地址","物流单号"],[2000,200000001, "六角眉笔", "CK-255da", "177/188", 15231, "待付款",11101,"李四","131234597","四川省成都市"]]';
         }
         // 调用接口得到json数据JSONData

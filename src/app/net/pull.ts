@@ -9,7 +9,7 @@ export const importFreight = (res) => {
     for (let i = 0;i < res.length;i++) {
         const id = parseInt(res[i].id,10);
         const price_type = parseInt(res[i].price_type,10);
-        const price = Math.floor(Number(res[i].price) * 10);
+        const price = Math.floor(Number(res[i].price) * 100);
         const tmp = [id,res[i].area,price_type,price];
         arr[i] = tmp;
     } 
@@ -48,6 +48,7 @@ export const importGoodsCate = (res) => {
         } 
         id1 = id2;
     } 
+    arr0.push(arr2);
     
     for (let i = 0;i < arr0.length;i++) {
         const group = dealGroup(arr0[i]);
@@ -146,17 +147,17 @@ export const importGoods = (res) => {
         const areaId = parseInt(res[i].地区id,10);
         const supplierId = parseInt(res[i].供应商id,10);
         const pay_type = parseInt(res[i].支付类型,10);
-        const cost = Math.floor(Number(res[i].成本价) * 10);
-        const supCost = Math.floor(Number(res[i].供货价) * 10);
-        const origin = Math.floor(Number(res[i].普通售价) * 10);
-        const vip_price = Math.floor(Number(res[i].会员价) * 10);
+        const cost = Math.floor(Number(res[i].成本价) * 100);
+        const supCost = Math.floor(Number(res[i].供货价) * 100);
+        const origin = Math.floor(Number(res[i].普通售价) * 100);
+        const vip_price = Math.floor(Number(res[i].会员价) * 100);
         const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
-        const tax = Math.floor(Number(res[i].税费) * 10);
-        const discount = res[i].折后价 === undefined ? origin : Math.floor(Number(res[i].折后价) * 10);
+        const tax = Math.floor(Number(res[i].税费) * 100);
+        const discount = res[i].折后价 === undefined ? origin : Math.floor(Number(res[i].折后价) * 100);
         const labels = [];
         res[i].标签.split(',').forEach(e => {
             e = e.replace(/\n/,'');
-            labels.push([e.split(':')[0],Math.floor(Number(e.split(':')[1]) * 10)]);
+            labels.push([e.split(':')[0],Math.floor(Number(e.split(':')[1]) * 100)]);
         });
         const images = []; 
         if (res[i].缩略图) images.push([res[i].缩略图,1,1]);
@@ -332,17 +333,12 @@ export const selSupplier = () => {
         param: { 
         } 
     };
-    const r = ['1hao','2hao'];
     requestAsync(msg).then(r => {
         console.log('r=',r);
         console.log('所有有未发货订单的供应商:',r.value);
-
-        // getOrder(1011001,2);
     }).catch((e) => {
         console.log(e);
     });
-
-    return r;
 };
 // 获取指定供应商指定类型的订单
 export const getOrder  = (supplier,Ordertype) => {
