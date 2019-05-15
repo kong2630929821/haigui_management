@@ -3,7 +3,9 @@
     border-left: 1px solid #ccc;
 }
 .body{
-    max-height: 600px;
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
     border-left: 1px solid #ccc;
 }
 .table{
