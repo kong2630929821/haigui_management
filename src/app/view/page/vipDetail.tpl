@@ -3,14 +3,14 @@
     <table w-class="table">
         <thead>
             <tr style="background:#F0F0F0;">
-                {{for i,v of it.titles}}
+                {{for i,v of it.showTitleList}}
                 <th w-class="td">{{v}}</th>
                 {{end}}
             </tr>
         </thead>
         <tbody>
             <tr style="background:#fff;">
-                {{for i,v of it.datas}}
+                {{for i,v of it.userData}}
                 <td w-class="td">{{v}}</td>
                 {{end}}
             </tr>

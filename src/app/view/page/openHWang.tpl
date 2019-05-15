@@ -29,8 +29,10 @@
         <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)">处理完成</div>
     </div>
 
+    {{if it.showDataList}}
     <div ev-table-btnClick="dealWith">
         <div w-class="tableTitle">数据列表</div>
-        <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},btn1:"开始处理" }</widget>
+        <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},btn1:{{it.btn}} }</widget>
     </div>
+    {{end}}
 </div>
