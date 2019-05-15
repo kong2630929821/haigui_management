@@ -355,3 +355,97 @@ export const getOrder  = (supplier,Ordertype) => {
         console.log(e);
     });
 };
+
+/**
+ * 获取海王申请列表
+ */
+export const getHWangApply = () => {
+    const msg = {
+        type:'mall_mgr/members@get_haiwang_application',
+        param:{
+            start_time:0,
+            end_time:Date.now()
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 修改海王申请状态
+ * @param id id
+ * @param uid uid
+ * @param state 1: 处理中 2：同意 3：拒绝
+ */
+export const changeHWangState = (id:number,uid:number,state:number) => {
+    const msg = {
+        type:'mall_mgr/members@haiwang_application_state',
+        param:{
+            id,
+            uid,
+            state
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 获取提现申请列表
+ */
+export const getWithdrawApply = () => {
+    const msg = {
+        type:'mall_mgr/members@get_withdraw_info',
+        param:{
+            start_time:0,
+            end_time:Date.now()
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 修改提现状态
+ * @param id id
+ * @param uid uid
+ * @param state 1: 处理中 2：同意 3：拒绝
+ */
+export const changeWithdrawState = (id:number,uid:number,state:number) => {
+    const msg = {
+        type:'mall_mgr/members@withdraw_application_state',
+        param:{
+            id,
+            uid,
+            state
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 获取会员列表
+ */
+export const getVipMember = () => {
+    const msg = {
+        type:'mall_mgr/members@get_level_user',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 查看会员详情
+ */
+export const getVipDetail = (uid:number) => {
+    const msg = {
+        type:'mall_mgr/members@get_level_details',
+        param:{
+            uid
+        }
+    };
+
+    return requestAsync(msg);
+};
