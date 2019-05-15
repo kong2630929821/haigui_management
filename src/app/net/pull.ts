@@ -9,7 +9,7 @@ export const importFreight = (res) => {
     for (let i = 0;i < res.length;i++) {
         const id = parseInt(res[i].id,10);
         const price_type = parseInt(res[i].price_type,10);
-        const price = Math.floor(Number(res[i].price) * 100);
+        const price = Number(res[i].price) * 100;
         const tmp = [id,res[i].area,price_type,price];
         arr[i] = tmp;
     } 
@@ -147,17 +147,17 @@ export const importGoods = (res) => {
         const areaId = parseInt(res[i].地区id,10);
         const supplierId = parseInt(res[i].供应商id,10);
         const pay_type = parseInt(res[i].支付类型,10);
-        const cost = Math.floor(Number(res[i].成本价) * 100);
-        const supCost = Math.floor(Number(res[i].供货价) * 100);
-        const origin = Math.floor(Number(res[i].普通售价) * 100);
-        const vip_price = Math.floor(Number(res[i].会员价) * 100);
+        const cost = Number(res[i].成本价) * 100;
+        const supCost = Number(res[i].供货价) * 100;
+        const origin = Number(res[i].普通售价) * 100;
+        const vip_price = Number(res[i].会员价) * 100;
         const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
-        const tax = Math.floor(Number(res[i].税费) * 100);
-        const discount = res[i].折后价 === undefined ? origin : Math.floor(Number(res[i].折后价) * 100);
+        const tax = Number(res[i].税费) * 100;
+        const discount = res[i].折后价 === undefined ? origin : Number(res[i].折后价) * 100;
         const labels = [];
         res[i].标签.split(',').forEach(e => {
             e = e.replace(/\n/,'');
-            labels.push([e.split(':')[0],Math.floor(Number(e.split(':')[1]) * 100)]);
+            labels.push([e.split(':')[0],Number(e.split(':')[1]) * 100]);
         });
         const images = []; 
         if (res[i].缩略图) images.push([res[i].缩略图,1,1]);
@@ -285,7 +285,8 @@ export const importInventory = (res) => {
             lable += res[i][str] === undefined ? '' : res[i][str];
         }
         const amount = parseInt(res[i].库存,10);
-        const tmp = [id,sku,lable,amount];
+        const supplierPrice = Number(res[i].供货价) * 100;
+        const tmp = [id,sku,lable,amount,supplierPrice];
         arr[i] = tmp;
     } 
     const str = JSON.stringify(arr);
@@ -352,7 +353,7 @@ export const selSupplier = () => {
 
 };
 // 获取指定供应商指定类型的订单
-export const getOrder  = (supplier,Ordertype) => {
+export const getOrder  = () => {
     const msg = { 
         type: 'select_supplier_order',
         param: { 
@@ -379,6 +380,23 @@ export const getRreturnGoods = () => {
             // type:Ordertype
             id:1011002,
             type:2
+        } 
+    };
+    requestAsync(msg).then(r => {
+        console.log('r=',r);
+
+        return r;
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+// 获取所有的商品信息，支付分页
+export const getAllGoods = () => {
+    const msg = { 
+        type: 'select_all_goods',
+        param: { 
+            id:10010001,
+            count:1
         } 
     };
     requestAsync(msg).then(r => {
