@@ -32,7 +32,9 @@
                     {{end}}
                     
                     {{for j,r of v}}
-                    <td w-class="td">{{r}}</td>
+                    <td w-class="td">
+                        <span>{{typeof(r)=="string" ? r :JSON.stringify(r)}}</span>
+                    </td>
                     {{end}}
 
                     {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}

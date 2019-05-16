@@ -12,10 +12,7 @@ interface Props {
     datas:any[];// 表数据
     selectList:any[];// 选择框列表
     allChecked:boolean;// 全选
-    isChange:number;// 是否修改数据值
-    isAdd:boolean;// 是否是新增数据
     needCheckBox:boolean; // 是否需要选择框
-    orgRowData:any[]; // 操作行的原始数据
     btn1:string;
     btn2:string;
     inlineBtn1:string;
@@ -29,10 +26,7 @@ export class Table extends Widget {
         datas:[],
         selectList:[],
         allChecked:false,
-        isChange:-1,
-        isAdd:false,
         needCheckBox:true,
-        orgRowData:[],
         btn1:'',
         btn2:'',
         inlineBtn1:'',
@@ -46,7 +40,6 @@ export class Table extends Widget {
             ...props
         };
         super.setProps(this.props);
-        this.props.orgRowData = deepCopy(this.props.datas[0]);
     }
     
     // 全选整页
