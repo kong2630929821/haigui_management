@@ -1,4 +1,5 @@
 import { Widget } from '../../../pi/widget/widget';
+import { getOrder } from '../../net/pull';
 
 /**
  * 所有订单
@@ -16,5 +17,16 @@ export class VipManage extends Widget {
         ],
         showTitleList:['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态']
     };
+
+    public search() {
+        
+        console.log('132');
+        getOrder(1011001,1);
+        getOrder(1011001,2);
+        getOrder(1011001,3);
+        getOrder(1011001,4);
+        // 得到订单
+        
+    }
     
 }

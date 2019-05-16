@@ -44,7 +44,7 @@ export class Home extends Widget {
             activePage: {},
             rightBox:true
         };
-        this.props.activePage = this.props.pageList[6];
+        this.props.activePage = this.props.pageList[2];
     }
 
     // 切换默认过滤器页面
