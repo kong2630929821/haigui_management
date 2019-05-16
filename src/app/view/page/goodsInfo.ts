@@ -22,8 +22,13 @@ export class GoodsInfo extends Widget {
     }
 
     public goDetail() {
+        debugger;
         console.log('132');
-        getOrder();
+        getOrder(1011002,1);
+        getOrder(1011002,2);
+        getOrder(1011002,3);
+        getOrder(1011002,4);
+        
     }
 
     public detailBack() {

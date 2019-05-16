@@ -19,7 +19,14 @@ export class VipManage extends Widget {
     };
 
     public search() {
-        getOrder(1011002,2);
+        
+        console.log('132');
+        getOrder(1011001,1);
+        getOrder(1011001,2);
+        getOrder(1011001,3);
+        getOrder(1011001,4);
+        // 得到订单
+        
     }
     
 }
