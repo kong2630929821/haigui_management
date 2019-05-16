@@ -23,7 +23,7 @@ export const importFreight = (res) => {
     
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
-        console.log(r);
+        alert('导入运费成功');
     }).catch((e) => {
         console.log(e);
     });
@@ -93,7 +93,7 @@ export const importGoodsCate1 = (data) => {
     console.log('msg = ',msg);
 
     return requestAsync(msg).then(r => {
-        console.log(r);
+        alert('导入分组成功');
     }).catch((e) => {
         console.log(e);
     });
@@ -188,7 +188,7 @@ export const importGoods = (res) => {
     };
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
-        console.log(r);
+        alert('导入商品成功');
     }).catch((e) => {
         console.log(e);
     });
@@ -214,7 +214,7 @@ export const importSupplier = (res) => {
     };
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
-        console.log(r);
+        alert('导入供应商成功');
     }).catch((e) => {
         console.log(e);
     });
@@ -240,7 +240,7 @@ export const importArea = (res) => {
     };
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
-        console.log(r);
+        alert('导入地区成功');
     }).catch((e) => {
         console.log(e);
     });
@@ -268,7 +268,7 @@ export const importBrand = (res) => {
     };
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
-        console.log(r);
+        alert('导入品牌成功');
     }).catch((e) => {
         console.log(e);
     });
@@ -298,7 +298,7 @@ export const importInventory = (res) => {
     };
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
-        console.log(r);
+        alert('导入库存成功');
     }).catch((e) => {
         console.log(e);
     });
@@ -307,9 +307,14 @@ export const importInventory = (res) => {
 export const importTransport = (res) => {
     const arr = [];
     for (let i = 0;i < res.length;i++) {
-        const supplierId = Number(res[i].供货商ID);
-        const uid = Number(res[i].订单用户ID);
-        const oid = Number(res[i].订单编号);
+        // const supplierId = Number(res[i].供货商ID);
+        // const uid = Number(res[i].订单用户ID);
+        // const oid = Number(res[i].订单编号);
+        // const sid = res[i].物流单号 ? res[i].物流单号 : '';
+        // const supplierId = Number(res[i].供货商ID);
+        const supplierId = Number(res[i].supplierId);
+        const uid = Number(res[i].uid);
+        const oid = res[i].id.startsWith(',') ? Number(res[i].id.substr(1)) :Number(res[i]);
         const sid = res[i].物流单号 ? res[i].物流单号 : '';
         arr.push([supplierId,uid,oid,sid]);
     }
@@ -322,7 +327,7 @@ export const importTransport = (res) => {
     };
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
-        console.log(r);
+        alert('导入运单成功');
     }).catch((e) => {
         console.log(e);
     });
@@ -362,12 +367,13 @@ export const getOrder  = (supplier,Ordertype) => {
         } 
     };
 
-    requestAsync(msg).then(r => {
-        console.log('r=',r);
+    return requestAsync(msg).then(r => {
 
-        return r;
+        return r.value;
     }).catch((e) => {
         console.log(e);
+
+        return '';
     });
 };
 // 获取用户退货记录
