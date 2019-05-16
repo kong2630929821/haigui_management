@@ -353,14 +353,12 @@ export const selSupplier = () => {
 
 };
 // 获取指定供应商指定类型的订单
-export const getOrder  = () => {
+export const getOrder  = (supplier,Ordertype) => {
     const msg = { 
         type: 'select_supplier_order',
         param: { 
-            // id:supplier,
-            // type:Ordertype
-            id:1011002,
-            type:2
+            id:supplier,
+            type:Ordertype
         } 
     };
     requestAsync(msg).then(r => {
@@ -395,8 +393,8 @@ export const getAllGoods = () => {
     const msg = { 
         type: 'select_all_goods',
         param: { 
-            id:10010001,
-            count:1
+            id:10010003,
+            count:3
         } 
     };
     requestAsync(msg).then(r => {
