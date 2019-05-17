@@ -315,7 +315,8 @@ export const importTransport = (res) => {
         const supplierId = Number(res[i].supplierId);
         const uid = Number(res[i].uid);
         const oid = res[i].id.startsWith(',') ? Number(res[i].id.substr(1)) :Number(res[i]);
-        const sid = res[i].物流单号 ? res[i].物流单号 : '';
+        // const sid = res[i].物流单号 ? res[i].物流单号 : '';
+        const sid = Number(res[i].物流单号.substr(1));
         arr.push([supplierId,uid,oid,sid]);
     }
     const str = JSON.stringify(arr);
@@ -385,8 +386,6 @@ export const getOrder  = (supplier,Ordertype) => {
     };
 
     return requestAsync(msg).then(r => {
-        console.log('r.value=',r.value);
-        debugger;
         return r.value;
     }).catch((e) => {
         console.log(e);
