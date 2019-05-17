@@ -46,7 +46,7 @@
                         {{end}}
                         
                         {{if it.inlineBtn1}}
-                        <div w-class="btn" style="margin-left:0;" on-tap="importExcel(e,{{i}})">{{it.inlineBtn1}}</div>
+                        <div w-class="btn" style="margin-left:0;" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
                         {{end}}
 
                         {{if it.inlineBtn2}}
