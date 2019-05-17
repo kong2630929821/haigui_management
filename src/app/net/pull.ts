@@ -332,6 +332,23 @@ export const importTransport = (res) => {
         console.log(e);
     });
 };
+// 获取所有供应商
+export const getAllSupplier = () => {
+    const msg = { 
+        type: 'all_supplier',
+        param: { 
+        } 
+    };
+
+    return requestAsync(msg).then(r => {
+        
+        console.log('所有的供应商:',r.value);
+
+        return r.value;
+    }).catch((e) => {
+        console.log(e);
+    });
+};
 // 获取所有有未发货订单的供应商
 export const selSupplier = () => {
     const msg = { 
@@ -368,7 +385,8 @@ export const getOrder  = (supplier,Ordertype) => {
     };
 
     return requestAsync(msg).then(r => {
-
+        console.log('r.value=',r.value);
+        debugger;
         return r.value;
     }).catch((e) => {
         console.log(e);
