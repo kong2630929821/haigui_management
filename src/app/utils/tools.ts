@@ -50,7 +50,6 @@ export const jsonToExcelConvertor = (JSONhead:any,JSONData:any, FileName:any) =>
     }
     // 先转化json
     const arrData = typeof JSONData !== 'object' ? JSON.parse(JSONData) : JSONData;
-    debugger;
     let excel = '<table>';
     let rowHead = '<tr>';
     // 设置表头
