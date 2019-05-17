@@ -5,6 +5,7 @@
 // ================================================ 导入
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
+import { getAllSupplier } from '../../net/pull';
 
 // ================================================ 导出
 export const forelet = new Forelet();
@@ -39,7 +40,6 @@ export class Home extends Widget {
                 { name: '提现', page: PAGE.withdraw, img:'chart.png' },
                 { name: '开通海王', page: PAGE.openHWang, img:'chart.png'  },
                 { name: '会员', page: PAGE.vipManage, img:'chart.png' }
-                
             ],
             activePage: {},
             rightBox:true
@@ -50,6 +50,15 @@ export class Home extends Widget {
     // 切换默认过滤器页面
     public changePage(num: number) {
         this.props.activePage = this.props.pageList[num];
+        // 切换到所有订单页先将所有供应商查询出来
+        getAllSupplier().then((r) => {
+            const supplier = JSON.parse(r);
+            const arr = [];
+            for (const v of supplier) {
+                arr.push(v[0]);
+            }
+            this.props.supplierList = arr;
+        });
         this.paint();
     }
 }

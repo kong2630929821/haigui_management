@@ -1,6 +1,6 @@
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
-import { getAllSupplier, getOrder, importSupplier, importTransport, selSupplier } from '../../net/pull';
+import { getAllSupplier, getOrder, getOrderById, importTransport } from '../../net/pull';
 import { importRead, jsonToExcelConvertor } from '../../utils/tools';
 
 /**
@@ -43,37 +43,32 @@ export class VipManage extends Widget {
     }
 
     public importTransport(e:any) {
-        
         // 导入运单
         const file = getRealNode(e.node).files[0];
         importRead(file,(res) => {
             importTransport(res);
         });
-        
     }
-    // 查询
-    public search(e:any) {
-        const supplierId = Number(getRealNode(e.node).parentNode.children[2].value);
-        const orderType = getRealNode(e.node).parentNode.children[3].options.selectedIndex + 1;// 订单类型，1待支付、2待发货、3待收货、4待完成
-        getOrder(supplierId,orderType).then((r) => {
+    // 按订单id查询
+    public searchById(e:any) {
+        const orderId = Number(getRealNode(e.node).parentNode.children[1].value);
+        getOrderById(orderId).then((r) => {
             console.log('r= ',r);
             const orderInfo = JSON.parse(r);
             const contentList = [];
+            const temp = [];
             let orderState = '';
-            if (orderType === 1) {
-                orderState = '待支付';
-            } else if (orderType === 2) {
+            if (orderInfo[0][7] === 0) {
+                orderState = '待付款';
+            } else if (orderInfo[0][8] === 0) {
                 orderState = '待发货';
-            } else if (orderType === 3) {
+            } else if (orderInfo[0][9] === 0) {
                 orderState = '待收货';
-            } else if (orderType === 4) {
-                orderState = '待完成';
+            } else if (orderInfo[0][11] === 0) {
+                orderState = '已完成';
             }
-            for (let i = 0;i < orderInfo.length;i++) {
-                const temp = [];
-                temp.push(0,orderInfo[i][1],'商品ID','商品名称','商品SKU','商品规格',orderInfo[i][0],orderInfo[i][2],orderInfo[i][8],orderInfo[i][9],orderInfo[i][10],orderState);
-                contentList.push(temp);
-            }
+            temp.push(0,orderInfo[0][0],orderInfo[0][12],orderInfo[0][15],orderInfo[0][16],orderInfo[0][17],orderInfo[0][18],orderInfo[0][1],orderInfo[0][2],orderInfo[0][3],orderInfo[0][4],orderState);
+            contentList.push(temp);
             this.props.contentList = contentList;
             this.paint();
         });
@@ -92,20 +87,39 @@ export class VipManage extends Widget {
     // 显示某供应商指定类型订单
     public showOrder(e:any) {
         const dom = getRealNode(e.node);
-        const supplierId = Number(dom.value);
-        const orderType = 2; // 订单类型，1待支付、2待发货、3待收货、4待完成
-        getOrder(supplierId,orderType);
+        const orderType = dom.parentNode.children[3].options.selectedIndex + 1;
+        const supplierId = Number(dom.parentNode.children[2].value);
+        getOrder(supplierId,orderType).then((r) => {
+            console.log('r= ',r);
+            if (!r) return Promise.reject('！！！请求接口错误');
+            
+            return JSON.parse(r);// 根据供应商和订单类型筛选得到订单id数组
+        }).then((r) => {
+            for (let i = 0;i < r.length;i++) {
+                const orderId = r[i][1];
+                getOrderById(orderId).then((r) => { // 根据id把订单查询出来并显示
+                    console.log('r= ',r);
+                    const orderInfo = JSON.parse(r);
+                    const contentList = [];
+                    for (let i = 0;i < orderInfo.length;i++) {
+                        let orderState = '';
+                        if (orderInfo[i][11] === 0) {
+                            orderState = '待付款';
+                        } else if (orderInfo[i][12] === 0) {
+                            orderState = '待发货';
+                        } else if (orderInfo[i][13] === 0) {
+                            orderState = '待收货';
+                        } else if (orderInfo[i][15] === 0) {
+                            orderState = '已完成';
+                        }
+                        const temp = [];
+                        temp.push(0,orderInfo[0][0],orderInfo[0][12],orderInfo[0][15],orderInfo[0][16],orderInfo[0][17],orderInfo[0][18],orderInfo[0][1],orderInfo[0][2],orderInfo[0][3],orderInfo[0][4],orderState);
+                        contentList.push(temp);
+                    }
+                    this.props.contentList = contentList;
+                    this.paint();
+                });
+            }
+        }).catch((e) => {console.log(e);});
     }
-    
-    // // 导入运单信息
-    // public imTransport(e:any) {
-    //     const dom = getRealNode(e.node);
-    //     if (!dom.files) {
-    //         return;
-    //     }
-    //     const f = dom.files[0];
-    //     importRead(f,(res) => {
-    //         importTransport(res);
-    //     });
-    // }
 }
