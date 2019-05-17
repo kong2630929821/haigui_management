@@ -1,6 +1,6 @@
 import { Widget } from '../../../pi/widget/widget';
 import { changeWithdrawState, getWithdrawApply, getWithdrawTotal } from '../../net/pull';
-import { popNewMessage, timestampFormat } from '../../utils/logic';
+import { popNewMessage, priceFormat, timestampFormat } from '../../utils/logic';
 
 interface Props {
     datas:any[];  // 原始数据
@@ -10,8 +10,8 @@ interface Props {
     withdrawIdList:number[]; // 未处理的提现单号列表
     btn:string;  // 处理按钮
     userNum:number; // 今日提现人数
-    dayMoney:number; // 今日提现金额
-    monthTotal:number; // 本月提现金额
+    dayMoney:string; // 今日提现金额
+    monthTotal:string; // 本月提现金额
 }
 const Status = [
     '申请中',
@@ -32,8 +32,8 @@ export class Withdraw extends Widget {
         datas:[],
         btn:'同意提现',
         userNum:0,
-        dayMoney:0,
-        monthTotal:0
+        dayMoney:'0',
+        monthTotal:'0'
     };
 
     public changeTab(num:number) {
@@ -46,8 +46,8 @@ export class Withdraw extends Widget {
         this.paint();
         getWithdrawTotal().then(r => {
             this.props.userNum = r.day_count;
-            this.props.dayMoney = r.day_money;
-            this.props.monthTotal = r.month_total;
+            this.props.dayMoney = priceFormat(r.day_money);
+            this.props.monthTotal = priceFormat(r.month_total);
         });
         this.getData();
     }
@@ -61,8 +61,8 @@ export class Withdraw extends Widget {
                     return [
                         item[0],           // id
                         item[1],           // uid
-                        `￥${item[2] / 100}`,     // 金额
-                        `￥${item[3] / 100}`,     // 手续费
+                        `￥${priceFormat(item[2])}`,     // 金额
+                        `￥${priceFormat(item[3])}`,     // 手续费
                         '微信',            // 提现渠道
                         timestampFormat(item[5]), // 时间
                         Status[item[4]]       // 状态

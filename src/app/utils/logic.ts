@@ -53,3 +53,8 @@ export const unicode2Str = (infos:any) => {
 
     return str;
 };
+
+// 价格格式化
+export const priceFormat = (price:number) => {
+    return (price / 100).toFixed(2);
+};

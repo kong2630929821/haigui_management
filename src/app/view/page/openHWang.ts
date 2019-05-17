@@ -54,7 +54,7 @@ export class OpenHWang extends Widget {
                         item[1],    // uid
                         unicode2Str(item[3]),  // 姓名
                         item[2],     // 电话
-                        item[4],     // 地址
+                        unicode2Str(item[4]),     // 地址
                         Status[item[5]]  // 状态
                     ];
                 });
