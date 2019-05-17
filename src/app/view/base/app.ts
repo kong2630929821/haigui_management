@@ -162,7 +162,6 @@ export class App extends Widget {
         // 调用接口得到json数据JSONData
         const JSONData = '[["订单编号","商品ID","商品名称","商品SKU","商品规格","供货商ID","订单状态","订单用户ID","用户姓名","用户电话","用户地址","物流单号"],[1000,100000001, "六角眉笔头", "CK-255da", "177/188", 15231, "待付款",11101,"张三","131234597","四川省成都市"],[2000,200000001, "六角眉笔", "CK-255da", "177/188", 15231, "待付款",11101,"李四","131234597","四川省成都市"]]';
         const FileName = '未发货订单';
-        jsonToExcelConvertor(JSONData,FileName);
     }
     // 显示该供应商的所有有未发货订单信息
     public showSupplier(e:any,supplierId:any) {

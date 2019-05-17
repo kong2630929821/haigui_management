@@ -42,7 +42,7 @@ const fixdata = (data) => {
 };
 
 // 导出
-export const jsonToExcelConvertor = (JSONData:any, FileName:any) => {
+export const jsonToExcelConvertor = (JSONhead:any,JSONData:any, FileName:any) => {
     if (JSONData === undefined) {
         alert('导出为空表');
 
@@ -53,18 +53,29 @@ export const jsonToExcelConvertor = (JSONData:any, FileName:any) => {
     let excel = '<table>';
     let rowHead = '<tr>';
     // 设置表头
-    arrData[0].forEach((item) => {
+    JSONhead.forEach((item) => {
         rowHead += `<th>${item}</th>`;
     });
     // 换行
     excel += `${rowHead}</tr>`;
         // 设置数据
-    for (let i = 1; i < arrData.length; i++) {
+    for (let i = 0; i < arrData.length; i++) {
         let rowContent = '<tr>';
-        for (const index in arrData[i]) {
-            console.log(arrData[i][index]);
+        const arr = [];
+        for (let value of arrData[i]) {
+            // console.log(arrData[i][index]);
                 // var value = arrData[i][index] === "." ? "" : arrData[i][index];
-            rowContent += `<td>${arrData[i][index]}</td>`;
+            console.log('value=',value);
+            console.log(typeof(value));
+            const str = value.toString();
+            arr.push(str);
+            if (typeof(value) === 'number' && value.toString().length >= 12) {
+                console.log('yes');
+                value = ','.concat(value.toString());
+                console.log('valueToStr=',value);
+            }
+            // rowContent += `<td>${arrData[i][index]}</td>`;
+            rowContent += `<td>${value}</td>`;
         }
         excel += `${rowContent}</tr>`;
     }
