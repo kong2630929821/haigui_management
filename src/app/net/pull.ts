@@ -442,6 +442,17 @@ export const changeHWangState = (id:number,uid:number,state:number) => {
 };
 
 /**
+ * 获取提现统计
+ */
+export const getWithdrawTotal = () => {
+    const msg = {
+        type:'mall_mgr/members@get_withdraw_total',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+/**
  * 获取提现申请列表
  */
 export const getWithdrawApply = () => {

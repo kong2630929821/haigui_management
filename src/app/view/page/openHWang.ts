@@ -1,12 +1,13 @@
 import { Widget } from '../../../pi/widget/widget';
 import { changeHWangState, getHWangApply } from '../../net/pull';
-import { popNewMessage } from '../../utils/logic';
+import { popNewMessage, unicode2Str } from '../../utils/logic';
 interface Props {
     datas:any[];  // 原始数据
     showDataList:any[];  // 显示数据
     showTitleList:string[];  // 显示标题
     activeTab:number;  // 活跃tab
     btn:string;  // 按钮
+    applyIdList:number[]; // 申请开通海王的ID列表
 }
 const Status = [
     '申请中',
@@ -24,7 +25,8 @@ export class OpenHWang extends Widget {
         showTitleList:['用户ID','姓名','手机号','地址信息','受理状态'],
         activeTab:0,
         datas:[],
-        btn:'开始处理'
+        btn:'开始处理',
+        applyIdList:[]
     };
 
     // 切换tab
@@ -38,21 +40,32 @@ export class OpenHWang extends Widget {
             this.props.btn = '开始处理';
         }
         this.paint();
+        this.getData();
+    }
+
+    public getData() {
         getHWangApply().then(r => {
             let list = [];
             if (r.value && r.value.length > 0) {
                 this.props.datas = r.value;
                 list = r.value.map(item => {
                     return [
-                        item[1],
-                        item[3],
-                        item[2],
-                        item[4],
-                        Status[item[5]]
+                        item[0],    // id
+                        item[1],    // uid
+                        unicode2Str(item[3]),  // 姓名
+                        item[2],     // 电话
+                        item[4],     // 地址
+                        Status[item[5]]  // 状态
                     ];
                 });
-                list = list.filter(item => {
-                    return item[4] === Status[this.props.activeTab];
+                list = list.filter(t => {
+                    if (t[5] === Status[this.props.activeTab]) {
+                        this.props.applyIdList.push(t.shift());
+
+                        return true;
+                    } 
+
+                    return false;
                 });
             }
             this.props.showDataList = list;
@@ -61,13 +74,17 @@ export class OpenHWang extends Widget {
     }
 
     // 处理数据
-    public dealWith(e:any) {
+    public async dealWith(e:any) {
         console.log(e.fg);
-        const data = this.props.datas[0];
-        if (data) {
-            changeHWangState(data[0],data[1],this.props.activeTab + 1).then(() => {
-                popNewMessage('处理成功');
-            });
+        for (const v of e.value) {
+            const id = this.props.applyIdList[v];
+            const uid = this.props.showDataList[v][0];
+            if (id && uid) {
+                await changeHWangState(id, uid, 2);
+            }
         }
+        popNewMessage('处理完成');
+        this.getData();
+        
     }
 }

@@ -1,14 +1,17 @@
-import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
-import { changeWithdrawState, getWithdrawApply } from '../../net/pull';
-import { popNewMessage } from '../../utils/logic';
+import { changeWithdrawState, getWithdrawApply, getWithdrawTotal } from '../../net/pull';
+import { popNewMessage, timestampFormat } from '../../utils/logic';
 
 interface Props {
     datas:any[];  // 原始数据
     showDataList:any[];  // 显示数据
     showTitleList:string[];  // 显示标题
     activeTab:number;  // 活跃tab
+    withdrawIdList:number[]; // 未处理的提现单号列表
     btn:string;  // 处理按钮
+    userNum:number; // 今日提现人数
+    dayMoney:number; // 今日提现金额
+    monthTotal:number; // 本月提现金额
 }
 const Status = [
     '申请中',
@@ -25,8 +28,12 @@ export class Withdraw extends Widget {
         ],
         showTitleList:['用户ID','提现金额','手续费','提现渠道','提交时间','受理状态'],
         activeTab:0,
+        withdrawIdList:[],
         datas:[],
-        btn:'同意提现'
+        btn:'同意提现',
+        userNum:0,
+        dayMoney:0,
+        monthTotal:0
     };
 
     public changeTab(num:number) {
@@ -37,22 +44,38 @@ export class Withdraw extends Widget {
             this.props.btn = '同意提现';
         }
         this.paint();
+        getWithdrawTotal().then(r => {
+            this.props.userNum = r.day_count;
+            this.props.dayMoney = r.day_money;
+            this.props.monthTotal = r.month_total;
+        });
+        this.getData();
+    }
+
+    public getData() {
         getWithdrawApply().then(r => {
             let list = [];
             if (r.value && r.value.length > 0) {
                 this.props.datas = r.value;
                 list = r.value.map(item => {
                     return [
-                        item[0],
-                        item[2],
-                        item[3],
-                        '微信',
-                        item[5],
-                        Status[item[4]]
+                        item[0],           // id
+                        item[1],           // uid
+                        `￥${item[2] / 100}`,     // 金额
+                        `￥${item[3] / 100}`,     // 手续费
+                        '微信',            // 提现渠道
+                        timestampFormat(item[5]), // 时间
+                        Status[item[4]]       // 状态
                     ];
                 });
                 list = list.filter(t => {
-                    return t[5] === Status[this.props.activeTab];
+                    if (t[6] === Status[this.props.activeTab]) {
+                        this.props.withdrawIdList.push(t.shift());
+
+                        return true;
+                    } 
+                    
+                    return false;
                 });
             }
             
@@ -61,13 +84,17 @@ export class Withdraw extends Widget {
         });
     }
 
-    public dealWith(e:any) {
+    public async dealWith(e:any) {
         console.log(e);
-        const data = this.props.datas[0];
-        if (data) {
-            changeWithdrawState(data[0],data[1], 2).then(() => {
-                popNewMessage('处理成功');
-            });
+        for (const v of e.value) {
+            const id = this.props.withdrawIdList[v];
+            const uid = this.props.showDataList[v][0];
+            if (id && uid) {
+                await changeWithdrawState(id, uid, 2);
+            }
         }
+        popNewMessage('处理完成');
+        this.getData();
     }
+
 }
