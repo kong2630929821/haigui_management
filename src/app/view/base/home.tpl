@@ -11,11 +11,9 @@
             {{end}}
         </div>
 
-        {{for i,v of it.pageList}}
-        <div style="{{it.activePage.page === v.page?'display: block;':'display: none;'}}" w-class="right">
-            <widget w-tag="app-view-page-{{v.page}}"></widget>
+        <div w-class="right">
+            <widget w-tag="app-view-page-{{it.activePage.page}}"></widget>
         </div>
-        {{end}}
-            
+
     </div>
 </div>

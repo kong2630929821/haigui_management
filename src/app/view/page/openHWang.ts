@@ -1,3 +1,4 @@
+import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeHWangState, getHWangApply } from '../../net/pull';
 import { popNewMessage, unicode2Str } from '../../utils/logic';
@@ -29,6 +30,11 @@ export class OpenHWang extends Widget {
         applyIdList:[]
     };
 
+    public create() {
+        super.create();
+        this.getData();
+    }
+
     // 切换tab
     public changeTab(num:number) {
         this.props.activeTab = num;
@@ -39,36 +45,33 @@ export class OpenHWang extends Widget {
         } else {
             this.props.btn = '开始处理';
         }
+        this.props.showDataList = [];
+        this.props.datas.forEach(t => {
+            const v = deepCopy(t);
+            if (t[5] === Status[num]) {
+                v.shift();
+                this.props.showDataList.push(v);
+            }
+        });
         this.paint();
-        this.getData();
     }
 
+    // 获取数据
     public getData() {
         getHWangApply().then(r => {
-            let list = [];
             if (r.value && r.value.length > 0) {
-                this.props.datas = r.value;
-                list = r.value.map(item => {
+                this.props.datas = r.value.map(item => {
                     return [
-                        item[0],    // id
-                        item[1],    // uid
+                        item[0],    // 记录id
+                        item[1],    // 用户uid
                         unicode2Str(item[3]),  // 姓名
                         item[2],     // 电话
                         unicode2Str(item[4]),     // 地址
                         Status[item[5]]  // 状态
                     ];
                 });
-                list = list.filter(t => {
-                    if (t[5] === Status[this.props.activeTab]) {
-                        this.props.applyIdList.push(t.shift());
-
-                        return true;
-                    } 
-
-                    return false;
-                });
+                this.changeTab(this.props.activeTab);
             }
-            this.props.showDataList = list;
             this.paint();
         });
     }

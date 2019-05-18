@@ -14,6 +14,7 @@ interface Props {
     hWangNum:number; // 海王数量
     baikNum:number; // 白客数量
     uid:number;  // uid
+    searUid:string;  // 查询的UID
     active:number;
     optionsList:string[]; // 下拉框
 }
@@ -35,10 +36,17 @@ export class VipManage extends Widget {
         hBaoNum:0,
         hWangNum:0,
         uid:0,
+        searUid:'',
         active:0,
         optionsList:['白客','海宝','海王','市代理','省代理']
     };
 
+    public create() {
+        super.create();
+        this.getDatas();
+    }
+
+    // 获取数据
     public getDatas() {
         getVipMember().then(r => {
             this.props.hBaoNum = r.haib_count;
@@ -97,6 +105,7 @@ export class VipManage extends Widget {
         this.updateDatas(e.value);
     }
 
+    // 更新数据
     public updateDatas(num:number) {
         let list = [];
         switch (num) {
@@ -129,6 +138,11 @@ export class VipManage extends Widget {
         this.paint();
     }
 
+    // 查询uid输入
+    public uidChange(e:any) {
+        this.props.searUid = e.value;
+    }
+
     // 返回列表
     public detailBack() {
         this.props.showDetail = false;
@@ -137,6 +151,26 @@ export class VipManage extends Widget {
 
     // 查询
     public search() {
-        this.getDatas();
+        if (this.props.searUid) {
+            const uid = Number(this.props.searUid);
+            let res = [];
+            res = this.props.hWangDatas.filter(item => item[0] === uid);
+            if (res.length === 0) {
+                res = this.props.hBaoDatas.filter(item => item[0] === uid);
+            }
+            if (res.length === 0) {
+                res = this.props.baikDatas.filter(item => item[0] === uid);
+            }
+            this.props.showDataList = res.map(t => {
+                const r = deepCopy(t);
+                r.pop(); // 删除最后一项用户类型
+    
+                return r;
+            });
+            this.paint();
+
+        } else {
+            this.updateDatas(this.props.active);
+        }
     }
 }

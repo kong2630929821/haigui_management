@@ -1,12 +1,14 @@
+import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { login } from '../../net/pull';
 
 /**
  * 登陆
  */
 export class Login extends Widget {
     public props:any = {
-        name:'',
-        pwd:''
+        name:'admin',
+        pwd:'admin'
     };
 
     public nameChange(e:any) {
@@ -17,7 +19,9 @@ export class Login extends Widget {
         this.props.pwd = e.value;
     }
 
-    public login() {
-        //
+    public loginUser() {
+        login(this.props.name,this.props.pwd).then(r => {
+            popNew('app-view-base-home');
+        });
     }
 }

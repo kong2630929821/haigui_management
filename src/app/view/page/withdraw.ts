@@ -1,3 +1,4 @@
+import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeWithdrawState, getWithdrawApply, getWithdrawTotal } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat } from '../../utils/logic';
@@ -36,28 +37,40 @@ export class Withdraw extends Widget {
         monthTotal:'0'
     };
 
+    public create() {
+        super.create();
+        this.getData();
+    }
+
+    // 切换过滤
     public changeTab(num:number) {
         this.props.activeTab = num;
-        if (num === 1) {
+        if (num === 2) {
             this.props.btn = '';
         } else {
             this.props.btn = '同意提现';
         }
+        this.props.showDataList = [];
+        this.props.datas.forEach(t => {
+            const v = deepCopy(t);
+            if (t[6] === Status[num]) {
+                this.props.withdrawIdList.push(v.shift());
+                this.props.showDataList.push(v);
+            }
+        });
         this.paint();
+    }
+
+    // 获取数据
+    public getData() {
         getWithdrawTotal().then(r => {
             this.props.userNum = r.day_count;
             this.props.dayMoney = priceFormat(r.day_money);
             this.props.monthTotal = priceFormat(r.month_total);
         });
-        this.getData();
-    }
-
-    public getData() {
         getWithdrawApply().then(r => {
-            let list = [];
             if (r.value && r.value.length > 0) {
-                this.props.datas = r.value;
-                list = r.value.map(item => {
+                this.props.datas = r.value.map(item => {
                     return [
                         item[0],           // id
                         item[1],           // uid
@@ -68,22 +81,13 @@ export class Withdraw extends Widget {
                         Status[item[4]]       // 状态
                     ];
                 });
-                list = list.filter(t => {
-                    if (t[6] === Status[this.props.activeTab]) {
-                        this.props.withdrawIdList.push(t.shift());
-
-                        return true;
-                    } 
-                    
-                    return false;
-                });
+                this.changeTab(this.props.activeTab);
             }
-            
-            this.props.showDataList = list;
             this.paint();
         });
     }
 
+    // 处理提现申请
     public async dealWith(e:any) {
         console.log(e);
         for (const v of e.value) {

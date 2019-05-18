@@ -534,3 +534,20 @@ export const getVipDetail = (uid:number) => {
 
     return requestAsync(msg);
 };
+
+/**
+ * 登录
+ * @param user user
+ * @param password pwd
+ */
+export const login = (user:string,password:string) => {
+    const msg = {
+        type:'mgr_login',
+        param:{
+            user,
+            password
+        }
+    };
+
+    return requestAsync(msg);
+};
