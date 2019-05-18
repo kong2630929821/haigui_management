@@ -22,7 +22,6 @@ export class GoodsInfo extends Widget {
     }
 
     public goDetail() {
-        debugger;
         console.log('132');
         getOrder(1011002,1);
         getOrder(1011002,2);

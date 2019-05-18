@@ -148,7 +148,6 @@ export const importGoods = (res) => {
         const supplierId = parseInt(res[i].供应商id,10);
         const pay_type = parseInt(res[i].支付类型,10);
         const cost = Number(res[i].成本价) * 100;
-        const supCost = Number(res[i].供货价) * 100;
         const origin = Number(res[i].普通售价) * 100;
         const vip_price = Number(res[i].会员价) * 100;
         const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
@@ -176,7 +175,7 @@ export const importGoods = (res) => {
                 detail.push(['','',[e,3,1]]);
             });
         }
-        const tmp = [id,name,brandId,areaId,supplierId,pay_type,supCost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
+        const tmp = [id,name,brandId,areaId,supplierId,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
         arr[i] = tmp;
     } 
     const str = JSON.stringify(arr);
@@ -341,7 +340,6 @@ export const getAllSupplier = () => {
     };
 
     return requestAsync(msg).then(r => {
-        
         console.log('所有的供应商:',r.value);
 
         return r.value;

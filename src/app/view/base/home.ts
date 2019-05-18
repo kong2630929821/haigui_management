@@ -50,15 +50,6 @@ export class Home extends Widget {
     // 切换默认过滤器页面
     public changePage(num: number) {
         this.props.activePage = this.props.pageList[num];
-        // 切换到所有订单页先将所有供应商查询出来
-        getAllSupplier().then((r) => {
-            const supplier = JSON.parse(r);
-            const arr = [];
-            for (const v of supplier) {
-                arr.push(v[0]);
-            }
-            this.props.supplierList = arr;
-        });
         this.paint();
     }
 }
