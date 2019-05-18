@@ -20,7 +20,16 @@
                 <option value="{{v}}">{{v}}</option>
             {{end}}
         </select>
-        <div w-class="search" on-tap="test">显示所有订单</div>
+        
+        <div>
+            开始时间<input type="datetime-local"/>
+            结束时间<input type="datetime-local"/>
+            <select on-change="showOrderByTime">
+                    {{for i,v of it.timeType}}
+                        <option value="{{v}}">{{v}}</option>
+                    {{end}}
+            </select>
+        </div>
         <div w-class="search" on-tap="exportOrder">导出订单</div>
         <div w-class="search" on-tap="searchById">按订单id查询</div>
         <input type="file" on-change="importTransport"/>导入运单
