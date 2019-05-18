@@ -4,22 +4,25 @@
     </div>
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>
-        <div w-class="input">
-            <widget w-tag="app-components-input">{placeHolder:"订单编号"}</widget>
-        </div>
-        <select>
+        <input type="text" placeholder="订单编号"/>
+        <select on-change="showOrderBySid">
             {{for i,v of it.supplierList}}
                 <option value="{{v}}">{{v}}</option>
             {{end}}
         </select>
-        <select>
+        <select on-change="showOrderByOrderType">
             {{for i,v of it.orderType}}
                 <option value="{{v}}">{{v}}</option>
             {{end}}
         </select>
-        <div w-class="search" on-tap="search">查询</div>
-        <div w-class="search" on-tap="test">显示所有供应商</div>
+        <select on-change="showOrderByExportState">
+            {{for i,v of it.exportType}}
+                <option value="{{v}}">{{v}}</option>
+            {{end}}
+        </select>
+        <div w-class="search" on-tap="test">显示所有订单</div>
         <div w-class="search" on-tap="exportOrder">导出订单</div>
+        <div w-class="search" on-tap="searchById">按订单id查询</div>
         <input type="file" on-change="importTransport"/>导入运单
     </div>
     <div>
