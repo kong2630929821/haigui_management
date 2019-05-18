@@ -148,7 +148,6 @@ export const importGoods = (res) => {
         const supplierId = parseInt(res[i].供应商id,10);
         const pay_type = parseInt(res[i].支付类型,10);
         const cost = Number(res[i].成本价) * 100;
-        const supCost = Number(res[i].供货价) * 100;
         const origin = Number(res[i].普通售价) * 100;
         const vip_price = Number(res[i].会员价) * 100;
         const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
@@ -176,7 +175,7 @@ export const importGoods = (res) => {
                 detail.push(['','',[e,3,1]]);
             });
         }
-        const tmp = [id,name,brandId,areaId,supplierId,pay_type,supCost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
+        const tmp = [id,name,brandId,areaId,supplierId,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
         arr[i] = tmp;
     } 
     const str = JSON.stringify(arr);
@@ -314,9 +313,8 @@ export const importTransport = (res) => {
         // const supplierId = Number(res[i].供货商ID);
         const supplierId = Number(res[i].supplierId);
         const uid = Number(res[i].uid);
-        const oid = res[i].id.startsWith(',') ? Number(res[i].id.substr(1)) :Number(res[i]);
-        // const sid = res[i].物流单号 ? res[i].物流单号 : '';
-        const sid = Number(res[i].物流单号.substr(1));
+        const oid = Number(res[i].id);
+        const sid = res[i].物流单号;
         arr.push([supplierId,uid,oid,sid]);
     }
     const str = JSON.stringify(arr);
@@ -342,7 +340,6 @@ export const getAllSupplier = () => {
     };
 
     return requestAsync(msg).then(r => {
-        
         console.log('所有的供应商:',r.value);
 
         return r.value;
@@ -375,6 +372,47 @@ export const selSupplier = () => {
     });
 
 };
+// 按订单编号查询订单
+export const getOrderById  = (orderId) => {
+    const msg = { 
+        type: 'select_orders',
+        param: { 
+            id:orderId
+        } 
+    };
+
+    return requestAsync(msg).then(r => {
+        return r.value;
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+// 获取所有订单
+export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) => {
+    const msg = { 
+        type: 'select_all_orders',
+        param: { 
+            id:id,       // 订单id,等于0表示从最大开始获取，大于0表示从指定订单id开始获取
+            count:count,   // 需要获取的订单信息数量，即一页需要显示的数量
+            time_type:time_type,    // 时间类型，1下单，2支付，3发货， 4收货，5完成
+            start:start ,               // 启始时间，单位毫秒
+            tail:tail,                // 结束时间，单位毫秒
+            sid:sid,                    // 供应商id，等于0表示所有供应商，大于0表示指定供应商
+            type:orderType,                // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
+            state:state                // 订单状态，0未导出，1已导出
+        } 
+    };
+
+    return requestAsync(msg).then(r => {
+        console.log('r=',r);
+
+        return r.value;
+    }).catch((e) => {
+        console.log(e);
+
+        return '';
+    });
+};
 // 获取指定供应商指定类型的订单
 export const getOrder  = (supplier,Ordertype) => {
     const msg = { 
@@ -390,7 +428,7 @@ export const getOrder  = (supplier,Ordertype) => {
     }).catch((e) => {
         console.log(e);
 
-        return '';
+        return 0;
     });
 };
 // 获取用户退货记录

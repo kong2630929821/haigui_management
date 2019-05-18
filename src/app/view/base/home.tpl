@@ -14,6 +14,6 @@
         <div w-class="right">
             <widget w-tag="app-view-page-{{it.activePage.page}}"></widget>
         </div>
-
+            
     </div>
 </div>

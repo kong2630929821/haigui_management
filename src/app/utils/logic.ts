@@ -58,3 +58,51 @@ export const unicode2Str = (infos:any) => {
 export const priceFormat = (price:number) => {
     return (price / 100).toFixed(2);
 };
+
+/**
+ * 时间控件的本地方法
+ */
+// 从某一天往前或往后加几天
+// day可以为负数
+const oneDay = 86400000; // 一天有多少毫秒
+export const parseDate = (time:string,day:number,fg?:number) => {
+    const timestamp = Date.parse(time) + day * oneDay;
+    
+    return dateToString(timestamp,fg);
+};
+// 将时间戳转换为字符串时间 
+// fg为0或不传 返回日期'2019-01-01'
+// fg为1 返回完整的时间'2019-01-01 10:00:00' 
+// fg为2 不返回秒
+export const dateToString = (timestamp:number,fg?:number) => {
+    const virtualDate = new Date(timestamp);
+    const year = virtualDate.getFullYear();
+    const month = virtualDate.getMonth() + 1;
+    const date = virtualDate.getDate();
+    const hour = virtualDate.getHours();
+    const minute = virtualDate.getMinutes();
+    const second = virtualDate.getSeconds();
+
+    const showYear = year >= 10 ? year :`0${year}` ;
+    const showMonth = month >= 10 ? month :`0${month}`;
+    const showDate = date >= 10 ? date :`0${date}`; 
+    const showHour = hour >= 10 ? hour :`0${hour}`;
+    const showminute = minute >= 10 ? minute :`0${minute}`;
+    const showsecond = second >= 10 ? second :`0${second}`;
+    if (fg === 1) {
+        return `${showYear}-${showMonth}-${showDate} ${showHour}:${showminute}:${showsecond}`;
+    } else if (fg === 2) {
+        return `${showYear}-${showMonth}-${showDate} ${showHour}:${showminute}`;
+    }
+    
+    return `${showYear}-${showMonth}-${showDate}`;
+};
+// 两个日期之间相差多少天
+export const subtractDate = (time1:string,time2:string) => {
+    return Math.abs(Date.parse(time2) - Date.parse(time1)) / oneDay;
+};
+
+// 判断两个日期的大小
+export const compareDate = (time1:string,time2:string) => {
+    return Date.parse(time1) > Date.parse(time2);
+};
