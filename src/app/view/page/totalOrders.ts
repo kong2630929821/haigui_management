@@ -20,7 +20,7 @@ export class TotalOrder extends Widget {
         showTitleList:['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态'],
         contentList:[],
         supplierList:['供应商id'],
-        orderType:['已下单未支付','已支付未发货','已发货未签收','已收货'],
+        orderType:['失败','已下单未支付','已支付未发货','已发货未签收','已收货'],
         exportType:['未导出','已导出'],
         timeType:['下单时间','支付时间','收货时间','发货时间','完成时间'],
         active:0,

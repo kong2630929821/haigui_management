@@ -6,13 +6,11 @@
                     <widget w-tag="app-components-input">{placeHolder:"订单编号"}</widget>
             </div>
             <div w-class="searchleft" on-tap="searchById">查询</div>
-            <div w-class="select">
-                <div style="display:inline-block;" ev-selected="filterTimeType">
-                    <widget w-tag="app-components-simpleFilter">{options:["下单时间","支付时间","收货时间","发货时间","完成时间"],active:{{it.active}} }</widget>
-                </div>
-                <input type="datetime-local" on-change="startTime"/>
-                <input type="datetime-local" on-change="endTime"/>
+            <div style="display:inline-block;margin:25px;" ev-selected="filterTimeType">
+                <widget w-tag="app-components-simpleFilter">{options:["下单时间","支付时间","收货时间","发货时间","完成时间"],active:{{it.active}} }</widget>
             </div>
+            <input type="datetime-local" on-change="startTime"/>
+            <input type="datetime-local" on-change="endTime"/>
             <div w-class="select">
                 <div style="display:inline-block;" ev-selected="filterSupplierId">
                         <widget w-tag="app-components-simpleFilter">{options:{{it.supplierList}},active:{{it.active}} }</widget>
