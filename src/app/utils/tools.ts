@@ -20,7 +20,15 @@ export const importRead = (f,ok) => { // 导入将excel读成json格式
         // wb.SheetNames[0]是获取Sheets中第一个Sheet的名字
         // wb.Sheets[Sheet名]获取第一个Sheet的数据
         
-        const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+        // 将所有数据类型改为字符串
+        const sheetData = wb.Sheets[wb.SheetNames[0]];
+        for (const k in sheetData) {
+            if (typeof sheetData[k] === 'object') {
+                sheetData[k].t = 's';
+                sheetData[k].v = `${sheetData[k].v}`;
+            }
+        }
+        const json = XLSX.utils.sheet_to_json(sheetData);
         ok && ok(json);
     };
     if (rABS) {
@@ -61,21 +69,9 @@ export const jsonToExcelConvertor = (JSONhead:any,JSONData:any, FileName:any) =>
         // 设置数据
     for (let i = 0; i < arrData.length; i++) {
         let rowContent = '<tr>';
-        const arr = [];
-        for (let value of arrData[i]) {
-            // console.log(arrData[i][index]);
-                // var value = arrData[i][index] === "." ? "" : arrData[i][index];
-            console.log('value=',value);
-            console.log(typeof(value));
-            const str = value.toString();
-            arr.push(str);
-            if (typeof(value) === 'number' && value.toString().length >= 12) {
-                console.log('yes');
-                value = ','.concat(value.toString());
-                console.log('valueToStr=',value);
-            }
-            // rowContent += `<td>${arrData[i][index]}</td>`;
-            rowContent += `<td>${value}</td>`;
+        for (const index in arrData[i]) {
+            
+            rowContent += `<td>${arrData[i][index]}</td>`;
         }
         excel += `${rowContent}</tr>`;
     }
