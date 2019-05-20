@@ -94,7 +94,6 @@
 }
 .btnBox{
     display: flex;
-    background: red;
 }
 .select{
     margin: 25px;
