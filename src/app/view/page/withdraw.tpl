@@ -4,21 +4,21 @@
             <img src="../../res/images/defultUser.png" w-class="tabImg"/>
             <div>
                 <div w-class="tabTitle">今日申请人数</div>
-                <div w-class="amount">7</div>
+                <div w-class="amount">{{it.userNum}}</div>
             </div>
         </div>
         <div w-class="tab">
             <img src="../../res/images/money.png" w-class="tabImg"/>
             <div>
                 <div w-class="tabTitle">今天提现</div>
-                <div w-class="amount">7</div>
+                <div w-class="amount">{{it.dayMoney}}</div>
             </div>
         </div>
         <div w-class="tab">
             <img src="../../res/images/money.png" w-class="tabImg"/>
             <div>
                 <div w-class="tabTitle">本月提现</div>
-                <div w-class="amount">7</div>
+                <div w-class="amount">{{it.monthTotal}}</div>
             </div>
         </div>
     </div>

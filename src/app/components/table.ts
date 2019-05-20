@@ -1,11 +1,6 @@
 // tslint:disable-next-line:missing-jsdoc
-import { ToneMapping } from 'three';
-import { deepCopy } from '../../pi/util/util';
 import { notify } from '../../pi/widget/event';
-import { getRealNode } from '../../pi/widget/painter';
 import { Widget } from '../../pi/widget/widget';
-import { importArea, importBrand, importFreight, importGoods, importGoodsCate, importInventory, importSupplier } from '../net/pull';
-import { importRead } from '../utils/tools';
 
 interface Props {
     title:any[];// 表格标题
@@ -68,12 +63,12 @@ export class Table extends Widget {
 
     // 点击下方按钮
     public clickBtn(e:any,fg:number) {
-        notify(e.node,'ev-table-btnClick',{ fg:fg });
+        notify(e.node,'ev-table-btnClick',{ fg:fg,value:this.props.selectList });
     }
 
     // 查看详情
     public goDetail(e:any,num:number,fg:number) {
-        notify(e.node,'ev-table-detail',{ value:this.props.datas[num], fg:fg });
+        notify(e.node,'ev-table-detail',{ value:this.props.datas[num], fg:fg,num:num });
     }
 
     // 导入excel

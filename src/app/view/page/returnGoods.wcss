@@ -66,8 +66,7 @@
 .input{
     width:200px;
     height:48px;
-    margin: 25px;
-    margin-right: 0;
+    margin: 25px 0;
     border:1px solid rgba(0,0,0,0.1);
     display: inline-block;
 }
@@ -76,9 +75,35 @@
     height:48px;
     line-height: 48px;
     text-align: center;
-    margin-right: 25px;
     color: #fff;
     font-size: 18px;
     background:#1991EB;
-    display:inline-block;
+    margin-top: 25px;
+}
+.title{
+    width:150px;
+    height:48px;
+    line-height: 48px;
+    text-align: center;
+    color: #354052;
+    font-size:18px;
+    font-family:SourceSansPro-Semibold;
+    font-weight:600;
+    background:white;
+    margin: 25px;
+}
+.activeTitle{
+    width:150px;
+    height:48px;
+    line-height: 48px;
+    text-align: center;
+    color: white;
+    font-size:18px;
+    font-family:SourceSansPro-Semibold;
+    font-weight:600;
+    background:#273142;
+    margin: 25px;
+}
+.btnBox{
+    display: flex;
 }
