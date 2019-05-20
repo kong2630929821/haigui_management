@@ -34,7 +34,7 @@ export class DateSelection extends Widget {
             ...this.props,
             ...props
         };
-        super.setProps(props);
+        super.setProps(this.props);
         let now = new Date();
         if (this.props.showDate) {
             now = new Date(this.props.showDate);
@@ -49,7 +49,6 @@ export class DateSelection extends Widget {
         const index = new Date(`${this.props.year}-${this.props.month}-1`).getDay(); // 当月1号是星期几
         for (let i = 0;i < 6;i++) {   // 6行
             this.props.dateList[i] = [];
-            debugger;
             for (let j = 0;j < 7;j++) {  // 7列
                 // tslint:disable-next-line:binary-expression-operand-order
                 const num = 7 * i + j - index;
