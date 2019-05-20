@@ -11,12 +11,15 @@
     align-items: center;
 }
 .prep{
-    width:36px;
+    width:60px;
     height:36px;
     box-sizing: border-box;
     border-radius:4px;
+    text-align: center;
+    line-height: 36px;
     display: inline-block;
     position: relative;
+    font-size: 14px;
     border:1px solid rgba(0,0,0,0.1);
 }
 .li{
@@ -31,10 +34,13 @@
     display: inline-block;
 }
 .next{
-    width:36px;
+    width:60px;
     height:36px;
     box-sizing: border-box;
     border-radius:4px;
+    text-align: center;
+    line-height: 36px;
+    font-size: 14px;
     display: inline-block;
     position: relative;
     border:1px solid rgba(0,0,0,0.1);

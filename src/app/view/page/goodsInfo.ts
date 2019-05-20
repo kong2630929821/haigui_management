@@ -1,5 +1,5 @@
 import { Widget } from '../../../pi/widget/widget';
-import { getAllGoods, getCurrentGood } from '../../net/pull';
+import { getAllGoods, getCurrentGood, getGoodsKey } from '../../net/pull';
 
 /**
  * 商品信息
@@ -13,23 +13,26 @@ export class GoodsInfo extends Widget {
             ['1256400023','六角眉笔刷头','CK-255df45451','177/88B','15234525','10','1500','199/100/110/399/233'],
             ['1256400023','六角眉笔刷头','CK-255df45451','177/88B','15234525','10','1500','199/100/110/399/233']
         ],
-        shopList:[],// 存所有的商品
-        showTitleList:['商品ID','商品名称','商品SKU','商品规格','供货商ID','销售数量','库存','会员价/成本价/供货价/市场价/折扣价'],
+        shopNum:0,
+        showTitleList:['商品ID','商品名','商品SKU','商品规格','供货商ID','供应商名称','已下单未支付数量','已下单已支付数量','库存数量','供货价','成本价','原价','会员价','折后价','是否保税','税费'],
         showDetail:false,
-        page:1,// 上一个操作是第几页
         currentIndex:0,// 当前页数
         searchValue:''// 输入的搜索值
     };
     public create() {
         super.create();
-        this.init(0,15);
+        this.init(1);
     }
-    public init(index:number,count:number) {
-        getAllGoods(index,count).then(r => {
-            const shop = JSON.parse(r.value);
-            this.props.shopList = shop;
-            this.props.showDataList = this.props.shopList.slice(0,3);
-            this.paint();
+    public init(index:number) {
+        getGoodsKey(index).then(r1 => {
+            console.log('111111111',r1);
+            const data = JSON.parse(r1.value);
+            this.props.shopNum = data[1];
+            getAllGoods(index === 1 ? 0 :data[0],3).then(r => {
+                const shop = JSON.parse(r.value);
+                this.props.showDataList = shop;
+                this.paint();
+            });
         });
     }
     public inputChange(e:any) {
@@ -45,31 +48,17 @@ export class GoodsInfo extends Widget {
             const shop = JSON.parse(r.value);
             this.props.showDataList = shop;
             this.paint();
-        });
-    }
-    // 下一页
-    public next(e:any) {
-        console.log(e.value,this.props.page);
-        const shopIndex = this.props.showDataList.length - 1;
-        const shopId = this.props.showDataList[shopIndex][0];
-        getAllGoods(shopId,3).then(r => {
-            const shop = JSON.parse(r.value);
-            if (e.value !== 2) {
-                this.props.shopList.push(...shop);
-            }
-            this.props.showDataList = shop;
-            console.log(this.props.shopList);
+        }).catch(e => {
+            this.props.showDataList = [];
             this.paint();
         });
+    }
+    // 分页
+    public pageChange(e:any) {
+        const index = (e.value) * 3;
+        this.init(index === 0 ? 1 :index);
 
     }
-    // 上一页
-    public prep(e:any) {
-        console.log(e.value);
-        this.props.showDataList = this.props.shopList.slice((e.value - 1) * 3,e.value * 3);
-        this.paint();
-    }
-   
     public detailBack() {
         this.props.showDetail = false;
         this.paint();

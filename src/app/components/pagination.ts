@@ -38,7 +38,7 @@ export class Pagination extends Widget {
         } else {
             this.props.currentIndex--;
         }
-        notify(event.node,'ev-prep',{ value:this.props.currentIndex + 1 });
+        notify(event.node,'ev-changeCurrent',{ value:this.props.currentIndex });
         this.paint();
     }
 
@@ -54,7 +54,7 @@ export class Pagination extends Widget {
         } else {
             this.props.currentIndex++;
         }
-        notify(event.node,'ev-next',{ value:this.props.currentIndex + 1 });
+        notify(event.node,'ev-changeCurrent',{ value:this.props.currentIndex });
         this.paint();
         
     }

@@ -545,6 +545,22 @@ export const getVipDetail = (uid:number) => {
     return requestAsync(msg);
 };
 
+// select_goods_keys
+export const getGoodsKey = (count:number) => {
+    const msg = {
+        type:'select_goods_keys',
+        param:{
+            count
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
 // 获取所有的商品信息，支付分页
 export const getAllGoods = (star:number,num:number) => {
     const msg = { 
