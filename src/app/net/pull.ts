@@ -503,6 +503,17 @@ export const changeHWangState = (id:number,uid:number,state:number) => {
 };
 
 /**
+ * 获取提现统计
+ */
+export const getWithdrawTotal = () => {
+    const msg = {
+        type:'mall_mgr/members@get_withdraw_total',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+/**
  * 获取提现申请列表
  */
 export const getWithdrawApply = () => {
@@ -556,6 +567,38 @@ export const getVipDetail = (uid:number) => {
         type:'mall_mgr/members@get_level_details',
         param:{
             uid
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 登录
+ * @param user user
+ * @param password pwd
+ */
+export const login = (user:string,password:string) => {
+    const msg = {
+        type:'mgr_login',
+        param:{
+            user,
+            password
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 设置海王标签
+ */
+export const setHwangLabel = (uid:number,label:number) => {
+    const msg = {
+        type:'mall_mgr/members@set_haiwang_label',
+        param:{
+            uid,
+            label
         }
     };
 

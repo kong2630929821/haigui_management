@@ -29,10 +29,19 @@
         <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)">处理完成</div>
     </div>
 
+    <div w-class="searchBox">
+        <div w-class="tableTitle">筛选查询</div>
+        <div w-class="input" ev-input-change="phoneChange">
+            <widget w-tag="app-components-input">{placeHolder:"手机号"}</widget>
+        </div>
+        <div w-class="search" on-tap="search">查询</div>
+
+    </div>
+
     {{if it.showDataList}}
-    <div ev-table-btnClick="dealWith">
+    <div ev-table-detail="dealWith">
         <div w-class="tableTitle">数据列表</div>
-        <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},btn1:{{it.btn}} }</widget>
+        <widget w-tag="app-components-tableDeal">{datas: {{it.showDataList}},title:{{it.showTitleList}},inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
     </div>
     {{end}}
 </div>

@@ -68,3 +68,13 @@
     -moz-appearance:none; /* Firefox */
     -webkit-appearance:none; /* Safari 和 Chrome */
 }
+.dealBtn{
+    width:100px;
+    height:20px;
+    font-size:14px;
+    color:rgba(33,129,28,1);
+    line-height:20px;
+    text-decoration: underline;
+    display: inline-block;
+    text-align: center;
+}
