@@ -120,13 +120,20 @@ export class OpenHWang extends Widget {
 
     public search() {
         if (this.props.searPhone) {
-            const index = this.props.showDataList.findIndex(item => item[2] === this.props.searPhone);
-            if (index > -1) {
-                this.props.applyIdList = [this.props.applyIdList[index]];
-                this.props.showDataList = [this.props.showDataList[index]];
+            const ids = [];
+            const list = [];
+            for (const i in this.props.showDataList) {
+                const v = this.props.showDataList[i];
+                if (v[2] === this.props.searPhone) {
+                    ids.push(this.props.applyIdList[i]);
+                    list.push(v);
+                }
             }
-            
+            this.props.showDataList = list;
+            this.props.applyIdList = ids;
             this.paint();
+        } else {
+            this.changeTab(this.props.activeTab);
         }
     }
 }

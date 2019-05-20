@@ -41,7 +41,7 @@
     {{if it.showDataList}}
     <div ev-table-detail="dealWith">
         <div w-class="tableTitle">数据列表</div>
-        <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
+        <widget w-tag="app-components-tableDeal">{datas: {{it.showDataList}},title:{{it.showTitleList}},inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
     </div>
     {{end}}
 </div>

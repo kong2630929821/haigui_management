@@ -30,7 +30,7 @@
                     {{end}}
 
                     {{if it.inlineBtn1 || it.inlineBtn2}}
-                    <td w-class="td">
+                    <td w-class="td" style="display: flex;">
 
                         {{if it.inlineBtn1}}
                         <div w-class="dealBtn" style="color:#FA2929" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>

@@ -64,7 +64,7 @@ export class Withdraw extends Widget {
         this.props.withdrawIdList = [];
         this.props.datas.forEach(t => {
             const v = deepCopy(t);
-            if (t[6] === Status[num]) {
+            if (t[6] === Status[num] || (num === 2 && t[6] === Status[3])) {
                 this.props.withdrawIdList.push(v.shift());
                 this.props.showDataList.push(v);
             }
@@ -120,13 +120,20 @@ export class Withdraw extends Widget {
 
     public search() {
         if (this.props.searUid) {
-            const index = this.props.showDataList.findIndex(item => item[0] === this.props.searUid);
-            if (index > -1) {
-                this.props.withdrawIdList = [this.props.withdrawIdList[index]];
-                this.props.showDataList = [this.props.showDataList[index]];
+            const ids = [];
+            const list = [];
+            for (const i in this.props.showDataList) {
+                const v = this.props.showDataList[i];
+                if (v[0] === Number(this.props.searUid)) {
+                    ids.push(this.props.withdrawIdList[i]);
+                    list.push(v);
+                }
             }
-            
+            this.props.showDataList = list;
+            this.props.withdrawIdList = ids;
             this.paint();
+        } else {
+            this.changeTab(this.props.activeTab);
         }
     }
 
