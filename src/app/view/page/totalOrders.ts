@@ -50,14 +50,17 @@ export class TotalOrder extends Widget {
         const jsonHead = ['订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态','物流单号'];
         const aoa = [jsonHead];
         const jsonData = this.props.contentList;
-        for (let v of jsonData) {
-            v = v.slice(1);
-            aoa.push(v);
+        for (let data of jsonData) {
+            data = data.slice(1);
+            for (let i = 0;i < data.length; i++) {
+                data[i] = data[i].toString();
+            }
+            aoa.push(data);
         }
         console.log(aoa);
         const sheet = XLSX.utils.aoa_to_sheet(aoa);
         
-        openDownloadDialog(sheet2blob(sheet), '导出.xlsx');
+        openDownloadDialog(sheet2blob(sheet), '待发货订单.xlsx');
         
         console.log('contentList ===',jsonData);
         // jsonToExcelConvertor(jsonHead,jsonData,'订单');
