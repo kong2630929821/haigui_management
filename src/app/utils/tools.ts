@@ -20,7 +20,15 @@ export const importRead = (f,ok) => { // 导入将excel读成json格式
         // wb.SheetNames[0]是获取Sheets中第一个Sheet的名字
         // wb.Sheets[Sheet名]获取第一个Sheet的数据
         
-        const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+        // 将所有数据类型改为字符串
+        const sheetData = wb.Sheets[wb.SheetNames[0]];
+        for (const k in sheetData) {
+            if (typeof sheetData[k] === 'object') {
+                sheetData[k].t = 's';
+                sheetData[k].v = `${sheetData[k].v}`;
+            }
+        }
+        const json = XLSX.utils.sheet_to_json(sheetData);
         ok && ok(json);
     };
     if (rABS) {
@@ -71,6 +79,7 @@ export const jsonToExcelConvertor = (JSONhead:any,JSONData:any, FileName:any) =>
             arr.push(str);
             if (typeof(value) === 'number' && value.toString().length >= 12) {
                 console.log('yes');
+                // value = ','.concat(value.toString());
                 value = ','.concat(value.toString());
                 console.log('valueToStr=',value);
             }
