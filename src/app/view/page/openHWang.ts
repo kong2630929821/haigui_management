@@ -1,6 +1,6 @@
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
-import { changeHWangState, getHWangApply } from '../../net/pull';
+import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
 import { popNewMessage, unicode2Str } from '../../utils/logic';
 interface Props {
     datas:any[];  // 原始数据
@@ -11,6 +11,9 @@ interface Props {
     btn2:string;  // 按钮
     applyIdList:number[]; // 申请开通海王的ID列表
     searPhone:string;  // 查询手机号
+    dayCount:number;   // 今天申请人数
+    monCount:number;  // 本月申请人数
+    allCount:number;  // 海王总数
 }
 const Status = [
     '申请中',
@@ -32,7 +35,10 @@ export class OpenHWang extends Widget {
         btn1:'',
         btn2:'开始处理',
         applyIdList:[],
-        searPhone:''
+        searPhone:'',
+        dayCount:0,
+        monCount:0,
+        allCount:0
     };
 
     public create() {
@@ -67,6 +73,12 @@ export class OpenHWang extends Widget {
 
     // 获取数据
     public getData() {
+        getHwangTotal().then(r => {
+            this.props.dayCount = r.day_count;
+            this.props.monCount = r.month_count;
+            this.props.allCount = r.haiw_count;
+            this.paint();
+        });
         getHWangApply().then(r => {
             if (r.value && r.value.length > 0) {
                 this.props.datas = r.value.map(item => {

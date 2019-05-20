@@ -9,15 +9,18 @@ interface Props {
     showTitleList:string[];  // 显示标题
     activeTab:number;  // 活跃tab
     withdrawIdList:number[]; // 未处理的提现单号列表
-    btn:string;  // 处理按钮
+    btn1:string;  // 按钮
+    btn2:string;  // 按钮
     userNum:number; // 今日提现人数
     dayMoney:string; // 今日提现金额
     monthTotal:string; // 本月提现金额
+    searUid:string;
 }
 const Status = [
     '申请中',
     '处理中',
-    '处理完成'
+    '提现成功',
+    '提现失败'
 ];
 /**
  * 提现
@@ -31,10 +34,12 @@ export class Withdraw extends Widget {
         activeTab:0,
         withdrawIdList:[],
         datas:[],
-        btn:'同意提现',
+        btn1:'',
+        btn2:'开始处理',
         userNum:0,
         dayMoney:'0',
-        monthTotal:'0'
+        monthTotal:'0',
+        searUid:''
     };
 
     public create() {
@@ -46,9 +51,14 @@ export class Withdraw extends Widget {
     public changeTab(num:number) {
         this.props.activeTab = num;
         if (num === 2) {
-            this.props.btn = '';
+            this.props.btn1 = '';
+            this.props.btn2 = '';
+        } else if (num === 1) {
+            this.props.btn1 = '拒绝提现';
+            this.props.btn2 = '同意提现';
         } else {
-            this.props.btn = '同意提现';
+            this.props.btn1 = '';
+            this.props.btn2 = '开始处理';
         }
         this.props.showDataList = [];
         this.props.withdrawIdList = [];
@@ -88,18 +98,36 @@ export class Withdraw extends Widget {
         });
     }
 
+    // 查询用户id输入
+    public uidChange(e:any) {
+        this.props.searUid = e.value;
+    }
+  
     // 处理提现申请
     public async dealWith(e:any) {
-        console.log(e);
-        for (const v of e.value) {
-            const id = this.props.withdrawIdList[v];
-            const uid = this.props.showDataList[v][0];
-            if (id && uid) {
-                await changeWithdrawState(id, uid, this.props.activeTab + 1);
-            }
+        const id = this.props.withdrawIdList[e.num];
+        const uid = this.props.showDataList[e.num][0];
+        if (id && uid) {
+            if (e.fg === 1) {
+                await changeWithdrawState(id, uid, 3);  // 拒绝
+            } else {
+                await changeWithdrawState(id, uid, this.props.activeTab + 1);  // 处理中 同意
+            } 
         }
         popNewMessage('处理完成');
         this.getData();
+    }
+
+    public search() {
+        if (this.props.searUid) {
+            const index = this.props.showDataList.findIndex(item => item[0] === this.props.searUid);
+            if (index > -1) {
+                this.props.withdrawIdList = [this.props.withdrawIdList[index]];
+                this.props.showDataList = [this.props.showDataList[index]];
+            }
+            
+            this.paint();
+        }
     }
 
 }

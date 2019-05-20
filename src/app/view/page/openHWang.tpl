@@ -4,21 +4,21 @@
             <img src="../../res/images/defultUser.png" w-class="tabImg"/>
             <div>
                 <div w-class="tabTitle">今日申请人数</div>
-                <div w-class="amount">7</div>
+                <div w-class="amount">{{it.dayCount}}</div>
             </div>
         </div>
         <div w-class="tab">
             <img src="../../res/images/defultUser.png" w-class="tabImg"/>
             <div>
                 <div w-class="tabTitle">本月开通人数</div>
-                <div w-class="amount">7</div>
+                <div w-class="amount">{{it.monCount}}</div>
             </div>
         </div>
         <div w-class="tab">
             <img src="../../res/images/defultUser.png" w-class="tabImg"/>
             <div>
                 <div w-class="tabTitle">海王总数</div>
-                <div w-class="amount">7</div>
+                <div w-class="amount">{{it.allCount}}</div>
             </div>
         </div>
     </div>

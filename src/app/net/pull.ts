@@ -469,6 +469,18 @@ export const getAllGoods = () => {
 };
 
 /**
+ * 获取海王统计信息
+ */
+export const getHwangTotal = () => {
+    const msg = {
+        type:'mall_mgr/members@get_haiwang_application_total',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+/**
  * 获取海王申请列表
  */
 export const getHWangApply = () => {
