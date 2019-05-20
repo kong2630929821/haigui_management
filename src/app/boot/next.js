@@ -69,7 +69,6 @@ winit.initNext = function () {
 				"pi/ui/root.tpl",
 				"pi/ui/html.js",
 				"pi/ui/html.tpl",
-				"pi/components/message/",
 				"app/net/",
 				"app/view/",
 				"app/components/",

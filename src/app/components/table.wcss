@@ -31,6 +31,7 @@
     text-align: center;
     border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
+    WORD-BREAK: break-all;
 }
 .bottom{
     height:48px;
@@ -66,4 +67,14 @@
     appearance:none;
     -moz-appearance:none; /* Firefox */
     -webkit-appearance:none; /* Safari 和 Chrome */
+}
+.dealBtn{
+    width:100px;
+    height:20px;
+    font-size:14px;
+    color:rgba(33,129,28,1);
+    line-height:20px;
+    text-decoration: underline;
+    display: inline-block;
+    text-align: center;
 }

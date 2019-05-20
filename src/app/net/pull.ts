@@ -311,9 +311,9 @@ export const importTransport = (res) => {
         // const oid = Number(res[i].订单编号);
         // const sid = res[i].物流单号 ? res[i].物流单号 : '';
         // const supplierId = Number(res[i].供货商ID);
-        const supplierId = Number(res[i].supplierId);
-        const uid = Number(res[i].uid);
-        const oid = Number(res[i].id);
+        const supplierId = Number(res[i].供货商ID);
+        const uid = Number(res[i].用户ID);
+        const oid = Number(res[i].订单编号);
         const sid = res[i].物流单号;
         arr.push([supplierId,uid,oid,sid]);
     }
@@ -396,7 +396,7 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
             count:count,   // 需要获取的订单信息数量，即一页需要显示的数量
             time_type:time_type,    // 时间类型，1下单，2支付，3发货， 4收货，5完成
             start:start ,               // 启始时间，单位毫秒
-            tail:tail,                // 结束时间，单位毫秒
+            tail:new Date().getTime(),                // 结束时间，单位毫秒
             sid:sid,                    // 供应商id，等于0表示所有供应商，大于0表示指定供应商
             type:orderType,                // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
             state:state                // 订单状态，0未导出，1已导出
@@ -450,6 +450,23 @@ export const getRreturnGoods = () => {
         console.log(e);
     });
 };
+// 获取所有的商品信息，支付分页
+export const getAllGoods = () => {
+    const msg = { 
+        type: 'select_all_goods',
+        param: { 
+            id:10010003,
+            count:3
+        } 
+    };
+    requestAsync(msg).then(r => {
+        console.log('r=',r);
+
+        return r;
+    }).catch((e) => {
+        console.log(e);
+    });
+};
 
 /**
  * 获取海王申请列表
@@ -485,6 +502,17 @@ export const changeHWangState = (id:number,uid:number,state:number) => {
     return requestAsync(msg);
 };
 
+/**
+ * 获取提现统计
+ */
+export const getWithdrawTotal = () => {
+    const msg = {
+        type:'mall_mgr/members@get_withdraw_total',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
 /**
  * 获取提现申请列表
  */
@@ -545,6 +573,37 @@ export const getVipDetail = (uid:number) => {
     return requestAsync(msg);
 };
 
+/**
+ * 登录
+ * @param user user
+ * @param password pwd
+ */
+export const login = (user:string,password:string) => {
+    const msg = {
+        type:'mgr_login',
+        param:{
+            user,
+            password
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 设置海王标签
+ */
+export const setHwangLabel = (uid:number,label:number) => {
+    const msg = {
+        type:'mall_mgr/members@set_haiwang_label',
+        param:{
+            uid,
+            label
+        }
+    };
+
+    return requestAsync(msg);
+};
 // select_goods_keys
 export const getGoodsKey = (count:number) => {
     const msg = {

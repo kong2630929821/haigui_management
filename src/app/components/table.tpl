@@ -33,7 +33,7 @@
                     
                     {{for j,r of v}}
                     <td w-class="td">
-                        <span>{{typeof(r)=="string" ? r :JSON.stringify(r)}}</span>
+                        <span style="word-break: break-all;">{{typeof(r)=="string" ? r :JSON.stringify(r)}}</span>
                     </td>
                     {{end}}
 
