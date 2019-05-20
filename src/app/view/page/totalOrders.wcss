@@ -81,3 +81,21 @@
     float: right;
     margin: 25px;
 }
+.searchleft{
+    width:150px;
+    height:48px;
+    line-height: 48px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    background:#1991EB;
+    float: left;
+    margin: 25px;
+}
+.btnBox{
+    display: flex;
+    background: red;
+}
+.select{
+    margin: 25px;
+}
