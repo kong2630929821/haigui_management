@@ -311,9 +311,9 @@ export const importTransport = (res) => {
         // const oid = Number(res[i].订单编号);
         // const sid = res[i].物流单号 ? res[i].物流单号 : '';
         // const supplierId = Number(res[i].供货商ID);
-        const supplierId = Number(res[i].supplierId);
-        const uid = Number(res[i].uid);
-        const oid = Number(res[i].id);
+        const supplierId = Number(res[i].供货商ID);
+        const uid = Number(res[i].用户ID);
+        const oid = Number(res[i].订单编号);
         const sid = res[i].物流单号;
         arr.push([supplierId,uid,oid,sid]);
     }

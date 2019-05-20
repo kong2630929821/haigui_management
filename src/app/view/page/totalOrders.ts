@@ -52,6 +52,7 @@ export class TotalOrder extends Widget {
         const jsonData = this.props.contentList;
         for (let v of jsonData) {
             v = v.slice(1);
+            v[0] = v[0].toString();
             aoa.push(v);
         }
         console.log(aoa);
