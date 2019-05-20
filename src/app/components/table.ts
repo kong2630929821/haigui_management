@@ -68,7 +68,7 @@ export class Table extends Widget {
 
     // 查看详情
     public goDetail(e:any,num:number,fg:number) {
-        notify(e.node,'ev-table-detail',{ value:this.props.datas[num], fg:fg });
+        notify(e.node,'ev-table-detail',{ value:this.props.datas[num], fg:fg,num:num });
     }
 
     // 导入excel

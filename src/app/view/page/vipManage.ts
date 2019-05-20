@@ -17,8 +17,9 @@ interface Props {
     searUid:string;  // 查询的UID
     active:number;
     optionsList:string[]; // 下拉框
+    userLabel:string;  // 用户标签
 }
-const UserLabel = ['无','市级代理','省级代理'];
+const UserLabel = ['','市代理','省代理'];
 /**
  * 会员管理
  */
@@ -38,7 +39,8 @@ export class VipManage extends Widget {
         uid:0,
         searUid:'',
         active:0,
-        optionsList:['白客','海宝','海王','市代理','省代理']
+        optionsList:['白客','海宝','海王','市代理','省代理'],
+        userLabel:''
     };
 
     public create() {
@@ -99,7 +101,7 @@ export class VipManage extends Widget {
         this.paint();
     }
 
-    // 切换海王 海宝
+    // 过滤用户
     public filterUser(e:any) {
         this.props.active = e.value;
         this.updateDatas(e.value);
@@ -107,6 +109,7 @@ export class VipManage extends Widget {
 
     // 更新数据
     public updateDatas(num:number) {
+        this.props.userLabel = this.props.optionsList[this.props.active];
         let list = [];
         switch (num) {
             case 0:
@@ -122,12 +125,15 @@ export class VipManage extends Widget {
                 list = this.props.hWangDatas.filter(item => {
                     return item[5] === '市代理';
                 });
+                break;
             case 4:// 省代理 
                 list = this.props.hWangDatas.filter(item => {
                     return item[5] === '省代理';
                 });
+                break;
             default:
         }
+        console.log(list);
         this.props.showDataList = list.map(t => {
             const r = deepCopy(t);
             r.pop(); // 删除最后一项用户类型
@@ -163,7 +169,7 @@ export class VipManage extends Widget {
             }
             this.props.showDataList = res.map(t => {
                 const r = deepCopy(t);
-                r.pop(); // 删除最后一项用户类型
+                this.props.userLabel = r.pop(); // 删除最后一项用户类型
     
                 return r;
             });

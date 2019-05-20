@@ -51,6 +51,7 @@ export class Withdraw extends Widget {
             this.props.btn = '同意提现';
         }
         this.props.showDataList = [];
+        this.props.withdrawIdList = [];
         this.props.datas.forEach(t => {
             const v = deepCopy(t);
             if (t[6] === Status[num]) {
@@ -94,7 +95,7 @@ export class Withdraw extends Widget {
             const id = this.props.withdrawIdList[v];
             const uid = this.props.showDataList[v][0];
             if (id && uid) {
-                await changeWithdrawState(id, uid, 2);
+                await changeWithdrawState(id, uid, this.props.activeTab + 1);
             }
         }
         popNewMessage('处理完成');

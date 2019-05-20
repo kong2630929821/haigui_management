@@ -589,3 +589,18 @@ export const login = (user:string,password:string) => {
 
     return requestAsync(msg);
 };
+
+/**
+ * 设置海王标签
+ */
+export const setHwangLabel = (uid:number,label:number) => {
+    const msg = {
+        type:'mall_mgr/members@set_haiwang_label',
+        param:{
+            uid,
+            label
+        }
+    };
+
+    return requestAsync(msg);
+};

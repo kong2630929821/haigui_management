@@ -44,6 +44,6 @@
         {{end}}
 
     {{else}}
-    <widget w-tag="app-view-page-vipDetail">{uid:{{it.uid}} }</widget>
+    <widget w-tag="app-view-page-vipDetail">{uid:{{it.uid}},userLabel:{{it.userLabel}} }</widget>
     {{end}}
 </div>
