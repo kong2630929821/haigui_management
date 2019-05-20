@@ -33,5 +33,6 @@
         <widget w-tag="app-components-table">{datas: {{it.contentList}},title:{{it.showTitleList}},needCheckBox:false}</widget>
     </div>
     <div w-class="searchleft" on-tap="exportOrder">导出订单</div>
+    
     <input type="file" on-change="importTransport"/>导入运单
 </div>
