@@ -396,7 +396,7 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
             count:count,   // 需要获取的订单信息数量，即一页需要显示的数量
             time_type:time_type,    // 时间类型，1下单，2支付，3发货， 4收货，5完成
             start:start ,               // 启始时间，单位毫秒
-            tail:tail,                // 结束时间，单位毫秒
+            tail:new Date().getTime(),                // 结束时间，单位毫秒
             sid:sid,                    // 供应商id，等于0表示所有供应商，大于0表示指定供应商
             type:orderType,                // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
             state:state                // 订单状态，0未导出，1已导出

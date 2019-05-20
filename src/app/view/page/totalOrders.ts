@@ -1,7 +1,7 @@
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, importTransport } from '../../net/pull';
-import { importRead, jsonToExcelConvertor } from '../../utils/tools';
+import { importRead, jsonToExcelConvertor, openDownloadDialog, sheet2blob } from '../../utils/tools';
 
 /**
  * 所有订单
@@ -29,7 +29,7 @@ export class TotalOrder extends Widget {
         exportActive:0,
         timeTypeActive:0,
         start:0,
-        tail:1558334628335,
+        tail:0,
         inputOrderId:0,
         orderList:[]
     };
@@ -47,9 +47,20 @@ export class TotalOrder extends Widget {
         });
     }
     public exportOrder(e:any) {
-        const jsonHead = ['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态','物流单号'];
+        const jsonHead = ['订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态','物流单号'];
+        const aoa = [jsonHead];
         const jsonData = this.props.contentList;
-        jsonToExcelConvertor(jsonHead,jsonData,'订单');
+        for (let v of jsonData) {
+            v = v.slice(1);
+            aoa.push(v);
+        }
+        console.log(aoa);
+        const sheet = XLSX.utils.aoa_to_sheet(aoa);
+        
+        openDownloadDialog(sheet2blob(sheet), '导出.xlsx');
+        
+        console.log('contentList ===',jsonData);
+        // jsonToExcelConvertor(jsonHead,jsonData,'订单');
     }
 
     public importTransport(e:any) {
