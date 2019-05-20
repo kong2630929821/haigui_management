@@ -503,6 +503,17 @@ export const changeHWangState = (id:number,uid:number,state:number) => {
 };
 
 /**
+ * 获取提现统计
+ */
+export const getWithdrawTotal = () => {
+    const msg = {
+        type:'mall_mgr/members@get_withdraw_total',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+/**
  * 获取提现申请列表
  */
 export const getWithdrawApply = () => {
@@ -560,4 +571,119 @@ export const getVipDetail = (uid:number) => {
     };
 
     return requestAsync(msg);
+};
+
+/**
+ * 登录
+ * @param user user
+ * @param password pwd
+ */
+export const login = (user:string,password:string) => {
+    const msg = {
+        type:'mgr_login',
+        param:{
+            user,
+            password
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 设置海王标签
+ */
+export const setHwangLabel = (uid:number,label:number) => {
+    const msg = {
+        type:'mall_mgr/members@set_haiwang_label',
+        param:{
+            uid,
+            label
+        }
+    };
+
+    return requestAsync(msg);
+};
+// select_goods_keys
+export const getGoodsKey = (count:number) => {
+    const msg = {
+        type:'select_goods_keys',
+        param:{
+            count
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
+// 获取所有的商品信息，支付分页
+export const getAllGoods = (star:number,num:number) => {
+    const msg = { 
+        type: 'select_all_goods',
+        param: { 
+            id:star,
+            count:num
+        } 
+    };
+    
+    return requestAsync(msg).then(r => {
+        // console.log('r=',r);
+
+        return r;
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+// 获取当前商品的信息
+export const getCurrentGood = (shopValue:string) => {
+    let shopID = 0;
+    let shopName = '';
+    if (isNaN(parseInt(shopValue))) {
+        shopName = shopValue;
+    } else {
+        shopID = parseInt(shopValue);
+    }
+    const msg = {
+        type:'select_goods',
+        param:{
+            id:shopID,
+            name:shopName
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
+
+// 获取所有退货信息
+export const getReturnGoods = (id:number,count:number,start:number,tail:number,state:number) => {
+    const msg = {
+        type:'select_all_return_goods',
+        param:{
+            id,
+            count,
+            start,
+            tail,
+            state
+        }
+    };
+    // tslint:disable-next-line:no-unnecessary-local-variable
+    const data = [['1001100','1120','SKU','1','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中']];
+
+    return data; 
+
+    // return requestAsync(msg).then(r => {
+
+    //     return r;
+    // }).catch(e => {
+    //     console.log(e);
+    // });
 };

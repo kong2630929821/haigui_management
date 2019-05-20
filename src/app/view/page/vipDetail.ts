@@ -1,6 +1,8 @@
+import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { getVipDetail } from '../../net/pull';
+import { getVipDetail, setHwangLabel } from '../../net/pull';
+import { popNewMessage, priceFormat, timestampFormat, unicode2Str } from '../../utils/logic';
 interface Props {
     userData:any[];  // 个人数据
     showDataList:any[];  // 显示数据
@@ -9,7 +11,10 @@ interface Props {
     uid:number;  // uid
     hBaoDatas:any[]; // 原始海宝数据
     hWangDatas:any[]; // 原始海王数据
+    userLabel:string;  // 查看用户的标签
 }
+const userType = ['','海王','海宝','白客'];
+const UserLabel = ['海王','市代理','省代理'];
 /**
  * 会员详情查看
  */
@@ -23,7 +28,8 @@ export class VipDetail extends Widget {
         activeTab:0,
         uid:0,
         hBaoDatas:[],
-        hWangDatas:[]
+        hWangDatas:[],
+        userLabel:''
     };
 
     public setProps(props:any) {
@@ -32,23 +38,51 @@ export class VipDetail extends Widget {
             ...props
         };
         super.setProps(this.props);
+        console.log(props);
         getVipDetail(props.uid).then(r => {
             const v = r.userTotal;
             if (v) {
+                let user = userType[v[9]];
+                if (v[9] === 1 && this.props.userLabel) {  // 海王有标签 省代理 市代理
+                    user = this.props.userLabel;
+                }
                 this.props.userData = [
-                    v[0],
-                    v[1],
-                    v[2],
-                    v[3],
-                    v[6],
-                    v[7]
+                    { th:'用户ID',td:v[0] },
+                    { th:'注册时间',td:timestampFormat(v[8]) },
+                    { th:'姓名',td:unicode2Str(v[7][0]) },
+                    { th:'微信名',td:unicode2Str(v[1]) },
+                    { th:'身份',td:user },
+                    { th:'手机号',td:v[2] },
+                    { th:'资产信息',td:`现金(￥${priceFormat(v[6][0])}) 海贝(${v[6][1]}) 积分(${v[6][2]})` },
+                    { th:'本月收益',td:`现金(￥${priceFormat(v[4][0])}) 海贝(${v[4][1]}) 积分(${v[4][2]})` },
+                    { th:'总收益',td:`现金(￥${priceFormat(v[5][0])}) 海贝(${v[5][1]}) 积分(${v[5][2]})` },
+                    { th:'地址信息',td:unicode2Str(v[3]) },
+                    { th:'身份证号',td:v[7][1] }
                 ];
             }
             if (r.haib) {
-                this.props.hBaoDatas = r.haib;
+                this.props.hBaoDatas = r.haib.map(v => {
+                    return [
+                        v[0],  // UID
+                        unicode2Str(v[1]),  // 姓名
+                        v[2],  // 手机
+                        unicode2Str(v[3]),  // 地址
+                        priceFormat(v[4]),  // 本月收益
+                        priceFormat(v[5])   // 总收益
+                    ];
+                });
             }
             if (r.haiw) {
-                this.props.hWangDatas = r.haiw;
+                this.props.hWangDatas = r.haiw.map(v => {
+                    return [
+                        v[0],  // UID
+                        unicode2Str(v[1]),  // 姓名
+                        v[2],  // 手机
+                        unicode2Str(v[3]),  // 地址
+                        priceFormat(v[4]),  // 本月收益
+                        priceFormat(v[5])   // 总收益
+                    ];
+                });
             }
             this.props.showDataList = this.props.hBaoDatas;
             this.paint();
@@ -59,6 +93,27 @@ export class VipDetail extends Widget {
         this.props.activeTab = num;
         this.props.showDataList = num ? this.props.hWangDatas :this.props.hBaoDatas;
         this.paint();
+    }
+
+    // 升级  降级
+    public upUserType(num:number) {
+        popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”升级至${UserLabel[num]}` },() => {
+            setHwangLabel(this.props.uid,num).then(r => {
+                popNewMessage('升级成功');
+                this.props.userLabel = this.props.userData[4].td = UserLabel[num];
+                this.paint();
+            });
+        });
+    }
+
+    public dnUserType(num:number) {
+        popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”降级至${UserLabel[num]}` },() => {
+            setHwangLabel(this.props.uid,num).then(r => {
+                popNewMessage('降级成功');
+                this.props.userLabel = this.props.userData[4].td = UserLabel[num];
+                this.paint();
+            });
+        });
     }
 
     public goBack(e:any) {

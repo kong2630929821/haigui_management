@@ -1,0 +1,5 @@
+{
+    "tpl" : "./tableDeal.tpl",
+    "js" : "./table.ts",
+    "css" : "./table.wcss"
+}

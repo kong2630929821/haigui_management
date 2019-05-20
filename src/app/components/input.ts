@@ -111,7 +111,6 @@ export class Input extends Widget {
         }
         // 密码输入时检验非法字符
         if (this.props.itype === 'password' && !this.availableJudge(currentValue) && currentValue.length > 0) {
-            popNew('app-components1-message-message',{ content:'非法字符' });
             currentValue = currentValue.slice(0,currentValue.length - 1); 
         }
         // 数字输入时检验输入格式
