@@ -484,23 +484,6 @@ export const getRreturnGoods = () => {
         console.log(e);
     });
 };
-// 获取所有的商品信息，支付分页
-export const getAllGoods = () => {
-    const msg = { 
-        type: 'select_all_goods',
-        param: { 
-            id:10010003,
-            count:3
-        } 
-    };
-    requestAsync(msg).then(r => {
-        console.log('r=',r);
-
-        return r;
-    }).catch((e) => {
-        console.log(e);
-    });
-};
 
 /**
  * 获取海王申请列表
@@ -710,7 +693,7 @@ export const getReturnGoods = (id:number,count:number,start:number,tail:number,s
         }
     };
     // tslint:disable-next-line:no-unnecessary-local-variable
-    const data = [['1001100','1120','SKU','1','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中']];
+    const data = [['1001100','1120','SKU','1','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中','2019-09-10','2019-09-10']];
 
     return data; 
 
