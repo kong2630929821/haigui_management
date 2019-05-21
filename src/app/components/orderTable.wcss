@@ -1,0 +1,87 @@
+.header{
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+.body{
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-left: 1px solid #ccc;
+}
+.table{
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 100%;
+}
+.has-gutter{
+    color: #909399;
+    font-weight: 500;
+}
+.th{
+    padding: 10px;
+    line-height: 25px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+.td{
+    transition: background-color .25s ease;
+    padding: 10px;
+    line-height: 25px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    WORD-BREAK: break-all;
+}
+.th1{
+    padding: 0;
+}
+.td1{
+   padding: 0;
+}
+.bottom{
+    height:48px;
+    background:rgba(240,240,240,1);
+    line-height: 48px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #CCC;
+    border-top: none;
+}
+.allCheck{
+    display: flex;
+    align-items: center;
+    width: 100px;
+    padding-left: 30px;
+    box-sizing: border-box;
+    text-align: right;
+}
+.btns{
+    margin-right: 50px;
+}
+.btn{
+    height:36px;
+    color: #21811C;
+    text-align: center;
+    line-height: 36px;
+    font-size: 14px;
+    display: inline-block;
+}
+.btnColor{
+    color: red;
+}
+.input{
+    appearance:none;
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari 和 Chrome */
+}
+.dealBtn{
+    width:100px;
+    height:20px;
+    font-size:14px;
+    color:rgba(33,129,28,1);
+    line-height:20px;
+    text-decoration: underline;
+    display: inline-block;
+    text-align: center;
+}
