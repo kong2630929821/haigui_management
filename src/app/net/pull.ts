@@ -466,12 +466,12 @@ export const getHwangTotal = () => {
 /**
  * 获取海王申请列表
  */
-export const getHWangApply = () => {
+export const getHWangApply = (stTime?:number,edTime?:number) => {
     const msg = {
         type:'mall_mgr/members@get_haiwang_application',
         param:{
-            start_time:0,
-            end_time:Date.now()
+            start_time: stTime || 0,
+            end_time: edTime || Date.now()
         }
     };
 
@@ -511,12 +511,12 @@ export const getWithdrawTotal = () => {
 /**
  * 获取提现申请列表
  */
-export const getWithdrawApply = () => {
+export const getWithdrawApply = (stTime?:number,edTime?:number) => {
     const msg = {
         type:'mall_mgr/members@get_withdraw_info',
         param:{
-            start_time:0,
-            end_time:Date.now()
+            start_time:stTime || 0,
+            end_time:edTime || Date.now()
         }
     };
 

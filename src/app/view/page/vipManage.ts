@@ -88,7 +88,7 @@ export class VipManage extends Widget {
                     ];
                 });
             }
-            this.updateDatas(0);
+            this.updateDatas(this.props.active);
         });
     }
 
@@ -116,7 +116,9 @@ export class VipManage extends Widget {
                 list = this.props.hBaoDatas;
                 break;
             case 2:
-                list = this.props.hWangDatas;
+                list = this.props.hWangDatas.filter(item => {
+                    return item[5] === '';
+                });
                 break;
             case 3:// 市代理 
                 list = this.props.hWangDatas.filter(item => {

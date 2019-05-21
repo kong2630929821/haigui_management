@@ -1,7 +1,7 @@
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
-import { popNewMessage, unicode2Str } from '../../utils/logic';
+import { dateToString, parseDate, popNewMessage, unicode2Str } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 interface Props {
     datas:any[];  // 原始数据
@@ -16,6 +16,8 @@ interface Props {
     monCount:number;  // 本月申请人数
     allCount:number;  // 海王总数
     showDateBox:boolean; // 展示日期选择框
+    startTime:string;  // 开始时间
+    endTime:string;  // 结束时间
 }
 const Status = [
     '申请中',
@@ -31,7 +33,7 @@ export class OpenHWang extends Widget {
         showDataList:[
             // ['123456','张三','15534429570','四川省成都市金牛区XX街道XX小区XX','申请中']
         ],
-        showTitleList:['用户ID','姓名','手机号','地址信息','微信名','邀请人id','受理状态'],
+        showTitleList:['用户ID','姓名','手机号','地址信息','微信名','邀请人id','申请时间','受理状态'],
         activeTab:0,
         datas:[],
         btn1:'',
@@ -41,11 +43,15 @@ export class OpenHWang extends Widget {
         dayCount:0,
         monCount:0,
         allCount:0,
-        showDateBox:false
+        showDateBox:false,
+        startTime:'',
+        endTime:''
     };
 
     public create() {
         super.create();
+        this.props.endTime = dateToString(Date.now(),1);
+        this.props.startTime = parseDate(this.props.endTime,-7,1);
         this.getData();
     }
 
@@ -66,7 +72,7 @@ export class OpenHWang extends Widget {
         this.props.applyIdList = [];
         this.props.datas.forEach(t => {
             const v = deepCopy(t);
-            if (t[7] === Status[num] || (num === 2 && t[7] === Status[3])) {
+            if (t[8] === Status[num] || (num === 2 && t[8] === Status[3])) {
                 this.props.applyIdList.push(v.shift());
                 this.props.showDataList.push(v);
             }
@@ -82,7 +88,9 @@ export class OpenHWang extends Widget {
             this.props.allCount = r.haiw_count;
             this.paint();
         });
-        getHWangApply().then(r => {
+        getHWangApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
+            this.props.datas = [];
+            this.props.showDataList = [];
             if (r.value && r.value.length > 0) {
                 this.props.datas = r.value.map(item => {
                     return [
@@ -93,6 +101,7 @@ export class OpenHWang extends Widget {
                         unicode2Str(item[4]),     // 地址
                         unicode2Str(item[8]),   // 微信名
                         item[7],    // 邀请人id
+                        dateToString(item[6],1), // 申请时间
                         Status[item[5]]  // 状态
                     ];
                 });
@@ -139,7 +148,7 @@ export class OpenHWang extends Widget {
             this.props.applyIdList = ids;
             this.paint();
         } else {
-            this.changeTab(this.props.activeTab);
+            this.getData();
         }
     }
 
@@ -160,6 +169,12 @@ export class OpenHWang extends Widget {
     public changeDateBox(e:any) {
         this.props.showDateBox = e.value;
         this.paint();
+    }
+
+    // 改变时间
+    public  changeDate(e:any) {
+        this.props.startTime = e.value[0];
+        this.props.endTime = e.value[1];
     }
 
     public pageClick() {

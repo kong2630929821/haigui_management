@@ -44,6 +44,8 @@
         {{end}}
 
     {{else}}
-    <widget w-tag="app-view-page-vipDetail">{uid:{{it.uid}},userLabel:{{it.userLabel}} }</widget>
+    <div ev-change-userType="getDatas">
+        <widget w-tag="app-view-page-vipDetail">{uid:{{it.uid}},userLabel:{{it.userLabel}} }</widget>
+    </div>
     {{end}}
 </div>

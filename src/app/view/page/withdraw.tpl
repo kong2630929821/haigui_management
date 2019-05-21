@@ -1,4 +1,4 @@
-<div w-class="page">
+<div w-class="page" on-tap="pageClick">
     <div w-class="tabRow">
         <div w-class="tab">
             <img src="../../res/images/defultUser.png" w-class="tabImg"/>
@@ -36,8 +36,8 @@
         </div>
         <div w-class="search" on-tap="search">查询</div>
         
-        <div style="display:inline-block" ev-dateBox-change="changeDateBox">
-            <widget w-tag="app-components-periodPicker">{showDateBox:{{it.showDateBox}} }</widget>
+        <div style="display:inline-block" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
+            <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
         </div>
     </div>
 

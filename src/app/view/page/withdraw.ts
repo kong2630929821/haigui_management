@@ -1,7 +1,7 @@
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeWithdrawState, getWithdrawApply, getWithdrawTotal } from '../../net/pull';
-import { popNewMessage, priceFormat, timestampFormat } from '../../utils/logic';
+import { dateToString, parseDate, popNewMessage, priceFormat, timestampFormat } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
 interface Props {
@@ -17,6 +17,8 @@ interface Props {
     monthTotal:string; // 本月提现金额
     searUid:string;
     showDateBox:boolean;  // 日期选择框
+    startTime:string;  // 开始时间
+    endTime:string;  // 结束时间
 }
 const Status = [
     '申请中',
@@ -42,11 +44,15 @@ export class Withdraw extends Widget {
         dayMoney:'0',
         monthTotal:'0',
         searUid:'',
-        showDateBox:false
+        showDateBox:false,
+        startTime:'',
+        endTime:''
     };
 
     public create() {
         super.create();
+        this.props.endTime = dateToString(Date.now(),1);
+        this.props.startTime = parseDate(this.props.endTime,-7,1);
         this.getData();
     }
 
@@ -82,7 +88,9 @@ export class Withdraw extends Widget {
             this.props.dayMoney = priceFormat(r.day_money);
             this.props.monthTotal = priceFormat(r.month_total);
         });
-        getWithdrawApply().then(r => {
+        getWithdrawApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
+            this.props.datas = [];
+            this.props.showDataList = [];
             if (r.value && r.value.length > 0) {
                 this.props.datas = r.value.map(item => {
                     return [
@@ -96,7 +104,7 @@ export class Withdraw extends Widget {
                     ];
                 });
                 this.changeTab(this.props.activeTab);
-            }
+            } 
             this.paint();
         });
     }
@@ -137,7 +145,7 @@ export class Withdraw extends Widget {
             this.props.withdrawIdList = ids;
             this.paint();
         } else {
-            this.changeTab(this.props.activeTab);
+            this.getData();
         }
     }
 
@@ -158,6 +166,12 @@ export class Withdraw extends Widget {
     public changeDateBox(e:any) {
         this.props.showDateBox = e.value;
         this.paint();
+    }
+
+    // 改变时间
+    public  changeDate(e:any) {
+        this.props.startTime = e.value[0];
+        this.props.endTime = e.value[1];
     }
 
     public pageClick() {

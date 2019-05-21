@@ -118,23 +118,25 @@ export class VipDetail extends Widget {
     }
 
     // 升级  降级
-    public upUserType(num:number) {
+    public upUserType(e:any,num:number) {
         popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”升级至${UserLabel[num]}` },() => {
             setHwangLabel(this.props.uid,num).then(r => {
                 popNewMessage('升级成功');
                 this.props.userLabel = this.props.userData[4].td = UserLabel[num];
                 this.paint();
+                notify(e.node,'ev-change-userType',{});
             });
         });
     }
 
     // 降级
-    public dnUserType(num:number) {
+    public dnUserType(e:any,num:number) {
         popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”降级至${UserLabel[num]}` },() => {
             setHwangLabel(this.props.uid,num).then(r => {
                 popNewMessage('降级成功');
                 this.props.userLabel = this.props.userData[4].td = UserLabel[num];
                 this.paint();
+                notify(e.node,'ev-change-userType',{});
             });
         });
     }
