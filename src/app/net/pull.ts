@@ -658,15 +658,47 @@ export const getReturnGoods = (id:number,count:number,start:number,tail:number,s
             state
         }
     };
-    // tslint:disable-next-line:no-unnecessary-local-variable
-    const data = [['1001100','1120','SKU','1','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中','2019-09-10','2019-09-10']];
 
-    return data; 
+    return requestAsync(msg).then(r => {
 
-    // return requestAsync(msg).then(r => {
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
 
-    //     return r;
-    // }).catch(e => {
-    //     console.log(e);
-    // });
+// 订单号查询退货信息
+export const getReturnGoodsId = (id:number) => {
+    const msg = {
+        type:'select_return_goods',
+        param:{
+            id
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
+
+// 改变退货状态
+export const getReturnStatus = (uid:number,id:number,state:number) => {
+    const msg = {
+        type:'set_return_goods',
+        param:{
+            uid,
+            id,
+            state
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
 };
