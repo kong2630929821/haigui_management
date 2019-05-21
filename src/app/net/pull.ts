@@ -1,3 +1,5 @@
+import { parseOrder, parseOrderShow } from '../utils/tools';
+import { Order } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
 /**
@@ -405,8 +407,16 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
 
     return requestAsync(msg).then(r => {
         console.log('r=',r);
+        const infos = <Order[]>JSON.parse(r.value);
+        if (!infos) {
+            alert('暂无数据');
 
-        return r.value;
+            return [];
+        }
+        const ordersShow = parseOrderShow(infos,orderType);
+        console.log('orders =====',ordersShow);
+
+        return ordersShow;
     }).catch((e) => {
         console.log(e);
 
@@ -414,17 +424,27 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
     });
 };
 // 获取指定供应商指定类型的订单
-export const getOrder  = (supplier,Ordertype) => {
+export const getOrder  = (supplier,Ordertype,oids) => {
     const msg = { 
         type: 'select_supplier_order',
         param: { 
             id:supplier,
-            type:Ordertype
+            type:Ordertype,
+            oids
         } 
     };
 
     return requestAsync(msg).then(r => {
-        return r.value;
+        const infos = <Order[]>JSON.parse(r.value);
+        if (!infos) {
+            alert('暂无数据');
+
+            return [];
+        }
+        const ordersShow = parseOrderShow(infos,Ordertype);
+        console.log('orders =====',ordersShow);
+
+        return ordersShow;
     }).catch((e) => {
         console.log(e);
 

@@ -13,5 +13,6 @@ export class SpecialWidget extends Widget {
             ...props
         };
         super.setProps(this.props);
+        console.log('---------',this.props);
     }
 }

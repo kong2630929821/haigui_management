@@ -24,7 +24,14 @@ export class PeriodPicker extends SpecialWidget {
         showDateBox:false, 
         position:''
     };
-    
+    public setProps(props:any) {
+        this.props = {
+            ...this.props,
+            ...props
+        };
+        console.log('props==',this.props);
+        super.setProps(this.props);
+    }
     public changeDateBox(e:any) {
         this.props.showDateBox = !this.props.showDateBox;
         const item = getRealNode(e.node).getBoundingClientRect();
@@ -37,6 +44,7 @@ export class PeriodPicker extends SpecialWidget {
         }
         this.props.position = style;
         this.paint();
+        console.log('changeDateBox', this.props.showDateBox);
         notify(e.node,'ev-dateBox-change',{ value:this.props.showDateBox });
     }
 
