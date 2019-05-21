@@ -19,7 +19,8 @@ export class GoodsInfo extends Widget {
         returnStatus:0, // 当前退货状态 0退货申请 1退货中 2退货完成
         startTime:'',  // 查询开始时间
         endTime:'', // 查询结束时间
-        showDateBox:[false,false]
+        showDateBox:[false,false],
+        numberOfApplications:0
     };
     public checkType(index:number) {
         this.props.returnStatus = index;
@@ -40,6 +41,9 @@ export class GoodsInfo extends Widget {
                 returnGoods = this.dataProcessing(returnGoods);
             }
             this.props.showDataList = returnGoods;
+            if (status === 1) {
+                this.props.numberOfApplications = this.props.showDataList.length;
+            }
             this.paint();
         });
     }
@@ -102,13 +106,17 @@ export class GoodsInfo extends Widget {
             const returnGoods = JSON.parse(r.value);
             returnGoods[0].forEach((v,i) => {
                 if (i === 7) {
-                    if ((v === 1 || v === -1) && this.props.returnStatus === 2) {
-                        this.props.showDataList = returnGoods;
-                    } else if (v === 1 && this.props.returnStatus === 1) {
-                        this.props.showDataList = returnGoods;
-                    } else if (v === 1 && this.props.returnStatus === 0) {
-                        this.props.showDataList = returnGoods;
+                    // 判断退货完成查询
+                    if ((v === 1 || v === -1) && this.props.returnStatus === 2 && returnGoods[0][11] !== 0) {
+                        this.props.showDataList = this.dataProcessing(returnGoods);
+                    } else if (v === 1 && this.props.returnStatus === 1 && returnGoods[0][10] !== 0 && returnGoods[0][11] === 0) {
+                        // 判断退货中查询
+                        this.props.showDataList = this.dataProcessing(returnGoods);
+                    } else if (v === 1 && this.props.returnStatus === 0 && returnGoods[0][10] === 0) {
+                        // 判断申请查询
+                        this.props.showDataList = this.dataProcessing(returnGoods);
                     } else {
+                        // 其他情况
                         this.props.showDataList = [];
                     }
                 }

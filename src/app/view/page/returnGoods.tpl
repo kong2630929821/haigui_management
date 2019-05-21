@@ -1,7 +1,7 @@
 <div w-class="page" on-tap="close">
     {{if !it.showDetail}}
     <div w-class="tabRow">
-        <div w-class="{{it.returnStatus==0?'activeTitle':'title'}}" on-tap="checkType(0)">退货申请{{it.showDataList.length}}</div>
+        <div w-class="{{it.returnStatus==0?'activeTitle':'title'}}" on-tap="checkType(0)">退货申请{{it.numberOfApplications}}</div>
         <div w-class="{{it.returnStatus==1?'activeTitle':'title'}}" on-tap="checkType(1)">退货中</div>
         <div w-class="{{it.returnStatus==2?'activeTitle':'title'}}" on-tap="checkType(2)">退货完成</div>
 
