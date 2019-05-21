@@ -203,7 +203,7 @@ export class TotalOrder extends Widget {
             const temp = [];
             let orderState = '';
             if (orderInfo[i][8] === 0) {
-                orderState = '待付款';
+                orderState = '待付款';  
             } else if (orderInfo[i][9] === 0) {
                 orderState = '待发货';
             } else if (orderInfo[i][10] === 0) {

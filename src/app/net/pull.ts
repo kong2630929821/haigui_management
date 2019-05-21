@@ -450,23 +450,6 @@ export const getRreturnGoods = () => {
         console.log(e);
     });
 };
-// 获取所有的商品信息，支付分页
-export const getAllGoods = () => {
-    const msg = { 
-        type: 'select_all_goods',
-        param: { 
-            id:10010003,
-            count:3
-        } 
-    };
-    requestAsync(msg).then(r => {
-        console.log('r=',r);
-
-        return r;
-    }).catch((e) => {
-        console.log(e);
-    });
-};
 
 /**
  * 获取海王申请列表
