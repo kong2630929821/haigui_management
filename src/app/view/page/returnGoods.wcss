@@ -107,3 +107,7 @@
 .btnBox{
     display: flex;
 }
+.dataBox{
+    width: 381px;
+    margin-top: 26px;
+}
