@@ -7,7 +7,7 @@ export const importRead = (f,ok) => { // 导入将excel读成json格式
     const rABS = false; // 是否将文件读取为ArrayBuffer
     const reader = new FileReader();
     reader.onload = (e) =>  {// onload在读取完成时触发
-        const data = e.target.result;// 取到读取的内容或是二进制或是arraybuffer
+        const data = (<any>e.target).result;// 取到读取的内容或是二进制或是arraybuffer
         if (rABS) {// 拿到excel中内容
             wb = XLSX.read(btoa(fixdata(data)), {// 手动转化
                 type: 'base64'
@@ -49,89 +49,7 @@ const fixdata = (data) => {
     return o;
 };
 
-// 导出
-export const jsonToExcelConvertor = (JSONhead:any,JSONData:any, FileName:any) => {
-    if (JSONData === undefined) {
-        alert('导出为空表');
-
-        return;
-    }
-    // 先转化json
-    const arrData = typeof JSONData !== 'object' ? JSON.parse(JSONData) : JSONData;
-    let excel = '<table>';
-    let rowHead = '<tr>';
-    // 设置表头
-    JSONhead.forEach((item) => {
-        rowHead += `<th>${item}</th>`;
-    });
-    // 换行
-    excel += `${rowHead}</tr>`;
-        // 设置数据
-    for (let i = 0; i < arrData.length; i++) {
-        let rowContent = '<tr>';
-        const arr = [];
-        for (let value of arrData[i]) {
-            // console.log(arrData[i][index]);
-                // var value = arrData[i][index] === "." ? "" : arrData[i][index];
-            console.log('value=',value);
-            console.log(typeof(value));
-            const str = value.toString();
-            arr.push(str);
-            if (typeof(value) === 'number' && value.toString().length >= 12) {
-                console.log('yes');
-                // value = ','.concat(value.toString());
-                value = ','.concat(value.toString());
-                console.log('valueToStr=',value);
-            }
-            // rowContent += `<td>${arrData[i][index]}</td>`;
-            rowContent += `<td>${value}</td>`;
-        }
-        excel += `${rowContent}</tr>`;
-    }
-
-    excel += '</table>';
-
-    let excelFile = '<html xmlns:o=\'urn:schemas-microsoft-com:office:office\' xmlns:x=\'urn:schemas-microsoft-com:office:excel\' xmlns=\'http://www.w3.org/TR/REC-html40\'>';
-    excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
-    excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel';
-    excelFile += '; charset=UTF-8">';
-    excelFile += '<head>';
-    excelFile += '<!--[if gte mso 9]>';
-    excelFile += '<xml>';
-    excelFile += '<x:ExcelWorkbook>';
-    excelFile += '<x:ExcelWorksheets>';
-    excelFile += '<x:ExcelWorksheet>';
-    excelFile += '<x:Name>';
-    excelFile += '{worksheet}';
-    excelFile += '</x:Name>';
-    excelFile += '<x:WorksheetOptions>';
-    excelFile += '<x:DisplayGridlines/>';
-    excelFile += '</x:WorksheetOptions>';
-    excelFile += '</x:ExcelWorksheet>';
-    excelFile += '</x:ExcelWorksheets>';
-    excelFile += '</x:ExcelWorkbook>';
-    excelFile += '</xml>';
-    excelFile += '<![endif]-->';
-    excelFile += '</head>';
-    excelFile += '<body>';
-    excelFile += excel;
-    excelFile += '</body>';
-    excelFile += '</html>';
-
-    const uri = `data:application/vnd.ms-excel;charset=utf-8,${encodeURIComponent(excelFile)}`;
-
-    const link = document.createElement('a');
-    link.href = uri;
-
-    // link.style = 'visibility:hidden';
-    link.download = `${FileName}.xls`;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
-
-export const openDownloadDialog = (url, saveName) => {
+const openDownloadDialog = (url, saveName) => {
     if (typeof url === 'object' && url instanceof Blob) {
         url = URL.createObjectURL(url); // 创建blob地址
     }
@@ -139,7 +57,7 @@ export const openDownloadDialog = (url, saveName) => {
     aLink.href = url;
     aLink.download = saveName || ''; // HTML5新增的属性，指定保存文件名，可以不要后缀，注意，file:///模式下不会生效
     let event;
-    if (window.MouseEvent) event = new MouseEvent('click');
+    if ((<any>window).MouseEvent) event = new MouseEvent('click');
     else {
         event = document.createEvent('MouseEvents');
         event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -148,7 +66,7 @@ export const openDownloadDialog = (url, saveName) => {
 };
 
 // 将一个sheet转成最终的excel文件的blob对象，然后利用URL.createObjectURL下载
-export const  sheet2blob = (sheet, sheetName?) => {
+const  sheet2blob = (sheet, sheetName?) => {
     sheetName = sheetName || 'sheet1';
     const workbook = {
         SheetNames: [sheetName],
@@ -175,4 +93,15 @@ export const  sheet2blob = (sheet, sheetName?) => {
     const blob = new Blob([s2ab(wbout)], { type:'application/octet-stream' });
     
     return blob;
+};
+
+/**
+ * 导出excel格式
+ * @param aoa 导出的数据  二维数组格式 例：[["姓名","年龄","职业"],["张三",18,"程序员"]]
+ * @param excelName 导出的excel文件名
+ */
+export const exportExcel = (aoa:any[][],excelName:string) => {
+    const sheet = XLSX.utils.aoa_to_sheet(aoa);
+            
+    openDownloadDialog(sheet2blob(sheet),excelName);
 };

@@ -1,7 +1,7 @@
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, importTransport } from '../../net/pull';
-import { importRead, jsonToExcelConvertor, openDownloadDialog, sheet2blob } from '../../utils/tools';
+import { exportExcel, importRead } from '../../utils/tools';
 
 /**
  * 所有订单
@@ -46,42 +46,41 @@ export class TotalOrder extends Widget {
             this.paint();
         });
     }
-    public exportOrder(e:any) {
+    public async exportOrder(e:any) {
         const supplierId = Number(this.props.supplierList[this.props.supplierActive]);
-        getOrder(supplierId,2).then((r) => {
-            
-            const data = JSON.parse(r);
-            const arr = [];
-            for (let i = 0;i < data.length;i++) {
-                let orderState = '';
-                if (data[i][13] === 0) {
-                    orderState = '待付款';
-                } else if (data[i][14] === 0) {
-                    orderState = '待发货';
-                } else if (data[i][15] === 0) {
-                    orderState = '待收货';
-                } else if (data[i][16] > 0) {
-                    orderState = '已完成';
+        console.log(this.props.orderTypeActive);
+        if (this.props.orderTypeActive === 2) {
+            await getOrder(supplierId,2).then((r) => {
+                const data = JSON.parse(r);
+                const arr = [];
+                for (let i = 0;i < data.length;i++) {
+                    let orderState = '';
+                    if (data[i][13] === 0) {
+                        orderState = '待付款';
+                    } else if (data[i][14] === 0) {
+                        orderState = '待发货';
+                    } else if (data[i][15] === 0) {
+                        orderState = '待收货';
+                    } else if (data[i][16] > 0) {
+                        orderState = '已完成';
+                    }
+                    arr.push([data[i][0],data[i][1],data[i][3][0][0],data[i][3][0][1],data[i][3][0][4],data[i][3][0][5],data[i][0],data[i][2],data[i][8],data[i][9],data[i][11],orderState]);
                 }
-                arr.push([data[i][0],data[i][1],data[i][3][0][0],data[i][3][0][1],data[i][3][0][4],data[i][3][0][5],data[i][0],data[i][2],data[i][8],data[i][9],data[i][10],orderState]);
-            }
-            this.props.contentList = arr;
-        }).then(() => {
-            const jsonHead = ['订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态','物流单号'];
-            const aoa = [jsonHead];
-            const jsonData = this.props.contentList;
-            for (let v of jsonData) {
-                v = v.slice(1);
-                v[0] = v[0].toString();
-                aoa.push(v);
-            }
-            console.log(aoa);
-            const sheet = XLSX.utils.aoa_to_sheet(aoa);
-            
-            openDownloadDialog(sheet2blob(sheet), '未发货订单.xlsx');
-            
-            console.log('contentList ===',jsonData);
-        });
+                this.props.contentList = arr;
+            });
+        }
+        const jsonHead = ['订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态','物流单号'];
+        const aoa = [jsonHead];
+        const jsonData = this.props.contentList;
+        for (let v of jsonData) {
+            v = v.slice(1);
+            v[0] = v[0].toString();
+            aoa.push(v);
+        }
+        console.log(aoa);
+        exportExcel(aoa,`${this.props.orderType[this.props.orderTypeActive]}订单.xlsx`);
+        
+        console.log('contentList ===',jsonData);
     }
 
     public importTransport(e:any) {
@@ -229,7 +228,7 @@ export class TotalOrder extends Widget {
             } else if (orderInfo[i][11] > 0) {
                 orderState = '已完成';
             }
-            temp.push(0,orderInfo[i][0],orderInfo[i][12],orderInfo[i][15],orderInfo[i][16],orderInfo[i][17],orderInfo[i][18],orderInfo[i][1],orderInfo[i][2],orderInfo[i][3],orderInfo[i][4],orderState);
+            temp.push(0,orderInfo[i][0],orderInfo[i][12],orderInfo[i][15],orderInfo[i][16],orderInfo[i][17],orderInfo[i][18],orderInfo[i][1],orderInfo[i][2],orderInfo[i][3],orderInfo[i][5],orderState);
             contentList.push(temp);
             this.props.contentList = contentList;
             this.paint();
