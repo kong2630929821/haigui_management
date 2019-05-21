@@ -47,23 +47,41 @@ export class TotalOrder extends Widget {
         });
     }
     public exportOrder(e:any) {
-        const jsonHead = ['订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态','物流单号'];
-        const aoa = [jsonHead];
-        const jsonData = this.props.contentList;
-        for (let data of jsonData) {
-            data = data.slice(1);
-            for (let i = 0;i < data.length; i++) {
-                data[i] = data[i].toString();
+        const supplierId = Number(this.props.supplierList[this.props.supplierActive]);
+        getOrder(supplierId,2).then((r) => {
+            
+            const data = JSON.parse(r);
+            const arr = [];
+            for (let i = 0;i < data.length;i++) {
+                let orderState = '';
+                if (data[i][13] === 0) {
+                    orderState = '待付款';
+                } else if (data[i][14] === 0) {
+                    orderState = '待发货';
+                } else if (data[i][15] === 0) {
+                    orderState = '待收货';
+                } else if (data[i][16] > 0) {
+                    orderState = '已完成';
+                }
+                arr.push([data[i][0],data[i][1],data[i][3][0][0],data[i][3][0][1],data[i][3][0][4],data[i][3][0][5],data[i][0],data[i][2],data[i][8],data[i][9],data[i][10],orderState]);
             }
-            aoa.push(data);
-        }
-        console.log(aoa);
-        const sheet = XLSX.utils.aoa_to_sheet(aoa);
-        
-        openDownloadDialog(sheet2blob(sheet), '待发货订单.xlsx');
-        
-        console.log('contentList ===',jsonData);
-        // jsonToExcelConvertor(jsonHead,jsonData,'订单');
+            this.props.contentList = arr;
+        }).then(() => {
+            const jsonHead = ['订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态','物流单号'];
+            const aoa = [jsonHead];
+            const jsonData = this.props.contentList;
+            for (let v of jsonData) {
+                v = v.slice(1);
+                v[0] = v[0].toString();
+                aoa.push(v);
+            }
+            console.log(aoa);
+            const sheet = XLSX.utils.aoa_to_sheet(aoa);
+            
+            openDownloadDialog(sheet2blob(sheet), '未发货订单.xlsx');
+            
+            console.log('contentList ===',jsonData);
+        });
     }
 
     public importTransport(e:any) {
@@ -203,7 +221,7 @@ export class TotalOrder extends Widget {
             const temp = [];
             let orderState = '';
             if (orderInfo[i][8] === 0) {
-                orderState = '待付款';  
+                orderState = '待付款';
             } else if (orderInfo[i][9] === 0) {
                 orderState = '待发货';
             } else if (orderInfo[i][10] === 0) {
