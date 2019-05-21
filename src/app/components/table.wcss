@@ -33,6 +33,12 @@
     border-right: 1px solid #ccc;
     WORD-BREAK: break-all;
 }
+.th1{
+    padding: 0;
+}
+.td1{
+   padding: 0;
+}
 .bottom{
     height:48px;
     background:rgba(240,240,240,1);
@@ -54,14 +60,15 @@
     margin-right: 50px;
 }
 .btn{
-    width:100px;
     height:36px;
-    background:rgba(25,145,235,1);
-    color: #fff;
+    color: #21811C;
     text-align: center;
     line-height: 36px;
-    margin-left: 20px;
+    font-size: 14px;
     display: inline-block;
+}
+.btnColor{
+    color: red;
 }
 .input{
     appearance:none;

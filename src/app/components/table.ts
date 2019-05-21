@@ -13,6 +13,7 @@ interface Props {
     inlineBtn1:string;
     inlineBtn2:string;
     inputFile:string;
+    color:boolean;
 }
 // tslint:disable-next-line:completed-docs
 export class Table extends Widget {
@@ -26,7 +27,8 @@ export class Table extends Widget {
         btn2:'',
         inlineBtn1:'',
         inlineBtn2:'',
-        inputFile:''
+        inputFile:'',
+        color:false
     };
     
     public setProps(props:any) {
