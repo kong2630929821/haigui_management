@@ -72,11 +72,11 @@
 
         <div w-class="btns">
             {{if it.btn1}}
-            <div w-class="btn" on-tap="clickBtn(e,1)">{{it.btn1}}</div>
+            <div w-class="bottomBtn" on-tap="clickBtn(e,1)">{{it.btn1}}</div>
             {{end}}
 
             {{if it.btn2}}
-            <div w-class="btn" on-tap="clickBtn(e,2)">{{it.btn2}}</div>
+            <div w-class="bottomBtn" on-tap="clickBtn(e,2)">{{it.btn2}}</div>
             {{end}}
         </div>
     </div>

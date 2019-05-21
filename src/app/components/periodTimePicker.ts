@@ -51,7 +51,7 @@ export class PeriodPicker extends Widget {
     // 输入开始日期
     public changeStartDate(e:any) {
         if (isDate(e.value)) {
-            this.props.startDate = parseDate(e.value, 0);
+            this.props.startDate = parseDate(e.value, 0, 1);
             if (compareDate(this.props.startDate, this.props.endDate)) { // 开始时间大于结束时间
                 this.props.endDate = this.props.startDate;
             }
@@ -65,7 +65,7 @@ export class PeriodPicker extends Widget {
     // 输入结束日期
     public changeEndDate(e:any) {
         if (isDate(e.value)) {
-            this.props.endDate = parseDate(e.value, 0);
+            this.props.endDate = parseDate(e.value, 0, 1);
             if (compareDate(this.props.startDate, this.props.endDate)) {
                 this.props.startDate = this.props.endDate; 
             }
@@ -80,7 +80,7 @@ export class PeriodPicker extends Widget {
 // ================================================ 本地
 // 是否是时间字符串 '2019-1-1' || '2019/1/1' || '2019-1-1 0:0' || '2019-1-1 0:0:0'
 export const isDate = (str:string) => {
-    const reg = /^(\d{4})(-|\/)(\d{1,2})\2(\d{1,2})$/;
+    const reg = /^(\d{4})(-|\/)(\d{1,2})\2(\d{1,2})\s?(((\d{1,2}):){1,2}(\d{1,2}))?$/;
 
     return reg.test(str);
 };

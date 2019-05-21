@@ -22,10 +22,15 @@ export const importFreight = (res) => {
     };
     
     console.log('msg = ',msg);
-    requestAsync(msg).then(r => {
+
+    return requestAsync(msg).then(r => {
         alert('导入运费成功');
+
+        return true;
     }).catch((e) => {
         console.log(e);
+
+        return false;
     });
 };
 
@@ -94,8 +99,12 @@ export const importGoodsCate1 = (data) => {
 
     return requestAsync(msg).then(r => {
         alert('导入分组成功');
+
+        return true;
     }).catch((e) => {
         console.log(e);
+
+        return false;
     });
 };
  // 解析一个分组
@@ -186,10 +195,15 @@ export const importGoods = (res) => {
         } 
     };
     console.log('msg = ',msg);
-    requestAsync(msg).then(r => {
+
+    return requestAsync(msg).then(r => {
         alert('导入商品成功');
+
+        return true;
     }).catch((e) => {
         console.log(e);
+
+        return false;
     });
 };
 
@@ -212,10 +226,15 @@ export const importSupplier = (res) => {
         } 
     };
     console.log('msg = ',msg);
-    requestAsync(msg).then(r => {
+
+    return requestAsync(msg).then(r => {
         alert('导入供应商成功');
+
+        return true;
     }).catch((e) => {
         console.log(e);
+
+        return false;
     });
 };
  // 解析并导入地区信息
@@ -238,10 +257,15 @@ export const importArea = (res) => {
         } 
     };
     console.log('msg = ',msg);
-    requestAsync(msg).then(r => {
+
+    return requestAsync(msg).then(r => {
         alert('导入地区成功');
+
+        return true;
     }).catch((e) => {
         console.log(e);
+
+        return false;
     });
 };
  // 解析并导入品牌信息
@@ -266,10 +290,15 @@ export const importBrand = (res) => {
         } 
     };
     console.log('msg = ',msg);
-    requestAsync(msg).then(r => {
+
+    return requestAsync(msg).then(r => {
         alert('导入品牌成功');
+
+        return true;
     }).catch((e) => {
         console.log(e);
+
+        return false;
     });
 };
  // 解析并导入库存信息
@@ -296,10 +325,15 @@ export const importInventory = (res) => {
         } 
     };
     console.log('msg = ',msg);
-    requestAsync(msg).then(r => {
+
+    return requestAsync(msg).then(r => {
         alert('导入库存成功');
+
+        return true;
     }).catch((e) => {
         console.log(e);
+
+        return false;
     });
 };
  // 解析并导入运单信息
@@ -452,14 +486,26 @@ export const getRreturnGoods = () => {
 };
 
 /**
+ * 获取海王统计信息
+ */
+export const getHwangTotal = () => {
+    const msg = {
+        type:'mall_mgr/members@get_haiwang_application_total',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+/**
  * 获取海王申请列表
  */
-export const getHWangApply = () => {
+export const getHWangApply = (stTime?:number,edTime?:number) => {
     const msg = {
         type:'mall_mgr/members@get_haiwang_application',
         param:{
-            start_time:0,
-            end_time:Date.now()
+            start_time: stTime || 0,
+            end_time: edTime || Date.now()
         }
     };
 
@@ -499,12 +545,12 @@ export const getWithdrawTotal = () => {
 /**
  * 获取提现申请列表
  */
-export const getWithdrawApply = () => {
+export const getWithdrawApply = (stTime?:number,edTime?:number) => {
     const msg = {
         type:'mall_mgr/members@get_withdraw_info',
         param:{
-            start_time:0,
-            end_time:Date.now()
+            start_time:stTime || 0,
+            end_time:edTime || Date.now()
         }
     };
 
