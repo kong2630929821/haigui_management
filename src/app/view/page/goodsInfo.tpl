@@ -17,6 +17,7 @@
     {{else}}
     <widget w-tag="app-view-page-vipDetail"></widget>
     {{end}}
+    <div w-class="searchleft" on-tap="exportShop">导出信息</div>
     {{% ==================================分页=====================}}
         {{if it.showDataList.length>0}}
             <div ev-changeCurrent="pageChange">

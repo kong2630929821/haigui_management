@@ -9,19 +9,20 @@
         <div w-class="th">操作</div>
         <div w-class="td">
             {{if it.userLabel == "市代理"}}
-            <div w-class="btn" on-tap="dnUserType(0)">降为海王</div>
-            <div w-class="btn" on-tap="upUserType(2)">升为省代理</div>
+            <div w-class="btn" on-tap="dnUserType(e,0)">降为海王</div>
+            <div w-class="btn" on-tap="upUserType(e,2)">升为省代理</div>
             {{elseif it.userLabel == "海王"}}
-            <div w-class="btn" on-tap="upUserType(1)">升为市代理</div>
+            <div w-class="btn" on-tap="upUserType(e,1)">升为市代理</div>
             {{elseif it.userLabel == "省代理"}}
-            <div w-class="btn" on-tap="dnUserType(1)">降为市代理</div>
+            <div w-class="btn" on-tap="dnUserType(e,1)">降为市代理</div>
             {{end}}
         </div>
     </div>
 
     <div w-class="tabRow" style="margin:20px 0 10px;">
-        <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)">ta的海宝</div>
-        <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)">ta的海王</div>
+        <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)">ta的海王</div>
+        <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)">ta的海宝</div>
+        <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)">ta的白客</div>
     </div>
 
     <div>

@@ -1,24 +1,24 @@
-<div w-class="page">
+<div w-class="page" on-tap="pageClick">
     <div w-class="tabRow">
         <div w-class="tab">
             <img src="../../res/images/defultUser.png" w-class="tabImg"/>
             <div>
                 <div w-class="tabTitle">今日申请人数</div>
-                <div w-class="amount">7</div>
+                <div w-class="amount">{{it.dayCount}}</div>
             </div>
         </div>
         <div w-class="tab">
             <img src="../../res/images/defultUser.png" w-class="tabImg"/>
             <div>
                 <div w-class="tabTitle">本月开通人数</div>
-                <div w-class="amount">7</div>
+                <div w-class="amount">{{it.monCount}}</div>
             </div>
         </div>
         <div w-class="tab">
             <img src="../../res/images/defultUser.png" w-class="tabImg"/>
             <div>
                 <div w-class="tabTitle">海王总数</div>
-                <div w-class="amount">7</div>
+                <div w-class="amount">{{it.allCount}}</div>
             </div>
         </div>
     </div>
@@ -36,10 +36,13 @@
         </div>
         <div w-class="search" on-tap="search">查询</div>
 
+        <div style="display:inline-block" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
+            <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
+        </div>
     </div>
 
     {{if it.showDataList}}
-    <div ev-table-detail="dealWith">
+    <div ev-table-detail="dealWith" ev-table-btnClick="exportData">
         <div w-class="tableTitle">数据列表</div>
         <widget w-tag="app-components-tableDeal">{datas: {{it.showDataList}},title:{{it.showTitleList}},inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
     </div>

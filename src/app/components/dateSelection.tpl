@@ -24,5 +24,26 @@
         </div>
         {{end}}
     </div>
+    {{if it.needTime}}
+    <div w-class="bottom">
+        <div w-class="time">{{it.curTime[0]}}</div>
+        <div w-class="bottomBtn">
+            <img src="../res/images/top.png" w-class="btn" on-tap="changeHour(e,1)"/>
+            <img src="../res/images/down.png" w-class="btn1" on-tap="changeHour(e,0)"/>
+        </div>
+        <span style="margin-left:5px;">:</span>
+        <div w-class="time">{{it.curTime[1]}}</div>
+        <div w-class="bottomBtn">
+            <img src="../res/images/top.png" w-class="btn" on-tap="changeMinute(e,1)"/>
+            <img src="../res/images/down.png" w-class="btn1" on-tap="changeMinute(e,0)"/>
+        </div>
+        <span style="margin-left:5px;">:</span>
+        <div w-class="time">{{it.curTime[2]}}</div>
+        <div w-class="bottomBtn">
+            <img src="../res/images/top.png" w-class="btn" on-tap="changeSecond(e,1)"/>
+            <img src="../res/images/down.png" w-class="btn1" on-tap="changeSecond(e,0)"/>
+        </div>
+    </div>
+    {{end}}
     
 </div>

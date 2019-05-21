@@ -1,5 +1,6 @@
 import { Widget } from '../../../pi/widget/widget';
 import { getAllGoods, getCurrentGood, getGoodsKey } from '../../net/pull';
+import { exportExcel } from '../../utils/tools';
 
 /**
  * 商品信息
@@ -53,7 +54,24 @@ export class GoodsInfo extends Widget {
     public pageChange(e:any) {
         const index = (e.value) * 3;
         this.init(index === 0 ? 1 :index);
-
+    }
+    // 导出商品
+    public async exportShop() {
+        let shop;
+        await getAllGoods(0,3).then(r => {
+            shop = JSON.parse(r.value);
+        });
+        const jsonHead = this.props.showTitleList;
+        const aoa = [jsonHead];
+        const jsonData = shop;
+        for (const v of jsonData) {
+            v[0] = v[0].toString();
+            aoa.push(v);
+        }
+        console.log(aoa);
+        exportExcel(aoa,`商品信息表.xlsx`);
+        
+        console.log('contentList ===',jsonData);
     }
     public detailBack() {
         this.props.showDetail = false;
