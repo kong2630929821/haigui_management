@@ -63,7 +63,7 @@ export class TotalOrder extends Widget {
                 } else if (data[i][16] > 0) {
                     orderState = '已完成';
                 }
-                arr.push([data[i][0],data[i][1],data[i][3][0][0],data[i][3][0][1],data[i][3][0][2],data[i][3][0][3],data[i][0],data[i][2],data[i][8],data[i][9],data[i][10],orderState]);
+                arr.push([data[i][0],data[i][1],data[i][3][0][0],data[i][3][0][1],data[i][3][0][4],data[i][3][0][5],data[i][0],data[i][2],data[i][8],data[i][9],data[i][10],orderState]);
             }
             this.props.contentList = arr;
         }).then(() => {
@@ -81,7 +81,6 @@ export class TotalOrder extends Widget {
             openDownloadDialog(sheet2blob(sheet), '未发货订单.xlsx');
             
             console.log('contentList ===',jsonData);
-            // jsonToExcelConvertor(jsonHead,jsonData,'订单');
         });
     }
 
