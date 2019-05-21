@@ -7,7 +7,7 @@ import { getAllGoods, getCurrentGood, getGoodsKey } from '../../net/pull';
 export class GoodsInfo extends Widget {
     public props:any = {
         showDataList:[
-            
+
         ],
         shopNum:0,
         showTitleList:['商品ID','商品名','商品SKU','商品规格','供货商ID','供应商名称','已下单未支付数量','已下单已支付数量','库存数量','供货价','成本价','原价','会员价','折后价','是否保税','税费'],

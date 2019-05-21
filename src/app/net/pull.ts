@@ -659,7 +659,7 @@ export const getReturnGoods = (id:number,count:number,start:number,tail:number,s
         }
     };
     // tslint:disable-next-line:no-unnecessary-local-variable
-    const data = [['1001100','1120','SKU','1','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中']];
+    const data = [['1001100','1120','SKU','1','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中','2019-09-10','2019-09-10']];
 
     return data; 
 
