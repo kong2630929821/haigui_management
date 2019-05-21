@@ -29,7 +29,7 @@ export class OpenHWang extends Widget {
         showDataList:[
             // ['123456','张三','15534429570','四川省成都市金牛区XX街道XX小区XX','申请中']
         ],
-        showTitleList:['用户ID','姓名','手机号','地址信息','受理状态'],
+        showTitleList:['用户ID','姓名','手机号','地址信息','微信名','邀请人id','受理状态'],
         activeTab:0,
         datas:[],
         btn1:'',
@@ -63,7 +63,7 @@ export class OpenHWang extends Widget {
         this.props.applyIdList = [];
         this.props.datas.forEach(t => {
             const v = deepCopy(t);
-            if (t[5] === Status[num] || (num === 2 && t[5] === Status[3])) {
+            if (t[7] === Status[num] || (num === 2 && t[7] === Status[3])) {
                 this.props.applyIdList.push(v.shift());
                 this.props.showDataList.push(v);
             }
@@ -88,6 +88,8 @@ export class OpenHWang extends Widget {
                         unicode2Str(item[3]),  // 姓名
                         item[2],     // 电话
                         unicode2Str(item[4]),     // 地址
+                        unicode2Str(item[8]),   // 微信名
+                        item[7],    // 邀请人id
                         Status[item[5]]  // 状态
                     ];
                 });

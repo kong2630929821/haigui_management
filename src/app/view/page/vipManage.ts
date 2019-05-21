@@ -17,7 +17,6 @@ interface Props {
     searUid:string;  // 查询的UID
     active:number;
     optionsList:string[]; // 下拉框
-    userLabel:string;  // 用户标签
 }
 const UserLabel = ['','市代理','省代理'];
 /**
@@ -39,8 +38,7 @@ export class VipManage extends Widget {
         uid:0,
         searUid:'',
         active:0,
-        optionsList:['白客','海宝','海王','市代理','省代理'],
-        userLabel:''
+        optionsList:['白客','海宝','海王','市代理','省代理']
     };
 
     public create() {
@@ -109,7 +107,6 @@ export class VipManage extends Widget {
 
     // 更新数据
     public updateDatas(num:number) {
-        this.props.userLabel = this.props.optionsList[this.props.active];
         let list = [];
         switch (num) {
             case 0:
@@ -169,7 +166,7 @@ export class VipManage extends Widget {
             }
             this.props.showDataList = res.map(t => {
                 const r = deepCopy(t);
-                this.props.userLabel = r.pop(); // 删除最后一项用户类型
+                r.pop(); // 删除最后一项用户类型
     
                 return r;
             });
