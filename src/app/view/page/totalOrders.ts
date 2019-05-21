@@ -1,22 +1,13 @@
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, importTransport } from '../../net/pull';
-import { importRead, jsonToExcelConvertor, openDownloadDialog, sheet2blob } from '../../utils/tools';
+import { exportExcel, importRead } from '../../utils/tools';
 
 /**
  * 所有订单
  */
 export class TotalOrder extends Widget {
     public props:any = {
-        showDataList:[
-            ['运费信息','2019-5-15 13:15'],
-            ['分类信息','2019-5-15 13:15'],
-            ['商品信息','2019-5-15 13:15'],
-            ['供应商信息','2019-5-15 13:15'],
-            ['地区信息','2019-5-15 13:15'],
-            ['品牌信息','2019-5-15 13:15'],
-            ['库存信息','2019-5-15 13:15']
-        ],
         showTitleList:['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态'],
         contentList:[],
         supplierList:['供应商id'],
@@ -46,48 +37,46 @@ export class TotalOrder extends Widget {
             this.paint();
         });
     }
-    public exportOrder(e:any) {
+    public async exportOrder(e:any) {
         const supplierId = Number(this.props.supplierList[this.props.supplierActive]);
-        getOrder(supplierId,2).then((r) => {
-            
-            const data = JSON.parse(r);
-            const arr = [];
-            for (let i = 0;i < data.length;i++) {
-                let orderState = '';
-                if (data[i][13] === 0) {
-                    orderState = '待付款';
-                } else if (data[i][14] === 0) {
-                    orderState = '待发货';
-                } else if (data[i][15] === 0) {
-                    orderState = '待收货';
-                } else if (data[i][16] > 0) {
-                    orderState = '已完成';
+        console.log(this.props.orderTypeActive);
+        if (this.props.orderTypeActive === 2) {
+            await getOrder(supplierId,2).then((r) => {
+                const data = JSON.parse(r);
+                const arr = [];
+                for (let i = 0;i < data.length;i++) {
+                    let orderState = '';
+                    if (data[i][13] === 0) {
+                        orderState = '待付款';
+                    } else if (data[i][14] === 0) {
+                        orderState = '待发货';
+                    } else if (data[i][15] === 0) {
+                        orderState = '待收货';
+                    } else if (data[i][16] > 0) {
+                        orderState = '已完成';
+                    }
+                    arr.push([data[i][0],data[i][1],data[i][3][0][0],data[i][3][0][1],data[i][3][0][4],data[i][3][0][5],data[i][0],data[i][2],data[i][8],data[i][9],data[i][11],orderState]);
                 }
-                arr.push([data[i][0],data[i][1],data[i][3][0][0],data[i][3][0][1],data[i][3][0][2],data[i][3][0][3],data[i][0],data[i][2],data[i][8],data[i][9],data[i][10],orderState]);
-            }
-            this.props.contentList = arr;
-        }).then(() => {
-            const jsonHead = ['订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态','物流单号'];
-            const aoa = [jsonHead];
-            const jsonData = this.props.contentList;
-            for (let v of jsonData) {
-                v = v.slice(1);
-                v[0] = v[0].toString();
-                aoa.push(v);
-            }
-            console.log(aoa);
-            const sheet = XLSX.utils.aoa_to_sheet(aoa);
-            
-            openDownloadDialog(sheet2blob(sheet), '未发货订单.xlsx');
-            
-            console.log('contentList ===',jsonData);
-            // jsonToExcelConvertor(jsonHead,jsonData,'订单');
-        });
+                this.props.contentList = arr;
+            });
+        }
+        const jsonHead = ['订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态','物流单号'];
+        const aoa = [jsonHead];
+        const jsonData = this.props.contentList;
+        for (let v of jsonData) {
+            v = v.slice(1);
+            v[0] = v[0].toString();
+            aoa.push(v);
+        }
+        console.log(aoa);
+        exportExcel(aoa,`${this.props.orderType[this.props.orderTypeActive]}订单.xlsx`);
+        
+        console.log('contentList ===',jsonData);
     }
 
     public importTransport(e:any) {
         // 导入运单
-        const file = getRealNode(e.node).files[0];
+        const file = (<any>getRealNode(e.node)).files[0];
         importRead(file,(res) => {
             importTransport(res);
         });
@@ -111,7 +100,9 @@ export class TotalOrder extends Widget {
             const contentList = [];
             const temp = [];
             let orderState = '';
-            if (orderInfo[0][8] === 0) {
+            if (orderInfo[0][7] === 0) {
+                orderState = '失败';
+            } else if (orderInfo[0][8] === 0) {
                 orderState = '待付款';
             } else if (orderInfo[0][9] === 0) {
                 orderState = '待发货';
@@ -221,7 +212,9 @@ export class TotalOrder extends Widget {
         for (let i = 0;i < orderInfo.length;i++) {
             const temp = [];
             let orderState = '';
-            if (orderInfo[i][8] === 0) {
+            if (orderInfo[i][7] === 0) {
+                orderState = '失败';
+            } else if (orderInfo[i][8] === 0) {
                 orderState = '待付款';
             } else if (orderInfo[i][9] === 0) {
                 orderState = '待发货';
@@ -230,7 +223,7 @@ export class TotalOrder extends Widget {
             } else if (orderInfo[i][11] > 0) {
                 orderState = '已完成';
             }
-            temp.push(0,orderInfo[i][0],orderInfo[i][12],orderInfo[i][15],orderInfo[i][16],orderInfo[i][17],orderInfo[i][18],orderInfo[i][1],orderInfo[i][2],orderInfo[i][3],orderInfo[i][4],orderState);
+            temp.push(0,orderInfo[i][0],orderInfo[i][12],orderInfo[i][15],orderInfo[i][16],orderInfo[i][17],orderInfo[i][18],orderInfo[i][1],orderInfo[i][2],orderInfo[i][3],orderInfo[i][5],orderState);
             contentList.push(temp);
             this.props.contentList = contentList;
             this.paint();

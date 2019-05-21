@@ -1,12 +1,12 @@
 <div w-class="dateBox">
     <div w-class="dateBox_header">
-        <img src="../res/images/arrow_left.png" w-class="headerImg" on-tap="changeYear(e,0)"/>
-        <img src="../res/images/arrow_left.png" w-class="headerImg" on-tap="changeMonth(e,0)"/>
+        <img src="../res/images/ArrowLeft.png" w-class="headerImg" on-tap="changeYear(e,0)"/>
+        <img src="../res/images/ArrowLeft.png" w-class="headerImg" on-tap="changeMonth(e,0)"/>
         <div style="flex: 1 0 0;text-align: center;">
             <span>{{it.year}}&nbsp;年&nbsp;{{it.month}}&nbsp;月</span>
         </div>
-        <img src="../res/images/arrow_right.png" w-class="headerImg" on-tap="changeMonth(e,1)"/>
-        <img src="../res/images/arrow_right.png" w-class="headerImg" on-tap="changeYear(e,1)"/>
+        <img src="../res/images/right.png" w-class="headerImg" on-tap="changeMonth(e,1)"/>
+        <img src="../res/images/right.png" w-class="headerImg" on-tap="changeYear(e,1)"/>
     </div>
 
     <div w-class="dateBox_Content">
