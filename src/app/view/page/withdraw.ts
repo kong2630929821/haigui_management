@@ -2,6 +2,7 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeWithdrawState, getWithdrawApply, getWithdrawTotal } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat } from '../../utils/logic';
+import { exportExcel } from '../../utils/tools';
 
 interface Props {
     datas:any[];  // 原始数据
@@ -15,6 +16,7 @@ interface Props {
     dayMoney:string; // 今日提现金额
     monthTotal:string; // 本月提现金额
     searUid:string;
+    showDateBox:boolean;  // 日期选择框
 }
 const Status = [
     '申请中',
@@ -39,7 +41,8 @@ export class Withdraw extends Widget {
         userNum:0,
         dayMoney:'0',
         monthTotal:'0',
-        searUid:''
+        searUid:'',
+        showDateBox:false
     };
 
     public create() {
@@ -118,6 +121,7 @@ export class Withdraw extends Widget {
         this.getData();
     }
 
+    // 查询
     public search() {
         if (this.props.searUid) {
             const ids = [];
@@ -137,4 +141,27 @@ export class Withdraw extends Widget {
         }
     }
 
+    // 导出列表
+    public exportData() {
+        if (this.props.showDataList.length > 0) {
+            this.props.showDataList.unshift(this.props.showTitleList);
+            let name = '提现申请列表.xls';
+            if (this.props.activeTab === 1) name = '提现处理中列表.xls';
+            if (this.props.activeTab === 2) name = '提现处理完成列表.xls';
+            exportExcel(this.props.showDataList,name);
+        } else {
+            popNewMessage('没有数据无法导出');
+        }
+    }
+
+    // 日期选择框显示
+    public changeDateBox(e:any) {
+        this.props.showDateBox = e.value;
+        this.paint();
+    }
+
+    public pageClick() {
+        this.props.showDateBox = false;
+        this.paint();
+    }
 }

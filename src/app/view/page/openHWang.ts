@@ -2,6 +2,7 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
 import { popNewMessage, unicode2Str } from '../../utils/logic';
+import { exportExcel } from '../../utils/tools';
 interface Props {
     datas:any[];  // 原始数据
     showDataList:any[];  // 显示数据
@@ -14,6 +15,7 @@ interface Props {
     dayCount:number;   // 今天申请人数
     monCount:number;  // 本月申请人数
     allCount:number;  // 海王总数
+    showDateBox:boolean; // 展示日期选择框
 }
 const Status = [
     '申请中',
@@ -38,7 +40,8 @@ export class OpenHWang extends Widget {
         searPhone:'',
         dayCount:0,
         monCount:0,
-        allCount:0
+        allCount:0,
+        showDateBox:false
     };
 
     public create() {
@@ -120,6 +123,7 @@ export class OpenHWang extends Widget {
         
     }
 
+    // 查询
     public search() {
         if (this.props.searPhone) {
             const ids = [];
@@ -137,5 +141,29 @@ export class OpenHWang extends Widget {
         } else {
             this.changeTab(this.props.activeTab);
         }
+    }
+
+    // 导出列表
+    public exportData() {
+        if (this.props.showDataList.length > 0) {
+            this.props.showDataList.unshift(this.props.showTitleList);
+            let name = '海王申请列表.xls';
+            if (this.props.activeTab === 1) name = '海王处理中列表.xls';
+            if (this.props.activeTab === 2) name = '海王处理完成列表.xls';
+            exportExcel(this.props.showDataList,name);
+        } else {
+            popNewMessage('没有数据无法导出');
+        }
+    }
+
+    // 日期选择框显示
+    public changeDateBox(e:any) {
+        this.props.showDateBox = e.value;
+        this.paint();
+    }
+
+    public pageClick() {
+        this.props.showDateBox = false;
+        this.paint();
     }
 }

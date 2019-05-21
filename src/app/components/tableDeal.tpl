@@ -30,7 +30,7 @@
                     {{end}}
 
                     {{if it.inlineBtn1 || it.inlineBtn2}}
-                    <td w-class="td" style="display: flex;">
+                    <td w-class="td" style="padding:0;">
 
                         {{if it.inlineBtn1}}
                         <div w-class="dealBtn" style="color:#FA2929" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
@@ -51,7 +51,7 @@
 
     <div w-class="bottom">
         <div w-class="btns">
-            <div w-class="btn" on-tap="clickBtn(e,1)">导出列表</div>
+            <div w-class="bottomBtn" on-tap="clickBtn(e,1)">导出列表</div>
         </div>
     </div>
 </div>

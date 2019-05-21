@@ -35,11 +35,14 @@
             <widget w-tag="app-components-input">{placeHolder:"用户ID"}</widget>
         </div>
         <div w-class="search" on-tap="search">查询</div>
-
+        
+        <div style="display:inline-block" ev-dateBox-change="changeDateBox">
+            <widget w-tag="app-components-periodPicker">{showDateBox:{{it.showDateBox}} }</widget>
+        </div>
     </div>
 
     {{if it.showDataList}}
-    <div ev-table-detail="dealWith">
+    <div ev-table-detail="dealWith" ev-table-btnClick="exportData">
         <div w-class="tableTitle">数据列表</div>
         <widget w-tag="app-components-tableDeal">{datas: {{it.showDataList}},title:{{it.showTitleList}},inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
     </div>

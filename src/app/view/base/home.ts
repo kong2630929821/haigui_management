@@ -5,7 +5,6 @@
 // ================================================ 导入
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getAllSupplier } from '../../net/pull';
 
 // ================================================ 导出
 export const forelet = new Forelet();
