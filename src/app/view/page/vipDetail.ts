@@ -11,6 +11,7 @@ interface Props {
     uid:number;  // uid
     hBaoDatas:any[]; // 原始海宝数据
     hWangDatas:any[]; // 原始海王数据
+    baikDatas:any[]; // 原始百科数据
     userLabel:string;  // 查看用户的标签
 }
 const userType = ['','海王','海宝','白客'];
@@ -29,6 +30,7 @@ export class VipDetail extends Widget {
         uid:0,
         hBaoDatas:[],
         hWangDatas:[],
+        baikDatas:[],
         userLabel:''
     };
 
@@ -43,9 +45,10 @@ export class VipDetail extends Widget {
             const v = r.userTotal;
             if (v) {
                 let user = userType[v[9]];
-                if (v[9] === 1 && this.props.userLabel) {  // 海王有标签 省代理 市代理
-                    user = this.props.userLabel;
+                if (v[9] === 1) {  // 海王有标签 省代理 市代理
+                    user = UserLabel[v[10]];
                 }
+                this.props.userLabel = user;
                 this.props.userData = [
                     { th:'用户ID',td:v[0] },
                     { th:'注册时间',td:timestampFormat(v[8]) },
@@ -84,34 +87,56 @@ export class VipDetail extends Widget {
                     ];
                 });
             }
+            if (r.baik) {
+                this.props.baikDatas = r.baik.map(v => {
+                    return [
+                        v[0],  // UID
+                        unicode2Str(v[1]),  // 姓名
+                        v[2],  // 手机
+                        unicode2Str(v[3]),  // 地址
+                        priceFormat(v[4]),  // 本月收益
+                        priceFormat(v[5])   // 总收益
+                    ];
+                });
+            }
             this.props.showDataList = this.props.hBaoDatas;
             this.paint();
         });
     }
 
+    // 切换
     public changeTab(num:number) {
         this.props.activeTab = num;
-        this.props.showDataList = num ? this.props.hWangDatas :this.props.hBaoDatas;
+        if (num === 0) {
+            this.props.showDataList = this.props.hWangDatas;
+        } else if (num === 1) {
+            this.props.showDataList = this.props.hBaoDatas;
+        } else {
+            this.props.showDataList = this.props.baikDatas;
+        }
         this.paint();
     }
 
     // 升级  降级
-    public upUserType(num:number) {
+    public upUserType(e:any,num:number) {
         popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”升级至${UserLabel[num]}` },() => {
             setHwangLabel(this.props.uid,num).then(r => {
                 popNewMessage('升级成功');
                 this.props.userLabel = this.props.userData[4].td = UserLabel[num];
                 this.paint();
+                notify(e.node,'ev-change-userType',{});
             });
         });
     }
 
-    public dnUserType(num:number) {
+    // 降级
+    public dnUserType(e:any,num:number) {
         popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”降级至${UserLabel[num]}` },() => {
             setHwangLabel(this.props.uid,num).then(r => {
                 popNewMessage('降级成功');
                 this.props.userLabel = this.props.userData[4].td = UserLabel[num];
                 this.paint();
+                notify(e.node,'ev-change-userType',{});
             });
         });
     }
