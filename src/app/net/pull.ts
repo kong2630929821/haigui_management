@@ -1,4 +1,4 @@
-import { parseOrder, parseOrderShow, parseOrderShow1 } from '../utils/tools';
+import { parseOrderShow, parseOrderShow1 } from '../utils/tools';
 import { Order } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -11,7 +11,7 @@ export const importFreight = (res) => {
     for (let i = 0;i < res.length;i++) {
         const id = parseInt(res[i].id,10);
         const price_type = parseInt(res[i].price_type,10);
-        const price = Number(res[i].price) * 100;
+        const price = Math.floor(Number(res[i].price) * 100);
         const tmp = [id,res[i].area,price_type,price];
         arr[i] = tmp;
     } 
@@ -158,12 +158,12 @@ export const importGoods = (res) => {
         const areaId = parseInt(res[i].地区id,10);
         const supplierId = parseInt(res[i].供应商id,10);
         const pay_type = parseInt(res[i].支付类型,10);
-        const cost = Number(res[i].成本价) * 100;
-        const origin = Number(res[i].普通售价) * 100;
-        const vip_price = Number(res[i].会员价) * 100;
+        const cost = Math.floor(Number(res[i].成本价) * 100);
+        const origin = Math.floor(Number(res[i].普通售价) * 100);
+        const vip_price = Math.floor(Number(res[i].会员价) * 100);
         const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
-        const tax = Number(res[i].税费) * 100;
-        const discount = res[i].折后价 === undefined ? origin : Number(res[i].折后价) * 100;
+        const tax = Math.floor(Number(res[i].税费) * 100);
+        const discount = Math.floor(res[i].折后价 === undefined ? origin : Number(res[i].折后价) * 100);
         const labels = [];
         res[i].标签.split(',').forEach(e => {
             e = e.replace(/\n/,'');
