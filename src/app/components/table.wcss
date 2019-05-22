@@ -11,7 +11,6 @@
 .table{
     table-layout: fixed;
     border-collapse: collapse;
-    width: 100%;
 }
 .has-gutter{
     color: #909399;
@@ -100,18 +99,17 @@
     overflow: auto;
 }
 .autoTd{
-    width: 186px;
+    white-space: nowrap;
     transition: background-color .25s ease;
-    padding: 10px 0;
+    padding: 10px;
     line-height: 25px;
     text-align: center;
     border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
-    WORD-BREAK: break-all;
 }
 .autoTh{
-    width: 186px;
-    padding: 10px 0;
+    white-space: nowrap;
+    padding: 10px;
     line-height: 25px;
     text-align: center;
     border-bottom: 1px solid #ccc;
