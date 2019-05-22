@@ -20,10 +20,18 @@ export class GoodsInfo extends Widget {
         startTime:'',  // 查询开始时间
         endTime:'', // 查询结束时间
         showDateBox:false,
-        numberOfApplications:0
+        numberOfApplications:0,
+        typeTitle:'申请时间'
     };
     public checkType(index:number) {
         this.props.returnStatus = index;
+        if (index === 0) {
+            this.props.typeTitle = '申请时间';
+        } else if (index === 1) {
+            this.props.typeTitle = '处理时间';
+        } else {
+            this.props.typeTitle = '完成时间';
+        }
         const oData = new Date();
         const time = oData.setHours(23, 59, 59, 999);
         this.props.endTime =  timeConvert(time);
