@@ -1,6 +1,7 @@
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
-import { importArea, importBrand, importFreight, importGoods, importGoodsCate, importInventory, importSupplier } from '../../net/pull';
+import { getExportTime, importArea, importBrand, importFreight, importGoods, importGoodsCate, importInventory, importSupplier } from '../../net/pull';
+import { timeConvert } from '../../utils/logic';
 import { importRead } from '../../utils/tools';
 
 /**
@@ -10,43 +11,33 @@ export class ImportExcel extends Widget {
     public props:any;
     constructor() {
         super();
-        const exportFreightTime = !localStorage.getItem('exportFreightTime') ? 0 : localStorage.getItem('exportFreightTime');
-        const exportCateTime = !localStorage.getItem('exportCateTime') ? 0 : localStorage.getItem('exportCateTime');
-        const exportGoodsTime = !localStorage.getItem('exportGoodsTime') ? 0 : localStorage.getItem('exportGoodsTime');
-        const exportSupplierTime = !localStorage.getItem('exportSupplierTime') ? 0 : localStorage.getItem('exportSupplierTime');
-        const exportAreaTime = !localStorage.getItem('exportAreaTime') ? 0 : localStorage.getItem('exportAreaTime');
-        const exportGrandTime = !localStorage.getItem('exportGrandTime') ? 0 : localStorage.getItem('exportGrandTime');
-        const exportSKUTime = !localStorage.getItem('exportSKUTime') ? 0 : localStorage.getItem('exportSKUTime');
         this.props = {
             showDataList:[
-                ['运费信息',exportFreightTime],
-                ['分类信息',exportCateTime],
-                ['商品信息',exportGoodsTime],
-                ['供应商信息',exportSupplierTime],
-                ['地区信息',exportAreaTime],
-                ['品牌信息',exportGrandTime],
-                ['库存信息',exportSKUTime]
+                ['运费信息',0],
+                ['分类信息',0],
+                ['商品信息',0],
+                ['供应商信息',0],
+                ['地区信息',0],
+                ['品牌信息',0],
+                ['库存信息',0]
             ],
             showTitleList:['表类','最新导入时间']
-            
         };
     }
-    // 时间戳转标准日期
-    public timeConvert(time:any) {
-        const date = new Date(time);
-        const year = date.getFullYear().toString().concat('-');
-        const month = (date.getMonth() + 1 < 10 ? '0'.concat((date.getMonth() + 1).toString()) : date.getMonth() + 1).toString().concat('-');
-        const day = (date.getDate() < 10 ? '0'.concat(date.getDate().toString()) : date.getDate()).toString().concat(' ');
-        const hour = (date.getHours() < 10 ? '0'.concat(date.getHours().toString()) : date.getHours()).toString().concat(':');
-        const minute = (date.getMinutes() < 10 ? '0'.concat(date.getMinutes().toString()) : date.getMinutes()).toString().concat(':');
-        const second = (date.getSeconds() < 10 ? '0'.concat(date.getSeconds().toString()) : date.getSeconds()).toString();
-
-        const showTime = year + month + day + hour + minute + second;
-        console.log(showTime);
-
-        return showTime;
+    
+    public create() {
+        getExportTime().then((r) => {
+            console.log('exportTime=',r);
+            this.props.showDataList[0] = ['运费信息',!r.value[3] ? 0 :timeConvert(r.value[3])];
+            this.props.showDataList[1] = ['分类信息',!r.value[5] ? 0 :timeConvert(r.value[5])];
+            this.props.showDataList[2] = ['商品信息',!r.value[4] ? 0 :timeConvert(r.value[4])];
+            this.props.showDataList[3] = ['供应商信息',!r.value[0] ? 0 :timeConvert(r.value[0])];
+            this.props.showDataList[4] = ['地区信息',!r.value[1] ? 0 :timeConvert(r.value[1])];
+            this.props.showDataList[5] = ['品牌信息',!r.value[2] ? 0 :timeConvert(r.value[2])];
+            this.props.showDataList[6] = ['库存信息',!r.value[6] ? 0 :timeConvert(r.value[6])];
+            this.paint();
+        });
     }
-
     // 导入excel
     public imExcel(e:any) {
         const file = getRealNode(e.node).getElementsByTagName('input')[e.value].files[0];
@@ -56,29 +47,32 @@ export class ImportExcel extends Widget {
             importRead(file,(res) => {
                 importFreight(res).then((r) => {
                     if (r) {
-                        localStorage.setItem('exportFreightTime',this.timeConvert(Date.now()));
-                        const exportFreightTime = localStorage.getItem('exportFreightTime');
-                        this.props.showDataList[0] = ['运费信息',exportFreightTime];
-                        this.paint();
+                        getExportTime().then((r) => {
+                            console.log('exportTime=',r);
+                            this.props.showDataList[0] = ['运费信息',timeConvert(r.value[3])];
+                            this.paint();
+                        });
                     }
                 });
             });
         } else if (num === 1) {// 导入分类
             importRead(file,(res) => {
                 importGoodsCate(res);
-                localStorage.setItem('exportCateTime',this.timeConvert(Date.now()));
-                const exportCateTime = localStorage.getItem('exportCateTime');
-                this.props.showDataList[1] = ['分类信息',exportCateTime];
-                this.paint();
+                getExportTime().then((r) => {
+                    console.log('exportTime=',r);
+                    this.props.showDataList[1] = ['分类信息',timeConvert(r.value[5])];
+                    this.paint();
+                });
             });
         } else if (num === 2) {// 导入商品
             importRead(file,(res) => {
                 importGoods(res).then((r) => {
                     if (r) {
-                        localStorage.setItem('exportGoodsTime',this.timeConvert(Date.now()));
-                        const exportGoodsTime = localStorage.getItem('exportGoodsTime');
-                        this.props.showDataList[2] = ['商品信息',exportGoodsTime];
-                        this.paint();
+                        getExportTime().then((r) => {
+                            console.log('exportTime=',r);
+                            this.props.showDataList[2] = ['商品信息',timeConvert(r.value[4])];
+                            this.paint();
+                        });
                     }
                 });
             });
@@ -86,10 +80,11 @@ export class ImportExcel extends Widget {
             importRead(file,(res) => {
                 importSupplier(res).then((r) => {
                     if (r) {
-                        localStorage.setItem('exportSupplierTime',this.timeConvert(Date.now()));
-                        const exportSupplierTime = localStorage.getItem('exportSupplierTime');
-                        this.props.showDataList[3] = ['供应商信息',exportSupplierTime];
-                        this.paint();
+                        getExportTime().then((r) => {
+                            console.log('exportTime=',r);
+                            this.props.showDataList[3] = ['供应商信息',timeConvert(r.value[0])];
+                            this.paint();
+                        });
                     }
                 });
             });
@@ -97,10 +92,11 @@ export class ImportExcel extends Widget {
             importRead(file,(res) => {
                 importArea(res).then((r) => {
                     if (r) {
-                        localStorage.setItem('exportAreaTime',this.timeConvert(Date.now()));
-                        const exportAreaTime = localStorage.getItem('exportAreaTime');
-                        this.props.showDataList[4] = ['地区信息',exportAreaTime];
-                        this.paint();
+                        getExportTime().then((r) => {
+                            console.log('exportTime=',r);
+                            this.props.showDataList[4] = ['地区信息',timeConvert(r.value[1])];
+                            this.paint();
+                        });
                     }
                 });
             });
@@ -108,10 +104,11 @@ export class ImportExcel extends Widget {
             importRead(file,(res) => {
                 importBrand(res).then((r) => {
                     if (r) {
-                        localStorage.setItem('exportGrandTime',this.timeConvert(Date.now()));
-                        const exportGrandTime = localStorage.getItem('exportGrandTime');
-                        this.props.showDataList[5] = ['品牌信息',exportGrandTime];
-                        this.paint();
+                        getExportTime().then((r) => {
+                            console.log('exportTime=',r);
+                            this.props.showDataList[5] = ['品牌信息',timeConvert(r.value[2])];
+                            this.paint();
+                        });
                     }
                 });
             });
@@ -119,10 +116,11 @@ export class ImportExcel extends Widget {
             importRead(file,(res) => {
                 importInventory(res).then((r) => {
                     if (r) {
-                        localStorage.setItem('exportSKUTime',this.timeConvert(Date.now()));
-                        const exportSKUTime = localStorage.getItem('exportSKUTime');
-                        this.props.showDataList[6] = ['库存信息',exportSKUTime];
-                        this.paint();
+                        getExportTime().then((r) => {
+                            console.log('exportTime=',r);
+                            this.props.showDataList[6] = ['库存信息',timeConvert(r.value[6])];
+                            this.paint();
+                        });
                     }
                 });
             });
