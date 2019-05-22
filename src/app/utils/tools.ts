@@ -1,3 +1,5 @@
+import { GoodsDetails, Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
+
 /**
  * 常用工具
  */
@@ -104,4 +106,16 @@ export const exportExcel = (aoa:any[][],excelName:string) => {
     const sheet = XLSX.utils.aoa_to_sheet(aoa);
             
     openDownloadDialog(sheet2blob(sheet),excelName);
+};
+
+export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
+    const ordersShow:OrderShow[] = [];
+    for (const info of infos) {
+        for (const v of info[3]) {
+            const orderShow:OrderShow = [false,info[1],v[0],v[1],v[4],v[5],info[0],info[2],info[8],info[9],info[11],OrderStatusShow[status]];
+            ordersShow.push(orderShow);
+        }
+    }
+
+    return ordersShow;
 };

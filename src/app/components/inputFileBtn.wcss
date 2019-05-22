@@ -1,0 +1,20 @@
+.import-btn{
+    width:150px;
+    height:48px;
+    line-height: 48px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    background:#1991EB;
+    float: left;
+    margin: 25px;
+    position: relative;
+}
+.import-input{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+}
