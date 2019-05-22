@@ -46,6 +46,7 @@ export class DateSelection extends Widget {
         this.props.month = now.getMonth() + 1;
         this.props.year = now.getFullYear();
         this.props.curDate = [this.props.year,this.props.month,now.getDate()];
+        this.props.curTime = [now.getHours(),now.getMinutes(),now.getSeconds()];
         this.init();
     }
 
