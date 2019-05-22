@@ -1,3 +1,4 @@
+import { popNewMessage } from '../utils/logic';
 import { parseOrderShow, parseOrderShow1 } from '../utils/tools';
 import { Order } from '../view/page/totalOrders';
 import { requestAsync } from './login';
@@ -26,7 +27,7 @@ export const importFreight = (res) => {
     console.log('msg = ',msg);
 
     return requestAsync(msg).then(r => {
-        alert('导入运费成功');
+        popNewMessage('导入运费成功');
 
         return true;
     }).catch((e) => {
@@ -100,7 +101,7 @@ export const importGoodsCate1 = (data) => {
     console.log('msg = ',msg);
 
     return requestAsync(msg).then(r => {
-        alert('导入分组成功');
+        popNewMessage('导入分组成功');
 
         return true;
     }).catch((e) => {
@@ -199,7 +200,7 @@ export const importGoods = (res) => {
     console.log('msg = ',msg);
 
     return requestAsync(msg).then(r => {
-        alert('导入商品成功');
+        popNewMessage('导入商品成功');
 
         return true;
     }).catch((e) => {
@@ -230,7 +231,7 @@ export const importSupplier = (res) => {
     console.log('msg = ',msg);
 
     return requestAsync(msg).then(r => {
-        alert('导入供应商成功');
+        popNewMessage('导入供应商成功');
 
         return true;
     }).catch((e) => {
@@ -261,7 +262,7 @@ export const importArea = (res) => {
     console.log('msg = ',msg);
 
     return requestAsync(msg).then(r => {
-        alert('导入地区成功');
+        popNewMessage('导入地区成功');
 
         return true;
     }).catch((e) => {
@@ -294,7 +295,7 @@ export const importBrand = (res) => {
     console.log('msg = ',msg);
 
     return requestAsync(msg).then(r => {
-        alert('导入品牌成功');
+        popNewMessage('导入品牌成功');
 
         return true;
     }).catch((e) => {
@@ -329,7 +330,7 @@ export const importInventory = (res) => {
     console.log('msg = ',msg);
 
     return requestAsync(msg).then(r => {
-        alert('导入库存成功');
+        popNewMessage('导入库存成功');
 
         return true;
     }).catch((e) => {
@@ -371,7 +372,7 @@ export const importTransport = (res) => {
     };
     console.log('msg = ',msg);
     requestAsync(msg).then(r => {
-        alert('导入运单成功');
+        popNewMessage('导入运单成功');
     }).catch((e) => {
         console.log(e);
     });
@@ -498,7 +499,7 @@ export const getOrder  = (supplier,Ordertype,oids) => {
     return requestAsync(msg).then(r => {
         const infos = <Order[]>JSON.parse(r.value);
         if (!infos) {
-            alert('暂无数据');
+            popNewMessage('暂无数据');
 
             return [];
         }
