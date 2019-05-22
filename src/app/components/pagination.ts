@@ -19,7 +19,6 @@ export class Pagination extends Widget {
         pages:-1
     };
 
-    public 点击页数;
     // 创建判断显示的页数
     public setProps(props:any) {
         super.setProps(props);
@@ -60,6 +59,8 @@ export class Pagination extends Widget {
         this.paint();
         
     }
+
+    // 点击页数
     public currentClick(event:any,index:number) {
         this.props.currentIndex = index;
         notify(event.node,'ev-changeCurrent',{ value:this.props.currentIndex });

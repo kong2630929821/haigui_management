@@ -19,6 +19,8 @@ interface Props {
     showDateBox:boolean;  // 日期选择框
     startTime:string;  // 开始时间
     endTime:string;  // 结束时间
+    curShowDataList:any[]; // 当前页显示数据
+    curPage:number; // 当前页码
 }
 const Status = [
     '申请中',
@@ -46,7 +48,9 @@ export class Withdraw extends Widget {
         searUid:'',
         showDateBox:false,
         startTime:'',
-        endTime:''
+        endTime:'',
+        curShowDataList:[], 
+        curPage:0 
     };
 
     public create() {
@@ -78,7 +82,8 @@ export class Withdraw extends Widget {
                 this.props.showDataList.push(v);
             }
         });
-        this.paint();
+        this.props.curPage = 0;
+        this.changePage({ value:0 });
     }
 
     // 获取数据
@@ -176,6 +181,13 @@ export class Withdraw extends Widget {
 
     public pageClick() {
         this.props.showDateBox = false;
+        this.paint();
+    }
+
+    // 查看某一页数据
+    public changePage(e:any) {
+        this.props.curPage = e.value;
+        this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
         this.paint();
     }
 }

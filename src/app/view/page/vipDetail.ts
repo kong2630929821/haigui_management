@@ -13,6 +13,8 @@ interface Props {
     hWangDatas:any[]; // 原始海王数据
     baikDatas:any[]; // 原始百科数据
     userLabel:string;  // 查看用户的标签
+    curShowDataList:any[]; // 当前页显示数据
+    curPage:number; // 当前页码
 }
 const userType = ['','海王','海宝','白客'];
 const UserLabel = ['海王','市代理','省代理'];
@@ -31,7 +33,9 @@ export class VipDetail extends Widget {
         hBaoDatas:[],
         hWangDatas:[],
         baikDatas:[],
-        userLabel:''
+        userLabel:'',
+        curShowDataList:[],
+        curPage:0
     };
 
     public setProps(props:any) {
@@ -114,7 +118,8 @@ export class VipDetail extends Widget {
         } else {
             this.props.showDataList = this.props.baikDatas;
         }
-        this.paint();
+        this.props.curPage = 0;
+        this.changePage({ value:0 });
     }
 
     // 升级  降级
@@ -143,5 +148,12 @@ export class VipDetail extends Widget {
 
     public goBack(e:any) {
         notify(e.node,'ev-detail-back',{});
+    }
+
+     // 查看某一页数据
+    public changePage(e:any) {
+        this.props.curPage = e.value;
+        this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
+        this.paint();
     }
 }
