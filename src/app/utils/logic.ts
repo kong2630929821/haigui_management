@@ -121,3 +121,10 @@ export const timeConvert = (time:any) => {
 
     return showTime;
 };
+// 标准日期转时间戳
+export const transitTimeStamp = (time:any) => {
+    let startTime = time.substring(0,19);    
+    startTime = startTime.replace(/-/g,'/'); 
+
+    return new Date(startTime).getTime();
+};

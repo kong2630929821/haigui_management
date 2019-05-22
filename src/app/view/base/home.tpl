@@ -1,5 +1,5 @@
 <div w-class="new_page" style="display:flex;flex-direction:column;">
-    <div w-class="logo">海龟壹号商城管理</div>
+    <div w-class="logo">海龟壹号管理后台</div>
     <div w-class="base">
         <div w-class="left">
             {{for i,v of it.pageList}}

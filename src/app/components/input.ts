@@ -11,7 +11,6 @@
  * maxLength?: 输入最大长度，仅对text和password类型输入有效
  * 外部可监听 ev-input-change，ev-input-blur，ev-input-focus，ev-input-clear事件
  */
-import { popNew } from '../../pi/ui/root';
 import { notify } from '../../pi/widget/event';
 import { getRealNode, paintCmd3, paintWidget } from '../../pi/widget/painter';
 import { Widget } from '../../pi/widget/widget';
@@ -150,6 +149,14 @@ export class Input extends Widget {
         this.state.showClear = this.props.clearable && !this.props.disabled && this.state.currentValue !== '';
         notify(event.node,'ev-input-focus',{});
         this.paint();
+    }
+
+    /**
+     * 按键按下
+     */
+    public keydown(event:any) {
+        const value = event.key;
+        notify(event.node,'ev-input-keydown',{ value });
     }
    
     // 清空文本框
