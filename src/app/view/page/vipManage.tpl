@@ -39,11 +39,13 @@
         {{if it.showDataList}}
         <div ev-table-detail="goDetail">
             <div w-class="tableTitle">数据列表</div>
-            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn1:"查看详情" }</widget>
+            <widget w-tag="app-components-tableDeal">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn2:"查看详情" }</widget>
         </div>
         {{end}}
 
     {{else}}
-    <widget w-tag="app-view-page-vipDetail">{uid:{{it.uid}},userLabel:{{it.userLabel}} }</widget>
+    <div ev-change-userType="getDatas">
+        <widget w-tag="app-view-page-vipDetail">{uid:{{it.uid}},userLabel:{{it.userLabel}} }</widget>
+    </div>
     {{end}}
 </div>

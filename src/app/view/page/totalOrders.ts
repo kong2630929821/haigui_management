@@ -1,35 +1,57 @@
-import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, importTransport } from '../../net/pull';
-import { timeConvert } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
 
+export type GoodsDetails = [number,string,number,number,string,string]; // [商品id,商品名称,购买时价格,数量,sku id,sku 描述]
+
+// [供应商id,订单id,用户id,商品详细信息,商品原支付金额,商品税费,商品运费,其它费用,收件人姓名,收件人电话,收件人地区,收件人详细地址,下单时间,支付时间,发货时间,收货时间,完成时间]
+export type Order = [number,number,number,GoodsDetails[],number,number,number,number,string,string,number,string,number,number,number,number,number];
+
+// ['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态']
+export type OrderShow = [boolean,number,number,string,string,string,number,number,string,string,string,string];
+
+// 订单状态
+export enum OrderStatus {
+    FAILED = 0,           // 失败
+    PENDINGPAYMENT = 1,   // 待付款
+    PENDINGDELIVERED  = 2,   // 待发货
+    PENDINGRECEIPT  = 3,   // 待收货
+    PENDINGFINISH = 4     // 待完成     确认收货后7天算已完成   这个时间段内的订单可以申请退货
+}
+
+// 订单状态显示
+export const OrderStatusShow = {
+    [OrderStatus.FAILED]:'失败',
+    [OrderStatus.PENDINGPAYMENT]:'待付款',
+    [OrderStatus.PENDINGDELIVERED]:'待发货',
+    [OrderStatus.PENDINGRECEIPT]:'待收货',
+    [OrderStatus.PENDINGFINISH]:'待完成'
+    
+};
 /**
  * 所有订单
  */
 export class TotalOrder extends Widget {
-    
-    public props:any;
-    constructor() {
-        super();
-        this.props = {
-            showTitleList:['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态'],
-            contentList:[],
-            supplierList:['供应商id'],
-            orderType:['失败','已下单未支付','已支付未发货','已发货未签收','已收货'],
-            exportType:['未导出','已导出'],
-            timeType:['下单时间','支付时间','收货时间','发货时间','完成时间'],
-            active:0,
-            supplierActive:0,
-            orderTypeActive:0,
-            exportActive:0,
-            timeTypeActive:0,
-            start:0,
-            tail:0,
-            inputOrderId:0,
-            orderList:[]
-        };
-    }
+    public props:any = {
+        showTitleList:['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态'],
+        contentList:[],
+        supplierList:['供应商id'],
+        orderType:['失败','已下单未支付','已支付未发货','已发货未签收','已收货'],
+        exportType:['未导出','已导出'],
+        timeType:['下单时间','支付时间','收货时间','发货时间','完成时间'],
+        active:0,
+        supplierActive:0,
+        orderTypeActive:0,
+        exportActive:0,
+        timeTypeActive:0,
+        start:0,
+        tail:0,
+        inputOrderId:0,
+        orderList:[],
+        showDateBox:false,
+        startTime:'',
+        endTime:''
+    };
 
     public create() {
         // 切换到所有订单页时将所有供应商查询出来
@@ -47,24 +69,11 @@ export class TotalOrder extends Widget {
         const supplierId = Number(this.props.supplierList[this.props.supplierActive]);
         console.log(this.props.orderTypeActive);
         if (this.props.orderTypeActive === 2) {
-            await getOrder(supplierId,2).then((r) => {
-                const data = JSON.parse(r);
-                const arr = [];
-                for (let i = 0;i < data.length;i++) {
-                    let orderState = '';
-                    if (data[i][13] === 0) {
-                        orderState = '待付款';
-                    } else if (data[i][14] === 0) {
-                        orderState = '待发货';
-                    } else if (data[i][15] === 0) {
-                        orderState = '待收货';
-                    } else if (data[i][16] > 0) {
-                        orderState = '已完成';
-                    }
-                    arr.push([data[i][0],data[i][1],data[i][3][0][0],data[i][3][0][1],data[i][3][0][4],data[i][3][0][5],data[i][0],data[i][2],data[i][8],data[i][9],data[i][11],orderState]);
-                }
-                this.props.contentList = arr;
-            });
+            const oids = [];
+            for (const v of this.props.contentList) {
+                oids.push(v[1]);
+            }
+            this.props.contentList = await getOrder(supplierId,2,oids);
         }
         const jsonHead = ['订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态','物流单号'];
         const aoa = [jsonHead];
@@ -77,12 +86,11 @@ export class TotalOrder extends Widget {
         console.log(aoa);
         exportExcel(aoa,`${this.props.orderType[this.props.orderTypeActive]}订单.xlsx`);
         
-        console.log('contentList ===',jsonData);
     }
 
     public importTransport(e:any) {
         // 导入运单
-        const file = (<any>getRealNode(e.node)).files[0];
+        const file = e.file;
         importRead(file,(res) => {
             importTransport(res);
         });
@@ -117,15 +125,7 @@ export class TotalOrder extends Widget {
             } else if (orderInfo[0][11] > 0) {
                 orderState = '已完成';
             }
-            let time = '';// 显示下单时间还是支付时间
-            if (orderInfo[0][8] === 0) {
-                time = timeConvert(orderInfo[0][7]);// 下单时间
-            } else {
-                time = timeConvert(orderInfo[0][8]);// 支付时间
-                this.props.showTitleList = ['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态'];
-                // this.props.orderTime = 1; 
-            }
-            temp.push(0,orderInfo[0][0],orderInfo[0][12],orderInfo[0][15],orderInfo[0][16],orderInfo[0][17],orderInfo[0][18],time,orderInfo[0][1],orderInfo[0][2],orderInfo[0][3],orderInfo[0][4],orderState);
+            temp.push(0,orderInfo[0][0],orderInfo[0][12],orderInfo[0][15],orderInfo[0][16],orderInfo[0][17],orderInfo[0][18],orderInfo[0][1],orderInfo[0][2],orderInfo[0][3],orderInfo[0][4],orderState);
             contentList.push(temp);
             this.props.contentList = contentList;
             this.paint();
@@ -143,7 +143,10 @@ export class TotalOrder extends Widget {
         const orderType = argsList[1];// 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
         const state = argsList[2];// 订单状态，0未导出，1已导出
 
-        return getAllOrder(id,count,time_type,start,tail,sid,orderType,state);
+        return getAllOrder(id,count,time_type,start,tail,sid,orderType,state).then(ordersShow => {
+            this.props.contentList = ordersShow;
+            this.paint();
+        });
     }
         // 根据供应商id筛选
     public filterSupplierId(e:any) {
@@ -155,9 +158,7 @@ export class TotalOrder extends Widget {
         const tail = this.props.tail;
         const timeType = this.props.timeTypeActive + 1;
         const argsList = [supplierId,orderType,exportType,start,tail,timeType];
-        this.showAllOrder(argsList).then((orderList) => {
-            this.showOrderOnPage(orderList);
-        });
+        this.showAllOrder(argsList);
     }
 
         // 根据订单类型筛选
@@ -170,9 +171,7 @@ export class TotalOrder extends Widget {
         const tail = this.props.tail;
         const timeType = this.props.timeTypeActive + 1;
         const argsList = [supplierId,orderType,exportType,start,tail,timeType];
-        this.showAllOrder(argsList).then((orderList) => {
-            this.showOrderOnPage(orderList);
-        });
+        this.showAllOrder(argsList);
     }
 
         // 根据导出状态筛选,未导出，已导出
@@ -185,9 +184,7 @@ export class TotalOrder extends Widget {
         const tail = this.props.tail;
         const timeType = this.props.timeTypeActive + 1;
         const argsList = [supplierId,orderType,exportType,start,tail,timeType];
-        this.showAllOrder(argsList).then((orderList) => {
-            this.showOrderOnPage(orderList);
-        });
+        this.showAllOrder(argsList);
     }
 
         // 根据时间筛选
@@ -200,9 +197,7 @@ export class TotalOrder extends Widget {
         const tail = this.props.tail;
         const timeType = this.props.timeTypeActive + 1;
         const argsList = [supplierId,orderType,exportType,start,tail,timeType];
-        this.showAllOrder(argsList).then((orderList) => {
-            this.showOrderOnPage(orderList);
-        });
+        this.showAllOrder(argsList);
     }
 
         //  在页面显示订单
@@ -243,13 +238,25 @@ export class TotalOrder extends Widget {
             this.paint();
         }
     }
-    public startTime(e:any) {
-        // debugger;
-        // this.props.start = e.value;
+    public changeTime(e:any) {
+        console.log('time ==',e.value);
+        this.props.startTime = e.value[0];
+        this.props.endTime = e.value[1];
     }
 
     public inputValue(e:any) {
         this.props.inputOrderId = e.value;
         this.paint();
+    }
+
+    public closeClick() {
+        console.log('close',this.props.showDateBox);
+        this.props.showDateBox = false;
+        this.paint();
+    }
+
+    public changeDateBox(e:any) {
+        this.props.showDateBox = e.value;
+        console.log(this.props.showDateBox);
     }
 }

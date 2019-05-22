@@ -1,7 +1,8 @@
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
-import { changeHWangState, getHWangApply } from '../../net/pull';
-import { popNewMessage, unicode2Str } from '../../utils/logic';
+import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
+import { dateToString, parseDate, popNewMessage, unicode2Str } from '../../utils/logic';
+import { exportExcel } from '../../utils/tools';
 interface Props {
     datas:any[];  // 原始数据
     showDataList:any[];  // 显示数据
@@ -11,6 +12,12 @@ interface Props {
     btn2:string;  // 按钮
     applyIdList:number[]; // 申请开通海王的ID列表
     searPhone:string;  // 查询手机号
+    dayCount:number;   // 今天申请人数
+    monCount:number;  // 本月申请人数
+    allCount:number;  // 海王总数
+    showDateBox:boolean; // 展示日期选择框
+    startTime:string;  // 开始时间
+    endTime:string;  // 结束时间
 }
 const Status = [
     '申请中',
@@ -26,17 +33,25 @@ export class OpenHWang extends Widget {
         showDataList:[
             // ['123456','张三','15534429570','四川省成都市金牛区XX街道XX小区XX','申请中']
         ],
-        showTitleList:['用户ID','姓名','手机号','地址信息','受理状态'],
+        showTitleList:['用户ID','姓名','手机号','地址信息','微信名','邀请人id','申请时间','受理状态'],
         activeTab:0,
         datas:[],
         btn1:'',
         btn2:'开始处理',
         applyIdList:[],
-        searPhone:''
+        searPhone:'',
+        dayCount:0,
+        monCount:0,
+        allCount:0,
+        showDateBox:false,
+        startTime:'',
+        endTime:''
     };
 
     public create() {
         super.create();
+        this.props.endTime = dateToString(Date.now(),1);
+        this.props.startTime = parseDate(this.props.endTime,-7,1);
         this.getData();
     }
 
@@ -57,7 +72,7 @@ export class OpenHWang extends Widget {
         this.props.applyIdList = [];
         this.props.datas.forEach(t => {
             const v = deepCopy(t);
-            if (t[5] === Status[num] || (num === 2 && t[5] === Status[3])) {
+            if (t[8] === Status[num] || (num === 2 && t[8] === Status[3])) {
                 this.props.applyIdList.push(v.shift());
                 this.props.showDataList.push(v);
             }
@@ -67,7 +82,15 @@ export class OpenHWang extends Widget {
 
     // 获取数据
     public getData() {
-        getHWangApply().then(r => {
+        getHwangTotal().then(r => {
+            this.props.dayCount = r.day_count;
+            this.props.monCount = r.month_count;
+            this.props.allCount = r.haiw_count;
+            this.paint();
+        });
+        getHWangApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
+            this.props.datas = [];
+            this.props.showDataList = [];
             if (r.value && r.value.length > 0) {
                 this.props.datas = r.value.map(item => {
                     return [
@@ -76,6 +99,9 @@ export class OpenHWang extends Widget {
                         unicode2Str(item[3]),  // 姓名
                         item[2],     // 电话
                         unicode2Str(item[4]),     // 地址
+                        unicode2Str(item[8]),   // 微信名
+                        item[7],    // 邀请人id
+                        dateToString(item[6],1), // 申请时间
                         Status[item[5]]  // 状态
                     ];
                 });
@@ -106,15 +132,53 @@ export class OpenHWang extends Widget {
         
     }
 
+    // 查询
     public search() {
         if (this.props.searPhone) {
-            const index = this.props.showDataList.findIndex(item => item[2] === this.props.searPhone);
-            if (index > -1) {
-                this.props.applyIdList = [this.props.applyIdList[index]];
-                this.props.showDataList = [this.props.showDataList[index]];
+            const ids = [];
+            const list = [];
+            for (const i in this.props.showDataList) {
+                const v = this.props.showDataList[i];
+                if (v[2] === this.props.searPhone) {
+                    ids.push(this.props.applyIdList[i]);
+                    list.push(v);
+                }
             }
-            
+            this.props.showDataList = list;
+            this.props.applyIdList = ids;
             this.paint();
+        } else {
+            this.getData();
         }
+    }
+
+    // 导出列表
+    public exportData() {
+        if (this.props.showDataList.length > 0) {
+            this.props.showDataList.unshift(this.props.showTitleList);
+            let name = '海王申请列表.xls';
+            if (this.props.activeTab === 1) name = '海王处理中列表.xls';
+            if (this.props.activeTab === 2) name = '海王处理完成列表.xls';
+            exportExcel(this.props.showDataList,name);
+        } else {
+            popNewMessage('没有数据无法导出');
+        }
+    }
+
+    // 日期选择框显示
+    public changeDateBox(e:any) {
+        this.props.showDateBox = e.value;
+        this.paint();
+    }
+
+    // 改变时间
+    public  changeDate(e:any) {
+        this.props.startTime = e.value[0];
+        this.props.endTime = e.value[1];
+    }
+
+    public pageClick() {
+        this.props.showDateBox = false;
+        this.paint();
     }
 }

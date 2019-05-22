@@ -56,6 +56,9 @@
     box-sizing: border-box;
     text-align: right;
 }
+.btns{
+    margin-right: 50px;
+}
 .btn{
     height:36px;
     color: #21811C;
@@ -81,17 +84,4 @@
     text-decoration: underline;
     display: inline-block;
     text-align: center;
-}
-.btns{
-    margin-left: 20px;
-}
-.bottomBtn{
-    width:100px;
-    background:rgba(25,145,235,1);
-    height:36px;
-    color: #fff;
-    text-align: center;
-    line-height: 36px;
-    font-size: 14px;
-    display: inline-block;
 }

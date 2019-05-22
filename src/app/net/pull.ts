@@ -1,3 +1,5 @@
+import { parseOrder, parseOrderShow } from '../utils/tools';
+import { Order } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
 /**
@@ -439,8 +441,16 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
 
     return requestAsync(msg).then(r => {
         console.log('r=',r);
+        const infos = <Order[]>JSON.parse(r.value);
+        if (!infos) {
+            alert('暂无数据');
 
-        return r.value;
+            return [];
+        }
+        const ordersShow = parseOrderShow(infos,orderType);
+        console.log('orders =====',ordersShow);
+
+        return ordersShow;
     }).catch((e) => {
         console.log(e);
 
@@ -448,17 +458,27 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
     });
 };
 // 获取指定供应商指定类型的订单
-export const getOrder  = (supplier,Ordertype) => {
+export const getOrder  = (supplier,Ordertype,oids) => {
     const msg = { 
         type: 'select_supplier_order',
         param: { 
             id:supplier,
-            type:Ordertype
+            type:Ordertype,
+            oids
         } 
     };
 
     return requestAsync(msg).then(r => {
-        return r.value;
+        const infos = <Order[]>JSON.parse(r.value);
+        if (!infos) {
+            alert('暂无数据');
+
+            return [];
+        }
+        const ordersShow = parseOrderShow(infos,Ordertype);
+        console.log('orders =====',ordersShow);
+
+        return ordersShow;
     }).catch((e) => {
         console.log(e);
 
@@ -486,14 +506,26 @@ export const getRreturnGoods = () => {
 };
 
 /**
+ * 获取海王统计信息
+ */
+export const getHwangTotal = () => {
+    const msg = {
+        type:'mall_mgr/members@get_haiwang_application_total',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+/**
  * 获取海王申请列表
  */
-export const getHWangApply = () => {
+export const getHWangApply = (stTime?:number,edTime?:number) => {
     const msg = {
         type:'mall_mgr/members@get_haiwang_application',
         param:{
-            start_time:0,
-            end_time:Date.now()
+            start_time: stTime || 0,
+            end_time: edTime || Date.now()
         }
     };
 
@@ -533,12 +565,12 @@ export const getWithdrawTotal = () => {
 /**
  * 获取提现申请列表
  */
-export const getWithdrawApply = () => {
+export const getWithdrawApply = (stTime?:number,edTime?:number) => {
     const msg = {
         type:'mall_mgr/members@get_withdraw_info',
         param:{
-            start_time:0,
-            end_time:Date.now()
+            start_time:stTime || 0,
+            end_time:edTime || Date.now()
         }
     };
 
@@ -692,17 +724,49 @@ export const getReturnGoods = (id:number,count:number,start:number,tail:number,s
             state
         }
     };
-    // tslint:disable-next-line:no-unnecessary-local-variable
-    const data = [['1001100','1120','SKU','1','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中','23.00','金额','张三','1777456664','weixinhao','2019-09-10','申请中','2019-09-10','2019-09-10']];
 
-    return data; 
+    return requestAsync(msg).then(r => {
 
-    // return requestAsync(msg).then(r => {
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
 
-    //     return r;
-    // }).catch(e => {
-    //     console.log(e);
-    // });
+// 订单号查询退货信息
+export const getReturnGoodsId = (id:number) => {
+    const msg = {
+        type:'select_return_goods',
+        param:{
+            id
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
+
+// 改变退货状态
+export const getReturnStatus = (uid:number,id:number,state:number) => {
+    const msg = {
+        type:'set_return_goods',
+        param:{
+            uid,
+            id,
+            state
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
 };
 
 // 获取最新导入时间
