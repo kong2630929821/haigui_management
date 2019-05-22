@@ -6,7 +6,6 @@
     color: #fff;
     font-size: 18px;
     background:#1991EB;
-    float: left;
     position: relative;
 }
 .import-input{
@@ -16,4 +15,5 @@
     left: 0;
     right: 0;
     opacity: 0;
+    width: 100%;
 }

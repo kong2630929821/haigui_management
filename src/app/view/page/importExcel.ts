@@ -1,7 +1,6 @@
-import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
 import { getExportTime, importArea, importBrand, importFreight, importGoods, importGoodsCate, importInventory, importSupplier } from '../../net/pull';
-import { timeConvert } from '../../utils/logic';
+import { popNewMessage, timeConvert } from '../../utils/logic';
 import { importRead } from '../../utils/tools';
 
 /**
@@ -40,9 +39,13 @@ export class ImportExcel extends Widget {
     }
     // 导入excel
     public imExcel(e:any) {
-        const file = getRealNode(e.node).getElementsByTagName('input')[e.value].files[0];
-        const num = e.value;
-        if (!file) return;
+        const file = e.file;
+        if (!file) {
+            popNewMessage('请导入excel文件');
+
+            return;
+        }
+        const num = e.index;
         if (num === 0) {// 导入运费
             importRead(file,(res) => {
                 importFreight(res).then((r) => {

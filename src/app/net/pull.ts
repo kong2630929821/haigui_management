@@ -1,4 +1,4 @@
-import { parseOrder, parseOrderShow } from '../utils/tools';
+import { parseOrder, parseOrderShow, parseOrderShow1 } from '../utils/tools';
 import { Order } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -427,9 +427,20 @@ export const getOrderById  = (orderId) => {
     };
 
     return requestAsync(msg).then(r => {
-        return r.value;
+        const infos = JSON.parse(r.value);
+        if (!infos) {
+            return [];
+        }
+        const ordersShow = parseOrderShow1(infos);
+        console.log('ordersShow =====',ordersShow);
+        console.log('orders =====',infos);
+
+        return ordersShow;
+
     }).catch((e) => {
         console.log(e);
+        
+        return [];
     });
 };
 // 获取所有订单

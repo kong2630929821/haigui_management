@@ -29,8 +29,7 @@
             </div>   
         </div>
     </div>
-    <div ev-select-click="selectClick">
-        <div w-class="tableTitle">数据列表</div>
+    <div w-class="order-table-box" ev-select-click="selectClick" ev-export-order="exportOrder" ev-import-order="importTransport">
         <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},title:{{it.showTitleList}},needCheckBox:true,isexport:true}</widget>
     </div>
 </div>

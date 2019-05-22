@@ -114,4 +114,12 @@ export class OrderTable extends Widget {
         notify(e.node,'ev-table-detail',{ value:num });
     }
 
+    public exportOrder(e:any) {
+        notify(e.node,'ev-export-order',undefined);
+    }
+
+    public importTransport(e:any) {
+        const file = e.file;
+        notify(e.node,'ev-import-order',{ file });
+    }
 }
