@@ -1,29 +1,35 @@
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, importTransport } from '../../net/pull';
+import { timeConvert } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
 
 /**
  * 所有订单
  */
 export class TotalOrder extends Widget {
-    public props:any = {
-        showTitleList:['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','用户ID','姓名','手机号','地址信息','订单状态'],
-        contentList:[],
-        supplierList:['供应商id'],
-        orderType:['失败','已下单未支付','已支付未发货','已发货未签收','已收货'],
-        exportType:['未导出','已导出'],
-        timeType:['下单时间','支付时间','收货时间','发货时间','完成时间'],
-        active:0,
-        supplierActive:0,
-        orderTypeActive:0,
-        exportActive:0,
-        timeTypeActive:0,
-        start:0,
-        tail:0,
-        inputOrderId:0,
-        orderList:[]
-    };
+    
+    public props:any;
+    constructor() {
+        super();
+        this.props = {
+            showTitleList:['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态'],
+            contentList:[],
+            supplierList:['供应商id'],
+            orderType:['失败','已下单未支付','已支付未发货','已发货未签收','已收货'],
+            exportType:['未导出','已导出'],
+            timeType:['下单时间','支付时间','收货时间','发货时间','完成时间'],
+            active:0,
+            supplierActive:0,
+            orderTypeActive:0,
+            exportActive:0,
+            timeTypeActive:0,
+            start:0,
+            tail:0,
+            inputOrderId:0,
+            orderList:[]
+        };
+    }
 
     public create() {
         // 切换到所有订单页时将所有供应商查询出来
@@ -111,7 +117,15 @@ export class TotalOrder extends Widget {
             } else if (orderInfo[0][11] > 0) {
                 orderState = '已完成';
             }
-            temp.push(0,orderInfo[0][0],orderInfo[0][12],orderInfo[0][15],orderInfo[0][16],orderInfo[0][17],orderInfo[0][18],orderInfo[0][1],orderInfo[0][2],orderInfo[0][3],orderInfo[0][4],orderState);
+            let time = '';// 显示下单时间还是支付时间
+            if (orderInfo[0][8] === 0) {
+                time = timeConvert(orderInfo[0][7]);// 下单时间
+            } else {
+                time = timeConvert(orderInfo[0][8]);// 支付时间
+                this.props.showTitleList = ['选择','订单编号','商品ID','商品名称','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态'];
+                // this.props.orderTime = 1; 
+            }
+            temp.push(0,orderInfo[0][0],orderInfo[0][12],orderInfo[0][15],orderInfo[0][16],orderInfo[0][17],orderInfo[0][18],time,orderInfo[0][1],orderInfo[0][2],orderInfo[0][3],orderInfo[0][4],orderState);
             contentList.push(temp);
             this.props.contentList = contentList;
             this.paint();

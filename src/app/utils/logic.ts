@@ -106,3 +106,18 @@ export const subtractDate = (time1:string,time2:string) => {
 export const compareDate = (time1:string,time2:string) => {
     return Date.parse(time1) > Date.parse(time2);
 };
+// 时间戳转标准日期
+export const timeConvert = (time:any) => {
+    const date = new Date(time);
+    const year = date.getFullYear().toString().concat('-');
+    const month = (date.getMonth() + 1 < 10 ? '0'.concat((date.getMonth() + 1).toString()) : date.getMonth() + 1).toString().concat('-');
+    const day = (date.getDate() < 10 ? '0'.concat(date.getDate().toString()) : date.getDate()).toString().concat(' ');
+    const hour = (date.getHours() < 10 ? '0'.concat(date.getHours().toString()) : date.getHours()).toString().concat(':');
+    const minute = (date.getMinutes() < 10 ? '0'.concat(date.getMinutes().toString()) : date.getMinutes()).toString().concat(':');
+    const second = (date.getSeconds() < 10 ? '0'.concat(date.getSeconds().toString()) : date.getSeconds()).toString();
+
+    const showTime = year + month + day + hour + minute + second;
+    console.log(showTime);
+
+    return showTime;
+};
