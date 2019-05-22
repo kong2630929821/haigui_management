@@ -784,3 +784,20 @@ export const getReturnStatus = (uid:number,id:number,state:number) => {
         console.log(e);
     });
 };
+
+// 获取最新导入时间
+export const getExportTime = () => {
+    const msg = {
+        type:'get_new_import_time',
+        param:{
+        }
+    };
+
+    return requestAsync(msg).then((r) => {
+        console.log(r);
+
+        return r;
+    }).catch((e) => {
+        console.log(e);
+    });
+};

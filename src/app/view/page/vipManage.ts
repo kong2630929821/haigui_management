@@ -4,7 +4,7 @@ import { getVipMember } from '../../net/pull';
 import { unicode2Str } from '../../utils/logic';
 
 interface Props {
-    showDataList:any[];  // 数据
+    showDataList:any[];  // 显示数据
     showTitleList:string[];  // 标题
     showDetail:boolean;  // 查看详情
     hBaoDatas:any[]; // 原始海宝数据
@@ -17,6 +17,9 @@ interface Props {
     searUid:string;  // 查询的UID
     active:number;
     optionsList:string[]; // 下拉框
+    showFilterBox:boolean;  // 展开过滤器
+    curShowDataList:any[]; // 当前页显示数据
+    curPage:number; // 当前页码
 }
 const UserLabel = ['','市代理','省代理'];
 /**
@@ -38,7 +41,10 @@ export class VipManage extends Widget {
         uid:0,
         searUid:'',
         active:0,
-        optionsList:['白客','海宝','海王','市代理','省代理']
+        optionsList:['白客','海宝','海王','市代理','省代理'],
+        showFilterBox:false,
+        curShowDataList:[],
+        curPage:0
     };
 
     public create() {
@@ -102,6 +108,7 @@ export class VipManage extends Widget {
     // 过滤用户
     public filterUser(e:any) {
         this.props.active = e.value;
+        this.props.showFilterBox = false;
         this.updateDatas(e.value);
     }
 
@@ -132,15 +139,14 @@ export class VipManage extends Widget {
                 break;
             default:
         }
-        console.log(list);
         this.props.showDataList = list.map(t => {
             const r = deepCopy(t);
             r.pop(); // 删除最后一项用户类型
 
             return r;
         });
-        console.log(list,this.props);
-        this.paint();
+        this.props.curPage = 0;
+        this.changePage({ value:0 });
     }
 
     // 查询uid输入
@@ -177,5 +183,23 @@ export class VipManage extends Widget {
         } else {
             this.updateDatas(this.props.active);
         }
+    }
+
+    // 过滤器展开
+    public changeFilterBox(e:any) {
+        this.props.showFilterBox = e.value;
+        this.paint();
+    }
+
+    public pageClick() {
+        this.props.showFilterBox = false;
+        this.paint();
+    }
+
+    // 查看某一页数据
+    public changePage(e:any) {
+        this.props.curPage = e.value;
+        this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
+        this.paint();
     }
 }
