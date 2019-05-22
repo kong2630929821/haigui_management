@@ -340,18 +340,27 @@ export const importInventory = (res) => {
 };
  // 解析并导入运单信息
 export const importTransport = (res) => {
-    const arr = [];
+    const maps = new Map();
     for (let i = 0;i < res.length;i++) {
-        // const supplierId = Number(res[i].供货商ID);
-        // const uid = Number(res[i].订单用户ID);
-        // const oid = Number(res[i].订单编号);
-        // const sid = res[i].物流单号 ? res[i].物流单号 : '';
-        // const supplierId = Number(res[i].供货商ID);
         const supplierId = Number(res[i].供货商ID);
         const uid = Number(res[i].用户ID);
         const oid = Number(res[i].订单编号);
         const sid = res[i].物流单号;
-        arr.push([supplierId,uid,oid,sid]);
+        const item = maps.get(oid);
+        if (!item) {
+            maps.set(oid,[supplierId,uid,oid,sid]);
+        } else {   // 一个订单多个商品  并且有多个物流
+            let sids = item[3];
+            if (sids.indexOf(sid) < 0) {
+                sids = `${sids}/${sid}`;
+            }
+            maps.set(oid,[supplierId,uid,oid,sids]);
+        }
+    }
+
+    const arr = [];
+    for (const [k,v] of maps) {
+        arr.push(v);
     }
     const str = JSON.stringify(arr);
     const msg = {
@@ -443,8 +452,6 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
         console.log('r=',r);
         const infos = <Order[]>JSON.parse(r.value);
         if (!infos) {
-            alert('暂无数据');
-
             return [];
         }
         const ordersShow = parseOrderShow(infos,orderType);
