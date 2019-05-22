@@ -25,9 +25,12 @@
                 <tbody>
                     {{for i,v of it.datas}}
                     <tr style="background:#fff;">
-                        {{if it.needCheckBox}}
-                        <td w-class="td" style="width:80px;" on-tap="checked({{i}})">
-                            <img src="../res/images/{{it.selectList.indexOf(i)>-1?'selectBox_active.png':'selectBox.png'}}" />
+                        {{if it.needCheckBox &&  (i > 0 ? v[0] !== it.datas[i - 1][0] : true) }}
+                        <td w-class="td" style="width:80px;" on-tap="checked(e,{{i}})">
+                            <img src="../res/images/{{it.selectList[i] ? 'selectBox_active.png':'selectBox.png'}}" />
+                        </td>
+                        {{else}}
+                        <td w-class="td" style="width:80px;" >
                         </td>
                         {{end}}
                         

@@ -10,7 +10,7 @@
                 <widget w-tag="app-components-simpleFilter">{options:["下单时间","支付时间","收货时间","发货时间","完成时间"],active:{{it.active}} }</widget>
             </div>
             <div w-class="dataBox" ev-period-change="changeTime" ev-dateBox-change="changeDateBox">
-                <widget  w-tag="app-components-periodPicker">{startDate:{{it.startTime}},endDate:{{it.endTime}},showDateBox:{{it.showDateBox }} }</widget>
+                <widget  w-tag="app-components-periodTimePicker">{startDate:{{it.startTime}},endDate:{{it.endTime}},showDateBox:{{it.showDateBox }} }</widget>
             </div>
             <div w-class="select">
                 <div style="display:inline-block;" ev-selected="filterSupplierId">
@@ -29,9 +29,9 @@
             </div>   
         </div>
     </div>
-    <div>
+    <div ev-select-click="selectClick">
         <div w-class="tableTitle">数据列表</div>
-        <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},title:{{it.showTitleList}},needCheckBox:false}</widget>
+        <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},title:{{it.showTitleList}},needCheckBox:true}</widget>
     </div>
     <div w-class="searchleft" on-tap="exportOrder">导出订单</div>
     

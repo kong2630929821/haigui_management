@@ -37,32 +37,66 @@ export class OrderTable extends Widget {
             ...props
         };
         super.setProps(this.props);
+        this.allCheckedInit(false);
+        console.log(this.props);
+    }
+
+    // 全选or not
+    public allCheckedInit(selected:Boolean) {
+        for (let i = 0;i < this.props.datas.length;i++) {
+            this.props.selectList[i] = selected;
+        }
+        this.props.selectList.length = this.props.datas.length;
+    }
+
+    // 是否全选
+    public isAllChecked() {
+        let allChecked = true;
+        for (let i = 0;i < this.props.datas.length;i++) {
+            if (!this.props.selectList[i]) {
+                allChecked = false;
+                break;
+            }
+        }
+
+        return allChecked;
     }
     
     // 全选整页
-    public allChecked() {
+    public allChecked(e:any) {
         this.props.allChecked = !this.props.allChecked;
-        this.props.selectList = [];
         if (this.props.allChecked) {
-            for (let i = 0;i < this.props.datas.length;i++) {
-                this.props.selectList.push(i);
-            }
+            this.allCheckedInit(true);
+        } else {
+            this.allCheckedInit(false);
         }
+        console.log(this.props.selectList);
+        notify(e.node,'ev-select-click',{ selectList:this.props.selectList });
         this.paint();
     }
 
     // 选中对应的行
-    public checked(index:number) {
-        const ind = this.props.selectList.indexOf(index);
-        if (ind === -1) {
-            this.props.selectList.push(index);
-        } else {
-            this.props.allChecked = false;
-            this.props.selectList.splice(ind,1);
-        }
+    public checked(e:any,index:number) {
+        const isSelected = !this.props.selectList[index];
+        this.props.selectList[index] = isSelected;
+        this.checkNextChoosed(index,isSelected);
+        console.log(this.props.selectList);
+        this.props.allChecked = this.isAllChecked();
+        notify(e.node,'ev-select-click',{ selectList:this.props.selectList });
         this.paint();
     }
 
+    // 检查下一个元素是否需要同时被选中或者不被选中  适用于同一个订单多个商品
+    public checkNextChoosed(curIndex:number,selected:boolean) {
+        if (curIndex < this.props.datas.length - 1) {
+            const curOrderId = this.props.datas[curIndex][0];
+            const nextOrderId = this.props.datas[curIndex + 1][0];
+            if (curOrderId === nextOrderId) {
+                this.props.selectList[curIndex + 1] = selected;
+                this.checkNextChoosed(curIndex + 1,selected);
+            }
+        }
+    }
     // 点击下方按钮
     public clickBtn(e:any,fg:number) {
         notify(e.node,'ev-table-btnClick',{ fg:fg,value:this.props.selectList });
