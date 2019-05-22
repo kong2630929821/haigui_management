@@ -35,8 +35,13 @@
                         {{end}}
                         
                         {{for j,r of v}}
-                        <td w-class="td">
+                        <td w-class="td" >
+                            <div w-class="flex-style">
+                            {{if j === 0 && it.isexport}}
+                            <span w-class="label">导</span>
+                            {{end}}
                             <span style="word-break: break-all;">{{typeof(r)=="string" ? r :JSON.stringify(r)}}</span>
+                            </div>
                         </td>
                         {{end}}
     
@@ -73,15 +78,9 @@
             </div>
             {{end}}
     
-            <div w-class="btns">
-                {{if it.btn1}}
-                <div w-class="btn" on-tap="clickBtn(e,1)">{{it.btn1}}</div>
-                {{end}}
+            <div w-class="searchleft" on-tap="exportOrder">导出订单</div>
     
-                {{if it.btn2}}
-                <div w-class="btn" on-tap="clickBtn(e,2)">{{it.btn2}}</div>
-                {{end}}
-            </div>
+            <div ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入运单"}</app-components-inputFileBtn></div>
         </div>
     </div>
     

@@ -1,13 +1,12 @@
 .import-btn{
-    width:150px;
-    height:48px;
-    line-height: 48px;
+    width:100px;
+    height:36px;
+    line-height: 36px;
     text-align: center;
     color: #fff;
     font-size: 18px;
     background:#1991EB;
     float: left;
-    margin: 25px;
     position: relative;
 }
 .import-input{

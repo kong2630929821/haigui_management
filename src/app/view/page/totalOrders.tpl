@@ -31,9 +31,6 @@
     </div>
     <div ev-select-click="selectClick">
         <div w-class="tableTitle">数据列表</div>
-        <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},title:{{it.showTitleList}},needCheckBox:true}</widget>
+        <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},title:{{it.showTitleList}},needCheckBox:true,isexport:true}</widget>
     </div>
-    <div w-class="searchleft" on-tap="exportOrder">导出订单</div>
-    
-    <div ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入运单"}</app-components-inputFileBtn></div>
 </div>

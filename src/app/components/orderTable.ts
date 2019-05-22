@@ -14,6 +14,7 @@ interface Props {
     inlineBtn2:string;
     inputFile:string;
     color:boolean;
+    isexport:boolean;
 }
 // tslint:disable-next-line:completed-docs
 export class OrderTable extends Widget {
@@ -28,7 +29,8 @@ export class OrderTable extends Widget {
         inlineBtn1:'',
         inlineBtn2:'',
         inputFile:'',
-        color:false
+        color:false,
+        isexport:false
     };
     
     public setProps(props:any) {
