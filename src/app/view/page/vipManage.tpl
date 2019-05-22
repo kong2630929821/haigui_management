@@ -1,4 +1,4 @@
-<div w-class="page" ev-detail-back="detailBack">
+<div w-class="page" ev-detail-back="detailBack" on-tap="pageClick">
     {{if !it.showDetail}}
     <div w-class="tabRow">
         <div w-class="tab">
@@ -31,17 +31,21 @@
         </div>
         <div w-class="search" on-tap="search">查询</div>
 
-        <div style="display:inline-block" ev-selected="filterUser">
-            <widget w-tag="app-components-simpleFilter">{options:{{it.optionsList}},active:{{it.active}} }</widget>
+        <div style="display:inline-block" ev-selected="filterUser" ev-expand="changeFilterBox">
+            <widget w-tag="app-components-simpleFilter">{options:{{it.optionsList}},active:{{it.active}},expand:{{it.showFilterBox}} }</widget>
         </div>
     </div>
 
         {{if it.showDataList}}
         <div ev-table-detail="goDetail">
             <div w-class="tableTitle">数据列表</div>
-            <widget w-tag="app-components-tableDeal">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn2:"查看详情" }</widget>
+            <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn2:"查看详情" }</widget>
         </div>
         {{end}}
+
+    <div ev-changeCurrent="changePage">
+        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/5)}},currentIndex:{{it.curPage}} }</widget>
+    </div>
 
     {{else}}
     <div ev-change-userType="getDatas">

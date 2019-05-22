@@ -44,7 +44,11 @@
     {{if it.showDataList}}
     <div ev-table-detail="dealWith" ev-table-btnClick="exportData">
         <div w-class="tableTitle">数据列表</div>
-        <widget w-tag="app-components-tableDeal">{datas: {{it.showDataList}},title:{{it.showTitleList}},inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
+        <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}},btn1:"导出列表" }</widget>
     </div>
     {{end}}
+    
+    <div ev-changeCurrent="changePage">
+        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/4)}},currentIndex:{{it.curPage}} }</widget>
+    </div>
 </div>

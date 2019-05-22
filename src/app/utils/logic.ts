@@ -106,7 +106,6 @@ export const subtractDate = (time1:string,time2:string) => {
 export const compareDate = (time1:string,time2:string) => {
     return Date.parse(time1) > Date.parse(time2);
 };
-
 // 时间戳转标准日期
 export const timeConvert = (time:any) => {
     const date = new Date(time);
