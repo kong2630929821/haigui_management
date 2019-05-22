@@ -1,6 +1,6 @@
 import { Widget } from '../../../pi/widget/widget';
 import { getReturnGoods, getReturnGoodsId, getReturnStatus } from '../../net/pull';
-import { timeConvert } from '../../utils/logic';
+import { timeConvert, transitTimeStamp } from '../../utils/logic';
 
 /**
  * 商品信息
@@ -10,7 +10,7 @@ export class GoodsInfo extends Widget {
         showDataList:[
            
         ],
-        shopList:[],// 存所有的商品
+        returnList:[],// 存所有的商品
         showTitleList:['售后单id','商品ID','商品SKU','用户ID','下单时单价','下单时数量','支付类型','状态','退货原因','申请退货的时间','回应退货申请的时间','完成退货的时间','用户姓名','用户电话','用户微信名','下单时间','支付时间','发货时间',' 收货时间','发货单号'],
         showDetail:false,
         page:1,// 上一个操作是第几页
@@ -19,24 +19,32 @@ export class GoodsInfo extends Widget {
         returnStatus:0, // 当前退货状态 0退货申请 1退货中 2退货完成
         startTime:'',  // 查询开始时间
         endTime:'', // 查询结束时间
-        showDateBox:[false,false],
+        showDateBox:false,
         numberOfApplications:0
     };
     public checkType(index:number) {
         this.props.returnStatus = index;
-        this.init(index + 1);
+        const oData = new Date();
+        const time = oData.setHours(23, 59, 59, 999);
+        this.props.endTime =  timeConvert(time);
+        this.props.startTime =  timeConvert(0);
+        this.init(index + 1,transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime));
         this.paint();
     }
     public create() {
         super.create();
-        this.init(1);
-    }
-    public init(status:number) {
         const oData = new Date();
         const time = oData.setHours(23, 59, 59, 999);
-        getReturnGoods(0,1,0,time,status).then(r => {
+        this.props.endTime =  timeConvert(time);
+        this.props.startTime =  timeConvert(0);
+        this.init(1,0,time);
+    }
+    public init(status:number,startTime:number,time:number) {
+       
+        getReturnGoods(0,1,startTime,time,status).then(r => {
             let returnGoods;
             returnGoods = JSON.parse(r.value);
+            this.props.returnList = returnGoods;
             if (returnGoods.length) {
                 returnGoods = this.dataProcessing(returnGoods);
             }
@@ -97,54 +105,60 @@ export class GoodsInfo extends Widget {
     }
     // 搜索指定ID
     public search() {
-        const num = parseInt(this.props.searchValue);
-        console.log(this.props.searchValue,this.props.startTime,this.props.endTime);
-        if (!this.props.searchValue || isNaN(num)) {
-            return ;
-        }
-        getReturnGoodsId(num).then(r => {
-            const returnGoods = JSON.parse(r.value);
-            returnGoods[0].forEach((v,i) => {
-                if (i === 7) {
-                    // 判断退货完成查询
-                    if ((v === 1 || v === -1) && this.props.returnStatus === 2 && returnGoods[0][11] !== 0) {
-                        this.props.showDataList = this.dataProcessing(returnGoods);
-                    } else if (v === 1 && this.props.returnStatus === 1 && returnGoods[0][10] !== 0 && returnGoods[0][11] === 0) {
-                        // 判断退货中查询
-                        this.props.showDataList = this.dataProcessing(returnGoods);
-                    } else if (v === 1 && this.props.returnStatus === 0 && returnGoods[0][10] === 0) {
-                        // 判断申请查询
-                        this.props.showDataList = this.dataProcessing(returnGoods);
-                    } else {
-                        // 其他情况
-                        this.props.showDataList = [];
+        let num = this.props.searchValue;
+        console.log(num);
+        if (num) {
+            num = parseInt(this.props.searchValue);
+            if (isNaN(num)) {
+                return ;
+            }
+            getReturnGoodsId(num).then(r => {
+                const returnGoods = JSON.parse(r.value);
+                this.props.returnList = returnGoods;
+                returnGoods[0].forEach((v,i) => {
+                    if (i === 7) {
+                        // 判断退货完成查询
+                        if ((v === 1 || v === -1) && this.props.returnStatus === 2 && returnGoods[0][11] !== 0) {
+                            this.props.showDataList = this.dataProcessing(returnGoods);
+                        } else if (v === 1 && this.props.returnStatus === 1 && returnGoods[0][10] !== 0 && returnGoods[0][11] === 0) {
+                            // 判断退货中查询
+                            this.props.showDataList = this.dataProcessing(returnGoods);
+                        } else if (v === 1 && this.props.returnStatus === 0 && returnGoods[0][10] === 0) {
+                            // 判断申请查询
+                            this.props.showDataList = this.dataProcessing(returnGoods);
+                        } else {
+                            // 其他情况
+                            this.props.showDataList = [];
+                        }
                     }
-                }
+                });
+                
+                this.paint();
+            }).catch(e => {
+                this.props.showDataList = [];
+                this.paint();
             });
-            
-            this.paint();
-        }).catch(e => {
-            this.props.showDataList = [];
-            this.paint();
-        });
+        } else {
+            console.log('开始时间',this.props.startTime,this.props.endTime);
+            console.log('开始时间搓',transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime));
+            this.init(this.props.returnStatus + 1,transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime));
+        }
+        
     }
-        // 更新起止时间
-    public changeTime(e:any) {
-        this.props.startTime = e.value[0]; 
-        this.props.endTime = e.value[1];
-    }
-    
-    // 是否展开时间选择框
-    public changeDateBox(e:any,fg:number) {
-        console.log(e.value,fg);
-        this.props.showDateBox = this.props.showDateBox.map(() => false);
-        this.props.showDateBox[fg] = e.value;
+     // 日期选择框显示
+    public changeDateBox(e:any) {
+        this.props.showDateBox = e.value;
         this.paint();
     }
+
+    // 改变时间
+    public  changeDate(e:any) {
+        this.props.startTime = e.value[0];
+        this.props.endTime = e.value[1];
+    }
+    // 页面点击
     public close() {
-        console.log(111111111111);
-        this.props.showDateBox = this.props.showDateBox.map(() => false);
-        console.log(this.props.showDateBox);
+        this.props.showDateBox = false;
         this.paint();
     }
     // 设置退货状态

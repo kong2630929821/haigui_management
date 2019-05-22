@@ -25,7 +25,7 @@ export class GoodsInfo extends Widget {
             console.log('111111111',r1);
             const data = JSON.parse(r1.value);
             this.props.shopNum = data[1];
-            getAllGoods(index === 1 ? 0 :data[0],3).then(r => {
+            getAllGoods(index === 1 ? 0 :data[0],6).then(r => {
                 const shop = JSON.parse(r.value);
                 this.props.showDataList = shop;
                 this.paint();
@@ -44,6 +44,7 @@ export class GoodsInfo extends Widget {
         getCurrentGood(this.props.searchValue).then(r => {
             const shop = JSON.parse(r.value);
             this.props.showDataList = shop;
+            this.props.shopNum = shop.length;
             this.paint();
         }).catch(e => {
             this.props.showDataList = [];
@@ -52,13 +53,14 @@ export class GoodsInfo extends Widget {
     }
     // 分页
     public pageChange(e:any) {
-        const index = (e.value) * 3;
+        console.log('11111111111111111111111111111111',e.value);
+        const index = (e.value) * 6;
         this.init(index === 0 ? 1 :index);
     }
     // 导出商品
     public async exportShop() {
         let shop;
-        await getAllGoods(0,3).then(r => {
+        await getAllGoods(0,6).then(r => {
             shop = JSON.parse(r.value);
         });
         const jsonHead = this.props.showTitleList;

@@ -14,8 +14,8 @@
                 <widget w-tag="app-components-input">{placeHolder:"查询订单编号"}</widget>
             </div>
             <div w-class="search" on-tap="search">查询</div>
-            <div w-class="dataBox" ev-period-change="changeTime" ev-dateBox-change="changeDateBox">
-                <widget  w-tag="app-components-periodPicker">{startDate:{{it.startTime}},endDate:{{it.endTime}},showDateBox:{{it.showDateBox[0]}} }</widget>
+            <div style="margin: 28px 0 28px 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
+                <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
             </div>
         </div>
 
@@ -24,11 +24,11 @@
     <div ev-table-detail="goDetail">
         <div w-class="tableTitle">数据列表</div>
         {{if it.returnStatus==0}}
-            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn1:"处理申请"}</widget>
+            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn1:"处理申请",auto:true}</widget>
         {{elseif it.returnStatus==1}}
-            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn1:"退货失败",inlineBtn2:"退货成功",color:true}</widget>
+            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn1:"退货失败",inlineBtn2:"退货成功",color:true,auto:true}</widget>
         {{else}}
-            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false}</widget>
+            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true}</widget>
         {{end}}
     </div>
     
