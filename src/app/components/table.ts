@@ -75,6 +75,7 @@ export class Table extends Widget {
 
     // 导入excel
     public importExcel(e:any,num:number) {
+        console.log('123123');
         notify(e.node,'ev-table-detail',{ value:num });
     }
 

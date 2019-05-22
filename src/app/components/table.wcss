@@ -95,3 +95,23 @@
     font-size: 14px;
     display: inline-block;
 }
+.exportFile{
+    position: relative;
+}
+.btn1{
+    position: absolute;
+    top:-11px;
+    left: 50%;
+    margin-left: -75px;
+    width:150px;
+    opacity: 0;
+}
+.exportFileBtn{
+    position: absolute;
+    top:-11px;
+    left: 50%;
+    margin-left: -75px;
+    width:150px;
+    color:white;
+    background: rgb(25, 145, 235);
+}
