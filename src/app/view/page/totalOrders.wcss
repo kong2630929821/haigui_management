@@ -51,14 +51,7 @@
     background: #273142;
     color:#fff;
 }
-.tableTitle{
-    height:48px;
-    font-size: 18px;
-    color: #fff;
-    line-height: 48px;
-    padding-left: 20px;
-    background:rgba(140,159,183,1);
-}
+
 .searchBox{
     margin:20px 0;
     height: 150px;
@@ -82,17 +75,7 @@
     float: right;
     margin: 25px;
 }
-.searchleft{
-    width:150px;
-    height:48px;
-    line-height: 48px;
-    text-align: center;
-    color: #fff;
-    font-size: 18px;
-    background:#1991EB;
-    float: left;
-    margin: 25px;
-}
+
 .btnBox{
     display: flex;
 }
@@ -114,21 +97,21 @@
     margin: 25px;
     position: relative;
 }
-.import-input{
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    opacity: 0;
+.searchleft{
+    width:150px;
+    height:48px;
+    line-height: 48px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    background:#1991EB;
+    margin: 25px;
 }
-.list-title{
-    display: flex;
-}
-.list-item{
-    height: 50px;
-    padding: 0 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
 }

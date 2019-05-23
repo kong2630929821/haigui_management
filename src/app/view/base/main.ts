@@ -12,6 +12,7 @@ export const run = (cb): void =>  {
     addWidget(document.body, 'pi-ui-root');
     // 打开首页面
     popNew('app-view-base-login');
+    // popNew('app-view-base-home');
     // 解决进入时闪一下问题
     setTimeout(() => {
         if (cb) cb();

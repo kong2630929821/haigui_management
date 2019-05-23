@@ -1,26 +1,20 @@
-<div w-class='box'>
-    {{if it.title}}
-    <div w-class="header" >
-        <table w-class="table">
-            <thead w-class="has-gutter">
-                <tr style="background:#fff;">
-                    {{if it.needCheckBox}}
-                    <th w-class="th {{it.auto?'autoTh':''}}" style="width:80px;">选择</th>
-                    {{end}}
-                    {{for i,v of it.title}}
-                    <th w-class="th {{it.auto?'autoTh':''}}">{{v}}</th>
-                    {{end}}
-
-                    {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
-                    <th w-class="th th1 {{it.auto?'autoTh':''}}">操作</th>
-                    {{end}}
-                </tr>
-            </thead>
-        </table>
-    </div>
-    {{end}}    
+<div w-class='box'> 
     <div w-class="{{it.auto?'autoBody':''}}">
         <table w-class="table">
+            <thead w-class="has-gutter">
+                    <tr style="background:#fff;">
+                        {{if it.needCheckBox}}
+                        <th w-class="th {{it.auto?'autoTh':''}}" style="width:80px;">选择</th>
+                        {{end}}
+                        {{for i,v of it.title}}
+                        <th w-class="th {{it.auto?'autoTh':''}}">{{v}}</th>
+                        {{end}}
+    
+                        {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
+                        <th w-class="th th1 {{it.auto?'autoTh':''}}">操作</th>
+                        {{end}}
+                    </tr>
+            </thead>
             <tbody>
                 {{for i,v of it.datas}}
                 <tr style="background:#fff;">

@@ -35,7 +35,7 @@ export class GoodsInfo extends Widget {
         const oData = new Date();
         const time = oData.setHours(23, 59, 59, 999);
         this.props.endTime =  timeConvert(time);
-        this.props.startTime =  timeConvert(0);
+        this.props.startTime = '2019-05-01 00:00:000';
         this.init(index + 1,transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime));
         this.paint();
     }
@@ -44,8 +44,9 @@ export class GoodsInfo extends Widget {
         const oData = new Date();
         const time = oData.setHours(23, 59, 59, 999);
         this.props.endTime =  timeConvert(time);
-        this.props.startTime =  timeConvert(0);
-        this.init(1,0,time);
+        this.props.startTime = '2019-05-01 00:00:000';
+        console.log('3333333333333333333333333333333333333',this.props.startTime);
+        this.init(1,transitTimeStamp(this.props.startTime),time);
     }
     public init(status:number,startTime:number,time:number) {
        

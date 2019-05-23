@@ -1,4 +1,5 @@
-import { GoodsDetails, Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
+import { popNew } from '../../pi/ui/root';
+import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
 
 /**
  * 常用工具
@@ -108,14 +109,54 @@ export const exportExcel = (aoa:any[][],excelName:string) => {
     openDownloadDialog(sheet2blob(sheet),excelName);
 };
 
+// 解析订单
 export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
     const ordersShow:OrderShow[] = [];
     for (const info of infos) {
-        for (const v of info[3]) {
-            const orderShow:OrderShow = [false,info[1],v[0],v[1],v[4],v[5],info[0],info[2],info[8],info[9],info[11],OrderStatusShow[status]];
+        for (const v of info[3]) { 
+            const timestamp = status === OrderStatus.PENDINGPAYMENT ? info[12] : info[13];
+            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],info[0],timestampFormat(timestamp),info[2],info[8],info[9],info[11],OrderStatusShow[status]];
             ordersShow.push(orderShow);
         }
     }
 
     return ordersShow;
+};
+
+// 解析订单1
+export const parseOrderShow1 = (infos:any[]) => {
+    const ordersShow:OrderShow[] = [];
+    for (const info of infos) {
+        let status;
+        if (info[7] === 0) {
+            status = OrderStatus.FAILED;
+        } else if (info[8] === 0) {
+            status = OrderStatus.PENDINGPAYMENT;
+        } else if (info[9] === 0) {
+            status = OrderStatus.PENDINGDELIVERED;
+        } else if (info[10] === 0) {
+            status = OrderStatus.PENDINGRECEIPT;
+        } else if (info[10]) {
+            status = OrderStatus.PENDINGFINISH;
+        }
+        const timestamp = status === OrderStatus.PENDINGPAYMENT ? info[7] : info[8];
+        // ['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态']
+        const orderShow:OrderShow = [info[0],info[12],info[15],info[14],info[16],info[17],info[18],timestampFormat(timestamp),info[1],info[2],info[3],info[5],OrderStatusShow[status]];
+        ordersShow.push(orderShow);
+    }
+
+    return ordersShow;
+};
+
+// 时间戳格式化 毫秒为单位
+export const timestampFormat = (timestamp: number) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1) >= 10 ? (date.getMonth() + 1) : `0${date.getMonth() + 1}`;
+    const day = date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`;
+    const hour = date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`;
+    const minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
+    const seconds = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`;
+
+    return `${year}-${month}-${day} ${hour}:${minutes}:${seconds}`;
 };

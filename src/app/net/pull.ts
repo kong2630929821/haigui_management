@@ -1,4 +1,4 @@
-import { parseOrder, parseOrderShow } from '../utils/tools';
+import { parseOrderShow, parseOrderShow1 } from '../utils/tools';
 import { Order } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -11,7 +11,7 @@ export const importFreight = (res) => {
     for (let i = 0;i < res.length;i++) {
         const id = parseInt(res[i].id,10);
         const price_type = parseInt(res[i].price_type,10);
-        const price = Number(res[i].price) * 100;
+        const price = Math.floor(Number(res[i].price) * 100);
         const tmp = [id,res[i].area,price_type,price];
         arr[i] = tmp;
     } 
@@ -158,12 +158,12 @@ export const importGoods = (res) => {
         const areaId = parseInt(res[i].地区id,10);
         const supplierId = parseInt(res[i].供应商id,10);
         const pay_type = parseInt(res[i].支付类型,10);
-        const cost = Number(res[i].成本价) * 100;
-        const origin = Number(res[i].普通售价) * 100;
-        const vip_price = Number(res[i].会员价) * 100;
+        const cost = Math.floor(Number(res[i].成本价) * 100);
+        const origin = Math.floor(Number(res[i].普通售价) * 100);
+        const vip_price = Math.floor(Number(res[i].会员价) * 100);
         const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
-        const tax = Number(res[i].税费) * 100;
-        const discount = res[i].折后价 === undefined ? origin : Number(res[i].折后价) * 100;
+        const tax = Math.floor(Number(res[i].税费) * 100);
+        const discount = Math.floor(res[i].折后价 === undefined ? origin : Number(res[i].折后价) * 100);
         const labels = [];
         res[i].标签.split(',').forEach(e => {
             e = e.replace(/\n/,'');
@@ -340,18 +340,27 @@ export const importInventory = (res) => {
 };
  // 解析并导入运单信息
 export const importTransport = (res) => {
-    const arr = [];
+    const maps = new Map();
     for (let i = 0;i < res.length;i++) {
-        // const supplierId = Number(res[i].供货商ID);
-        // const uid = Number(res[i].订单用户ID);
-        // const oid = Number(res[i].订单编号);
-        // const sid = res[i].物流单号 ? res[i].物流单号 : '';
-        // const supplierId = Number(res[i].供货商ID);
         const supplierId = Number(res[i].供货商ID);
         const uid = Number(res[i].用户ID);
         const oid = Number(res[i].订单编号);
         const sid = res[i].物流单号;
-        arr.push([supplierId,uid,oid,sid]);
+        const item = maps.get(oid);
+        if (!item) {
+            maps.set(oid,[supplierId,uid,oid,sid]);
+        } else {   // 一个订单多个商品  并且有多个物流
+            let sids = item[3];
+            if (sids.indexOf(sid) < 0) {
+                sids = `${sids}/${sid}`;
+            }
+            maps.set(oid,[supplierId,uid,oid,sids]);
+        }
+    }
+
+    const arr = [];
+    for (const [k,v] of maps) {
+        arr.push(v);
     }
     const str = JSON.stringify(arr);
     const msg = {
@@ -418,21 +427,40 @@ export const getOrderById  = (orderId) => {
     };
 
     return requestAsync(msg).then(r => {
-        return r.value;
+        const infos = JSON.parse(r.value);
+        if (!infos) {
+            return [];
+        }
+        const ordersShow = parseOrderShow1(infos);
+        console.log('ordersShow =====',ordersShow);
+        console.log('orders =====',infos);
+
+        return ordersShow;
+
     }).catch((e) => {
         console.log(e);
+        
+        return [];
     });
 };
 // 获取所有订单
 export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) => {
+    let startTimestamp = 0; 
+    let endTimestamp = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).getTime();
+    if (start) {
+        startTimestamp = new Date(start).getTime();
+    }
+    if (tail) {
+        endTimestamp = new Date(tail).getTime();
+    }
     const msg = { 
         type: 'select_all_orders',
         param: { 
             id:id,       // 订单id,等于0表示从最大开始获取，大于0表示从指定订单id开始获取
             count:count,   // 需要获取的订单信息数量，即一页需要显示的数量
             time_type:time_type,    // 时间类型，1下单，2支付，3发货， 4收货，5完成
-            start:start ,               // 启始时间，单位毫秒
-            tail:new Date().getTime(),                // 结束时间，单位毫秒
+            start:startTimestamp ,               // 启始时间，单位毫秒
+            tail:endTimestamp,                // 结束时间，单位毫秒
             sid:sid,                    // 供应商id，等于0表示所有供应商，大于0表示指定供应商
             type:orderType,                // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
             state:state                // 订单状态，0未导出，1已导出
@@ -443,12 +471,11 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
         console.log('r=',r);
         const infos = <Order[]>JSON.parse(r.value);
         if (!infos) {
-            alert('暂无数据');
-
             return [];
         }
         const ordersShow = parseOrderShow(infos,orderType);
-        console.log('orders =====',ordersShow);
+        console.log('ordersShow =====',ordersShow);
+        console.log('orders =====',infos);
 
         return ordersShow;
     }).catch((e) => {
