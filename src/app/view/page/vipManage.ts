@@ -178,7 +178,7 @@ export class VipManage extends Widget {
     
                 return r;
             });
-            this.paint();
+            this.changePage({ value:0 });
 
         } else {
             this.updateDatas(this.props.active);

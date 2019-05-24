@@ -101,10 +101,10 @@ export class OpenHWang extends Widget {
                     return [
                         item[0],    // 记录id
                         item[1],    // 用户uid
-                        unicode2Str(item[3]),  // 姓名
+                        unicode2Str(item[8]),  // 姓名
                         item[2],     // 电话
                         unicode2Str(item[4]),     // 地址
-                        unicode2Str(item[8]),   // 微信名
+                        unicode2Str(item[3]),   // 微信名
                         item[7],    // 邀请人id
                         dateToString(item[6],1), // 申请时间
                         Status[item[5]]  // 状态
@@ -151,7 +151,7 @@ export class OpenHWang extends Widget {
             }
             this.props.showDataList = list;
             this.props.applyIdList = ids;
-            this.paint();
+            this.changePage({ value:0 });
         } else {
             this.getData();
         }

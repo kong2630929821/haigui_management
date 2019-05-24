@@ -148,7 +148,7 @@ export class Withdraw extends Widget {
             }
             this.props.showDataList = list;
             this.props.withdrawIdList = ids;
-            this.paint();
+            this.changePage({ value:0 });
         } else {
             this.getData();
         }
