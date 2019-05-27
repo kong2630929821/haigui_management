@@ -11,6 +11,7 @@
 .table{
     table-layout: fixed;
     border-collapse: collapse;
+    min-width: 100%;
 }
 .has-gutter{
     color: #909399;
