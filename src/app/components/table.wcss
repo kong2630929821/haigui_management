@@ -114,6 +114,6 @@
     border-right: 1px solid #ccc;
 }
 .autoBody{
-    max-height: 400px;
+    max-height: 609px;
     border-left: 1px solid #ccc;
 }
