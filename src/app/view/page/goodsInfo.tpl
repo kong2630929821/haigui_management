@@ -10,6 +10,7 @@
         </div>
 
     </div>
+    <div w-class="shopSum">共{{it.shopNum}}件商品</div> 
     <div ev-table-detail="goDetail">
         <div w-class="tableTitle">商品列表</div>
         <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true}</widget>
