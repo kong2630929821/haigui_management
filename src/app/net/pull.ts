@@ -1,6 +1,6 @@
 import { popNewMessage } from '../utils/logic';
-import { parseOrderShow, parseOrderShow1 } from '../utils/tools';
-import { Order } from '../view/page/totalOrders';
+import { parseOrderShow } from '../utils/tools';
+import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
 /**
@@ -428,15 +428,15 @@ export const getOrderById  = (orderId) => {
     };
 
     return requestAsync(msg).then(r => {
-        const infos = JSON.parse(r.value);
+        const infos = <Order>JSON.parse(r.value);
         if (!infos) {
-            return [];
+            return [[],[]];
         }
-        const ordersShow = parseOrderShow1(infos);
+        const ordersShow = parseOrderShow([infos],OrderStatus.ALL);
         console.log('ordersShow =====',ordersShow);
         console.log('orders =====',infos);
 
-        return ordersShow;
+        return [[infos],ordersShow];
 
     }).catch((e) => {
         console.log(e);
@@ -472,13 +472,13 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
         console.log('r=',r);
         const infos = <Order[]>JSON.parse(r.value);
         if (!infos) {
-            return [];
+            return [[],[]];
         }
         const ordersShow = parseOrderShow(infos,orderType);
         console.log('ordersShow =====',ordersShow);
         console.log('orders =====',infos);
 
-        return ordersShow;
+        return [infos,ordersShow];
     }).catch((e) => {
         console.log(e);
 

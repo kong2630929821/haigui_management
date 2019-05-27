@@ -1,10 +1,12 @@
 // tslint:disable-next-line:missing-jsdoc
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
+import { Order, OrderShow } from '../view/page/totalOrders';
 
 interface Props {
     title:any[];// 表格标题
-    datas:any[];// 表数据
+    datas:Order[];  // 表原始数据
+    showDatas:OrderShow[];// 表显示数据
     selectList:any[];// 选择框列表
     allChecked:boolean;// 全选
     needCheckBox:boolean; // 是否需要选择框
@@ -14,13 +16,14 @@ interface Props {
     inlineBtn2:string;
     inputFile:string;
     color:boolean;
-    isexport:boolean;
+    isExported:Function;
 }
 // tslint:disable-next-line:completed-docs
 export class OrderTable extends Widget {
     public props:Props = {
         title:[],
         datas:[],
+        showDatas:[],
         selectList:[],
         allChecked:false,
         needCheckBox:true,
@@ -30,31 +33,38 @@ export class OrderTable extends Widget {
         inlineBtn2:'',
         inputFile:'',
         color:false,
-        isexport:false
+        isExported:this.isExported.bind(this)
     };
     
     public setProps(props:any) {
         this.props = {
             ...this.props,
-            ...props
+            ...props,
+            allChecked:false
         };
         super.setProps(this.props);
         this.allCheckedInit(false);
         console.log(this.props);
     }
 
+    public isExported(orderId:number) {
+        for (const v of this.props.datas) {
+            if (v[1] === orderId) return v[14] > 0;
+        }
+    }
+
     // 全选or not
     public allCheckedInit(selected:Boolean) {
-        for (let i = 0;i < this.props.datas.length;i++) {
+        for (let i = 0;i < this.props.showDatas.length;i++) {
             this.props.selectList[i] = selected;
         }
-        this.props.selectList.length = this.props.datas.length;
+        this.props.selectList.length = this.props.showDatas.length;
     }
 
     // 是否全选
     public isAllChecked() {
         let allChecked = true;
-        for (let i = 0;i < this.props.datas.length;i++) {
+        for (let i = 0;i < this.props.showDatas.length;i++) {
             if (!this.props.selectList[i]) {
                 allChecked = false;
                 break;
@@ -90,9 +100,9 @@ export class OrderTable extends Widget {
 
     // 检查下一个元素是否需要同时被选中或者不被选中  适用于同一个订单多个商品
     public checkNextChoosed(curIndex:number,selected:boolean) {
-        if (curIndex < this.props.datas.length - 1) {
-            const curOrderId = this.props.datas[curIndex][0];
-            const nextOrderId = this.props.datas[curIndex + 1][0];
+        if (curIndex < this.props.showDatas.length - 1) {
+            const curOrderId = this.props.showDatas[curIndex][0];
+            const nextOrderId = this.props.showDatas[curIndex + 1][0];
             if (curOrderId === nextOrderId) {
                 this.props.selectList[curIndex + 1] = selected;
                 this.checkNextChoosed(curIndex + 1,selected);
@@ -106,7 +116,7 @@ export class OrderTable extends Widget {
 
     // 查看详情
     public goDetail(e:any,num:number,fg:number) {
-        notify(e.node,'ev-table-detail',{ value:this.props.datas[num], fg:fg,num:num });
+        notify(e.node,'ev-table-detail',{ value:this.props.showDatas[num], fg:fg,num:num });
     }
 
     // 导入excel
