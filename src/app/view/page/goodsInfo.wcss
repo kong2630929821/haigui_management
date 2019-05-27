@@ -62,6 +62,7 @@
     margin:20px 0;
     height: 150px;
     background: #fff;
+    cursor: pointer;
 }
 .input{
     width:200px;
@@ -90,7 +91,16 @@
     background:#1991EB;
     float: left;
     margin: 25px;
+    cursor: pointer;
 }
 .btnBox{
     display: flex;
+}
+.shopSum{
+    height: 26px;
+    font-size:14px;
+    font-family:PingFangSC-Semibold;
+    font-weight:600;
+    color:rgba(53,64,82,1);
+    line-height:20px;
 }

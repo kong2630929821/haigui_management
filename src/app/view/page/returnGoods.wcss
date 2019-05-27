@@ -79,6 +79,7 @@
     font-size: 18px;
     background:#1991EB;
     margin-top: 25px;
+    cursor: pointer;
 }
 .title{
     width:150px;
@@ -91,6 +92,7 @@
     font-weight:600;
     background:white;
     margin: 25px;
+    cursor: pointer;
 }
 .activeTitle{
     width:150px;
@@ -103,6 +105,7 @@
     font-weight:600;
     background:#273142;
     margin: 25px;
+    cursor: pointer;
 }
 .btnBox{
     display: flex;

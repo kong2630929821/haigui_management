@@ -111,11 +111,15 @@ export const exportExcel = (aoa:any[][],excelName:string) => {
 
 // 解析订单
 export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
+    let localStatus = status;
     const ordersShow:OrderShow[] = [];
     for (const info of infos) {
+        if (status === OrderStatus.ALL) {   // 全部订单  自己解析订单状态
+            localStatus = parseOrderStatus(info[12],info[13],info[14],info[15],info[16],info[17]);
+        }
         for (const v of info[3]) { 
-            const timestamp = status === OrderStatus.PENDINGPAYMENT ? info[12] : info[13];
-            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],info[0],timestampFormat(timestamp),info[2],info[8],info[9],info[11],OrderStatusShow[status]];
+            const timestamp = localStatus === OrderStatus.PENDINGPAYMENT ? info[12] : info[13];
+            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],info[0],timestampFormat(timestamp),info[2],info[8],info[9],info[11],OrderStatusShow[localStatus]];
             ordersShow.push(orderShow);
         }
     }
@@ -123,29 +127,32 @@ export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
     return ordersShow;
 };
 
-// 解析订单1
-export const parseOrderShow1 = (infos:any[]) => {
-    const ordersShow:OrderShow[] = [];
-    for (const info of infos) {
-        let status;
-        if (info[7] === 0) {
-            status = OrderStatus.FAILED;
-        } else if (info[8] === 0) {
-            status = OrderStatus.PENDINGPAYMENT;
-        } else if (info[9] === 0) {
-            status = OrderStatus.PENDINGDELIVERED;
-        } else if (info[10] === 0) {
-            status = OrderStatus.PENDINGRECEIPT;
-        } else if (info[10]) {
-            status = OrderStatus.PENDINGFINISH;
-        }
-        const timestamp = status === OrderStatus.PENDINGPAYMENT ? info[7] : info[8];
-        // ['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态']
-        const orderShow:OrderShow = [info[0],info[12],info[15],info[14],info[16],info[17],info[18],timestampFormat(timestamp),info[1],info[2],info[3],info[5],OrderStatusShow[status]];
-        ordersShow.push(orderShow);
+/**
+ * 解析订单类型
+ * @param orderTime 下单时间
+ * @param payTime 支付时间
+ * @param shipTime 发货时间
+ * @param receiptTime 收货时间
+ * @param finishTime 完成时间
+ * @param shipId 物流单号
+ */
+const parseOrderStatus = (orderTime:number,payTime:number,shipTime:number,receiptTime:number,finishTime:number,shipId:string):OrderStatus => {
+    let status:OrderStatus;
+    if (orderTime === 0) {
+        status = OrderStatus.FAILED;            // 失败
+    } else if (payTime === 0) {
+        status = OrderStatus.PENDINGPAYMENT;     // 待付款
+    } else if (shipTime === 0 || !shipId) {
+        status = OrderStatus.PENDINGDELIVERED;   // 待发货
+    } else if (receiptTime === 0) {
+        status = OrderStatus.PENDINGRECEIPT;   // 待收货
+    } else if (finishTime === 0) {
+        status = OrderStatus.PENDINGFINISH;   // 待完成
+    } else {
+        status = OrderStatus.FINISHED;      // 已完成
     }
 
-    return ordersShow;
+    return status;
 };
 
 // 时间戳格式化 毫秒为单位

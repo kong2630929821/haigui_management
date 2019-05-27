@@ -10,6 +10,7 @@
         </div>
 
     </div>
+    <div w-class="shopSum">共{{it.shopNum}}件商品</div> 
     <div ev-table-detail="goDetail">
         <div w-class="tableTitle">商品列表</div>
         <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true}</widget>
@@ -22,7 +23,7 @@
     {{% ==================================分页=====================}}
         {{if it.showDataList.length>0}}
             <div ev-changeCurrent="pageChange">
-                <widget w-tag="app-components-pagination">{pages:{{Math.floor(it.shopNum/ 6) + 1}},currentIndex:{{it.currentIndex}} }</widget>
+                <widget w-tag="app-components-pagination">{pages:{{Math.floor(it.shopNum/ 12) + 1}},currentIndex:{{it.currentIndex}} }</widget>
             </div>
         {{end}}
 </div>
