@@ -11,7 +11,7 @@
         <div w-class="tableTitle">筛选查询</div>
         <div w-class="btnBox">
             <div w-class="input" ev-input-change="inputChange">
-                <widget w-tag="app-components-input">{placeHolder:"查询订单编号"}</widget>
+                <widget w-tag="app-components-input">{placeHolder:"查询售后单ID"}</widget>
             </div>
             <div w-class="search" on-tap="search">查询</div>
             <div style="margin-left: 30px;line-height:96px; ">{{it.typeTitle}}：</div>
