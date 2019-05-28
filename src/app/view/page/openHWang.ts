@@ -140,17 +140,17 @@ export class OpenHWang extends Widget {
     // 查询
     public search() {
         if (this.props.searPhone) {
-            const ids = [];
-            const list = [];
-            for (const i in this.props.showDataList) {
-                const v = this.props.showDataList[i];
-                if (v[2] === this.props.searPhone) {
-                    ids.push(this.props.applyIdList[i]);
-                    list.push(v);
+            this.props.showDataList = [];
+            this.props.applyIdList = [];
+            const num = this.props.activeTab;
+
+            for (const t of this.props.datas) {
+                const v = deepCopy(t);
+                if (t[3] === this.props.searPhone && (t[8] === Status[num] || (num === 2 && t[8] === Status[3]))) {
+                    this.props.applyIdList.push(v.shift());
+                    this.props.showDataList.push(v);
                 }
             }
-            this.props.showDataList = list;
-            this.props.applyIdList = ids;
             this.changePage({ value:0 });
         } else {
             this.getData();

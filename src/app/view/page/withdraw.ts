@@ -75,14 +75,13 @@ export class Withdraw extends Widget {
         }
         this.props.showDataList = [];
         this.props.withdrawIdList = [];
-        this.props.datas.forEach(t => {
+        for (const t of this.props.datas) {
             const v = deepCopy(t);
             if (t[6] === Status[num] || (num === 2 && t[6] === Status[3])) {
                 this.props.withdrawIdList.push(v.shift());
                 this.props.showDataList.push(v);
             }
-        });
-        this.props.curPage = 0;
+        }
         this.changePage({ value:0 });
     }
 
@@ -137,18 +136,20 @@ export class Withdraw extends Widget {
     // 查询
     public search() {
         if (this.props.searUid) {
-            const ids = [];
-            const list = [];
-            for (const i in this.props.showDataList) {
-                const v = this.props.showDataList[i];
-                if (v[0] === Number(this.props.searUid)) {
-                    ids.push(this.props.withdrawIdList[i]);
-                    list.push(v);
+            this.props.showDataList = [];
+            this.props.withdrawIdList = [];
+            const num = this.props.activeTab;
+            const searUid = Number(this.props.searUid);
+
+            for (const t of this.props.datas) {
+                const v = deepCopy(t);
+                if (t[1] === searUid && (t[6] === Status[num] || (num === 2 && t[6] === Status[3]))) {
+                    this.props.withdrawIdList.push(v.shift());
+                    this.props.showDataList.push(v);
                 }
             }
-            this.props.showDataList = list;
-            this.props.withdrawIdList = ids;
             this.changePage({ value:0 });
+
         } else {
             this.getData();
         }

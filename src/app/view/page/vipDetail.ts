@@ -122,7 +122,7 @@ export class VipDetail extends Widget {
         this.changePage({ value:0 });
     }
 
-    // 升级  降级
+    // 升级 
     public upUserType(e:any,num:number) {
         popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”升级至${UserLabel[num]}` },() => {
             setHwangLabel(this.props.uid,num).then(r => {
