@@ -63,6 +63,7 @@
     line-height: 36px;
     font-size: 14px;
     display: inline-block;
+    cursor: pointer;
 }
 .btnColor{
     color: red;

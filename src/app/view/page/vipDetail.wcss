@@ -21,8 +21,8 @@
     background: rgb(240, 240, 240);
     width: 150px;
     height: 48px;
-    line-height: 48px;
     text-align: center;
+    line-height: 48px;
     border-bottom: 1px solid #CCCCCC;
 }
 .td{
@@ -32,7 +32,6 @@
     min-width: 300px;
     flex:1 0 0;
     height: 48px;
-    line-height: 48px;
     text-align: center;
     display: flex;
     justify-content: space-around;

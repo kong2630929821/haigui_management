@@ -1,6 +1,6 @@
 <div>
     <div w-class="body">
-        <table w-class="table header">
+        <table w-class="table header" style="width: 100%;">
             {{if it.title}}
             <thead w-class="has-gutter">
                 <tr style="background:#fff;">

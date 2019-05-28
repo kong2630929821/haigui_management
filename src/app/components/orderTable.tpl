@@ -17,9 +17,9 @@
                 </tr>
             </thead>
             <tbody >
-                {{for i,v of it.datas}}
+                {{for i,v of it.showDatas}}
                 <tr style="background:#fff;">
-                    {{if it.needCheckBox &&  (i > 0 ? v[0] !== it.datas[i - 1][0] : true) }}
+                    {{if it.needCheckBox &&  (i > 0 ? v[0] !== it.showDatas[i - 1][0] : true) }}
                     <td w-class="td" style="width:80px;" on-tap="checked(e,{{i}})">
                         <img src="../res/images/{{it.selectList[i] ? 'selectBox_active.png':'selectBox.png'}}" />
                     </td>
@@ -31,7 +31,7 @@
                     {{for j,r of v}}
                     <td w-class="td" >
                         <div w-class="flex-style">
-                        {{if j === 0 && it.isexport}}
+                        {{if j === 0 && it.isExported(r)}}
                         <span w-class="label">导</span>
                         {{end}}
                         <span style="word-break: break-all;">{{typeof(r)=="string" ? r :JSON.stringify(r)}}</span>
