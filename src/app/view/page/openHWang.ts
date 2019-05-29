@@ -104,7 +104,7 @@ export class OpenHWang extends Widget {
                         unicode2Str(item[8]),  // 姓名
                         item[2],     // 电话
                         unicode2Str(item[4]),     // 地址
-                        unicode2Str(item[3]),   // 微信名
+                        item[3] ? unicode2Str(JSON.parse(item[3])) : '',   // 微信名
                         item[7],    // 邀请人id
                         dateToString(item[6],1), // 申请时间
                         Status[item[5]]  // 状态
