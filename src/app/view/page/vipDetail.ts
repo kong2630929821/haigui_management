@@ -57,7 +57,7 @@ export class VipDetail extends Widget {
                     { th:'用户ID',td:v[0] },
                     { th:'注册时间',td:timestampFormat(v[8]) },
                     { th:'姓名',td:unicode2Str(v[7][0]) },
-                    { th:'微信名',td:unicode2Str(v[1]) },
+                    { th:'微信名',td:v[1] ? unicode2Str(JSON.parse(v[1])) : '' },
                     { th:'身份',td:user },
                     { th:'手机号',td:v[2] },
                     { th:'资产信息',td:`现金(￥${priceFormat(v[6][0])}) 海贝(${v[6][1]}) 积分(${v[6][2]})` },

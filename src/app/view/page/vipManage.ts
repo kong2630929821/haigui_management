@@ -62,7 +62,7 @@ export class VipManage extends Widget {
                 this.props.hBaoDatas = r.haib.map(item => {
                     return [
                         item[0],           // uid
-                        unicode2Str(item[1]),           // 姓名
+                        item[1] ? unicode2Str(JSON.parse(item[1])) : '',           // wx名
                         item[2],           // 手机号
                         unicode2Str(item[3]),           // 地址信息
                         `￥${item[4] / 100}`,            // ta的总收益
@@ -74,7 +74,7 @@ export class VipManage extends Widget {
                 this.props.hWangDatas = r.haiw.map(item => {
                     return [
                         item[0],           // uid
-                        unicode2Str(item[1]),           // 姓名
+                        item[1] ? unicode2Str(JSON.parse(item[1])) : '',           // wx名
                         item[2],           // 手机号
                         unicode2Str(item[3]),           // 地址信息
                         `￥${item[4] / 100}`,            // ta的总收益
@@ -86,7 +86,7 @@ export class VipManage extends Widget {
                 this.props.baikDatas = r.baik.map(item => {
                     return [
                         item[0],           // uid
-                        unicode2Str(item[1]),           // 姓名
+                        item[1] ? unicode2Str(JSON.parse(item[1])) : '',           // wx名
                         item[2],           // 手机号
                         unicode2Str(item[3]),           // 地址信息
                         `￥${item[4] / 100}`,            // ta的总收益
