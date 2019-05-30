@@ -76,5 +76,8 @@
 
         <div ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入运单"}</app-components-inputFileBtn></div>
     </div>
+    <div  w-class="pagination-box">
+        <widget w-tag="app-components-pagination">{pages:100,currentIndex:0 }</widget>
+    </div>
 </div>
     

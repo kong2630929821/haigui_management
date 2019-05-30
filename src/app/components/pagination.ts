@@ -65,6 +65,5 @@ export class Pagination extends Widget {
         this.props.currentIndex = index;
         notify(event.node,'ev-changeCurrent',{ value:this.props.currentIndex });
         this.paint();
-        console.log(this.props.currentIndex + 1);
     }
 }

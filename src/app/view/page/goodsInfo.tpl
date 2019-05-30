@@ -22,7 +22,7 @@
     <div w-class="searchleft" on-tap="exportShop">导出信息</div>
     {{% ==================================分页=====================}}
         {{if it.showDataList.length>0}}
-            <div ev-changeCurrent="pageChange">
+            <div ev-changeCurrent="pageChange" w-class="pagination">
                 <widget w-tag="app-components-pagination">{pages:{{Math.floor(it.shopNum/ 12) + 1}},currentIndex:{{it.currentIndex}} }</widget>
             </div>
         {{end}}

@@ -149,7 +149,7 @@ export const dealGroup = (arr2) => {
     
 };
 
-const maxNum = 50;   // 每次导入最大条数
+const maxNum = 30;   // 每次导入最大条数
 
  // 解析并导入商品信息
 export const importGoods = (res) => {

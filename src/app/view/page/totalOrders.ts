@@ -1,4 +1,5 @@
 import { Widget } from '../../../pi/widget/widget';
+import { orderMaxCount } from '../../config';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, importTransport } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
@@ -64,12 +65,12 @@ export class TotalOrder extends Widget {
         orderStateActiveIndex:0,
         timeType:[],
         timeTypeActiveIndex:0,
-
         inputOrderId:0,
         showDateBox:false,
         startTime:'',
         endTime:'',
-        selectList:[]
+        selectList:[],
+        currentPageIndex:0    // 当前页数
     };
 
     public create() {
@@ -209,7 +210,7 @@ export class TotalOrder extends Widget {
     // 获取订单
     public filterOrderQuery() {
         const id = 0;                 // 订单id,等于0表示从最大开始获取，大于0表示从指定订单id开始获取
-        const count = 10000;          // 需要获取的订单信息数量，即一页需要显示的数量
+        const count = orderMaxCount;          // 需要获取的订单信息数量，即一页需要显示的数量
         const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
         const start = this.props.startTime;     // 启始时间，单位毫秒
         const tail = this.props.endTime;         // 结束时间，单位毫秒
@@ -278,5 +279,10 @@ export class TotalOrder extends Widget {
         this.props.showDateBox = e.value;
         console.log(this.props.showDateBox);
         this.paint();
+    }
+
+    public pageChange(e:any) {
+        this.props.currentPageIndex = e.value;
+        console.log(e);
     }
 }
