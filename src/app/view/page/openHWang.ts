@@ -1,7 +1,7 @@
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
-import { dateToString, parseDate, popNewMessage, unicode2Str } from '../../utils/logic';
+import { dateToString, parseDate, popNewMessage, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 interface Props {
     datas:any[];  // 原始数据
@@ -104,7 +104,7 @@ export class OpenHWang extends Widget {
                         unicode2Str(item[8]),  // 姓名
                         item[2],     // 电话
                         unicode2Str(item[4]),     // 地址
-                        unicode2Str(item[3]),   // 微信名
+                        unicode2ReadStr(item[3]),   // 微信名
                         item[7],    // 邀请人id
                         dateToString(item[6],1), // 申请时间
                         Status[item[5]]  // 状态

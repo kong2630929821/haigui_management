@@ -128,3 +128,20 @@ export const transitTimeStamp = (time:any) => {
 
     return new Date(startTime).getTime();
 };
+
+/**
+ * 将Unicode字符串转成可读字符串
+ */
+export const unicode2ReadStr = (item:any) => {
+    try {
+        if (item && typeof(item) === 'string') {
+            return unicode2Str(JSON.parse(item));
+        }
+    
+        return unicode2Str(item);
+        
+    } catch (e) {
+        return item;
+    }
+    
+};
