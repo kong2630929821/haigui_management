@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { getVipDetail, setHwangLabel } from '../../net/pull';
-import { popNewMessage, priceFormat, timestampFormat, unicode2Str } from '../../utils/logic';
+import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 interface Props {
     userData:any[];  // 个人数据
     showDataList:any[];  // 显示数据
@@ -27,7 +27,7 @@ export class VipDetail extends Widget {
         showDataList:[
             // ['123456','张三','15534429570','四川省成都市金牛区XX街道XX小区XX','￥1200','￥1200']
         ],
-        showTitleList:['用户ID','姓名','手机号','地址信息','ta的本月收益','ta的总收益'],
+        showTitleList:['用户ID','微信名','手机号','地址信息','ta的本月收益','ta的总收益'],
         activeTab:0,
         uid:0,
         hBaoDatas:[],
@@ -57,13 +57,13 @@ export class VipDetail extends Widget {
                     { th:'用户ID',td:v[0] },
                     { th:'注册时间',td:timestampFormat(v[8]) },
                     { th:'姓名',td:unicode2Str(v[7][0]) },
-                    { th:'微信名',td:v[1] ? unicode2Str(JSON.parse(v[1])) : '' },
+                    { th:'微信名',td:unicode2ReadStr(v[1]) },
                     { th:'身份',td:user },
                     { th:'手机号',td:v[2] },
                     { th:'资产信息',td:`现金(￥${priceFormat(v[6][0])}) 海贝(${v[6][1]}) 积分(${v[6][2]})` },
                     { th:'本月收益',td:`现金(￥${priceFormat(v[4][0])}) 海贝(${v[4][1]}) 积分(${v[4][2]})` },
                     { th:'总收益',td:`现金(￥${priceFormat(v[5][0])}) 海贝(${v[5][1]}) 积分(${v[5][2]})` },
-                    { th:'地址信息',td:unicode2Str(v[3]) },
+                    { th:'地址信息',td:unicode2ReadStr(v[3]) },
                     { th:'身份证号',td:v[7][1] }
                 ];
             }
@@ -71,7 +71,7 @@ export class VipDetail extends Widget {
                 this.props.hBaoDatas = r.haib.map(v => {
                     return [
                         v[0],  // UID
-                        unicode2Str(v[1]),  // 姓名
+                        unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
                         unicode2Str(v[3]),  // 地址
                         priceFormat(v[4]),  // 本月收益
@@ -83,7 +83,7 @@ export class VipDetail extends Widget {
                 this.props.hWangDatas = r.haiw.map(v => {
                     return [
                         v[0],  // UID
-                        unicode2Str(v[1]),  // 姓名
+                        unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
                         unicode2Str(v[3]),  // 地址
                         priceFormat(v[4]),  // 本月收益
@@ -95,7 +95,7 @@ export class VipDetail extends Widget {
                 this.props.baikDatas = r.baik.map(v => {
                     return [
                         v[0],  // UID
-                        unicode2Str(v[1]),  // 姓名
+                        unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
                         unicode2Str(v[3]),  // 地址
                         priceFormat(v[4]),  // 本月收益

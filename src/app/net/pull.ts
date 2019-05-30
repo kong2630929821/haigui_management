@@ -1,3 +1,4 @@
+import { httpPort, sourceIp } from '../config';
 import { popNewMessage } from '../utils/logic';
 import { parseOrderShow } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
@@ -680,12 +681,13 @@ export const changeWithdrawState = (id:number,uid:number,state:number) => {
  * 获取会员列表
  */
 export const getVipMember = () => {
-    const msg = {
-        type:'mall_mgr/members@get_level_user',
-        param:{}
-    };
+    // const msg = {
+    //     type:'mall_mgr/members@get_level_user',
+    //     param:{}
+    // };
 
-    return requestAsync(msg);
+    // return requestAsync(msg);
+    return fetch(`http://${sourceIp}:${httpPort}/members/get_level_user`).then(res => res.json());
 };
 
 /**

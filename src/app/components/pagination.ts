@@ -23,9 +23,10 @@ export class Pagination extends Widget {
     public setProps(props:any) {
         super.setProps(props);
         this.props.pagesList = [0,1,2,3,4];
+        this.props.currentIndex = 0;
         if (this.props.pages < this.props.pagesList.length) {
             this.props.pagesList.splice(this.props.pages);
-        }
+        } 
         console.log('=============总页数',this.props);
     }
     // 上一页
