@@ -1,6 +1,6 @@
 import { Widget } from '../../../pi/widget/widget';
 import { orderMaxCount } from '../../config';
-import { getAllOrder, getAllSupplier, getOrder, getOrderById, importTransport } from '../../net/pull';
+import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
 
@@ -46,8 +46,8 @@ export const OrderStatusShow = {
     [OrderStatus.PENDINGPAYMENT]:'待付款',
     [OrderStatus.PENDINGDELIVERED]:'待发货',
     [OrderStatus.PENDINGRECEIPT]:'待收货',
-    [OrderStatus.PENDINGFINISH]:'已收货'
-    
+    [OrderStatus.PENDINGFINISH]:'已收货',
+    [OrderStatus.FINISHED]:'已完成'
 };
 /**
  * 所有订单
@@ -69,8 +69,12 @@ export class TotalOrder extends Widget {
         showDateBox:false,
         startTime:'',
         endTime:'',
+        orderMaxCount,
         selectList:[],
-        currentPageIndex:0    // 当前页数
+        currentPageIndex:0,    // 当前页数
+        totalCount:0,     // 总数目
+        forceUpdate:false,   // 强制刷新  通过不断改变其值来触发分页的setProps 分页组件目前不完美
+        expandIndex:-1        // 触发下拉列表
     };
 
     public create() {
@@ -136,6 +140,7 @@ export class TotalOrder extends Widget {
             this.props.supplierList = arr;
             this.paint();
             this.filterOrderQuery();
+            this.pageChangeQuery();
         });
 
     }
@@ -191,6 +196,8 @@ export class TotalOrder extends Widget {
     public searchById(e:any) {
         const orderId = Number(this.props.inputOrderId);
         if (!orderId) {
+            this.filterOrderQuery();
+            this.pageChangeQuery();
 
             return;
         }
@@ -208,9 +215,7 @@ export class TotalOrder extends Widget {
     }
     
     // 获取订单
-    public filterOrderQuery() {
-        const id = 0;                 // 订单id,等于0表示从最大开始获取，大于0表示从指定订单id开始获取
-        const count = orderMaxCount;          // 需要获取的订单信息数量，即一页需要显示的数量
+    public filterOrderQuery(id:number = 0) {
         const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
         const start = this.props.startTime;     // 启始时间，单位毫秒
         const tail = this.props.endTime;         // 结束时间，单位毫秒
@@ -219,11 +224,32 @@ export class TotalOrder extends Widget {
         const orderType = this.props.orderType[this.props.orderTypeActiveIndex].status ;  // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
         const state = this.props.orderState[this.props.orderStateActiveIndex].status;    // 订单状态，0未导出，1已导出
 
-        return getAllOrder(id,count,time_type,start,tail,sid,orderType,state).then(([orders,ordersShow]) => {
+        return getAllOrder(id,orderMaxCount,time_type,start,tail,sid,orderType,state).then(([orders,ordersShow]) => {
             this.updateOrderTitle(orderType);
             this.props.contentShowList = ordersShow;
             this.props.contentList = orders;
             this.paint();
+        });
+        
+    }
+
+    // 分页变动
+    public pageChangeQuery(count:number = 0) {
+        count = !count ? orderMaxCount : this.props.currentPageIndex * orderMaxCount;          // 需要获取的订单信息数量，即一页需要显示的数量
+        const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
+        const start = this.props.startTime;     // 启始时间，单位毫秒
+        const tail = this.props.endTime;         // 结束时间，单位毫秒
+        let sid = Number(this.props.supplierList[this.props.supplierActiveIndex]);        
+        sid = isNaN(sid) ? 0 : sid;                   // 供应商id，等于0表示所有供应商，大于0表示指定供应商
+        const orderType = this.props.orderType[this.props.orderTypeActiveIndex].status ;  // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
+        const state = this.props.orderState[this.props.orderStateActiveIndex].status;    // 订单状态，0未导出，1已导出
+
+        return getOrderKey(count,time_type,start,tail,sid,orderType,state).then(([orders,totalCount]) => {
+            this.props.totalCount = totalCount;
+            this.paint();
+            console.log(orders);
+
+            return orders[0][0];
         });
     }
 
@@ -237,25 +263,41 @@ export class TotalOrder extends Widget {
         // 根据供应商id筛选
     public filterSupplierId(e:any) {
         this.props.supplierActiveIndex = e.value;
+        this.props.currentPageIndex = 0;
+        this.props.forceUpdate = !this.props.forceUpdate;
+        this.props.totalCount = 0;
         this.filterOrderQuery();
+        this.pageChangeQuery();
     }
 
         // 根据订单类型筛选
     public filterOrderType(e:any) {
         this.props.orderTypeActiveIndex = e.activeIndex;
+        this.props.currentPageIndex = 0;
+        this.props.forceUpdate = !this.props.forceUpdate;
+        this.props.totalCount = 0;
         this.filterOrderQuery();
+        this.pageChangeQuery();
     }
 
         // 根据导出状态筛选,未导出，已导出
     public filterExportType(e:any) {
         this.props.orderStateActiveIndex = e.activeIndex;
+        this.props.currentPageIndex = 0;
+        this.props.forceUpdate = !this.props.forceUpdate;
+        this.props.totalCount = 0;
         this.filterOrderQuery();
+        this.pageChangeQuery();
     }
 
         // 根据时间筛选
     public filterTimeType(e:any) {
         this.props.timeTypeActiveIndex = e.activeIndex;
+        this.props.currentPageIndex = 0;
+        this.props.forceUpdate = !this.props.forceUpdate;
+        this.props.totalCount = 0;
         this.filterOrderQuery();
+        this.pageChangeQuery();
     }
 
     public changeTime(e:any) {
@@ -272,6 +314,7 @@ export class TotalOrder extends Widget {
     public closeClick() {
         console.log('close',this.props.showDateBox);
         this.props.showDateBox = false;
+        this.props.expandIndex++;
         this.paint();
     }
 
@@ -283,6 +326,15 @@ export class TotalOrder extends Widget {
 
     public pageChange(e:any) {
         this.props.currentPageIndex = e.value;
-        console.log(e);
+        console.log('当前页数 ===',e);
+        if (this.props.currentPageIndex === 0) {
+            this.filterOrderQuery();
+            this.pageChangeQuery();
+        } else {
+            this.pageChangeQuery().then(id => {
+                this.filterOrderQuery(id);
+            });
+        }
+        
     }
 }

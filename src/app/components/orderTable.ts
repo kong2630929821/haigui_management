@@ -17,6 +17,7 @@ interface Props {
     inputFile:string;
     color:boolean;
     isExported:Function;
+    totalPage:number;   // 订单总页数
 }
 // tslint:disable-next-line:completed-docs
 export class OrderTable extends Widget {
@@ -33,7 +34,8 @@ export class OrderTable extends Widget {
         inlineBtn2:'',
         inputFile:'',
         color:false,
-        isExported:this.isExported.bind(this)
+        isExported:this.isExported.bind(this),
+        totalPage:0
     };
     
     public setProps(props:any) {

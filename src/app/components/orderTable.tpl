@@ -76,8 +76,10 @@
 
         <div ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入运单"}</app-components-inputFileBtn></div>
     </div>
+    {{if it.totalPage>0}}
     <div  w-class="pagination-box">
-        <widget w-tag="app-components-pagination">{pages:100,currentIndex:0 }</widget>
+        <widget w-tag="app-components-pagination">{pages:{{it.totalPage}},forceUpdate:{{it.forceUpdate}} }</widget>
     </div>
+    {{end}}
 </div>
     

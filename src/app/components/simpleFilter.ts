@@ -26,6 +26,7 @@ export class SimpleFilter extends Widget {
             ...this.props,
             ...props
         };
+        this.props.expand = false;
         super.setProps(this.props);
     }
 
