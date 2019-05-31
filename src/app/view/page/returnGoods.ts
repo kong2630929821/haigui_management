@@ -1,6 +1,6 @@
 import { Widget } from '../../../pi/widget/widget';
 import { getReturnGoods, getReturnGoodsId, getReturnStatus } from '../../net/pull';
-import { timeConvert, transitTimeStamp } from '../../utils/logic';
+import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
 
 /**
  * 商品信息
@@ -175,6 +175,14 @@ export class GoodsInfo extends Widget {
         getReturnStatus(uid,id,state).then(r => {
             if (r.result === 1) {
                 this.props.showDataList.splice(num,1);
+                if (state === 0) {
+                    popNewMessage('处理成功');
+                    this.props.numberOfApplications--;
+                } else if (state === -1) {
+                    popNewMessage('退货失败');
+                } else {
+                    popNewMessage('退货成功');
+                }
                 this.paint();
             }
         });
