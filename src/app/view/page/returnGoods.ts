@@ -1,6 +1,6 @@
 import { Widget } from '../../../pi/widget/widget';
 import { getReturnGoods, getReturnGoodsId, getReturnStatus } from '../../net/pull';
-import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
+import { popNewMessage, timeConvert, transitTimeStamp, unicode2Str } from '../../utils/logic';
 
 /**
  * 商品信息
@@ -101,6 +101,8 @@ export class GoodsInfo extends Widget {
                         returnGoods[index][i] = timeConvert(v);
                     }
                     
+                } else if (i === 14) {
+                    returnGoods[index][i] = unicode2Str(JSON.parse(v));
                 }
             });
         });
