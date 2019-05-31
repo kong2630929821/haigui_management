@@ -351,7 +351,7 @@ export const importInventory = (res) => {
                 lable += res[i][str] === undefined ? '' : res[i][str];
             }
             const amount = parseInt(res[i].库存,10);
-            const supplierPrice = Number(res[i].供货价) * 100;
+            const supplierPrice = Math.floor(Number(res[i].供货价) * 100);
             const tmp = [id,sku,lable,amount,supplierPrice];
             arr[i] = tmp;
         } 

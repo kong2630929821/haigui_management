@@ -48,7 +48,7 @@
     </div>
     {{end}}
 
-    <div ev-changeCurrent="changePage">
+    <div ev-changeCurrent="changePage" w-class="pagination-box"> 
         <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/5)}} }</widget>
     </div>
 </div>

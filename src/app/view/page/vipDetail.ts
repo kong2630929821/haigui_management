@@ -103,7 +103,7 @@ export class VipDetail extends Widget {
                     ];
                 });
             }
-            this.props.showDataList = this.props.hBaoDatas;
+            this.changeTab(0);
             this.paint();
         });
     }

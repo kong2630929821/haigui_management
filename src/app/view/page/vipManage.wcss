@@ -83,3 +83,8 @@
     background:#1991EB;
     display:inline-block;
 }
+.pagination-box{
+    position: fixed;
+    bottom: 50px;
+    right: 200px;
+}

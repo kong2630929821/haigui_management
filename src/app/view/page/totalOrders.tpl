@@ -33,7 +33,13 @@
             </div>   
         </div>
     </div>
-    <div w-class="order-table-box" ev-select-click="selectClick" ev-export-order="exportOrder" ev-import-order="importTransport" ev-changeCurrent="pageChange">
-        <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},showDatas:{{it.contentShowList}},title:{{it.showTitleList}},needCheckBox:true,totalPage:{{Math.ceil(it.totalCount/ it.orderMaxCount)}},forceUpdate:{{it.forceUpdate}} }</widget>
+    <div w-class="order-table-box" ev-select-click="selectClick" ev-export-order="exportOrder" ev-import-order="importTransport" >
+        <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},showDatas:{{it.contentShowList}},title:{{it.showTitleList}},needCheckBox:true }</widget>
     </div>
+    {{:totalPage = Math.ceil(it.totalCount/ it.orderMaxCount)}}
+    {{if totalPage>0}}
+    <div  w-class="pagination-box" ev-changeCurrent="pageChange">
+        <widget w-tag="app-components-pagination">{pages:{{totalPage}},forceUpdate:{{it.forceUpdate}} }</widget>
+    </div>
+    {{end}}
 </div>

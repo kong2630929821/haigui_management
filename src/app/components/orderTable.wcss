@@ -60,9 +60,7 @@
     border: 1px solid #CCC;
     border-top: none;
 }
-.pagination-box{
-    position: relative;
-}
+
 .allCheck{
     display: flex;
     align-items: center;

@@ -1,7 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { orderMaxCount } from '../../config';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport } from '../../net/pull';
-import { popNewMessage } from '../../utils/logic';
+import { dateToString, popNewMessage } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
 
 export type GoodsDetails = [number,string,number,number,string,string]; // [商品id,商品名称,购买时价格,数量,sku id,sku 描述]
@@ -67,8 +67,8 @@ export class TotalOrder extends Widget {
         timeTypeActiveIndex:0,
         inputOrderId:0,
         showDateBox:false,
-        startTime:'',
-        endTime:'',
+        startTime:'2019-05-30 00:00:00',
+        endTime:dateToString(Date.now(),1),
         orderMaxCount,
         selectList:[],
         currentPageIndex:0,    // 当前页数
@@ -97,6 +97,9 @@ export class TotalOrder extends Widget {
         },{
             status:OrderStatus.PENDINGFINISH,
             text:'已收货'
+        },{
+            status:OrderStatus.FINISHED,
+            text:'已完成'
         }];
 
         // 订单状态
