@@ -119,7 +119,7 @@ export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
         }
         for (const v of info[3]) { 
             const timestamp = localStatus === OrderStatus.PENDINGPAYMENT ? info[12] : info[13];
-            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],info[0],timestampFormat(timestamp),info[2],info[8],info[9],info[11],OrderStatusShow[localStatus]];
+            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],info[0],timestampFormat(timestamp),info[2],info[8],info[9],addressFormat(info[11]),OrderStatusShow[localStatus]];
             ordersShow.push(orderShow);
         }
     }
@@ -166,4 +166,13 @@ export const timestampFormat = (timestamp: number) => {
     const seconds = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`;
 
     return `${year}-${month}-${day} ${hour}:${minutes}:${seconds}`;
+};
+
+/**
+ * 地址格式化
+ */
+export const addressFormat = (addrStr:string) => {
+    const address = JSON.parse(addrStr);
+
+    return `${address[0].join('')}${address[1]}`;
 };
