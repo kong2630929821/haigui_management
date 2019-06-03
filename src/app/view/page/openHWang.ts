@@ -1,3 +1,4 @@
+import { popNew } from '../../../pi/ui/root';
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
@@ -127,13 +128,27 @@ export class OpenHWang extends Widget {
         const uid = this.props.showDataList[e.num][0];
         if (id && uid) {
             if (e.fg === 1) {
-                await changeHWangState(id, uid, 3);  // 拒绝
+                popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
+                    await changeHWangState(id, uid, 3);  // 拒绝
+                    popNewMessage('处理完成');
+                    this.getData();
+                });
+                
             } else {
-                await changeHWangState(id, uid, this.props.activeTab + 1);  // 处理中 同意
-            }
+                if (this.props.activeTab === 0) {
+                    await changeHWangState(id, uid, 1);  // 开始处理
+                    popNewMessage('处理完成');
+                    this.getData();
+                } else {
+                    popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
+                        await changeHWangState(id, uid, 2);  // 同意
+                        popNewMessage('处理完成');
+                        this.getData();
+                    });
+                }
+            } 
+            
         }
-        popNewMessage('处理完成');
-        this.getData();
         
     }
 
