@@ -59,10 +59,7 @@ export class GoodsInfo extends Widget {
     }
     // 导出商品
     public async exportShop() {
-        let shop;
-        await getAllGoods(0,12).then(r => {
-            shop = JSON.parse(r.value);
-        });
+        const shop = this.props.showDataList;
         const jsonHead = this.props.showTitleList;
         const aoa = [jsonHead];
         const jsonData = shop;
