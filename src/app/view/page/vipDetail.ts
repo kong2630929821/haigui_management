@@ -3,6 +3,7 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { getVipDetail, setHwangLabel } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
+import { addressFormat } from '../../utils/tools';
 interface Props {
     userData:any[];  // 个人数据
     showDataList:any[];  // 显示数据
@@ -63,7 +64,7 @@ export class VipDetail extends Widget {
                     { th:'资产信息',td:`现金(￥${priceFormat(v[6][0])}) 海贝(${v[6][1]}) 积分(${v[6][2]})` },
                     { th:'本月收益',td:`现金(￥${priceFormat(v[4][0])}) 海贝(${v[4][1]}) 积分(${v[4][2]})` },
                     { th:'总收益',td:`现金(￥${priceFormat(v[5][0])}) 海贝(${v[5][1]}) 积分(${v[5][2]})` },
-                    { th:'地址信息',td:unicode2ReadStr(v[3]) },
+                    { th:'地址信息',td:addressFormat(v[3]) },
                     { th:'身份证号',td:v[7][1] }
                 ];
             }
@@ -73,7 +74,7 @@ export class VipDetail extends Widget {
                         v[0],  // UID
                         unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
-                        unicode2Str(v[3]),  // 地址
+                        addressFormat(v[3]),  // 地址
                         priceFormat(v[4]),  // 本月收益
                         priceFormat(v[5])   // 总收益
                     ];
@@ -85,7 +86,7 @@ export class VipDetail extends Widget {
                         v[0],  // UID
                         unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
-                        unicode2Str(v[3]),  // 地址
+                        addressFormat(v[3]),  // 地址
                         priceFormat(v[4]),  // 本月收益
                         priceFormat(v[5])   // 总收益
                     ];
@@ -97,7 +98,7 @@ export class VipDetail extends Widget {
                         v[0],  // UID
                         unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
-                        unicode2Str(v[3]),  // 地址
+                        addressFormat(v[3]),  // 地址
                         priceFormat(v[4]),  // 本月收益
                         priceFormat(v[5])   // 总收益
                     ];
