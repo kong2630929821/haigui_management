@@ -26,3 +26,6 @@ export enum GroupsLocation {
     SECOND = 2,  //  位置2 （轮播图下方分组）
     THIRD = 3   //   位置3  （剩下分组）
 }
+
+// 一次性最多获取多少订单
+export const orderMaxCount = 20;

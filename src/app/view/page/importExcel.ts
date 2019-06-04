@@ -71,6 +71,7 @@ export class ImportExcel extends Widget {
             importRead(file,(res) => {
                 importGoods(res).then((r) => {
                     if (r) {
+                        popNewMessage('导入商品成功');
                         getExportTime().then((r) => {
                             console.log('exportTime=',r);
                             this.props.showDataList[2] = ['商品信息',timeConvert(r.value[4])];
@@ -83,6 +84,7 @@ export class ImportExcel extends Widget {
             importRead(file,(res) => {
                 importSupplier(res).then((r) => {
                     if (r) {
+                        popNewMessage('导入供应商成功');
                         getExportTime().then((r) => {
                             console.log('exportTime=',r);
                             this.props.showDataList[3] = ['供应商信息',timeConvert(r.value[0])];
@@ -107,6 +109,7 @@ export class ImportExcel extends Widget {
             importRead(file,(res) => {
                 importBrand(res).then((r) => {
                     if (r) {
+                        popNewMessage('导入品牌成功');
                         getExportTime().then((r) => {
                             console.log('exportTime=',r);
                             this.props.showDataList[5] = ['品牌信息',timeConvert(r.value[2])];
@@ -119,6 +122,7 @@ export class ImportExcel extends Widget {
             importRead(file,(res) => {
                 importInventory(res).then((r) => {
                     if (r) {
+                        popNewMessage('导入库存成功');
                         getExportTime().then((r) => {
                             console.log('exportTime=',r);
                             this.props.showDataList[6] = ['库存信息',timeConvert(r.value[6])];

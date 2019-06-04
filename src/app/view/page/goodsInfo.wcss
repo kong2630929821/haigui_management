@@ -104,3 +104,8 @@
     color:rgba(53,64,82,1);
     line-height:20px;
 }
+.pagination{
+    position: absolute;
+    bottom:20px;
+    right: 139px;
+}

@@ -10,30 +10,36 @@
             </div>
             <div w-class="item">
                 <div style="display:inline-block;height: 50px;" ev-selected="filterTimeType">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}} }</widget>
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
                 </div>
                 <div w-class="dataBox" ev-period-change="changeTime" ev-dateBox-change="changeDateBox">
                     <widget  w-tag="app-components-periodTimePicker">{startDate:{{it.startTime}},endDate:{{it.endTime}},showDateBox:{{it.showDateBox }} }</widget>
                 </div>
             </div>
-            <div w-class="select">
+            <div w-class="select" >
                 <div style="display:inline-block;" ev-selected="filterSupplierId">
-                        <widget w-tag="app-components-simpleFilter">{options:{{it.supplierList}},active:{{it.supplierActiveIndex}} }</widget>
+                    <widget w-tag="app-components-simpleFilter">{options:{{it.supplierList}},active:{{it.supplierActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
                 </div>
             </div>
             <div w-class="select">
                 <div style="display:inline-block;" ev-selected="filterOrderType">
-                        <widget w-tag="app-components-simpleFilter1">{options:{{it.orderType}},activeIndex:{{it.orderTypeActiveIndex}} }</widget>
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.orderType}},activeIndex:{{it.orderTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
                 </div>
             </div>
             <div w-class="select">
                 <div style="display:inline-block;" ev-selected="filterExportType">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.orderState}},activeIndex:{{it.orderStateActiveIndex}} }</widget>
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.orderState}},activeIndex:{{it.orderStateActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
                 </div>
             </div>   
         </div>
     </div>
-    <div w-class="order-table-box" ev-select-click="selectClick" ev-export-order="exportOrder" ev-import-order="importTransport">
-        <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},showDatas:{{it.contentShowList}},title:{{it.showTitleList}},needCheckBox:true}</widget>
+    <div w-class="order-table-box" ev-select-click="selectClick" ev-export-order="exportOrder" ev-import-order="importTransport" >
+        <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},showDatas:{{it.contentShowList}},title:{{it.showTitleList}},needCheckBox:true }</widget>
     </div>
+    {{:totalPage = Math.ceil(it.totalCount/ it.orderMaxCount)}}
+    {{if totalPage>0}}
+    <div  w-class="pagination-box" ev-changeCurrent="pageChange">
+        <widget w-tag="app-components-pagination">{pages:{{totalPage}},forceUpdate:{{it.forceUpdate}} }</widget>
+    </div>
+    {{end}}
 </div>

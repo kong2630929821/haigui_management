@@ -29,11 +29,13 @@
     </div>
 
     <div>
-        <div w-class="tableTitle">海宝列表</div>
+        {{:typeList = ["海王","海宝","白客"]}}
+        <div w-class="tableTitle">{{typeList[it.activeTab]}}列表</div>
         <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},needCheckBox:false }</widget>
     </div>
-
-    <div ev-changeCurrent="changePage">
+    {{if Math.ceil(it.showDataList.length/5) > 0}}
+    <div ev-changeCurrent="changePage" w-class="pagination-box">
         <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/5)}} }</widget>
     </div>
+    {{end}}
 </div>

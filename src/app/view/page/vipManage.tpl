@@ -42,11 +42,11 @@
             <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn2:"查看详情" }</widget>
         </div>
         {{end}}
-
-    <div ev-changeCurrent="changePage">
+    {{if Math.ceil(it.showDataList.length/5)}}
+    <div ev-changeCurrent="changePage" w-class="pagination-box">
         <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/5)}} }</widget>
     </div>
-
+    {{end}}
     {{else}}
     <div ev-change-userType="getDatas">
         <widget w-tag="app-view-page-vipDetail">{uid:{{it.uid}},userLabel:{{it.userLabel}} }</widget>

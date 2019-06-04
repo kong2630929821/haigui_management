@@ -117,3 +117,8 @@
     align-items: center;
     margin: 25px;
 }
+.pagination-box{
+    position: fixed;
+    bottom: 50px;
+    right: 200px;
+}

@@ -1,7 +1,4 @@
 .pagination{
-    position: absolute;
-    bottom:20px;
-    right: 139px;
     cursor: pointer;
 }
 .ul{

@@ -60,6 +60,7 @@
     border: 1px solid #CCC;
     border-top: none;
 }
+
 .allCheck{
     display: flex;
     align-items: center;

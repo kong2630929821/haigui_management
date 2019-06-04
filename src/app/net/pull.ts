@@ -150,96 +150,119 @@ export const dealGroup = (arr2) => {
     
 };
 
+const maxNum = 30;   // 每次导入最大条数
+
  // 解析并导入商品信息
 export const importGoods = (res) => {
-    const arr = []; 
-    for (let i = 0;i < res.length;i++) {
-        const id = parseInt(res[i].商品id,10);
-        const name = res[i].商品名称;
-        const brandId = parseInt(res[i].品牌id,10);
-        const areaId = parseInt(res[i].地区id,10);
-        const supplierId = parseInt(res[i].供应商id,10);
-        const pay_type = parseInt(res[i].支付类型,10);
-        const cost = Math.floor(Number(res[i].成本价) * 100);
-        const origin = Math.floor(Number(res[i].普通售价) * 100);
-        const vip_price = Math.floor(Number(res[i].会员价) * 100);
-        const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
-        const tax = Math.floor(Number(res[i].税费) * 100);
-        const discount = Math.floor(res[i].折后价 === undefined ? origin : Number(res[i].折后价) * 100);
-        const labels = [];
-        res[i].标签.split(',').forEach(e => {
-            e = e.replace(/\n/,'');
-            labels.push([e.split(':')[0],Number(e.split(':')[1]) * 100]);
-        });
-        const images = []; 
-        if (res[i].缩略图) images.push([res[i].缩略图,1,1]);
-        if (res[i].主图) {
-            res[i].主图.split(',').forEach(e => {
+    return new Promise((resolve) => {
+        const arr = []; 
+        for (let i = 0;i < res.length;i++) {
+            const id = parseInt(res[i].商品id,10);
+            const name = res[i].商品名称;
+            const brandId = parseInt(res[i].品牌id,10);
+            const areaId = parseInt(res[i].地区id,10);
+            const supplierId = parseInt(res[i].供应商id,10);
+            const pay_type = parseInt(res[i].支付类型,10);
+            const cost = Math.floor(Number(res[i].成本价) * 100);
+            const origin = Math.floor(Number(res[i].普通售价) * 100);
+            const vip_price = Math.floor(Number(res[i].会员价) * 100);
+            const has_tax = res[i].是否保税区的产品 === 'YES' ? true : false;
+            const tax = Math.floor(Number(res[i].税费) * 100);
+            const discount = Math.floor(res[i].折后价 === undefined ? origin : Number(res[i].折后价) * 100);
+            const labels = [];
+            res[i].标签.split(',').forEach(e => {
                 e = e.replace(/\n/,'');
-                images.push([e,2,1]);
+                labels.push([e.split(':')[0],Number(e.split(':')[1]) * 100]);
             });
-        }
-        const intro = '';
-        const spec = [];
-        const detail = [];
-        if (res[i].详情图) {
-            res[i].详情图.split(',').forEach(e => {
-                e = e.replace(/\n/,'');
-                detail.push(['','',[e,3,1]]);
-            });
-        }
-        const tmp = [id,name,brandId,areaId,supplierId,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
-        arr[i] = tmp;
-    } 
-    const str = JSON.stringify(arr);
-    const msg = { 
-        type: 'set_goods', 
-        param: { 
-            input:str
+            const images = []; 
+            if (res[i].缩略图) images.push([res[i].缩略图,1,1]);
+            if (res[i].主图) {
+                res[i].主图.split(',').forEach(e => {
+                    e = e.replace(/\n/,'');
+                    images.push([e,2,1]);
+                });
+            }
+            const intro = '';
+            const spec = [];
+            const detail = [];
+            if (res[i].详情图) {
+                res[i].详情图.split(',').forEach(e => {
+                    e = e.replace(/\n/,'');
+                    detail.push(['','',[e,3,1]]);
+                });
+            }
+            const tmp = [id,name,brandId,areaId,supplierId,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
+            arr[i] = tmp;
         } 
-    };
-    console.log('msg = ',msg);
+        
+        const len = Math.ceil(arr.length / maxNum);
+        let index = 0;
+        const upload = () => {
+            if (index === len) {
+                resolve(true);
 
-    return requestAsync(msg).then(r => {
-        popNewMessage('导入商品成功');
-
-        return true;
-    }).catch((e) => {
-        console.log(e);
-
-        return false;
+                return;
+            }
+            const tmpArr = arr.slice(index * maxNum,(index + 1) * maxNum);
+            const str = JSON.stringify(tmpArr);
+            const msg = { 
+                type: 'set_goods', 
+                param: { 
+                    input:str
+                } 
+            };
+            console.log('msg = ',msg);
+        
+            requestAsync(msg).then(() => {
+                upload();
+            });
+            index++;
+        };
+    
+        upload();
     });
+    
 };
 
  // 解析并导入供应商信息
 export const importSupplier = (res) => {
-    const arr = []; 
-    for (let i = 0;i < res.length;i++) {
-        const id = parseInt(res[i].供应商id,10);
-        const name = res[i].供应商名称;
-        const detail = res[i].供应商详细描述;
-        const images = [];
-        const tmp = [id,name,detail,images];
-        arr[i] = tmp;
-    } 
-    const str = JSON.stringify(arr);
-    const msg = { 
-        type: 'set_supplier', 
-        param: { 
-            input:str
+    return new Promise(resolve => {
+        const arr = []; 
+        for (let i = 0;i < res.length;i++) {
+            const id = parseInt(res[i].供应商id,10);
+            const name = res[i].供应商名称;
+            const detail = res[i].供应商详细描述;
+            const images = [];
+            const tmp = [id,name,detail,images];
+            arr[i] = tmp;
         } 
-    };
-    console.log('msg = ',msg);
-
-    return requestAsync(msg).then(r => {
-        popNewMessage('导入供应商成功');
-
-        return true;
-    }).catch((e) => {
-        console.log(e);
-
-        return false;
+        const len = Math.ceil(arr.length / maxNum);
+        let index = 0;
+        const upload = () => {
+            if (index === len) {
+                resolve(true);
+    
+                return;
+            }
+            const tmpArr = arr.slice(index * maxNum,(index + 1) * maxNum);
+            const str = JSON.stringify(tmpArr);
+            const msg = { 
+                type: 'set_supplier', 
+                param: { 
+                    input:str
+                } 
+            };
+            console.log('msg = ',msg);
+        
+            requestAsync(msg).then(() => {
+                upload();
+            });
+            index++;
+        };
+    
+        upload();
     });
+    
 };
  // 解析并导入地区信息
 export const importArea = (res) => {
@@ -274,71 +297,92 @@ export const importArea = (res) => {
 };
  // 解析并导入品牌信息
 export const importBrand = (res) => {
-    const arr = []; 
-    for (let i = 0;i < res.length;i++) {
-        const id = parseInt(res[i].品牌id,10);
-        const name = res[i].品牌名;
-        const detail = res[i].品牌详细信息;
-        const images = [];
-        images.push([res[i].小图,4,1]);
-        images.push([res[i].缩略图,1,1]);
-        images.push([res[i].主图,2,1]);
-        const tmp = [id,name,detail,images];
-        arr[i] = tmp;
-    } 
-    const str = JSON.stringify(arr);
-    const msg = { 
-        type: 'set_brand', 
-        param: { 
-            input:str
+    return new Promise(resolve => {
+        const arr = []; 
+        for (let i = 0;i < res.length;i++) {
+            const id = parseInt(res[i].品牌id,10);
+            const name = res[i].品牌名;
+            const detail = res[i].品牌详细信息;
+            const images = [];
+            images.push([res[i].小图,4,1]);
+            images.push([res[i].缩略图,1,1]);
+            images.push([res[i].主图,2,1]);
+            const tmp = [id,name,detail,images];
+            arr[i] = tmp;
         } 
-    };
-    console.log('msg = ',msg);
+        const len = Math.ceil(arr.length / maxNum);
+        let index = 0;
+        const upload = () => {
+            if (index === len) {
+                resolve(true);
 
-    return requestAsync(msg).then(r => {
-        popNewMessage('导入品牌成功');
-
-        return true;
-    }).catch((e) => {
-        console.log(e);
-
-        return false;
+                return;
+            }
+            const tmpArr = arr.slice(index * maxNum,(index + 1) * maxNum);
+            const str = JSON.stringify(tmpArr);
+            const msg = { 
+                type: 'set_brand', 
+                param: { 
+                    input:str
+                } 
+            };
+            console.log('msg = ',msg);
+        
+            requestAsync(msg).then(() => {
+                upload();
+            });
+            index++;
+        };
+    
+        upload();
     });
+    
 };
  // 解析并导入库存信息
 export const importInventory = (res) => {
-    const arr = []; 
-    for (let i = 0;i < res.length;i++) {
-        const id = parseInt(res[i].供应商id,10);
-        const sku = res[i].sku;
-        let lable = '';
-        for (let j = 1;j <= 10;j++) {
-            const str = `标签${j}`;
-            lable += res[i][str] === undefined ? '' : res[i][str];
-        }
-        const amount = parseInt(res[i].库存,10);
-        const supplierPrice = Number(res[i].供货价) * 100;
-        const tmp = [id,sku,lable,amount,supplierPrice];
-        arr[i] = tmp;
-    } 
-    const str = JSON.stringify(arr);
-    const msg = { 
-        type: 'set_inventory', 
-        param: { 
-            input:str
+    return new Promise((resolve) => {
+        const arr = []; 
+        for (let i = 0;i < res.length;i++) {
+            const id = parseInt(res[i].供应商id,10);
+            const sku = res[i].sku;
+            let lable = '';
+            for (let j = 1;j <= 10;j++) {
+                const str = `标签${j}`;
+                lable += res[i][str] === undefined ? '' : res[i][str];
+            }
+            const amount = parseInt(res[i].库存,10);
+            const supplierPrice = Math.floor(Number(res[i].供货价) * 100);
+            const tmp = [id,sku,lable,amount,supplierPrice];
+            arr[i] = tmp;
         } 
-    };
-    console.log('msg = ',msg);
 
-    return requestAsync(msg).then(r => {
-        popNewMessage('导入库存成功');
+        const len = Math.ceil(arr.length / maxNum);
+        let index = 0;
+        const upload = () => {
+            if (index === len) {
+                resolve(true);
 
-        return true;
-    }).catch((e) => {
-        console.log(e);
-
-        return false;
+                return;
+            }
+            const tmpArr = arr.slice(index * maxNum,(index + 1) * maxNum);
+            const str = JSON.stringify(tmpArr);
+            const msg = { 
+                type: 'set_inventory', 
+                param: { 
+                    input:str
+                } 
+            };
+            console.log('msg = ',msg);
+        
+            requestAsync(msg).then(() => {
+                upload();
+            });
+            index++;
+        };
+    
+        upload();
     });
+    
 };
  // 解析并导入运单信息
 export const importTransport = (res) => {
@@ -445,6 +489,44 @@ export const getOrderById  = (orderId) => {
         return [];
     });
 };
+
+// 获取第count个订单的id
+export const getOrderKey = (count,time_type,start,tail,sid,orderType,state) => {
+    let startTimestamp = 0; 
+    let endTimestamp = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).getTime();
+    if (start) {
+        startTimestamp = new Date(start).getTime();
+    }
+    if (tail) {
+        endTimestamp = new Date(tail).getTime();
+    }
+    const msg = {
+        type:'select_all_orders_keys',
+        param:{
+            id:0,       // 订单id,等于0表示从最大开始获取，大于0表示从指定订单id开始获取
+            count:count,   // 需要获取的订单信息数量，即一页需要显示的数量
+            time_type:time_type,    // 时间类型，1下单，2支付，3发货， 4收货，5完成
+            start:startTimestamp ,               // 启始时间，单位毫秒
+            tail:endTimestamp,                // 结束时间，单位毫秒
+            sid:sid,                    // 供应商id，等于0表示所有供应商，大于0表示指定供应商
+            type:orderType,                // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
+            state:state                // 订单状态，0未导出，1已导出
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        const infos = <any[]>JSON.parse(r.value);
+        if (!infos) {
+            return [[],[]];
+        }
+        const ordersShow = parseOrderShow([infos[0]],orderType);
+        console.log('select_all_orders_keys',ordersShow);
+        console.log('select_all_orders_keys',infos[1]);
+
+        return [ordersShow,infos[1]];
+    });
+};
+
 // 获取所有订单
 export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) => {
     let startTimestamp = 0; 
