@@ -208,17 +208,17 @@ export const analysisFreightData = (res) => {
         const price_type = Number(content[i].price_type);
         const price = Number(content[i].price) * 100;
         if (id !== 0 && !id) {
-            popNewMessage(`第${i + 1}行id为空或类型不正确`);
+            popNewMessage(`第${i + 2}行id为空或类型不正确`);
 
             return; 
         }
         if (price_type !== 0 && !price_type) {
-            popNewMessage(`第${i + 1}行price_type为空或类型不正确`);
+            popNewMessage(`第${i + 2}行price_type为空或类型不正确`);
 
             return; 
         }
         if (price !== 0 && !price) {
-            popNewMessage(`第${i + 1}行price为空或类型不正确`);
+            popNewMessage(`第${i + 2}行price为空或类型不正确`);
 
             return; 
         }
@@ -260,14 +260,14 @@ export const analysisGoodsCatetData = (res) => {
     for (let i = 0;i < content.length;i++) {
         // 必填字段不为空验证（必填字段不为空（注意为0的情况），id转化之后是number），错误要提示
         if (content[i][titleGroupId] === undefined) {
-            popNewMessage(`第${i + 1}行id为空`);
+            popNewMessage(`第${i + 2}行id为空`);
 
             return;
         } 
         if (content[i][titleOneGroupName]) {
             if (content[i][titlePosition] === undefined || content[i][titleRootId] === undefined) {
                 if (content[i][titleVisible] !== 'NO') { 
-                    popNewMessage(`第${i + 1}行位置或根id为空(没有空行的情况下是第${i + 1}行)`);
+                    popNewMessage(`第${i + 2}行位置或根id为空(没有空行的情况下是第${i + 1}行)`);
 
                     return;
                 }
@@ -394,7 +394,7 @@ export const analysisSupliertData = (res) => {
     for (let i = 0;i < content.length;i++) {
         const id = Number(content[i][supplierId]);
         if (id !== 0 && !id) {
-            popNewMessage(`第${i + 1}行id为空或类型不正确`);
+            popNewMessage(`第${i + 2}行id为空或类型不正确`);
 
             return;
         }
@@ -439,7 +439,7 @@ export const analysisAreatData = (res) => {
         const detail = '';
         const images = [];
         if (id !== 0 && !id) {
-            popNewMessage(`第${i + 1}行id为空或类型不正确`);
+            popNewMessage(`第${i + 2}行id为空或类型不正确`);
 
             return;
         }
@@ -481,7 +481,7 @@ export const analysisGrandData = (res) => {
         const detail = content[i][titleDetail];
         const images = [];
         if (id !== 0 && !id) {
-            popNewMessage(`第${i + 1}行id为空或类型不正确`);
+            popNewMessage(`第${i + 2}行id为空或类型不正确`);
 
             return;
         }
@@ -535,17 +535,17 @@ export const analysisInventoryData = (res) => {
         const supplierPrice = Number(content[i][titleSupplierPrice]) * 100;
         const Lable1 = content[i][titleLable1];
         if (id !== 0 && !id) {
-            popNewMessage(`第${i + 1}行id为空或类型不正确`);
+            popNewMessage(`第${i + 2}行id为空或类型不正确`);
 
             return;
         }
         if (amount !== 0 && !amount) {
-            popNewMessage(`第${i + 1}行库存为空或类型不正确`);
+            popNewMessage(`第${i + 2}行库存为空或类型不正确`);
 
             return;
         }
         if (supplierPrice !== 0 && !supplierPrice) {
-            popNewMessage(`第${i + 1}行供货价为空或类型不正确`);
+            popNewMessage(`第${i + 2}行供货价为空或类型不正确`);
 
             return;
         }
@@ -618,7 +618,7 @@ export const analysisGoodsData = (res) => {
             });
         }
         const temparr = [id,areaId,supplierId,pay_type,cost,origin,vip_price,tax,discount];
-        if (!Tip(temparr)) return;
+        if (!Tip(temparr,i)) return;
         const tmp = [id,name,brandId,areaId,supplierId,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
         arr[i] = tmp;
     }
@@ -630,11 +630,22 @@ export const analysisGoodsData = (res) => {
 
     return groups;
 };
-const Tip = (temparr) => {
+const Tip = (temparr,row) => {
     for (let i = 0;i < temparr.length;i++) {
         if (temparr[i] !== 0 && !temparr[i]) {
-            popNewMessage(`${i}存在错误数据`);
-
+            switch (i) {
+                case 0:popNewMessage(`第${row + 2}行商品id存在错误数据`);break;
+                case 1:popNewMessage(`第${row + 2}行地区id存在错误数据`);break;
+                case 2:popNewMessage(`第${row + 2}行供应商id存在错误数据`);break;
+                case 3:popNewMessage(`第${row + 2}行支付类型存在错误数据`);break;
+                case 4:popNewMessage(`第${row + 2}行成本价存在错误数据`);break;
+                case 5:popNewMessage(`第${row + 2}行普通售价存在错误数据`);break;
+                case 6:popNewMessage(`第${row + 2}行会员价存在错误数据`);break;
+                case 7:popNewMessage(`第${row + 2}行税费存在错误数据`);break;
+                case 8:popNewMessage(`第${row + 2}行折后价存在错误数据`);break;
+                default:
+            }
+            
             return false;
         }
     }
