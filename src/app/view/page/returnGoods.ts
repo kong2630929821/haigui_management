@@ -101,7 +101,7 @@ export class GoodsInfo extends Widget {
                         returnGoods[index][i] = timeConvert(v);
                     }
                     
-                } else if (i === 14) {
+                } else if (i === 14 && v !== '') {
                     returnGoods[index][i] = unicode2Str(JSON.parse(v));
                 }
             });
