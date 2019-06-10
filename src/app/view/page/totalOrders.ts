@@ -180,7 +180,9 @@ export class TotalOrder extends Widget {
         const aoa = [titleList];
         
         for (const v of exportList) {
-            v[0] = v[0].toString();
+            for (let i = 0;i < v.length;i++) {
+                v[i] = v[i].toString();
+            }
             aoa.push(v);
         }
         console.log(aoa);
