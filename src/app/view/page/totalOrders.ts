@@ -54,7 +54,7 @@ export const OrderStatusShow = {
  */
 export class TotalOrder extends Widget {
     public props:any = {
-        showTitleList:['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号'],
+        showTitleList:['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','收货人','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号'],
         contentList:[],   // 展示的原始数据
         contentShowList:[], // 展示的数据
         supplierList:[],
