@@ -167,3 +167,19 @@ export const timestampFormat = (timestamp: number) => {
 
     return `${year}-${month}-${day} ${hour}:${minutes}:${seconds}`;
 };
+
+/**
+ * 地址格式化
+ */
+export const addressFormat = (addrStr:string) => {
+    try {
+        const address = JSON.parse(addrStr);
+
+        return `${address[0].join('')}${address[1]}`;
+
+    } catch (err) {
+        return addrStr;
+        
+    }
+    
+};

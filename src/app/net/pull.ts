@@ -1,4 +1,4 @@
-import { httpPort, sourceIp } from '../config';
+import { httpPort, maxNum, sourceIp } from '../config';
 import { popNewMessage } from '../utils/logic';
 import { parseOrderShow } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
@@ -149,8 +149,6 @@ export const dealGroup = (arr2) => {
     }; 
     
 };
-
-const maxNum = 30;   // 每次导入最大条数
 
  // 解析并导入商品信息
 export const importGoods = (res) => {
