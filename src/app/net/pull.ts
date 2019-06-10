@@ -551,6 +551,9 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
 
     return requestAsync(msg).then(r => {
         console.log('r=',r);
+        if (!r.value) {
+            return [[],[]];
+        }
         const infos = <Order[]>JSON.parse(r.value);
         if (!infos) {
             return [[],[]];

@@ -1,5 +1,6 @@
 import { popNew } from '../../pi/ui/root';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
+import { priceFormat } from './logic';
 
 /**
  * 常用工具
@@ -119,7 +120,7 @@ export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
         }
         for (const v of info[3]) { 
             const timestamp = localStatus === OrderStatus.PENDINGPAYMENT ? info[12] : info[13];
-            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],info[0],timestampFormat(timestamp),info[2],info[8],info[9],addressFormat(info[11]),OrderStatusShow[localStatus]];
+            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],info[0],timestampFormat(timestamp),info[2],info[8],info[9],addressFormat(info[11]),OrderStatusShow[localStatus],priceFormat(info[18]),info[19]];
             ordersShow.push(orderShow);
         }
     }
