@@ -1,3 +1,4 @@
+import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { getReturnGoods, getReturnGoodsId, getReturnStatus } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp, unicode2Str } from '../../utils/logic';
@@ -101,7 +102,7 @@ export class GoodsInfo extends Widget {
                         returnGoods[index][i] = timeConvert(v);
                     }
                     
-                } else if (i === 14) {
+                } else if (i === 14 && v !== '') {
                     returnGoods[index][i] = unicode2Str(JSON.parse(v));
                 }
             });
@@ -195,13 +196,27 @@ export class GoodsInfo extends Widget {
         const id = e.value[0];
         if (this.props.returnStatus === 0) {
             // 退货申请
-            this.changeReturnGoods(uid,id,0,e.num);
+            popNew('app-components-confirmPayInfo',{ money:'你确定操作' },() => {
+                this.changeReturnGoods(uid,id,0,e.num);
+            },() => {
+                popNewMessage('你已经取消操作！');
+            });
+            
         } else if (this.props.returnStatus === 1) {
             // 退货中
             if (e.fg === 1) {
-                this.changeReturnGoods(uid,id,-1,e.num);
+                popNew('app-components-confirmPayInfo',{ money:'你确定操作' },() => {
+                    this.changeReturnGoods(uid,id,-1,e.num);
+                },() => {
+                    popNewMessage('你已经取消操作！');
+                });
             } else {
-                this.changeReturnGoods(uid,id,1,e.num);
+                popNew('app-components-confirmPayInfo',{ money:'你确定操作' },() => {
+                    this.changeReturnGoods(uid,id,1,e.num);
+                },() => {
+                    popNewMessage('你已经取消操作！');
+                });
+                
             }
         }
     }
