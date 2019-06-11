@@ -566,7 +566,7 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
     }).catch((e) => {
         console.log(e);
 
-        return '';
+        return [[],[]];
     });
 };
 // 获取指定供应商指定类型的订单
@@ -890,6 +890,24 @@ export const getExportTime = () => {
         }
     };
 
+    return requestAsync(msg).then((r) => {
+        console.log(r);
+
+        return r;
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+
+// 取消订单
+export const quitOrder = (orderId) => {
+    const msg = {
+        type:'console_cancel_order',
+        param:{
+            id:orderId
+        }
+    };
+    
     return requestAsync(msg).then((r) => {
         console.log(r);
 

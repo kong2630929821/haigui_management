@@ -46,9 +46,13 @@
                             <input type="file" on-change="importExcel(e,{{i}})"/>
                         </div>
                         {{end}}
-                        
-                        {{if it.inlineBtn1}}
-                        <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+
+                        {{if !(it.showdatas[i][12] > 0)}}
+                        <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;">已取消</div>
+                        {{else}}
+                            {{if !it.showdatas[i][14]}}
+                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;" on-tap="showOpreation({{i}})">取消订单</div>
+                            {{end}}
                         {{end}}
 
                         {{if it.inlineBtn2}}
