@@ -7,15 +7,15 @@
     z-index: 10;
 }
 .contain{
-    width:620px;
+    width:420px;
     background:rgba(255,255,255,1);
     border-radius:10px;
 }
 .title{
-    font-size: 34px;
+    font-size: 24px;
     margin: 40px;
     text-align: center;
-    margin-bottom: 80px;
+    margin-bottom: 40px;
 }
 .row{
     display: flex;
@@ -40,24 +40,24 @@
     display: flex;
     justify-content: center;
     margin-top: 40px;
-    font-size: 28px;
+    font-size: 18px;
     margin-bottom: 30px;
 }
 .cancel{
-    width:200px;
-    height:88px;
+    width:150px;
+    height:50px;
     background:rgba(249,249,249,1);
     margin-right: 40px;
     text-align: center;
-    line-height: 88px;
+    line-height: 50px;
 }
 .sure{
     background:rgba(25,145,235,1);
     color:#fff;
-    width:200px;
-    height:88px;
+    width:150px;
+    height:50px;
     text-align: center;
-    line-height: 88px;
+    line-height: 50px;
 }
 .money{
     height:90px;
@@ -70,7 +70,7 @@
 }
 .desc{
     height:40px;
-    font-size:28px;
+    font-size:20px;
     color:rgba(136,136,136,1);
     line-height:40px;
     text-align: center;
