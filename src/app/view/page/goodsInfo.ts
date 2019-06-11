@@ -59,18 +59,22 @@ export class GoodsInfo extends Widget {
     }
     // 导出商品
     public async exportShop() {
-        const shop = this.props.showDataList;
-        const jsonHead = this.props.showTitleList;
-        const aoa = [jsonHead];
-        const jsonData = shop;
-        for (const v of jsonData) {
-            v[0] = v[0].toString();
-            aoa.push(v);
-        }
-        console.log(aoa);
-        exportExcel(aoa,`商品信息表.xlsx`);
         
-        console.log('contentList ===',jsonData);
+        getAllGoods(0,this.props.shopNum).then(r => {
+            const shop = JSON.parse(r.value);
+            console.log(shop);
+            const jsonHead = this.props.showTitleList;
+            const aoa = [jsonHead];
+            const jsonData = shop;
+            for (const v of jsonData) {
+                v[0] = v[0].toString();
+                aoa.push(v);
+            }
+            console.log(aoa);
+            exportExcel(aoa,`商品信息表.xlsx`);
+        
+            console.log('contentList ===',jsonData);
+        });
     }
     public detailBack() {
         this.props.showDetail = false;
