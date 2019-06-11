@@ -784,21 +784,8 @@ export const getGoodsKey = (count:number) => {
 };
 // 获取所有的商品信息，支付分页
 export const getAllGoods = (star:number,num:number) => {
-    const msg = { 
-        type: 'select_all_goods',
-        param: { 
-            id:star,
-            count:num
-        } 
-    };
-    
-    return requestAsync(msg).then(r => {
-        // console.log('r=',r);
 
-        return r;
-    }).catch((e) => {
-        console.log(e);
-    });
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}`).then(r => r.json());
 };
 // 获取当前商品的信息
 export const getCurrentGood = (shopValue:string) => {
