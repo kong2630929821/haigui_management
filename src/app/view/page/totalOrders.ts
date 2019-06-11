@@ -74,7 +74,7 @@ export class TotalOrder extends Widget {
         currentPageIndex:0,    // 当前页数
         totalCount:0,     // 总数目
         forceUpdate:false,   // 强制刷新  通过不断改变其值来触发分页的setProps 分页组件目前不完美
-        expandIndex:-1        // 触发下拉列表
+        expandIndex:-1      // 触发下拉列表 
     };
 
     public create() {
@@ -340,4 +340,5 @@ export class TotalOrder extends Widget {
         }
         
     }
+
 }
