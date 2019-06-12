@@ -1,3 +1,4 @@
+import { int } from 'babylonjs';
 import { httpPort, maxNum, sourceIp } from '../config';
 import { popNewMessage } from '../utils/logic';
 import { parseOrderShow } from '../utils/tools';
@@ -903,6 +904,28 @@ export const getExportTime = () => {
 
         return r;
     }).catch((e) => {
+        console.log(e);
+    });
+};
+
+// 修改资产
+// tslint:disable-next-line:no-reserved-keywords
+export const changeMoney = (type:int,uid:int,money:int) => {
+    const msg = {
+        type:'console_alter_balance',
+        param:{
+            type,
+            uid,
+            money,
+            note:''
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        console.log(r);
+        
+        return r;
+    }).catch(e => {
         console.log(e);
     });
 };

@@ -19,6 +19,11 @@ interface Props {
 }
 const userType = ['','海王','海宝','白客'];
 const UserLabel = ['海王','市代理','省代理'];
+const showData = [
+    { title:'资金',num:0 },
+    { title:'海贝',num:1 },
+    { title:'积分',num:2 }
+];
 /**
  * 会员详情查看
  */
@@ -156,5 +161,20 @@ export class VipDetail extends Widget {
         this.props.curPage = e.value;
         this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
         this.paint();
+    }
+
+    public changeMoney() {
+        console.log(this.props.userData[6]);
+        const uid = this.props.userData[0].td;
+        const data = this.props.userData[6].td;
+        const arr = data.split(' ');
+        showData[0].num = arr[0].substring(4,arr[0].length - 1);
+        showData[1].num = arr[1].substring(3,arr[1].length - 1);
+        showData[2].num = arr[2].substring(3,arr[2].length - 1);
+        popNew('app-components-modifyFunds',{ showData ,uid },(r) => {
+            console.log(r);
+        },() => {
+            this.paint();
+        });
     }
 }

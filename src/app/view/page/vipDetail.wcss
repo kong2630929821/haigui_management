@@ -50,3 +50,12 @@
     bottom: 50px;
     right: 200px;
 }
+.changeMoney{
+font-size:14px;
+font-family:PingFangSC-Regular;
+font-weight:400;
+color:rgba(25,145,235,1);
+line-height:20px;
+text-decoration: underline;
+cursor: pointer;
+}
