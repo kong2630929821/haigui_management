@@ -1,4 +1,5 @@
 <div w-class="modify">
+    <div w-class="box">输入正数为增加，输入负数为减少</div>
     {{for i,v of it.showData}}
     <div w-class="money">
         <p w-class="title">{{v.title}} ￥{{v.num}}</p>

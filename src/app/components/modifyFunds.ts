@@ -6,11 +6,18 @@ import { popNewMessage } from '../utils/logic';
 interface Props {
     showData:any;
     uid:number;
+    changeNum:number;
 }
+const changeNum = [
+        { title:'资金',num:0 },
+        { title:'海贝',num:1 },
+        { title:'积分',num:2 }
+];
 // tslint:disable-next-line:completed-docs
 export class Modify extends Widget {
     public ok: (r:any) => void;
     public cancel: () => void;   // fg为false表示退出APP(或点击取消)，true表示忘记密码
+    public props:Props;
     public setProps(props:any) {
         this.props = {
             ...this.props,
@@ -19,7 +26,7 @@ export class Modify extends Widget {
         super.setProps(this.props);
     }
     public inputChange(e:any,index:number) {
-        this.props.showData[index].num = e.value;
+        changeNum[index].num = e.value;
     }
     /**
      * 点击取消按钮
@@ -31,13 +38,17 @@ export class Modify extends Widget {
      * 点击确认按钮
      */
     public okBtnClick(index:number) {
-        let money = parseInt(this.props.showData[index].num);
+        let money = Number(changeNum[index].num);
         if (index === 0) {
             money = money * 100;
         }
-        changeMoney(index + 1,parseInt(this.props.uid),money).then(r => {
+        changeMoney(index + 1,Number(this.props.uid),money).then(r => {
             console.log('11111111111111',r);
             popNewMessage('修改成功');
+            console.log(Number(this.props.showData[index].num),Number(this.props.changeNum));
+          
+            this.props.showData[index].num = (Number(this.props.showData[index].num) + Number(changeNum[index].num)).toFixed(2);
+           
             this.paint();
         });
     }
