@@ -48,7 +48,7 @@
                         {{end}}
 
                         {{if !(it.showdatas[i][12] > 0)}}
-                        <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;">已取消</div>
+                        <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;">手动取消</div>
                         {{elseif !it.showdatas[i][14]}}
                         <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;" on-tap="showOpreation({{i}})">取消订单</div>
                         {{end}}
