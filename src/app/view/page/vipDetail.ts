@@ -3,7 +3,6 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { getVipDetail, setHwangLabel } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
-import { addressFormat } from '../../utils/tools';
 interface Props {
     userData:any[];  // 个人数据
     showDataList:any[];  // 显示数据
@@ -79,7 +78,7 @@ export class VipDetail extends Widget {
                         v[0],  // UID
                         unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
-                        addressFormat(v[3]),  // 地址
+                        unicode2Str(v[3]),  // 地址
                         priceFormat(v[4]),  // 本月收益
                         priceFormat(v[5])   // 总收益
                     ];
@@ -91,7 +90,7 @@ export class VipDetail extends Widget {
                         v[0],  // UID
                         unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
-                        addressFormat(v[3]),  // 地址
+                        unicode2Str(v[3]),  // 地址
                         priceFormat(v[4]),  // 本月收益
                         priceFormat(v[5])   // 总收益
                     ];
@@ -103,7 +102,7 @@ export class VipDetail extends Widget {
                         v[0],  // UID
                         unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
-                        addressFormat(v[3]),  // 地址
+                        unicode2Str(v[3]),  // 地址
                         priceFormat(v[4]),  // 本月收益
                         priceFormat(v[5])   // 总收益
                     ];

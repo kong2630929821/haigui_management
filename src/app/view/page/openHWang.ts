@@ -3,7 +3,7 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
 import { dateToString, parseDate, popNewMessage, unicode2ReadStr, unicode2Str } from '../../utils/logic';
-import { addressFormat, exportExcel } from '../../utils/tools';
+import { exportExcel } from '../../utils/tools';
 interface Props {
     datas:any[];  // 原始数据
     showDataList:any[];  // 显示数据
@@ -104,7 +104,7 @@ export class OpenHWang extends Widget {
                         item[1],    // 用户uid
                         unicode2Str(item[8]),  // 姓名
                         item[2],     // 电话
-                        addressFormat(item[4]),     // 地址
+                        unicode2Str(item[4]),     // 地址
                         unicode2ReadStr(item[3]),   // 微信名
                         item[7],    // 邀请人id
                         dateToString(item[6],1), // 申请时间
@@ -126,10 +126,9 @@ export class OpenHWang extends Widget {
     public async dealWith(e:any) {
         const id = this.props.applyIdList[e.num];
         const uid = this.props.showDataList[e.num][0];
-        const name = this.props.showDataList[e.num][1];
         if (id && uid) {
             if (e.fg === 1) {
-                popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${name}</span>”的开通海王申请` },async () => {
+                popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
                     await changeHWangState(id, uid, 3);  // 拒绝
                     popNewMessage('处理完成');
                     this.getData();
@@ -141,7 +140,7 @@ export class OpenHWang extends Widget {
                     popNewMessage('处理完成');
                     this.getData();
                 } else {
-                    popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${name}</span>”的开通海王申请` },async () => {
+                    popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
                         await changeHWangState(id, uid, 2);  // 同意
                         popNewMessage('处理完成');
                         this.getData();

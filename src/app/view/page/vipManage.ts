@@ -2,7 +2,6 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { getVipMember } from '../../net/pull';
 import { unicode2ReadStr, unicode2Str } from '../../utils/logic';
-import { addressFormat } from '../../utils/tools';
 
 interface Props {
     showDataList:any[];  // 显示数据
@@ -65,7 +64,7 @@ export class VipManage extends Widget {
                         item[0],           // uid
                         unicode2ReadStr(item[1]),           // 微信名
                         item[2],           // 手机号
-                        addressFormat(item[3]),           // 地址信息
+                        unicode2Str(item[3]),           // 地址信息
                         `￥${item[4] / 100}`,            // ta的总收益
                         UserLabel[item[5]]       // 标签
                     ];
@@ -77,7 +76,7 @@ export class VipManage extends Widget {
                         item[0],           // uid
                         unicode2ReadStr(item[1]),           // 微信名
                         item[2],           // 手机号
-                        addressFormat(item[3]),           // 地址信息
+                        unicode2Str(item[3]),           // 地址信息
                         `￥${item[4] / 100}`,            // ta的总收益
                         UserLabel[item[5]]       // 标签
                     ];
@@ -89,7 +88,7 @@ export class VipManage extends Widget {
                         item[0],           // uid
                         unicode2ReadStr(item[1]),           // 微信名
                         item[2],           // 手机号
-                        addressFormat(item[3]),           // 地址信息
+                        unicode2Str(item[3]),           // 地址信息
                         `￥${item[4] / 100}`,            // ta的总收益
                         UserLabel[item[5]]       // 标签
                     ];
