@@ -51,8 +51,6 @@ export const importGoodsCate = (data) => {
     });
 };
 
-const maxNum = 30;   // 每次导入最大条数
-
  // 解析并导入商品信息
 export const importGoods = (str) => {
     const msg = { 
