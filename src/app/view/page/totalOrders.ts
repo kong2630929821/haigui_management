@@ -282,8 +282,8 @@ export class TotalOrder extends Widget {
     }
 
     // 分页变动
-    public pageChangeQuery(count:number = 0) {
-        count = !count ? orderMaxCount : this.props.currentPageIndex * orderMaxCount;          // 需要获取的订单信息数量，即一页需要显示的数量
+    public pageChangeQuery() {
+        const count = this.props.currentPageIndex * orderMaxCount ? this.props.currentPageIndex * orderMaxCount :orderMaxCount;          // 需要获取的订单信息数量，即一页需要显示的数量
         const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
         const start = this.props.startTime;     // 启始时间，单位毫秒
         const tail = this.props.endTime;         // 结束时间，单位毫秒

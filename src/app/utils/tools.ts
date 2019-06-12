@@ -1,6 +1,6 @@
 import { popNew } from '../../pi/ui/root';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { priceFormat } from './logic';
+import { priceFormat, unicode2Str } from './logic';
 
 /**
  * 常用工具
@@ -179,8 +179,8 @@ export const addressFormat = (addrStr:string) => {
         return `${address[0].join('')}${address[1]}`;
 
     } catch (err) {
-        return addrStr;
         
+        return unicode2Str(addrStr);
     }
     
 };
