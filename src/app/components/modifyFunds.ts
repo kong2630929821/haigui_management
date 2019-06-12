@@ -8,6 +8,11 @@ interface Props {
     uid:number;
     changeNum:number;
 }
+const changeNum = [
+        { title:'资金',num:0 },
+        { title:'海贝',num:1 },
+        { title:'积分',num:2 }
+];
 // tslint:disable-next-line:completed-docs
 export class Modify extends Widget {
     public ok: (r:any) => void;
@@ -21,7 +26,7 @@ export class Modify extends Widget {
         super.setProps(this.props);
     }
     public inputChange(e:any,index:number) {
-        this.props.changeNum = e.value;
+        changeNum[index].num = e.value;
     }
     /**
      * 点击取消按钮
@@ -33,7 +38,7 @@ export class Modify extends Widget {
      * 点击确认按钮
      */
     public okBtnClick(index:number) {
-        let money = Number(this.props.changeNum);
+        let money = Number(changeNum[index].num);
         if (index === 0) {
             money = money * 100;
         }
@@ -41,7 +46,9 @@ export class Modify extends Widget {
             console.log('11111111111111',r);
             popNewMessage('修改成功');
             console.log(Number(this.props.showData[index].num),Number(this.props.changeNum));
-            this.props.showData[index].num = (Number(this.props.showData[index].num) + Number(this.props.changeNum)).toFixed(2);
+          
+            this.props.showData[index].num = (Number(this.props.showData[index].num) + Number(changeNum[index].num)).toFixed(2);
+           
             this.paint();
         });
     }
