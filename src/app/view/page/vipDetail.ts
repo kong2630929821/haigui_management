@@ -50,7 +50,10 @@ export class VipDetail extends Widget {
         };
         super.setProps(this.props);
         console.log(props);
-        getVipDetail(props.uid).then(r => {
+        this.init();
+    }
+    public init() {
+        getVipDetail(this.props.uid).then(r => {
             const v = r.userTotal;
             if (v) {
                 let user = userType[v[9]];
@@ -112,7 +115,6 @@ export class VipDetail extends Widget {
             this.paint();
         });
     }
-
     // 切换
     public changeTab(num:number) {
         this.props.activeTab = num;
@@ -173,7 +175,7 @@ export class VipDetail extends Widget {
         popNew('app-components-modifyFunds',{ showData ,uid },(r) => {
             console.log(r);
         },() => {
-            this.paint();
+            this.init();
         });
     }
 }
