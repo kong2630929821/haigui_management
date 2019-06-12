@@ -6,6 +6,7 @@ import { popNewMessage } from '../utils/logic';
 interface Props {
     showData:any;
     uid:number;
+    changeNum:number;
 }
 // tslint:disable-next-line:completed-docs
 export class Modify extends Widget {
@@ -19,7 +20,7 @@ export class Modify extends Widget {
         super.setProps(this.props);
     }
     public inputChange(e:any,index:number) {
-        this.props.showData[index].num = e.value;
+        this.props.changeNum = e.value;
     }
     /**
      * 点击取消按钮
@@ -31,13 +32,15 @@ export class Modify extends Widget {
      * 点击确认按钮
      */
     public okBtnClick(index:number) {
-        let money = parseInt(this.props.showData[index].num);
+        let money = Number(this.props.changeNum);
         if (index === 0) {
             money = money * 100;
         }
-        changeMoney(index + 1,parseInt(this.props.uid),money).then(r => {
+        changeMoney(index + 1,Number(this.props.uid),money).then(r => {
             console.log('11111111111111',r);
             popNewMessage('修改成功');
+            console.log(Number(this.props.showData[index].num),Number(this.props.changeNum));
+            this.props.showData[index].num = Number(this.props.showData[index].num) + Number(this.props.changeNum);
             this.paint();
         });
     }
