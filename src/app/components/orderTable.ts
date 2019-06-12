@@ -135,4 +135,7 @@ export class OrderTable extends Widget {
         notify(e.node,'ev-import-order',{ file });
     }
     
+    public exportAllOrder(e:any) {
+        notify(e.node,'ev-import-allOrder',undefined);
+    }
 }
