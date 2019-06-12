@@ -1,5 +1,4 @@
-import { int } from 'babylonjs';
-import { httpPort, maxNum, sourceIp } from '../config';
+import { httpPort, sourceIp } from '../config';
 import { popNewMessage } from '../utils/logic';
 import { parseOrderShow } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
@@ -698,13 +697,11 @@ export const quitOrder = (orderId) => {
         console.log(e);
     });
 
-
-
-});
+};
 
 // 修改资产
 // tslint:disable-next-line:no-reserved-keywords
-export const changeMoney = (type:int,uid:int,money:int) => {
+export const changeMoney = (type:number,uid:number,money:number) => {
     const msg = {
         type:'console_alter_balance',
         param:{

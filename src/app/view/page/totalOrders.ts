@@ -301,9 +301,9 @@ export class TotalOrder extends Widget {
 
     public updateOrderTitle(orderType:OrderStatus) {
         if (orderType === OrderStatus.PENDINGPAYMENT) {
-            this.props.showTitleList[7] = '下单时间';
+            this.props.showTitleList[8] = '下单时间';
         } else {
-            this.props.showTitleList[7] = '支付时间';
+            this.props.showTitleList[8] = '支付时间';
         }
     }
         // 根据供应商id筛选

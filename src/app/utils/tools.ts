@@ -1,5 +1,5 @@
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { popNewMessage, priceFormat, unicode2Str } from './logic';
+import { popNewMessage } from './logic';
 
 /**
  * 常用工具
