@@ -75,6 +75,7 @@
         <div w-class="searchleft" on-tap="exportOrder">导出订单</div>
 
         <div ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入运单"}</app-components-inputFileBtn></div>
+        <div w-class="searchleft" on-tap="exportAllOrder">导出全部订单</div>
     </div>
 </div>
     

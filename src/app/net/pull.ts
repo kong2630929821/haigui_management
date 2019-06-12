@@ -524,7 +524,6 @@ export const getOrderKey = (count,time_type,start,tail,sid,orderType,state) => {
         return [ordersShow,infos[1]];
     });
 };
-
 // 获取所有订单
 export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) => {
     let startTimestamp = 0; 
@@ -535,39 +534,61 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
     if (tail) {
         endTimestamp = new Date(tail).getTime();
     }
-    const msg = { 
-        type: 'select_all_orders',
-        param: { 
-            id:id,       // 订单id,等于0表示从最大开始获取，大于0表示从指定订单id开始获取
-            count:count,   // 需要获取的订单信息数量，即一页需要显示的数量
-            time_type:time_type,    // 时间类型，1下单，2支付，3发货， 4收货，5完成
-            start:startTimestamp ,               // 启始时间，单位毫秒
-            tail:endTimestamp,                // 结束时间，单位毫秒
-            sid:sid,                    // 供应商id，等于0表示所有供应商，大于0表示指定供应商
-            type:orderType,                // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
-            state:state                // 订单状态，0未导出，1已导出
-        } 
-    };
 
-    return requestAsync(msg).then(r => {
-        console.log('r=',r);
-        if (!r.value) {
-            return [[],[]];
-        }
-        const infos = <Order[]>JSON.parse(r.value);
-        if (!infos) {
-            return [[],[]];
-        }
-        const ordersShow = parseOrderShow(infos,orderType);
-        console.log('ordersShow =====',ordersShow);
-        console.log('orders =====',infos);
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_orders?id=${id}&count=${count}&time_type=${time_type}&start=${startTimestamp}&tail=${endTimestamp}&sid=${sid}&type=${orderType}&state=${state}`).then(res => {
+        return res.json().then(r => {
+            console.log(r);
+            if (!r.value) {
+                return [[],[]];
+            }
+            const infos = <Order[]>JSON.parse(r.value);
+            if (!infos) {
+                return [[],[]];
+            }
+            const ordersShow = parseOrderShow(infos,orderType);
+            console.log('ordersShow =====',ordersShow);
+            console.log('orders =====',infos);
 
-        return [infos,ordersShow];
-    }).catch((e) => {
-        console.log(e);
-
-        return '';
+            return [infos,ordersShow];
+        }).catch(e => {
+            return  [[],[]];
+        });
+      
     });
+    // const msg = { 
+    //     type: 'select_all_orders',
+    //     param: { 
+    //         id:id,       // 订单id,等于0表示从最大开始获取，大于0表示从指定订单id开始获取
+    //         count:count,   // 需要获取的订单信息数量，即一页需要显示的数量
+    //         time_type:time_type,    // 时间类型，1下单，2支付，3发货， 4收货，5完成
+    //         start:startTimestamp ,               // 启始时间，单位毫秒
+    //         tail:endTimestamp,                // 结束时间，单位毫秒
+    //         sid:sid,                    // 供应商id，等于0表示所有供应商，大于0表示指定供应商
+    //         type:orderType,                // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
+    //         state:state                // 订单状态，0未导出，1已导出
+    //     } 
+    // };
+
+    // return requestAsync(msg).then(r => {
+    //     console.log('r=',r);
+    //     if (!r.value) {
+    //         return [[],[]];
+    //     }
+    //     const infos = <Order[]>JSON.parse(r.value);
+    //     if (!infos) {
+    //         return [[],[]];
+    //     }
+    //     const ordersShow = parseOrderShow(infos,orderType);
+    //     console.log('ordersShow =====',ordersShow);
+    //     console.log('orders =====',infos);
+
+    //     return [infos,ordersShow];
+    // }).catch((e) => {
+    //     console.log(e);
+
+    //     return  [[],[]];
+    // });
+
 };
 // 获取指定供应商指定类型的订单
 export const getOrder  = (supplier,Ordertype,oids) => {
