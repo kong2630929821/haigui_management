@@ -12,6 +12,7 @@ interface Props {
 export class Modify extends Widget {
     public ok: (r:any) => void;
     public cancel: () => void;   // fg为false表示退出APP(或点击取消)，true表示忘记密码
+    public props:Props;
     public setProps(props:any) {
         this.props = {
             ...this.props,
@@ -40,7 +41,7 @@ export class Modify extends Widget {
             console.log('11111111111111',r);
             popNewMessage('修改成功');
             console.log(Number(this.props.showData[index].num),Number(this.props.changeNum));
-            this.props.showData[index].num = Number(this.props.showData[index].num) + Number(this.props.changeNum);
+            this.props.showData[index].num = (Number(this.props.showData[index].num) + Number(this.props.changeNum)).toFixed(2);
             this.paint();
         });
     }
