@@ -1,6 +1,9 @@
 // tslint:disable-next-line:missing-jsdoc
+import { popNew } from '../../pi/ui/root';
+import { deepCopy } from '../../pi/util/util';
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
+import { quitOrder } from '../net/pull';
 import { Order, OrderShow } from '../view/page/totalOrders';
 
 interface Props {
@@ -12,12 +15,13 @@ interface Props {
     needCheckBox:boolean; // 是否需要选择框
     btn1:string;
     btn2:string;
-    inlineBtn1:string;
+    inlineBtn1:string[];
     inlineBtn2:string;
     inputFile:string;
     color:boolean;
     isExported:Function;
     totalPage:number;   // 订单总页数
+    showdatas:Order[];// datas的深拷贝
 }
 // tslint:disable-next-line:completed-docs
 export class OrderTable extends Widget {
@@ -30,15 +34,17 @@ export class OrderTable extends Widget {
         needCheckBox:true,
         btn1:'',
         btn2:'',
-        inlineBtn1:'',
+        inlineBtn1:[],
         inlineBtn2:'',
         inputFile:'',
         color:false,
         isExported:this.isExported.bind(this),
-        totalPage:0
+        totalPage:0,
+        showdatas:[]
     };
-    
+
     public setProps(props:any) {
+        this.props.showdatas = deepCopy(props.datas);
         this.props = {
             ...this.props,
             ...props,
@@ -47,6 +53,7 @@ export class OrderTable extends Widget {
         super.setProps(this.props);
         this.allCheckedInit(false);
         console.log(this.props);
+        
     }
 
     public isExported(orderId:number) {
@@ -118,7 +125,7 @@ export class OrderTable extends Widget {
 
     // 查看详情
     public goDetail(e:any,num:number,fg:number) {
-        notify(e.node,'ev-table-detail',{ value:this.props.showDatas[num], fg:fg,num:num });
+        notify(e.node,'ev-table-details',{ value:this.props.showDatas[num], fg:fg,num:num });
     }
 
     // 导入excel
@@ -134,7 +141,16 @@ export class OrderTable extends Widget {
         const file = e.file;
         notify(e.node,'ev-import-order',{ file });
     }
-    
+    // 判断操作列显示什么
+    public showOpreation(i:number) {
+        const orderId = this.props.showdatas[i][1];
+        popNew('app-components-confirmPayInfo',{},() => {
+            quitOrder(orderId).then(r => {
+                this.props.showdatas[i][12] = -1;
+                this.paint();
+            });
+        });
+    }
     public exportAllOrder(e:any) {
         notify(e.node,'ev-import-allOrder',undefined);
     }

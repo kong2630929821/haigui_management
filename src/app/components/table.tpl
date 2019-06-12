@@ -39,8 +39,9 @@
                     {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
                     <td w-class="td td1 {{it.auto?'autoTd':''}}">
                         {{if it.inputFile}}
-                        <div style="margin-left:0;">
-                            <input type="file" on-change="importExcel(e,{{i}})"/>
+                        <div w-class="exportFile">
+                            <div w-class="exportFileBtn">导入表单</div>
+                            <input type="file" w-class="btn1" on-change="importExcel(e,{{i}})"/>
                         </div>
                         {{end}}
                         

@@ -78,6 +78,7 @@
     text-align: center;
     line-height: 36px;
     font-size: 14px;
+    padding: 0 20px;
     display: inline-block;
 }
 .btnColor{
