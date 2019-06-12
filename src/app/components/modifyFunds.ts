@@ -1,6 +1,7 @@
 // tslint:disable-next-line:missing-jsdoc
 import { Widget } from '../../pi/widget/widget';
 import { changeMoney } from '../net/pull';
+import { popNewMessage } from '../utils/logic';
 
 interface Props {
     showData:any;
@@ -34,8 +35,10 @@ export class Modify extends Widget {
         if (index === 0) {
             money = money * 100;
         }
-        changeMoney(parseInt(this.props.uid),index + 1,money).then(r => {
+        changeMoney(index + 1,parseInt(this.props.uid),money).then(r => {
             console.log('11111111111111',r);
+            popNewMessage('修改成功');
+            this.paint();
         });
     }
 }
