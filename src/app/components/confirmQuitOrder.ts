@@ -3,7 +3,7 @@ import { Widget } from '../../pi/widget/widget';
 /**
  * 取消订单
  */
-export class ConfirmPayIfo extends Widget {
+export class ConfirmQuitOrder extends Widget {
     public ok:() => void;
     public cancel:() => void;
     public props:any = {
