@@ -49,7 +49,7 @@
                         {{if v[13] === it.PENDINGPAYMENT ||  v[13] === it.PENDINGDELIVERED}}
                             <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;" on-tap="quitOrder(e,{{i}})">取消订单</div>
                         {{else}}
-                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;">取消</div>
+                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;">手动取消</div>
                         {{end}}
                         {{if it.inlineBtn2}}
                         <div w-class="btn" style="margin-left:0;" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
