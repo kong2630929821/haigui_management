@@ -45,8 +45,6 @@ export class Modify extends Widget {
         changeMoney(index + 1,Number(this.props.uid),money).then(r => {
             console.log('11111111111111',r);
             popNewMessage('修改成功');
-            console.log(Number(this.props.showData[index].num),Number(changeNum));
-          
             this.props.showData[index].num = (Number(this.props.showData[index].num) + Number(changeNum[index].num)).toFixed(2);
            
             this.paint();
