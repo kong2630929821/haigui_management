@@ -46,7 +46,7 @@
     justify-content: center;
 }
 .th1{
-    padding: 0;
+    padding: 0 20px;
 }
 .td1{
    padding: 0;

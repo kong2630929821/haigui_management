@@ -82,7 +82,7 @@ export class VipDetail extends Widget {
                         v[0],  // UID
                         unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
-                        addressFormat(v[3]),  // 地址
+                        addressFormat(unicode2Str(v[3])),  // 地址
                         priceFormat(v[4]),  // 本月收益
                         priceFormat(v[5])   // 总收益
                     ];
@@ -94,7 +94,7 @@ export class VipDetail extends Widget {
                         v[0],  // UID
                         unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
-                        addressFormat(v[3]),  // 地址
+                        addressFormat(unicode2Str(v[3])),  // 地址
                         priceFormat(v[4]),  // 本月收益
                         priceFormat(v[5])   // 总收益
                     ];
@@ -106,7 +106,7 @@ export class VipDetail extends Widget {
                         v[0],  // UID
                         unicode2ReadStr(v[1]),  // 微信名
                         v[2],  // 手机
-                        addressFormat(v[3]),  // 地址
+                        addressFormat(unicode2Str(v[3])),  // 地址
                         priceFormat(v[4]),  // 本月收益
                         priceFormat(v[5])   // 总收益
                     ];

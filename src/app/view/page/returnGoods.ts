@@ -205,13 +205,13 @@ export class GoodsInfo extends Widget {
         } else if (this.props.returnStatus === 1) {
             // 退货中
             if (e.fg === 1) {
-                popNew('app-components-modalBox',{ content:`确认处理“<span style="color:#1991EB">${id}</span>”的申请退货失败` }, () => {
+                popNew('app-components-modalBox',{ content:`确认处理“<span style="color:#1991EB">${id}</span>”申请退货失败` }, () => {
                     this.changeReturnGoods(uid,id,-1,e.num);
                 },() => {
                     popNewMessage('你已经取消操作！');
                 });
             } else {
-                popNew('app-components-modalBox',{ content:`确认处理“<span style="color:#1991EB">${id}</span>”的申请退货成功` }, () => {
+                popNew('app-components-modalBox',{ content:`确认处理“<span style="color:#1991EB">${id}</span>”申请退货成功` }, () => {
                     this.changeReturnGoods(uid,id,1,e.num);
                 },() => {
                     popNewMessage('你已经取消操作！');
