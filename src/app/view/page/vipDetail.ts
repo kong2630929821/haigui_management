@@ -72,7 +72,7 @@ export class VipDetail extends Widget {
                     { th:'资产信息',td:`现金(￥${priceFormat(v[6][0])}) 海贝(${v[6][1]}) 积分(${v[6][2]})` },
                     { th:'本月收益',td:`现金(￥${priceFormat(v[4][0])}) 海贝(${v[4][1]}) 积分(${v[4][2]})` },
                     { th:'总收益',td:`现金(￥${priceFormat(v[5][0])}) 海贝(${v[5][1]}) 积分(${v[5][2]})` },
-                    { th:'地址信息',td:addressFormat(v[3]) },
+                    { th:'地址信息',td:addressFormat(unicode2Str(v[3])) },
                     { th:'身份证号',td:v[7][1] }
                 ];
             }
