@@ -5,9 +5,9 @@
         <div style="display:flex;flex:1 0 0;">
             <div w-class="th">{{v.th}}</div>
             <div w-class="td">
-                {{v.td}}
+                <p>{{v.td}}</p>
                 {{if i==6}}
-                    <span w-class="changeMoney" on-tap="changeMoney">修改</span>
+                    <p w-class="changeMoney" on-tap="changeMoney">修改</p>
                 {{end}}
             </div>
         </div>
