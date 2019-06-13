@@ -1,10 +1,18 @@
 // tslint:disable-next-line:missing-jsdoc
-import { popNew } from '../../pi/ui/root';
-import { deepCopy } from '../../pi/util/util';
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
-import { quitOrder } from '../net/pull';
 import { Order, OrderShow } from '../view/page/totalOrders';
+
+// 订单类型
+export enum OrderStatusShow {
+    FAILED = '失败',           // 失败
+    PENDINGPAYMENT = '待付款',   // 待付款
+    PENDINGDELIVERED  = '待发货',   // 待发货
+    PENDINGRECEIPT  = '待收货',   // 待收货
+    PENDINGFINISH = '待完成',     // 待完成     确认收货后7天算已完成   这个时间段内的订单可以申请退货
+    FINISHED = '已完成',    // 已完成  已过7天 
+    ALL = '全部'               // 全部
+}
 
 interface Props {
     title:any[];// 表格标题
@@ -21,7 +29,8 @@ interface Props {
     color:boolean;
     isExported:Function;
     totalPage:number;   // 订单总页数
-    showdatas:Order[];// datas的深拷贝
+    PENDINGPAYMENT:OrderStatusShow;
+    PENDINGDELIVERED:OrderStatusShow;
 }
 // tslint:disable-next-line:completed-docs
 export class OrderTable extends Widget {
@@ -40,11 +49,11 @@ export class OrderTable extends Widget {
         color:false,
         isExported:this.isExported.bind(this),
         totalPage:0,
-        showdatas:[]
+        PENDINGPAYMENT:OrderStatusShow.PENDINGPAYMENT,
+        PENDINGDELIVERED:OrderStatusShow.PENDINGDELIVERED
     };
 
     public setProps(props:any) {
-        this.props.showdatas = deepCopy(props.datas);
         this.props = {
             ...this.props,
             ...props,
@@ -53,7 +62,6 @@ export class OrderTable extends Widget {
         super.setProps(this.props);
         this.allCheckedInit(false);
         console.log(this.props);
-        
     }
 
     public isExported(orderId:number) {
@@ -142,14 +150,8 @@ export class OrderTable extends Widget {
         notify(e.node,'ev-import-order',{ file });
     }
     // 判断操作列显示什么
-    public showOpreation(i:number) {
-        const orderId = this.props.showdatas[i][1];
-        popNew('app-components-confirmPayInfo',{},() => {
-            quitOrder(orderId).then(r => {
-                this.props.showdatas[i][12] = -1;
-                this.paint();
-            });
-        });
+    public quitOrder(e:any,num:number) {
+        notify(e.node,'ev-table-quitOrder',{ value:num });
     }
     public exportAllOrder(e:any) {
         notify(e.node,'ev-import-allOrder',undefined);
