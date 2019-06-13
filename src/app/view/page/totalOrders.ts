@@ -7,10 +7,10 @@ import { exportExcel, importRead } from '../../utils/tools';
 export type GoodsDetails = [number,string,number,number,string,string,boolean]; // [商品id,商品名称,购买时价格,数量,sku id,sku 描述,是否保税]
 
 // [供应商id,订单id,用户id,商品详细信息,商品原支付金额,商品税费,商品运费,其它费用,收件人姓名,收件人电话,收件人地区,收件人详细地址,下单时间,支付时间,发货时间,收货时间,完成时间,运单号]
-export type Order = [number,number,number,GoodsDetails[],number,number,number,number,string,string,number,string,number,number,number,number,number,string];
+export type Order = [number,number,number,GoodsDetails[],number,number,number,number,string,string,number,string,number,number,number,number,number,string,number,string,string,string];
 
-// ['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','是否保税','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态']
-export type OrderShow = [number,number,string,number,string,string,string,number,string,number,string,string,string,string];
+// ['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','是否保税','供货商ID','下单时间','用户ID','收货人','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号']
+export type OrderShow = [number,number,string,number,string,string,string,number,string,number,string,string,string,string,number,string,string,string];
 
 // 订单类型
 export enum OrderStatus {
@@ -54,7 +54,7 @@ export const OrderStatusShow = {
  */
 export class TotalOrder extends Widget {
     public props:any = {
-        showTitleList:['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','商品类型','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态'],
+        showTitleList:['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','商品类型','供货商ID','下单时间','用户ID','收货人','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号'],
         contentList:[],   // 展示的原始数据
         contentShowList:[], // 展示的数据
         supplierList:[],
@@ -157,6 +157,7 @@ export class TotalOrder extends Widget {
         const status = this.props.orderType[this.props.orderTypeActiveIndex].status;
         const exportList = [];
         const oidsSet = new Set();
+        console.log('contentShowList',this.props.contentShowList,this.props.selectList);
         for (let i = 0;i < this.props.contentShowList.length;i++) {
             if (this.props.selectList[i]) {
                 const content = this.props.contentShowList[i];
@@ -180,7 +181,9 @@ export class TotalOrder extends Widget {
         const aoa = [titleList];
         
         for (const v of exportList) {
-            v[0] = v[0].toString();
+            for (let i = 0;i < v.length;i++) {
+                v[i] = v[i].toString();
+            }
             aoa.push(v);
         }
         console.log(aoa);

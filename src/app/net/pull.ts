@@ -156,11 +156,12 @@ export const importInventory = (str) => {
  // 解析并导入运单信息
 export const importTransport = (res) => {
     const maps = new Map();
-    for (let i = 0;i < res.length;i++) {
-        const supplierId = Number(res[i].供货商ID);
-        const uid = Number(res[i].用户ID);
-        const oid = Number(res[i].订单编号);
-        const sid = res[i].物流单号;
+    for (let i = 0;i < res[1].length;i++) {
+        const ret = res[1][i];
+        const supplierId = Number(ret.供货商ID);
+        const uid = Number(ret.用户ID);
+        const oid = Number(ret.订单编号);
+        const sid = ret.物流单号;
         const item = maps.get(oid);
         if (!item) {
             maps.set(oid,[supplierId,uid,oid,sid]);

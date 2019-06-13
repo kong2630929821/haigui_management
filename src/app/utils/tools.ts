@@ -1,5 +1,5 @@
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { popNewMessage } from './logic';
+import { popNewMessage, priceFormat } from './logic';
 
 /**
  * 常用工具
@@ -121,6 +121,12 @@ export const exportExcel = (aoa:any[][],excelName:string) => {
 export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
     let localStatus = status;
     const ordersShow:OrderShow[] = [];
+    
+    if (infos.length === 1) {
+        console.log('1111111',infos,ordersShow);
+
+        return [[]];
+    }
     for (const info of infos) {
         if (status === OrderStatus.ALL) {   // 全部订单  自己解析订单状态
             localStatus = parseOrderStatus(info[12],info[13],info[14],info[15],info[16],info[17]);
@@ -133,7 +139,7 @@ export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
             } else {
                 goodsType = '普通商品';
             }
-            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],goodsType,info[0],timestampFormat(timestamp),info[2],info[8],info[9],addressFormat(info[11]),OrderStatusShow[localStatus]];
+            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],goodsType,info[0],timestampFormat(timestamp),info[2],info[8],info[9],addressFormat(info[11]),OrderStatusShow[localStatus],priceFormat(info[18]),info[19],info[20],info[21]];
             ordersShow.push(orderShow);
         }
     }
