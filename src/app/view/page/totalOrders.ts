@@ -152,18 +152,33 @@ export class TotalOrder extends Widget {
     public selectClick(e:any) {
         this.props.selectList = e.selectList;
     }
-    
+    public find(id:number) {
+        for (let i = 0;i < this.props.contentList.length;i++) {
+            if (this.props.contentList[i][0] === id) {
+                return this.props.contentList[i];
+            }
+        }
+    }
     public async exportOrder(e:any) {
         const supplierId = Number(this.props.supplierList[this.props.supplierActiveIndex]);
         const status = this.props.orderType[this.props.orderTypeActiveIndex].status;
-        const exportList = [];
+        let exportList = [];// 导出的列表
+        const exported = [];// 已经导出的列表
+        const unexport = [];// 未导出的列表
         const oidsSet = new Set();
         console.log('contentShowList',this.props.contentShowList,this.props.selectList);
         for (let i = 0;i < this.props.contentShowList.length;i++) {
             if (this.props.selectList[i]) {
-                const content = this.props.contentShowList[i];
-                exportList.push(content);
-                oidsSet.add(content[0]);
+                const item = this.find(this.props.contentShowList[i][0]);
+                console.log('原始数据',item);
+                if (item[14] > 0) {
+                    exported.push(this.props.contentShowList[i]);
+                } else {
+                    const content = this.props.contentShowList[i];
+                    unexport.push(content);
+                    oidsSet.add(content[0]);
+                }
+                exportList.push(this.props.contentShowList[i]);
             }
         }
 
@@ -175,12 +190,13 @@ export class TotalOrder extends Widget {
         this.updateOrderTitle(status);
         const titleList = JSON.parse(JSON.stringify(this.props.showTitleList));
         if (status === OrderStatus.PENDINGDELIVERED) {
-            this.props.contentShowList = await getOrder(supplierId,2,[...oidsSet]);
+            const data = await getOrder(supplierId,2,[...oidsSet]);
+            exportList = exported.concat(data);
+
             titleList.push('物流单号');
         }
-        
+        console.log('导出过的数据',exported);
         const aoa = [titleList];
-        
         for (const v of exportList) {
             for (let i = 0;i < v.length;i++) {
                 v[i] = v[i].toString();
