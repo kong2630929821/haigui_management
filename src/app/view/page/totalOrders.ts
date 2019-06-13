@@ -388,9 +388,9 @@ export class TotalOrder extends Widget {
         
     }
 
-    public quitOrder(i:number) {
-        const orderId = this.props.contentShowList[i][1];
-        const currentPageId = this.props.contentShowList[0][1];
+    public quitOrder(e:any) {
+        const orderId = this.props.contentShowList[e.value][0];
+        const currentPageId = this.props.contentShowList[0][0];
         popNew('app-components-confirmPayInfo',{},() => {
             quitOrder(orderId).then(r => {
                 this.filterOrderQuery(currentPageId);
