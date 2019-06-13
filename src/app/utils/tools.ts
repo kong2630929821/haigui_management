@@ -121,8 +121,7 @@ export const exportExcel = (aoa:any[][],excelName:string) => {
 export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
     let localStatus = status;
     const ordersShow:OrderShow[] = [];
-    
-    if (infos.length === 1) {
+    if (typeof infos[0] === 'string') {
         console.log('1111111',infos,ordersShow);
 
         return [[]];
@@ -158,7 +157,7 @@ export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
  */
 const parseOrderStatus = (orderTime:number,payTime:number,shipTime:number,receiptTime:number,finishTime:number,shipId:string):OrderStatus => {
     let status:OrderStatus;
-    if (orderTime === 0) {
+    if (orderTime <= 0) {
         status = OrderStatus.FAILED;            // 失败
     } else if (payTime === 0) {
         status = OrderStatus.PENDINGPAYMENT;     // 待付款

@@ -44,10 +44,10 @@
                         {{if it.inputFile}}
                         <div style="margin-left:0;">
                             <input type="file" on-change="importExcel(e,{{i}})"/>
-                        </div>
+                        </div>v
                         {{end}}
-                        {{if it.showdatas[i][13] === "待付款" || it.showdatas[i][13] === "待发货"}}
-                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;" on-tap="showOpreation({{i}})">取消订单</div>
+                        {{if v[13] === it.PENDINGPAYMENT ||  v[13] === it.PENDINGDELIVERED}}
+                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;" on-tap="quitOrder(e,{{i}})">取消订单</div>
                         {{else}}
                             <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;">已取消</div>
                         {{end}}
