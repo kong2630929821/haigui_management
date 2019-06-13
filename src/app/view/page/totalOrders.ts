@@ -190,6 +190,49 @@ export class TotalOrder extends Widget {
         
     }
 
+    public async exportAllOrder(e:any) {
+        const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
+        const start = this.props.startTime;     // 启始时间，单位毫秒
+        const tail = this.props.endTime;         // 结束时间，单位毫秒
+        let sid = Number(this.props.supplierList[this.props.supplierActiveIndex]);        
+        sid = isNaN(sid) ? 0 : sid;                   // 供应商id，等于0表示所有供应商，大于0表示指定供应商
+        const orderType = this.props.orderType[this.props.orderTypeActiveIndex].status ;  // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
+        const state = this.props.orderState[this.props.orderStateActiveIndex].status;    // 订单状态，0未导出，1已导出
+        let exportList = [];
+        await getAllOrder(0,this.props.totalCount,time_type,start,tail,sid,orderType,state).then(([orders,ordersShow]) => {
+            // this.updateOrderTitle(orderType);
+            // this.props.contentShowList = ordersShow;
+            // this.props.contentList = orders;
+            // this.paint();
+            exportList  = ordersShow;
+        });
+        const supplierId = Number(this.props.supplierList[this.props.supplierActiveIndex]);
+        const status = this.props.orderType[this.props.orderTypeActiveIndex].status;
+       
+        if (exportList.length === 0) {
+            popNewMessage('请选择要导出的订单');
+
+            return;
+        }
+        this.updateOrderTitle(status);
+        const titleList = JSON.parse(JSON.stringify(this.props.showTitleList));
+        if (status === OrderStatus.PENDINGDELIVERED) {
+            this.props.contentShowList = await getOrder(supplierId,2,[]);
+            titleList.push('物流单号');
+        }
+        
+        const aoa = [titleList];
+        
+        for (const v of exportList) {
+            for (let i = 0;i < v.length;i++) {
+                v[i] = v[i].toString();
+            }
+            aoa.push(v);
+        }
+        console.log(aoa);
+        exportExcel(aoa,`${this.props.orderType[this.props.orderTypeActiveIndex].text}订单.xlsx`);
+    }
+
     public importTransport(e:any) {
         // 导入运单
         const file = e.file;
@@ -239,8 +282,8 @@ export class TotalOrder extends Widget {
     }
 
     // 分页变动
-    public pageChangeQuery(count:number = 0) {
-        count = !count ? orderMaxCount : this.props.currentPageIndex * orderMaxCount;          // 需要获取的订单信息数量，即一页需要显示的数量
+    public pageChangeQuery() {
+        const count = this.props.currentPageIndex * orderMaxCount ? this.props.currentPageIndex * orderMaxCount :orderMaxCount;          // 需要获取的订单信息数量，即一页需要显示的数量
         const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
         const start = this.props.startTime;     // 启始时间，单位毫秒
         const tail = this.props.endTime;         // 结束时间，单位毫秒

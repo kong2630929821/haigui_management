@@ -143,6 +143,7 @@ export class OrderTable extends Widget {
     }
     // 判断操作列显示什么
     public showOpreation(i:number) {
+        console.log('!!!!!!!!!!',this.props.showdatas[i][13]);
         const orderId = this.props.showdatas[i][1];
         popNew('app-components-confirmPayInfo',{},() => {
             quitOrder(orderId).then(r => {
@@ -150,5 +151,8 @@ export class OrderTable extends Widget {
                 this.paint();
             });
         });
+    }
+    public exportAllOrder(e:any) {
+        notify(e.node,'ev-import-allOrder',undefined);
     }
 }

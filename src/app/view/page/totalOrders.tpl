@@ -33,8 +33,8 @@
             </div>   
         </div>
     </div>
-    <div w-class="order-table-box" ev-select-click="selectClick" ev-export-order="exportOrder" ev-import-order="importTransport">
-        <widget w-tag="app-components-orderTable" >{datas: {{it.contentList}},showDatas:{{it.contentShowList}},title:{{it.showTitleList}},needCheckBox:true}</widget>
+    <div w-class="order-table-box" ev-select-click="selectClick" ev-export-order="exportOrder" ev-import-order="importTransport" ev-import-allOrder='exportAllOrder'>
+        <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},showDatas:{{it.contentShowList}},title:{{it.showTitleList}},needCheckBox:true }</widget>
     </div>
     {{:totalPage = Math.ceil(it.totalCount/ it.orderMaxCount)}}
     {{if totalPage>0}}
