@@ -31,6 +31,7 @@ interface Props {
     totalPage:number;   // 订单总页数
     PENDINGPAYMENT:OrderStatusShow;
     PENDINGDELIVERED:OrderStatusShow;
+    FAILED:OrderStatusShow;
 }
 // tslint:disable-next-line:completed-docs
 export class OrderTable extends Widget {
@@ -50,7 +51,8 @@ export class OrderTable extends Widget {
         isExported:this.isExported.bind(this),
         totalPage:0,
         PENDINGPAYMENT:OrderStatusShow.PENDINGPAYMENT,
-        PENDINGDELIVERED:OrderStatusShow.PENDINGDELIVERED
+        PENDINGDELIVERED:OrderStatusShow.PENDINGDELIVERED,
+        FAILED:OrderStatusShow.FAILED
     };
 
     public setProps(props:any) {
