@@ -152,30 +152,19 @@ export class TotalOrder extends Widget {
     public selectClick(e:any) {
         this.props.selectList = e.selectList;
     }
-    public find(id:number) {
-        for (let i = 0;i < this.props.contentList.length;i++) {
-            if (this.props.contentList[i][0] === id) {
-                return this.props.contentList[i];
-            }
-        }
-    }
     public async exportOrder(e:any) {
         const supplierId = Number(this.props.supplierList[this.props.supplierActiveIndex]);
         const status = this.props.orderType[this.props.orderTypeActiveIndex].status;
-        let exportList = [];// 导出的列表
-        const exported = [];// 已经导出的列表
-        const unexport = [];// 未导出的列表
+        const exportList = [];// 导出的列表
         const oidsSet = new Set();
         console.log('contentShowList',this.props.contentShowList,this.props.selectList);
         for (let i = 0;i < this.props.contentShowList.length;i++) {
             if (this.props.selectList[i]) {
-                const item = this.find(this.props.contentShowList[i][0]);
+                console.log('查找有没有导出过',this.props.contentList);
+                const item = this.findItem(this.props.contentShowList[i][0]);
                 console.log('原始数据',item);
-                if (item[14] > 0) {
-                    exported.push(this.props.contentShowList[i]);
-                } else {
+                if (item[14] <= 0) {
                     const content = this.props.contentShowList[i];
-                    unexport.push(content);
                     oidsSet.add(content[0]);
                 }
                 exportList.push(this.props.contentShowList[i]);
@@ -190,12 +179,12 @@ export class TotalOrder extends Widget {
         this.updateOrderTitle(status);
         const titleList = JSON.parse(JSON.stringify(this.props.showTitleList));
         if (status === OrderStatus.PENDINGDELIVERED) {
-            const data = await getOrder(supplierId,2,[...oidsSet]);
-            exportList = exported.concat(data);
-
+            console.log('看看',oidsSet);
+            if (oidsSet.size !== 0) {
+                await getOrder(supplierId,2,[...oidsSet]);
+            }
             titleList.push('物流单号');
         }
-        console.log('导出过的数据',exported);
         const aoa = [titleList];
         for (const v of exportList) {
             for (let i = 0;i < v.length;i++) {
@@ -205,9 +194,19 @@ export class TotalOrder extends Widget {
         }
         console.log(aoa);
         exportExcel(aoa,`${this.props.orderType[this.props.orderTypeActiveIndex].text}订单.xlsx`);
-        
+        console.log('选中的列表有',this.props.selectList);
+        if (status === OrderStatus.PENDINGDELIVERED) {
+            this.filterOrderQuery();
+        }
     }
-
+    public findItem(id:any) {
+        for (let i = 0;i < this.props.contentList.length;i++) {
+            if (this.props.contentList[i][1] === parseInt(id)) {
+                
+                return this.props.contentList[i];
+            }
+        }
+    }
     public async exportAllOrder(e:any) {
         const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
         const start = this.props.startTime;     // 启始时间，单位毫秒
@@ -217,6 +216,7 @@ export class TotalOrder extends Widget {
         const orderType = this.props.orderType[this.props.orderTypeActiveIndex].status ;  // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
         const state = this.props.orderState[this.props.orderStateActiveIndex].status;    // 订单状态，0未导出，1已导出
         let exportList = [];
+        const oidsSet = new Set();
         await getAllOrder(0,this.props.totalCount,time_type,start,tail,sid,orderType,state).then(([orders,ordersShow]) => {
             // this.updateOrderTitle(orderType);
             // this.props.contentShowList = ordersShow;
@@ -232,10 +232,20 @@ export class TotalOrder extends Widget {
 
             return;
         }
+
+        for (let i = 0;i < exportList.length;i++) { 
+            const item = this.findItem(this.props.contentShowList[i][0]);
+            if (item[14] <= 0) {
+                const content = this.props.contentShowList[i];
+                oidsSet.add(content[0]);
+            }
+        }
         this.updateOrderTitle(status);
         const titleList = JSON.parse(JSON.stringify(this.props.showTitleList));
         if (status === OrderStatus.PENDINGDELIVERED) {
-            this.props.contentShowList = await getOrder(supplierId,2,[]);
+            if (oidsSet.size !== 0) {
+                await getOrder(supplierId,2,[...oidsSet]);
+            }
             titleList.push('物流单号');
         }
         
@@ -249,13 +259,17 @@ export class TotalOrder extends Widget {
         }
         console.log(aoa);
         exportExcel(aoa,`${this.props.orderType[this.props.orderTypeActiveIndex].text}订单.xlsx`);
+        if (status === OrderStatus.PENDINGDELIVERED) {
+            this.filterOrderQuery();
+        }
     }
 
     public importTransport(e:any) {
         // 导入运单
         const file = e.file;
-        importRead(file,(res) => {
-            importTransport(res);
+        importRead(file,async (res) => {
+            await importTransport(res);
+            this.filterOrderQuery();
         });
     }
     // 按订单id查询
@@ -375,6 +389,10 @@ export class TotalOrder extends Widget {
     public inputValue(e:any) {
         this.props.inputOrderId = e.value;
         this.paint();
+    }
+    
+    public importTable() {
+        console.log('导出');
     }
 
     public closeClick() {
