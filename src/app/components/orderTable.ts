@@ -66,7 +66,7 @@ export class OrderTable extends Widget {
 
     public isExported(orderId:number) {
         for (const v of this.props.datas) {
-            if (v[1] === orderId) return v[14] > 0;
+            if (v[1] === Number(orderId)) return v[14] > 0;
         }
     }
 
@@ -109,7 +109,7 @@ export class OrderTable extends Widget {
         const isSelected = !this.props.selectList[index];
         this.props.selectList[index] = isSelected;
         this.checkNextChoosed(index,isSelected);
-        console.log(this.props.selectList);
+        console.log(this.props);
         this.props.allChecked = this.isAllChecked();
         notify(e.node,'ev-select-click',{ selectList:this.props.selectList });
         this.paint();
