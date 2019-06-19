@@ -17,6 +17,7 @@ interface Props {
     curTime:number[];  // 当前时 分 秒
     showDate:string; // 默认显示的日期
     needTime:boolean; // 需要显示时分秒
+    curIndex:any;// 当前天数的下标
 }
 
 // tslint:disable-next-line:completed-docs
@@ -30,7 +31,11 @@ export class DateSelection extends Widget {
         curDate:[2019,3,13],  
         curTime:[0,0,0],
         showDate:'', 
-        needTime:false
+        needTime:false,
+        curIndex:{
+            i:0,
+            j:0
+        }
     };
 
     public setProps(props:any) {
@@ -61,11 +66,22 @@ export class DateSelection extends Widget {
                 this.props.dateList[i].push(tt);
             }
         }
+        for (let i = 0;i < 6;i++) {
+            for (let j = 0;j < 7;j++) {
+                const arr = this.props.dateList[i][j];
+                if (parseInt(arr[1]) === this.props.curDate[1] && parseInt(arr[2]) === this.props.curDate[2]) {
+                    this.props.curIndex.i = i;
+                    this.props.curIndex.j = j;                    
+                }
+            }
+        }
         this.paint();
     }
     
     public changeDate(e: any,i:number,j:number) {
         this.props.curDate = this.props.dateList[i][j];
+        this.props.curIndex.i = i;
+        this.props.curIndex.j = j;
         this.paint();
         this.notifyValue(e);
     }
@@ -100,17 +116,29 @@ export class DateSelection extends Widget {
         this.init();
         this.notifyValue(e);
     }
-
     public changeHour(e:any,fg:number) {
         if (fg) {
             const hour = ++this.props.curTime[0];
             if (hour >= 24) {
                 this.props.curTime[0] = 0;
+                // 如果大于24小时则当前天数添加一天
+                const j = this.props.curIndex.j + 1;
+                if (j > 6) {
+                    this.changeDate(e,this.props.curIndex.i + 1,0);
+                } else {
+                    this.changeDate(e,this.props.curIndex.i ,this.props.curIndex.j + 1);
+                }
             } 
         } else {
             const hour = --this.props.curTime[0];
             if (hour < 0) {
                 this.props.curTime[0] = 23;
+                const j = this.props.curIndex.j - 1;
+                if (j < 0) {
+                    this.changeDate(e,this.props.curIndex.i - 1 ,6);
+                } else {
+                    this.changeDate(e,this.props.curIndex.i ,this.props.curIndex.j - 1);
+                }
             }
         }
         this.paint();
@@ -121,14 +149,16 @@ export class DateSelection extends Widget {
         if (fg) {
             const minute = ++this.props.curTime[1];
             if (minute >= 60) {
-                this.changeHour(e,1);
+                // 必须先更改分钟再去更改时钟，不然在时钟调用了this.notifyValue(e)就报错
                 this.props.curTime[1] = 0;
+                this.changeHour(e,1);
             } 
         } else {
             const minute = --this.props.curTime[1];
             if (minute < 0) {
-                this.changeHour(e,0);
+                // 必须先更改分钟再去更改时钟，不然在时钟调用了this.notifyValue(e)就报错
                 this.props.curTime[1] = 59;
+                this.changeHour(e,0);  
             }
         }
         this.paint();
@@ -139,14 +169,17 @@ export class DateSelection extends Widget {
         if (fg) {
             const second = ++this.props.curTime[2];
             if (second >= 60) {
-                this.changeMinute(e,1);
+                // 必须先更改秒钟再去更改分钟，不然在时钟调用了this.notifyValue(e)就报错
                 this.props.curTime[2] = 0;
+                this.changeMinute(e,1);
+                
             } 
         } else {
             const second = --this.props.curTime[2];
             if (second < 0) {
-                this.changeMinute(e,0);
+                // 必须先更改秒钟再去更改分钟，不然在时钟调用了this.notifyValue(e)就报错
                 this.props.curTime[2] = 59;
+                this.changeMinute(e,0); 
             }
         }
         this.paint();
