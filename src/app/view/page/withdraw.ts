@@ -121,8 +121,9 @@ export class Withdraw extends Widget {
   
     // 处理提现申请
     public async dealWith(e:any) {
-        const id = this.props.withdrawIdList[e.num];
-        const uid = this.props.showDataList[e.num][0];
+        const id = this.props.withdrawIdList[ this.props.curPage * 5 + e.num];
+        const uid = this.props.curShowDataList[e.num][0];
+        console.log(this.props.curShowDataList);
         if (id && uid) {
             if (e.fg === 1) {
                 popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
