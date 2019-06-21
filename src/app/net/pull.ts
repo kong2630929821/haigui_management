@@ -705,7 +705,12 @@ export const changeWithdrawState = (id:number,uid:number,state:number) => {
         }
     };
 
-    return requestAsync(msg);
+    return requestAsync(msg).then(r => {
+        return r;
+    }).catch(e => {
+
+        return e;
+    });
 };
 
 /**

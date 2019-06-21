@@ -160,20 +160,44 @@ export class Withdraw extends Widget {
         if (id && uid) {
             if (e.fg === 1) {
                 popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
-                    await changeWithdrawState(id, uid, 3);  // 拒绝
-                    popNewMessage('处理完成');
+                    await changeWithdrawState(id, uid, 3).then(r => {
+                        if (r.result !== 1) {
+                            popNewMessage(r.error_code);
+                        } else {
+                            popNewMessage('处理完成');
+                        }
+                    }).catch(e => {
+                        popNewMessage(e.error_code);
+                    });  // 拒绝
+                    
                     this.getData();
                 });
                 
             } else {
                 if (this.props.activeTab === 0) {
-                    await changeWithdrawState(id, uid, 1);  // 开始处理
-                    popNewMessage('处理完成');
+                    await changeWithdrawState(id, uid, 1).then(r => {
+                        console.log(r);
+                        if (r.result !== 1) {
+                            popNewMessage(r.error_code);
+                        } else {
+                            popNewMessage('处理完成');
+                        }
+                    }).catch(e => {
+                        popNewMessage(e.error_code);
+                    });  // 开始处理
                     this.getData();
                 } else {
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
-                        await changeWithdrawState(id, uid, 2);  // 同意
-                        popNewMessage('处理完成');
+                        await changeWithdrawState(id, uid, 2).then(r => {
+                            if (r.result !== 1) {
+                                popNewMessage(r.error_code);
+                            } else {
+                                popNewMessage('处理完成');
+                            }
+                        }).catch(e => {
+                            popNewMessage(e.error_code);
+                        });  // 同意
+                        
                         this.getData();
                     });
                 }
@@ -187,7 +211,13 @@ export class Withdraw extends Widget {
         const id = this.props.withdrawIdList[e.num];
         const uid = this.props.showDataList[e.num][0];
         popNew('app-components-modalBox',{ content:`确认重新处理用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
-            await changeWithdrawState(id, uid, 1);  // 开始处理
+            await changeWithdrawState(id, uid, 1).then(r => {
+                if (r.result !== 1) {
+                    popNewMessage(r.error_code);
+                }
+            }).catch(e => {
+                popNewMessage(e.error_code);
+            });  // 开始处理
             popNewMessage('处理完成');
             this.getData();
         });
