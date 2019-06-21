@@ -709,7 +709,7 @@ export const changeWithdrawState = (id:number,uid:number,state:number) => {
 };
 
 /**
- * 获取会员列表
+ * 获取会员列表    
  */
 export const getVipMember = () => {
     // const msg = {
