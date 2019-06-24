@@ -5,6 +5,7 @@ import { changeWithdrawState, getWithdrawApply, getWithdrawTotal } from '../../n
 import { dateToString, parseDate, popNewMessage, priceFormat, timestampFormat } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
+const DEFAULT_NUM = 5;
 interface Props {
     datas:any[];  // 原始数据
     showDataList:any[];  // 显示数据
@@ -89,6 +90,7 @@ export class Withdraw extends Widget {
 
     // 切换过滤
     public changeTab(num:number) {
+        this.props.curPage = 0;
         this.props.activeTab = num;
         if (num === 2) {
             this.props.btn1 = '';
@@ -155,8 +157,8 @@ export class Withdraw extends Widget {
   
     // 处理提现申请
     public async dealWith(e:any) {
-        const id = this.props.withdrawIdList[e.num];
-        const uid = this.props.showDataList[e.num][0];
+        const id = this.props.withdrawIdList[e.num + this.props.curPage  * DEFAULT_NUM];
+        const uid = this.props.showDataList[e.num + this.props.curPage  * DEFAULT_NUM][0];
         if (id && uid) {
             if (e.fg === 1) {
                 popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
@@ -208,8 +210,8 @@ export class Withdraw extends Widget {
 
     public async redealWith(e:any) {
         // TODO:
-        const id = this.props.withdrawIdList[e.num];
-        const uid = this.props.showDataList[e.num][0];
+        const id = this.props.withdrawIdList[e.num + this.props.curPage * DEFAULT_NUM];
+        const uid = this.props.showDataList[e.num + this.props.curPage * DEFAULT_NUM][0];
         popNew('app-components-modalBox',{ content:`确认重新处理用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
             await changeWithdrawState(id, uid, 1).then(r => {
                 if (r.result !== 1) {
@@ -279,7 +281,7 @@ export class Withdraw extends Widget {
     // 查看某一页数据
     public changePage(e:any) {
         this.props.curPage = e.value;
-        this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
+        this.props.curShowDataList = this.props.showDataList.slice(e.value * DEFAULT_NUM,e.value * DEFAULT_NUM + DEFAULT_NUM);
         this.paint();
     }
 
