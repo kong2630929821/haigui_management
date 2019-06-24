@@ -21,14 +21,20 @@
                     {{for j,r of v}}
                     <td w-class="td">
                         <span>{{typeof(r)=="string" ? r :JSON.stringify(r)}}</span>
-                    </td>
+                    </td>                    
                     {{end}}
 
                     {{if it.inlineBtn1 || it.inlineBtn2}}
                     <td w-class="td">
-                        <div style="display: flex;justify-content: center;">
+                        <div style="display: flex;justify-content: center;">                            
                             {{if it.inlineBtn1}}
-                            <div w-class="dealBtn" style="color:#FA2929" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                            
+                                {{if v[5]=="提现失败"}}
+                                
+                                <div w-class="dealBtn" style="color:#FA2929" on-tap="reDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                                {{else}}
+                                <div w-class="dealBtn" style="color:#FA2929" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                                {{end}}
                             {{end}}
 
                             {{if it.inlineBtn2}}
@@ -36,7 +42,8 @@
                             {{end}}
                         </div>
                     </td>
-                    {{end}}
+                    {{end}}                    
+
                 </tr>
                 {{end}}
             </tbody>

@@ -19,11 +19,11 @@
     {{else}}
     <widget w-tag="app-view-page-vipDetail"></widget>
     {{end}}
-    <div w-class="searchleft" on-tap="exportShop">导出信息</div>
+    <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
     {{% ==================================分页=====================}}
         {{if it.showDataList.length>0}}
             <div ev-changeCurrent="pageChange" w-class="pagination">
-                <widget w-tag="app-components-pagination">{pages:{{Math.floor(it.shopNum/ 12) + 1}},currentIndex:{{it.currentIndex}} }</widget>
+                <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ 12)}},currentIndex:{{it.currentIndex}} }</widget>
             </div>
         {{end}}
 </div>

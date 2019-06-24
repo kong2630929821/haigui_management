@@ -1,4 +1,4 @@
-import { httpPort, sourceIp } from '../config';
+import { httpPort, maxNum, sourceIp } from '../config';
 import { popNewMessage } from '../utils/logic';
 import { parseOrderShow } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
@@ -149,8 +149,6 @@ export const dealGroup = (arr2) => {
     }; 
     
 };
-
-const maxNum = 30;   // 每次导入最大条数
 
  // 解析并导入商品信息
 export const importGoods = (res) => {
@@ -553,6 +551,9 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
 
     return requestAsync(msg).then(r => {
         console.log('r=',r);
+        if (!r.value) {
+            return [[],[]];
+        }
         const infos = <Order[]>JSON.parse(r.value);
         if (!infos) {
             return [[],[]];
@@ -704,11 +705,16 @@ export const changeWithdrawState = (id:number,uid:number,state:number) => {
         }
     };
 
-    return requestAsync(msg);
+    return requestAsync(msg).then(r => {
+        return r;
+    }).catch(e => {
+
+        return e;
+    });
 };
 
 /**
- * 获取会员列表
+ * 获取会员列表    
  */
 export const getVipMember = () => {
     // const msg = {
@@ -783,21 +789,8 @@ export const getGoodsKey = (count:number) => {
 };
 // 获取所有的商品信息，支付分页
 export const getAllGoods = (star:number,num:number) => {
-    const msg = { 
-        type: 'select_all_goods',
-        param: { 
-            id:star,
-            count:num
-        } 
-    };
-    
-    return requestAsync(msg).then(r => {
-        // console.log('r=',r);
 
-        return r;
-    }).catch((e) => {
-        console.log(e);
-    });
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}`).then(r => r.json());
 };
 // 获取当前商品的信息
 export const getCurrentGood = (shopValue:string) => {

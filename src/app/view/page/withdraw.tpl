@@ -39,12 +39,17 @@
         <div style="display:inline-block" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
             <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
         </div>
+        {{if it.activeTab==2}}
+        <div style="display:inline-block;height: 50px;margin-left: 40px;" ev-selected="filterTimeType">
+            <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
+        </div>
+        {{end}}
     </div>
 
     {{if it.showDataList}}
-    <div ev-table-detail="dealWith" ev-table-btnClick="exportData">
+    <div ev-table-detail="dealWith" ev-table-btnClick="exportData" ev-table-redetail="redealWith">
         <div w-class="tableTitle">数据列表</div>
-        <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}},btn1:"导出列表" }</widget>
+        <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}},btn1:"导出列表"}</widget>
     </div>
     {{end}}
 
