@@ -124,8 +124,8 @@ export class OpenHWang extends Widget {
 
     // 处理数据
     public async dealWith(e:any) {
-        const id = this.props.applyIdList[e.num];
-        const uid = this.props.showDataList[e.num][0];
+        const id = this.props.applyIdList[this.props.curPage * 5 + e.num];
+        const uid = this.props.curShowDataList[e.num][0];
         if (id && uid) {
             if (e.fg === 1) {
                 popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
