@@ -1,4 +1,4 @@
-<div w-class="page" ev-detail-back="detailBack">
+<div w-class="page" ev-detail-back="detailBack" on-tap="close">
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>
         <div w-class="filterBox">
@@ -16,10 +16,11 @@
             </div>
             <div w-class="filterTitle">
                 <span>上架时间</span>
-                <div style="display:inline-block;height: 50px;margin-left: 20px;margin-top: 26px" ev-selected="filterAddedTime">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.addedTime}},activeIndex:{{it.addedTimeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
-                </div>
+                
             </div>
+            <div style="margin: 28px 0 28px 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
+                    <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
+                </div>
             <div w-class="btnBox">
                 <div w-class="input" ev-input-change="inputChange">
                     <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
@@ -29,7 +30,7 @@
         </div>
     </div>
     <div w-class="shopSum">共{{it.shopNum}}件商品</div> 
-    <div ev-table-detail="goDetail">
+    <div>
         <div w-class="tableTitle">商品列表</div>
         <div w-class="tableData">
             <div w-class="tableDataTitle">
@@ -49,13 +50,17 @@
                             <div w-class="imgShow"></div>
                             <div w-class="typeShow">
                                 {{for j,t of v.type}}
-                                    <div w-class="row">1</div>
+                                    <div w-class="row">
+                                        {{for index,item of t}}
+                                            <div w-class="typeShowItem {{index==0 ||index==1?'typeShowItem1':''}}">{{item}}</div>
+                                        {{end}}
+                                    </div>
                                 {{end}}
                             </div>
                             <div w-class="status">
                                 <div w-class="discount">{{v.discount}}</div>
-                                <div>{{v.time}}</div>
-                                <div>{{v.status}}</div>
+                                <div w-class="discount">{{v.time}}</div>
+                                <div w-class="discount">{{v.status}}</div>
                                 <div w-class="ctrollerStatus">
                                     <div w-class="btn">下架</div>
                                     <div w-class="btn">详情</div>

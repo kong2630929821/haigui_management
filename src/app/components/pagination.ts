@@ -30,11 +30,6 @@ export class Pagination extends Widget {
         timeTypeActiveIndex:0,
         expandIndex:-1
     };
-    // public create() {
-    //     super.create();
-    //        // 状态筛选
-        
-    // }
     // 创建判断显示的页数
     public setProps(props:any) {
         this.props = {
@@ -50,13 +45,13 @@ export class Pagination extends Widget {
         const timeType = [
             {
                 status:StatuType.statuType_1,
-                text:'5'
+                text:'20'
             },{
                 status:StatuType.statuType_2,
-                text:'10'
+                text:'50'
             },{
                 status:StatuType.statuType_3,
-                text:'15'
+                text:'100'
             }
         ];
         this.props.timeType = timeType;
