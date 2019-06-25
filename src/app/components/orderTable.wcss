@@ -46,7 +46,7 @@
     justify-content: center;
 }
 .th1{
-    padding: 0;
+    padding: 0 20px;
 }
 .td1{
    padding: 0;
@@ -78,6 +78,7 @@
     text-align: center;
     line-height: 36px;
     font-size: 14px;
+    padding: 0 20px;
     display: inline-block;
 }
 .btnColor{

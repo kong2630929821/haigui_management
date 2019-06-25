@@ -124,12 +124,11 @@ export class OpenHWang extends Widget {
 
     // 处理数据
     public async dealWith(e:any) {
-        const id = this.props.applyIdList[e.num];
-        const uid = this.props.showDataList[e.num][0];
-        const name = this.props.showDataList[e.num][1];
+        const id = this.props.applyIdList[this.props.curPage * 5 + e.num];
+        const uid = this.props.curShowDataList[e.num][0];
         if (id && uid) {
             if (e.fg === 1) {
-                popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${name}</span>”的开通海王申请` },async () => {
+                popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
                     await changeHWangState(id, uid, 3);  // 拒绝
                     popNewMessage('处理完成');
                     this.getData();
@@ -141,7 +140,7 @@ export class OpenHWang extends Widget {
                     popNewMessage('处理完成');
                     this.getData();
                 } else {
-                    popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${name}</span>”的开通海王申请` },async () => {
+                    popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
                         await changeHWangState(id, uid, 2);  // 同意
                         popNewMessage('处理完成');
                         this.getData();
