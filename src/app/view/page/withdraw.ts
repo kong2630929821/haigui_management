@@ -22,13 +22,25 @@ interface Props {
     endTime:string;  // 结束时间
     curShowDataList:any[]; // 当前页显示数据
     curPage:number; // 当前页码
+    timeType:any;
+    timeTypeActiveIndex:number;
+    expandIndex:number;    
 }
 const Status = [
     '申请中',
     '处理中',
     '提现成功',
+    '提现拒绝',
     '提现失败'
+
 ];
+// 订单时间类型
+export enum TimeType {
+    PAYTIME = 0,       // 成功
+    PAYTIME_2 = 1, // 拒绝
+    PAYTIME_1= 2 // 失败
+    
+}
 /**
  * 提现
  */
@@ -37,7 +49,7 @@ export class Withdraw extends Widget {
         showDataList:[
             // ['123456','￥500.00','现金','2017-12-25 14:35','申请中']
         ],
-        showTitleList:['用户ID','提现金额','手续费','提现渠道','提交时间','受理状态'],
+        showTitleList:['用户ID','提现金额','手续费','提现渠道','提交时间','受理状态','微信支付单号','处理时间'],
         activeTab:0,
         withdrawIdList:[],
         datas:[],
@@ -51,13 +63,27 @@ export class Withdraw extends Widget {
         startTime:'',
         endTime:'',
         curShowDataList:[], 
-        curPage:0 
+        curPage:0 ,
+        timeType:[],
+        timeTypeActiveIndex:0,
+        expandIndex:-1
     };
 
     public create() {
         super.create();
         this.props.endTime = dateToString(Date.now(),1);
         this.props.startTime = parseDate(this.props.endTime,-7,1);
+        const timeType = [{
+            status:TimeType.PAYTIME,
+            text:'提现成功'
+        },{
+            status:TimeType.PAYTIME_2,
+            text:'提现拒绝'
+        },{
+            status:TimeType.PAYTIME_1,
+            text:'提现失败'
+        }];
+        this.props.timeType = timeType;
         this.getData();
     }
 
@@ -78,9 +104,15 @@ export class Withdraw extends Widget {
         this.props.withdrawIdList = [];
         for (const t of this.props.datas) {
             const v = deepCopy(t);
-            if (t[6] === Status[num] || (num === 2 && t[6] === Status[3])) {
+            if ((t[6] === Status[num] && num !== 2) || 
+                (num === 2 && t[6] === Status[2] && t[6] === Status[this.props.timeTypeActiveIndex + 2]) || 
+                (num === 2 && t[6] === Status[3] && t[6] === Status[this.props.timeTypeActiveIndex + 2]) || 
+                (num === 2 && t[6] === Status[4] && t[6] === Status[this.props.timeTypeActiveIndex + 2])) {
                 this.props.withdrawIdList.push(v.shift());
                 this.props.showDataList.push(v);
+            }
+            if (num === 2 && t[6] === Status[4] && t[6] === Status[this.props.timeTypeActiveIndex + 2]) {
+                this.props.btn1 = '重新处理';
             }
         }
         this.changePage({ value:0 });
@@ -105,7 +137,9 @@ export class Withdraw extends Widget {
                         `￥${priceFormat(item[3])}`,     // 手续费
                         '微信',            // 提现渠道
                         timestampFormat(item[5]), // 时间
-                        Status[item[4]]       // 状态
+                        Status[item[4]],       // 状态
+                        item[7], // 微信单号
+                        timestampFormat(item[8]) // 处理时间
                     ];
                 });
                 this.changeTab(this.props.activeTab);
@@ -127,26 +161,67 @@ export class Withdraw extends Widget {
         if (id && uid) {
             if (e.fg === 1) {
                 popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
-                    await changeWithdrawState(id, uid, 3);  // 拒绝
-                    popNewMessage('处理完成');
+                    await changeWithdrawState(id, uid, 3).then(r => {
+                        if (r.result !== 1) {
+                            popNewMessage(r.error_code);
+                        } else {
+                            popNewMessage('处理完成');
+                        }
+                    }).catch(e => {
+                        popNewMessage(e.error_code);
+                    });  // 拒绝
+                    
                     this.getData();
                 });
                 
             } else {
                 if (this.props.activeTab === 0) {
-                    await changeWithdrawState(id, uid, 1);  // 开始处理
-                    popNewMessage('处理完成');
+                    await changeWithdrawState(id, uid, 1).then(r => {
+                        console.log(r);
+                        if (r.result !== 1) {
+                            popNewMessage(r.error_code);
+                        } else {
+                            popNewMessage('处理完成');
+                        }
+                    }).catch(e => {
+                        popNewMessage(e.error_code);
+                    });  // 开始处理
                     this.getData();
                 } else {
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
-                        await changeWithdrawState(id, uid, 2);  // 同意
-                        popNewMessage('处理完成');
+                        await changeWithdrawState(id, uid, 2).then(r => {
+                            if (r.result !== 1) {
+                                popNewMessage(r.error_code);
+                            } else {
+                                popNewMessage('处理完成');
+                            }
+                        }).catch(e => {
+                            popNewMessage(e.error_code);
+                        });  // 同意
+                        
                         this.getData();
                     });
                 }
             } 
         }
         
+    }
+
+    public async redealWith(e:any) {
+        // TODO:
+        const id = this.props.withdrawIdList[e.num];
+        const uid = this.props.showDataList[e.num][0];
+        popNew('app-components-modalBox',{ content:`确认重新处理用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
+            await changeWithdrawState(id, uid, 1).then(r => {
+                if (r.result !== 1) {
+                    popNewMessage(r.error_code);
+                }
+            }).catch(e => {
+                popNewMessage(e.error_code);
+            });  // 开始处理
+            popNewMessage('处理完成');
+            this.getData();
+        });
     }
 
     // 查询
@@ -198,6 +273,7 @@ export class Withdraw extends Widget {
 
     public pageClick() {
         this.props.showDateBox = false;
+        this.props.expandIndex++;
         this.paint();
     }
 
@@ -206,5 +282,13 @@ export class Withdraw extends Widget {
         this.props.curPage = e.value;
         this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
         this.paint();
+    }
+
+    // 成功失败切换
+    public filterTimeType(e:any) {
+        // TODO:
+        this.props.timeTypeActiveIndex = this.props.timeType[e.activeIndex].status;
+        this.changeTab(this.props.activeTab);
+
     }
 }

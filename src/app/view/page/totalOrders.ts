@@ -1,17 +1,16 @@
-import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { orderMaxCount } from '../../config';
-import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport, quitOrder } from '../../net/pull';
+import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport } from '../../net/pull';
 import { dateToString, popNewMessage } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
 
-export type GoodsDetails = [number,string,number,number,string,string,boolean]; // [商品id,商品名称,购买时价格,数量,sku id,sku 描述,是否保税]
+export type GoodsDetails = [number,string,number,number,string,string]; // [商品id,商品名称,购买时价格,数量,sku id,sku 描述]
 
 // [供应商id,订单id,用户id,商品详细信息,商品原支付金额,商品税费,商品运费,其它费用,收件人姓名,收件人电话,收件人地区,收件人详细地址,下单时间,支付时间,发货时间,收货时间,完成时间,运单号,'订单总金额','微信支付单号','姓名','身份证号']
 export type Order = [number,number,number,GoodsDetails[],number,number,number,number,string,string,number,string,number,number,number,number,number,string,number,string,string,string];
 
-// ['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','是否保税','供货商ID','下单时间','用户ID','收货人','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号']
-export type OrderShow = [number,number,string,number,string,string,string,number,string,number,string,string,string,string,string,string,string,string];
+// ['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号','金额']
+export type OrderShow = [number,number,string,number,string,string,number,string,number,string,string,string,string,string,string,string,string,string];
 
 // 订单类型
 export enum OrderStatus {
@@ -55,7 +54,7 @@ export const OrderStatusShow = {
  */
 export class TotalOrder extends Widget {
     public props:any = {
-        showTitleList:['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','商品类型','供货商ID','下单时间','用户ID','收货人','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号'],
+        showTitleList:['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','收货人','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号','金额'],
         contentList:[],   // 展示的原始数据
         contentShowList:[], // 展示的数据
         supplierList:[],
@@ -75,7 +74,7 @@ export class TotalOrder extends Widget {
         currentPageIndex:0,    // 当前页数
         totalCount:0,     // 总数目
         forceUpdate:false,   // 强制刷新  通过不断改变其值来触发分页的setProps 分页组件目前不完美
-        expandIndex:-1      // 触发下拉列表 
+        expandIndex:-1        // 触发下拉列表 
     };
 
     public create() {
@@ -152,100 +151,29 @@ export class TotalOrder extends Widget {
     public selectClick(e:any) {
         this.props.selectList = e.selectList;
     }
+    
     public async exportOrder(e:any) {
         const supplierId = Number(this.props.supplierList[this.props.supplierActiveIndex]);
         const status = this.props.orderType[this.props.orderTypeActiveIndex].status;
-        const exportList = [];// 导出的列表
+        const exportList = [];
         const oidsSet = new Set();
-        console.log('contentShowList',this.props.contentShowList,this.props.selectList);
         for (let i = 0;i < this.props.contentShowList.length;i++) {
             if (this.props.selectList[i]) {
-                console.log('查找有没有导出过',this.props.contentList);
-                const item = this.findItem(this.props.contentShowList[i][0]);
-                console.log('原始数据',item);
-                if (item[14] <= 0) {
-                    const content = this.props.contentShowList[i];
-                    oidsSet.add(content[0]);
-                }
-                exportList.push(this.props.contentShowList[i]);
-            }
-        }
-
-        if (exportList.length === 0) {
-            popNewMessage('请选择要导出的订单');
-
-            return;
-        }
-        this.updateOrderTitle(status);
-        const titleList = JSON.parse(JSON.stringify(this.props.showTitleList));
-        if (status === OrderStatus.PENDINGDELIVERED) {
-            console.log('看看',oidsSet);
-            if (oidsSet.size !== 0) {
-                await getOrder(supplierId,2,[...oidsSet]);
-            }
-            titleList.push('物流单号');
-        }
-        const aoa = [titleList];
-        for (const v of exportList) {
-            for (let i = 0;i < v.length;i++) {
-                v[i] = v[i].toString();
-            }
-            aoa.push(v);
-        }
-        console.log(aoa);
-        exportExcel(aoa,`${this.props.orderType[this.props.orderTypeActiveIndex].text}订单.xlsx`);
-        console.log('选中的列表有',this.props.selectList);
-        if (status === OrderStatus.PENDINGDELIVERED) {
-            this.filterOrderQuery();
-        }
-    }
-    public findItem(id:any) {
-        for (let i = 0;i < this.props.contentList.length;i++) {
-            if (this.props.contentList[i][1] === parseInt(id)) {
-                
-                return this.props.contentList[i];
-            }
-        }
-    }
-    public async exportAllOrder(e:any) {
-        const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
-        const start = this.props.startTime;     // 启始时间，单位毫秒
-        const tail = this.props.endTime;         // 结束时间，单位毫秒
-        let sid = Number(this.props.supplierList[this.props.supplierActiveIndex]);        
-        sid = isNaN(sid) ? 0 : sid;                   // 供应商id，等于0表示所有供应商，大于0表示指定供应商
-        const orderType = this.props.orderType[this.props.orderTypeActiveIndex].status ;  // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
-        const state = this.props.orderState[this.props.orderStateActiveIndex].status;    // 订单状态，0未导出，1已导出
-        let exportList = [];
-        const oidsSet = new Set();
-        await getAllOrder(0,this.props.totalCount,time_type,start,tail,sid,orderType,state).then(([orders,ordersShow]) => {
-            // this.updateOrderTitle(orderType);
-            // this.props.contentShowList = ordersShow;
-            // this.props.contentList = orders;
-            // this.paint();
-            exportList  = ordersShow;
-        });
-        const supplierId = Number(this.props.supplierList[this.props.supplierActiveIndex]);
-        const status = this.props.orderType[this.props.orderTypeActiveIndex].status;
-       
-        if (exportList.length === 0) {
-            popNewMessage('请选择要导出的订单');
-
-            return;
-        }
-
-        for (let i = 0;i < exportList.length;i++) { 
-            const item = this.findItem(this.props.contentShowList[i][0]);
-            if (item[14] <= 0) {
                 const content = this.props.contentShowList[i];
+                exportList.push(content);
                 oidsSet.add(content[0]);
             }
         }
+
+        if (exportList.length === 0) {
+            popNewMessage('请选择要导出的订单');
+
+            return;
+        }
         this.updateOrderTitle(status);
         const titleList = JSON.parse(JSON.stringify(this.props.showTitleList));
         if (status === OrderStatus.PENDINGDELIVERED) {
-            if (oidsSet.size !== 0) {
-                await getOrder(supplierId,2,[...oidsSet]);
-            }
+            this.props.contentShowList = await getOrder(supplierId,2,[...oidsSet]);
             titleList.push('物流单号');
         }
         
@@ -259,17 +187,14 @@ export class TotalOrder extends Widget {
         }
         console.log(aoa);
         exportExcel(aoa,`${this.props.orderType[this.props.orderTypeActiveIndex].text}订单.xlsx`);
-        if (status === OrderStatus.PENDINGDELIVERED) {
-            this.filterOrderQuery();
-        }
+        
     }
 
     public importTransport(e:any) {
         // 导入运单
         const file = e.file;
-        importRead(file,async (res) => {
-            await importTransport(res);
-            this.filterOrderQuery();
+        importRead(file,(res) => {
+            importTransport(res);
         });
     }
     // 按订单id查询
@@ -335,9 +260,9 @@ export class TotalOrder extends Widget {
 
     public updateOrderTitle(orderType:OrderStatus) {
         if (orderType === OrderStatus.PENDINGPAYMENT) {
-            this.props.showTitleList[8] = '下单时间';
+            this.props.showTitleList[7] = '下单时间';
         } else {
-            this.props.showTitleList[8] = '支付时间';
+            this.props.showTitleList[7] = '支付时间';
         }
     }
         // 根据供应商id筛选
@@ -390,10 +315,6 @@ export class TotalOrder extends Widget {
         this.props.inputOrderId = e.value;
         this.paint();
     }
-    
-    public importTable() {
-        console.log('导出');
-    }
 
     public closeClick() {
         console.log('close',this.props.showDateBox);
@@ -420,15 +341,5 @@ export class TotalOrder extends Widget {
             });
         }
         
-    }
-
-    public quitOrder(e:any) {
-        const orderId = this.props.contentShowList[e.value][0];
-        const currentPageId = this.props.contentShowList[0][0];
-        popNew('app-components-confirmQuitOrder',{},() => {
-            quitOrder(orderId).then(r => {
-                this.filterOrderQuery(currentPageId);
-            });
-        });
     }
 }

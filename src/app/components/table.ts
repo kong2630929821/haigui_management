@@ -81,4 +81,8 @@ export class Table extends Widget {
         notify(e.node,'ev-table-detail',{ value:num });
     }
 
+    public reDetail(e:any,num:number,fg:number) {
+        notify(e.node,'ev-table-redetail',{ value:this.props.datas[num], fg:fg,num:num }); 
+    }    
+
 }
