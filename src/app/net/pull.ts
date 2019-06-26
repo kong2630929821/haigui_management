@@ -724,3 +724,26 @@ export const changeMoney = (type:number,uid:number,money:number) => {
         console.log(e);
     });
 };
+// 获取所有产品信息
+export const getAllProduct = (start_time:number,end_time:number) => {
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_inventory?start_time=${start_time}&end_time=${end_time}`).then(res => {
+        return res.json().then(r => {
+            
+            const data = JSON.parse(r.value);
+            const num = data[0];
+            console.log(data);
+            const arr = [];
+            // debugger;
+            data[1].forEach((element,index) => {
+                arr.push(element);
+                const itme = element[0];
+                arr[index].splice(0,1);
+                arr[index].push(...itme);
+                // debugger;
+            });
+            
+            return data;
+            
+        });
+    });
+};
