@@ -286,7 +286,7 @@ export const getOrderKey = (count,time_type,start,tail,sid,orderType,state) => {
 
     return requestAsync(msg).then(r => {
         const infos = <any[]>JSON.parse(r.value);
-        if (!infos) {
+        if (!infos[0]) {
             return [[],[]];
         }
         const ordersShow = parseOrderShow([infos[0]],orderType);
