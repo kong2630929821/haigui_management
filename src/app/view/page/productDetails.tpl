@@ -11,19 +11,19 @@
             <div w-class="shopName">2018款怀集系列见覅拉尔金属怀旧连衣裙-红色（1515）</div>
             <div w-class="shopType">
                 <span w-class="discount">是否打折</span>
-                <span>9.5折</span>
+                <span style="margin-left:12px;">9.5折</span>
             </div>
-            <div>
-                <span>最新上架时间</span>
-                <span>2018-83-48 12:48:32</span>
+            <div w-class="shopType">
+                <span w-class="discount">最新上架时间</span>
+                <span style="margin-left:12px;">2018-83-48 12:48:32</span>
             </div>
-            <div>
-                <span>状态</span>
-                <span>已上架</span>
+            <div w-class="shopType">
+                <span w-class="discount">状态</span>
+                <span style="margin-left:12px;">已上架</span>
             </div>
-            <div>
-                <span>所属分类</span>
-                <span>女装-连衣裙</span>
+            <div w-class="shopType">
+                <span w-class="discount">所属分类</span>
+                <span style="margin-left:12px;">女装-连衣裙</span>
             </div>
         </div>
     </div>
