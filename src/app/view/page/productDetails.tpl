@@ -27,4 +27,12 @@
             </div>
         </div>
     </div>
+    <div w-class="imgShow">
+        <div w-class="imgInfo">
+            <div w-class="infoTitle">
+                <div w-class="title_1">商品封面图</div>
+                <div w-class="title_1">商品轮播图</div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -12,8 +12,7 @@
     color:rgba(0,0,0,1);
 }
 .searchBox{
-    margin:20px 0;
-    height: 150px;
+    margin:20px 0 0 0;
     background: #fff;
     cursor: pointer;
 }
@@ -57,4 +56,23 @@
 .item1{
     display: inline-block;
     margin-left: 12px;
+}
+.imgShow{
+    border: 1px solid rgba(204,204,204,1);
+    height: 600px;
+}
+.imgInfo{
+    display: flex;
+}
+.infoTitle{
+    display: flex;
+    height: 24px;
+    font-size:14px;
+    font-family:Source Sans Pro;
+    font-weight:600;
+    line-height:18px;
+    color:rgba(53,64,82,1);
+}
+.title_1{
+    width: 220px;
 }
