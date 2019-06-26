@@ -890,3 +890,12 @@ export const getExportTime = () => {
         console.log(e);
     });
 };
+
+// 获取所有产品信息
+export const getAllProduct = (start_time:number,end_time:number) => {
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_inventory?start_time=${start_time}&end_time=${end_time}`).then(r => {
+        return r.json().then(res => {
+            debugger;
+        });
+    });
+};
