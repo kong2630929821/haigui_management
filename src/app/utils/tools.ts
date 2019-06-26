@@ -1,4 +1,3 @@
-import { popNew } from '../../pi/ui/root';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
 import { priceFormat } from './logic';
 

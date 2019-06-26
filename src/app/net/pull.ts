@@ -244,7 +244,7 @@ export const getOrderById  = (orderId) => {
 
     return requestAsync(msg).then(r => {
         const infos = <Order>JSON.parse(r.value);
-        if (!infos) {
+        if (!infos[0]) {
             return [[],[]];
         }
         const ordersShow = parseOrderShow([infos],OrderStatus.ALL);
