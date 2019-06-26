@@ -102,7 +102,7 @@ export class GoodsInfo extends Widget {
                         returnGoods[index][i] = timeConvert(v);
                     }
                     
-                } else if (i === 14 && v !== '') {
+                } else if (i === 14) {
                     returnGoods[index][i] = unicode2Str(JSON.parse(v));
                 }
             });
@@ -196,7 +196,7 @@ export class GoodsInfo extends Widget {
         const id = e.value[0];
         if (this.props.returnStatus === 0) {
             // 退货申请
-            popNew('app-components-confirmPayInfo',{ money:'你确定操作' },() => {
+            popNew('app-components-modalBox',{ content:`确认处理“<span style="color:#1991EB">${id}</span>”的申请退货` }, () => {
                 this.changeReturnGoods(uid,id,0,e.num);
             },() => {
                 popNewMessage('你已经取消操作！');
@@ -205,18 +205,17 @@ export class GoodsInfo extends Widget {
         } else if (this.props.returnStatus === 1) {
             // 退货中
             if (e.fg === 1) {
-                popNew('app-components-confirmPayInfo',{ money:'你确定操作' },() => {
+                popNew('app-components-modalBox',{ content:`确认处理“<span style="color:#1991EB">${id}</span>”申请退货失败` }, () => {
                     this.changeReturnGoods(uid,id,-1,e.num);
                 },() => {
                     popNewMessage('你已经取消操作！');
                 });
             } else {
-                popNew('app-components-confirmPayInfo',{ money:'你确定操作' },() => {
+                popNew('app-components-modalBox',{ content:`确认处理“<span style="color:#1991EB">${id}</span>”申请退货成功` }, () => {
                     this.changeReturnGoods(uid,id,1,e.num);
                 },() => {
                     popNewMessage('你已经取消操作！');
-                });
-                
+                }); 
             }
         }
     }

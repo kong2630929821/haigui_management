@@ -3,6 +3,17 @@ import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
 import { Order, OrderShow } from '../view/page/totalOrders';
 
+// 订单类型
+export enum OrderStatusShow {
+    FAILED = '失败',           // 失败
+    PENDINGPAYMENT = '待付款',   // 待付款
+    PENDINGDELIVERED  = '待发货',   // 待发货
+    PENDINGRECEIPT  = '待收货',   // 待收货
+    PENDINGFINISH = '待完成',     // 待完成     确认收货后7天算已完成   这个时间段内的订单可以申请退货
+    FINISHED = '已完成',    // 已完成  已过7天 
+    ALL = '全部'               // 全部
+}
+
 interface Props {
     title:any[];// 表格标题
     datas:Order[];  // 表原始数据
@@ -12,12 +23,15 @@ interface Props {
     needCheckBox:boolean; // 是否需要选择框
     btn1:string;
     btn2:string;
-    inlineBtn1:string;
+    inlineBtn1:string[];
     inlineBtn2:string;
     inputFile:string;
     color:boolean;
     isExported:Function;
     totalPage:number;   // 订单总页数
+    PENDINGPAYMENT:OrderStatusShow;
+    PENDINGDELIVERED:OrderStatusShow;
+    FAILED:OrderStatusShow;
 }
 // tslint:disable-next-line:completed-docs
 export class OrderTable extends Widget {
@@ -30,14 +44,17 @@ export class OrderTable extends Widget {
         needCheckBox:true,
         btn1:'',
         btn2:'',
-        inlineBtn1:'',
+        inlineBtn1:[],
         inlineBtn2:'',
         inputFile:'',
         color:false,
         isExported:this.isExported.bind(this),
-        totalPage:0
+        totalPage:0,
+        PENDINGPAYMENT:OrderStatusShow.PENDINGPAYMENT,
+        PENDINGDELIVERED:OrderStatusShow.PENDINGDELIVERED,
+        FAILED:OrderStatusShow.FAILED
     };
-    
+
     public setProps(props:any) {
         this.props = {
             ...this.props,
@@ -51,7 +68,7 @@ export class OrderTable extends Widget {
 
     public isExported(orderId:number) {
         for (const v of this.props.datas) {
-            if (v[1] === orderId) return v[14] > 0;
+            if (v[1] === Number(orderId)) return v[14] > 0;
         }
     }
 
@@ -94,7 +111,7 @@ export class OrderTable extends Widget {
         const isSelected = !this.props.selectList[index];
         this.props.selectList[index] = isSelected;
         this.checkNextChoosed(index,isSelected);
-        console.log(this.props.selectList);
+        console.log(this.props);
         this.props.allChecked = this.isAllChecked();
         notify(e.node,'ev-select-click',{ selectList:this.props.selectList });
         this.paint();
@@ -118,7 +135,7 @@ export class OrderTable extends Widget {
 
     // 查看详情
     public goDetail(e:any,num:number,fg:number) {
-        notify(e.node,'ev-table-detail',{ value:this.props.showDatas[num], fg:fg,num:num });
+        notify(e.node,'ev-table-details',{ value:this.props.showDatas[num], fg:fg,num:num });
     }
 
     // 导入excel
@@ -134,5 +151,11 @@ export class OrderTable extends Widget {
         const file = e.file;
         notify(e.node,'ev-import-order',{ file });
     }
-    
+    // 判断操作列显示什么
+    public quitOrder(e:any,num:number) {
+        notify(e.node,'ev-table-quitOrder',{ value:num });
+    }
+    public exportAllOrder(e:any) {
+        notify(e.node,'ev-import-allOrder',undefined);
+    }
 }

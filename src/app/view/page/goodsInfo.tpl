@@ -23,7 +23,7 @@
     {{% ==================================分页=====================}}
         {{if it.showDataList.length>0}}
             <div ev-changeCurrent="pageChange" w-class="pagination">
-                <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ 12)}},currentIndex:{{it.currentIndex}} }</widget>
+                <widget w-tag="app-components-pagination">{pages:{{Math.floor(it.shopNum/ 12) + 1}},currentIndex:{{it.currentIndex}} }</widget>
             </div>
         {{end}}
 </div>
