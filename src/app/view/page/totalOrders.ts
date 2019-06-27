@@ -1,9 +1,9 @@
+import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { orderMaxCount } from '../../config';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport, quitOrder } from '../../net/pull';
 import { dateToString, popNewMessage } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
-import { popNew } from '../../../pi/ui/root';
 
 export type GoodsDetails = [number,string,number,number,string,string,boolean]; // [商品id,商品名称,购买时价格,数量,sku id,sku 描述,商品类型]
 
@@ -103,6 +103,9 @@ export class TotalOrder extends Widget {
         },{
             status:OrderStatus.FINISHED,
             text:'已完成'
+        }{
+            status:OrderStatus.CANCEL,
+            text:'已取消'
         }];
 
         // 订单状态
