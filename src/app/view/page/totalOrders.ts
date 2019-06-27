@@ -1,6 +1,7 @@
+import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { orderMaxCount } from '../../config';
-import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport } from '../../net/pull';
+import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport, quitOrder } from '../../net/pull';
 import { dateToString, popNewMessage } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
 
@@ -341,5 +342,14 @@ export class TotalOrder extends Widget {
             });
         }
         
+    }
+    public quitOrder(e:any) {
+        const orderId = this.props.contentShowList[e.value][0];
+        const currentPageId = this.props.contentShowList[0][0];
+        popNew('app-components-confirmQuitOrder',{},() => {
+            quitOrder(orderId).then(r => {
+                this.filterOrderQuery(currentPageId);
+            });
+        });
     }
 }
