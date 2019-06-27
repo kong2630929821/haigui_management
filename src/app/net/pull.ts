@@ -306,9 +306,10 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
     if (tail) {
         endTimestamp = new Date(tail).getTime();
     }
-
+   
     return fetch(`http://${sourceIp}:${httpPort}/console/select_all_orders?id=${id}&count=${count}&time_type=${time_type}&start=${startTimestamp}&tail=${endTimestamp}&sid=${sid}&type=${orderType}&state=${state}`).then(res => {
         return res.json().then(r => {
+            
             console.log(r);
             if (!r.value) {
                 return [[],[]];

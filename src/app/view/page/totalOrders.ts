@@ -21,7 +21,8 @@ export enum OrderStatus {
     PENDINGRECEIPT  = 3,   // 待收货
     PENDINGFINISH = 4,     // 待完成     确认收货后7天算已完成   这个时间段内的订单可以申请退货
     FINISHED = 5,    // 已完成  已过7天 
-    ALL = 6               // 全部
+    ALL = 6 ,              // 全部
+    CANCEL= 7// 已取消
 }
 
 // 订单状态
@@ -48,7 +49,8 @@ export const OrderStatusShow = {
     [OrderStatus.PENDINGDELIVERED]:'待发货',
     [OrderStatus.PENDINGRECEIPT]:'待收货',
     [OrderStatus.PENDINGFINISH]:'已收货',
-    [OrderStatus.FINISHED]:'已完成'
+    [OrderStatus.FINISHED]:'已完成',
+    [OrderStatus.CANCEL]:'已取消'
 };
 /**
  * 所有订单
@@ -101,6 +103,9 @@ export class TotalOrder extends Widget {
         },{
             status:OrderStatus.FINISHED,
             text:'已完成'
+        }{
+            status:OrderStatus.CANCEL,
+            text:'已取消'
         }];
 
         // 订单状态
