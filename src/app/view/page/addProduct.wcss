@@ -64,7 +64,7 @@
 .btn{
     width:150px;
     height:48px;
-    background:rgba(255,255,255,1);
+    background:rgba(25,145,235,1);
     opacity:1;
     font-size:18px;
     font-family:Source Sans Pro;
@@ -72,7 +72,11 @@
     line-height:48px;
     color:rgba(255,255,255,1);
     text-align: center;
+    border: 1px solid;
 }
 .ctr{
-    
+    height: 82px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-around;
 }
