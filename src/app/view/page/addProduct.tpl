@@ -8,20 +8,20 @@
         <div w-class="tableTitle">基本信息</div>
         <div w-class="filterBox">
             <div w-class="productName">
-                <div w-class="title">产品名称</div>
+                <div w-class="title">SKU</div>
                 <div w-class="input" ev-input-change="inputChange" style="width: 724px;">
                     <widget w-tag="app-components-input">{placeHolder:"请输入"}</widget>
                 </div>
             </div>
             <div w-class="productName">
                 <div w-class="item">
-                    <div w-class="title">SKU编号</div>
+                    <div w-class="title">供应商id</div>
                     <div w-class="input" ev-input-change="inputChange" style="width: 464px;">
                         <widget w-tag="app-components-input">{placeHolder:"请输入"}</widget>
                     </div>
                 </div>
                 <div w-class="item">
-                    <div w-class="title">供应商SKU编号</div>
+                    <div w-class="title">产品名</div>
                     <div w-class="input" ev-input-change="inputChange" style="width: 464px;">
                         <widget w-tag="app-components-input">{placeHolder:"请输入"}</widget>
                     </div>
@@ -34,14 +34,6 @@
                         <widget w-tag="app-components-input">{placeHolder:"请输入"}</widget>
                     </div>
                 </div>
-                <div w-class="item">
-                    <div w-class="title">供应商商品ID</div>
-                    <div w-class="input" ev-input-change="inputChange" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入"}</widget>
-                    </div>
-                </div>
-            </div>
-            <div w-class="productName">
                 <div w-class="item">
                     <div w-class="title">供货价</div>
                     <div w-class="input" ev-input-change="inputChange" style="width: 464px;">
