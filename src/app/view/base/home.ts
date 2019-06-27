@@ -18,7 +18,7 @@ const PAGE = {
     goodsInfo: 'goodsInfo', // 商品信息
     goodsManage:'commodityLibrary',// 商品管理
     // commodityLibrary:'commodityLibrary',// 商品库
-    commodityLibrary:'productLibrary',// 
+    commodityLibrary:'addProduct',// productLibrary
     // productLibrary:'productLibrary',// 产品库
     productLibrary:'shopDetails',// 商品详情
     importExcel: 'importExcel', // 导入Excel

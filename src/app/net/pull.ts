@@ -1,5 +1,5 @@
 import { httpPort, sourceIp } from '../config';
-import { popNewMessage } from '../utils/logic';
+import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
 import { parseOrderShow } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
@@ -733,17 +733,55 @@ export const getAllProduct = (start_time:number,end_time:number) => {
             const num = data[0];
             console.log(data);
             const arr = [];
-            // debugger;
             data[1].forEach((element,index) => {
                 arr.push(element);
-                const itme = element[0];
+                const item = element[0];
                 arr[index].splice(0,1);
-                arr[index].push(...itme);
-                // debugger;
+                arr[index].unshift(...item);
+                arr[index][6] = `￥${priceFormat(arr[index][6])}`;
+                arr[index][8] = timestampFormat(arr[index][8]);
             });
-            
-            return data;
+
+            return [num,arr];
             
         });
+    });
+};
+// 搜索产品信息
+export const searchProduct = (key:any) => {
+    let item = 0;
+    if (isNaN(parseInt(key))) {
+        item = key;
+    } else {
+        item = parseInt(key);
+    }
+    const msg = {
+        type:'select_inventory',
+        param:{
+            key:item
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        const data = JSON.parse(r.value);
+        if (!data) {
+            return [0,[]];
+        }
+        debugger;
+        const num = data[0];
+        console.log(data);
+        const arr = [];
+        data[1].forEach((element,index) => {
+            arr.push(element);
+            const item = element[0];
+            arr[index].splice(0,1);
+            arr[index].unshift(...item);
+            arr[index][6] = `￥${priceFormat(arr[index][6])}`;
+            arr[index][8] = timestampFormat(arr[index][8]);
+        });
+
+        return [num,arr];
+    }).catch(e => {
+        console.log(e);
     });
 };

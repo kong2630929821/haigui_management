@@ -1,7 +1,8 @@
 // tslint:disable-next-line:missing-jsdoc
 import { Widget } from '../../../pi/widget/widget';
-import { getAllProduct } from '../../net/pull';
+import { getAllProduct, searchProduct } from '../../net/pull';
 import { timeConvert, transitTimeStamp } from '../../utils/logic';
+import { exportExcel } from '../../utils/tools';
 
 interface Props {
     timeType:any;// 状态筛选
@@ -13,8 +14,12 @@ interface Props {
     showTitleList:any;// 标题
     showDataList:any;// 数据
     showDateBox:boolean;// 时间选择
-    startTime:string;
-    endTime:string;
+    startTime:string;// 开始时间
+    endTime:string;// 结束时间
+    dataList:any;// 原始数据
+    btn1:string;// 按钮1
+    btn2:string;// 按钮2
+    inputValue:string;// 搜索框
 }
 // 状态筛选
 export enum StatuType {
@@ -29,7 +34,7 @@ export enum ProductTypes {
     productTypese_3= 2// 海外直购
 }
 // 每页多少数据
-const perPage = [5,10,15];
+const perPage = [20,50,100];
 // tslint:disable-next-line:completed-docs
 export class CommodityLibrary extends Widget {
     public props:Props = {
@@ -39,12 +44,16 @@ export class CommodityLibrary extends Widget {
         shopNum:123,
         currentIndex:0,
         perPage:perPage[0],
-        showTitleList:['产品ID','产品名称','SKU','成本','库存','供应商（ID）','品牌','产品类型','税费','原产地'],
+        showTitleList:['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间'],
         // ['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']
         showDataList:[],
         showDateBox:false,
         startTime:'',  // 查询开始时间
-        endTime:'' // 查询结束时间
+        endTime:'', // 查询结束时间
+        dataList:[],
+        btn1:'编辑',
+        btn2:'详情',
+        inputValue:''
     };
 
     public create() {
@@ -74,6 +83,10 @@ export class CommodityLibrary extends Widget {
         const end_time = transitTimeStamp(this.props.endTime);
         getAllProduct(start_time,end_time).then(r => {
             console.log('getAllProduct',r);
+            this.props.shopNum = r[0];
+            this.props.dataList = r[1];
+            this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
+            this.paint();
         });
     }
     // 根据时间筛选
@@ -83,23 +96,67 @@ export class CommodityLibrary extends Widget {
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = perPage[e.value];
-        this.paint();
+        this.init();
     }
     // 重置页面的展开状态
     public close() {
         this.props.expandIndex++;
+        // 判断时间选择框是否展开过
+        if (this.props.showDateBox) {
+            console.log('时间筛选',this.props.startTime,this.props.endTime);
+            this.init();
+        }
         this.props.showDateBox = false;
         this.paint();
+    }
+    // 输入框改变
+    public inputChange(e:any) {
+        this.props.inputValue = e.value;
     }
          // 日期选择框显示
     public changeDateBox(e:any) {
         this.props.showDateBox = e.value;
         this.paint();
     }
-    
         // 改变时间
     public  changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
+    }
+    // 分页变化
+    public pageChange(e:any) {
+        console.log(e.value);
+        this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+        console.log('当前页数据：',this.props.showDataList);
+        this.paint();
+    }
+    // 导出全部数据
+    public exportShop() {
+        const start_time = transitTimeStamp(this.props.startTime);
+        const end_time = transitTimeStamp(this.props.endTime);
+        getAllProduct(start_time,end_time).then(r => {
+            console.log('getAllProduct',r);
+            const jsonHead = this.props.showTitleList;
+            const aoa = [jsonHead];
+            const jsonData = r[1];
+            for (const v of jsonData) {
+                v[0] = v[0].toString();
+                aoa.push(v);
+            }
+            console.log(aoa);
+            exportExcel(aoa,`产品信息表.xlsx`);
+        
+            console.log('contentList ===',jsonData);
+        });
+    }
+    // 搜索
+    public search() {
+        console.log(this.props.inputValue);
+        searchProduct(this.props.inputValue).then(r => {
+            this.props.shopNum = r[0];
+            this.props.dataList = r[1];
+            this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
+            this.paint();
+        });
     }
 }

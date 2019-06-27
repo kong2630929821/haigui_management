@@ -1,6 +1,6 @@
 import { popNew } from '../../pi/ui/root';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { priceFormat, popNewMessage } from './logic';
+import { popNewMessage, priceFormat } from './logic';
 
 /**
  * 常用工具
@@ -153,8 +153,10 @@ export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
  */
 const parseOrderStatus = (orderTime:number,payTime:number,shipTime:number,receiptTime:number,finishTime:number,shipId:string):OrderStatus => {
     let status:OrderStatus;
-    if (orderTime === 0) {
-        status = OrderStatus.FAILED;            // 失败
+    if (orderTime < 0) {
+        status = OrderStatus.CANCEL;            // 已取消
+    } else if (orderTime === 0) {
+        status = OrderStatus.FAILED; // 失败
     } else if (payTime === 0) {
         status = OrderStatus.PENDINGPAYMENT;     // 待付款
     } else if (shipTime === 0 || !shipId) {

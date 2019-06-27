@@ -11,7 +11,8 @@ export enum OrderStatusShow {
     PENDINGRECEIPT  = '待收货',   // 待收货
     PENDINGFINISH = '待完成',     // 待完成     确认收货后7天算已完成   这个时间段内的订单可以申请退货
     FINISHED = '已完成',    // 已完成  已过7天 
-    ALL = '全部'               // 全部
+    ALL = '全部',               // 全部
+    CANCEL= '已取消'
 }
 
 interface Props {
@@ -52,7 +53,7 @@ export class OrderTable extends Widget {
         totalPage:0,
         PENDINGPAYMENT:OrderStatusShow.PENDINGPAYMENT,
         PENDINGDELIVERED:OrderStatusShow.PENDINGDELIVERED,
-        FAILED:OrderStatusShow.FAILED
+        FAILED:OrderStatusShow.CANCEL
     };
 
     public setProps(props:any) {

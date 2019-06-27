@@ -15,12 +15,11 @@
                 </div>
             </div>
             <div w-class="filterTitle">
-                <span>上架时间</span>
-                
+                <span>上架时间</span>      
             </div>
             <div style="margin: 28px 0 28px 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
-                    <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
-                </div>
+                <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
+            </div>
             <div w-class="btnBox">
                 <div w-class="input" ev-input-change="inputChange">
                     <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
