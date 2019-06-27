@@ -152,7 +152,9 @@ export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
  */
 const parseOrderStatus = (orderTime:number,payTime:number,shipTime:number,receiptTime:number,finishTime:number,shipId:string):OrderStatus => {
     let status:OrderStatus;
-    if (orderTime === 0) {
+    if (orderTime < 0) {
+        status = OrderStatus.CANCEL;            // 已取消
+    } else if (orderTime === 0) {
         status = OrderStatus.FAILED;            // 失败
     } else if (payTime === 0) {
         status = OrderStatus.PENDINGPAYMENT;     // 待付款
