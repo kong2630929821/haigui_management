@@ -7,7 +7,7 @@
             <div w-class="td">
                 <p>{{v.td}}</p>
                 {{if i==6}}
-                    <p w-class="changeMoney" on-tap="changeMoney">修改</p>
+                    {{%<!-- <p w-class="changeMoney" on-tap="changeMoney">修改</p> -->}}
                 {{end}}
             </div>
         </div>
