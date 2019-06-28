@@ -16,6 +16,7 @@ interface Props {
     showDateBox:boolean;// 时间选择
     startTime:string;
     endTime:string;
+    shopDetail:boolean;
 }
 // 状态筛选
 export enum StatuType {
@@ -52,7 +53,8 @@ export class CommodityLibrary extends Widget {
         ],
         showDateBox:false,
         startTime:'',  // 查询开始时间
-        endTime:'' // 查询结束时间
+        endTime:'', // 查询结束时间
+        shopDetail:false
     };
 
     public create() {
@@ -120,5 +122,15 @@ export class CommodityLibrary extends Widget {
     public  changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
+    }
+    // 展示商品详情
+    public showShopDetail() {
+        this.props.shopDetail = true;
+        this.paint();
+    }
+    // 展示商品
+    public showShop() {
+        this.props.shopDetail = false;
+        this.paint();
     }
 }

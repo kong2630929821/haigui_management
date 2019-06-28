@@ -1,4 +1,5 @@
 // tslint:disable-next-line:missing-jsdoc
+import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { timeConvert } from '../../utils/logic';
 interface Props {
@@ -20,20 +21,24 @@ export class ShopDetails extends Widget {
         this.props.endTime =  timeConvert(time);
         this.props.startTime = '2019-05-01 00:00:000';
     }
-        // 重置页面的展开状态
+    // 重置页面的展开状态
     public close() {
         this.props.showDateBox = false;
         this.paint();
     }
-             // 日期选择框显示
+    // 日期选择框显示
     public changeDateBox(e:any) {
         this.props.showDateBox = e.value;
         this.paint();
     }
         
-            // 改变时间
+    // 改变时间
     public  changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
+    }
+    // 去商品页面
+    public gotoShop(e:any) {
+        notify(e.node,'ev-change-showShop',null);
     }
 }

@@ -1,6 +1,5 @@
 .page{
     background: #F0F2F5;
-    padding: 20px 60px;
     color:#354052;
 }
 .searchBox{
@@ -75,7 +74,7 @@
     border: 1px solid;
 }
 .ctr{
-    height: 82px;
+    height: 170px;
     cursor: pointer;
     display: flex;
     justify-content: space-around;

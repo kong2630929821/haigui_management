@@ -1,0 +1,22 @@
+.page{
+    background: #F0F2F5;
+    padding: 20px 60px;
+    color:#354052;
+}
+.searchBox{
+    margin:20px 0;
+    background: #fff;
+    cursor: pointer;
+    opacity:1;
+}
+.narBar{
+    display: flex;
+    cursor: pointer;
+    font-size:24px;
+    font-family:PingFangSC-Regular;
+    line-height:32px;
+    color:rgba(0,0,0,1);
+}
+.onShelvesTitle{
+    
+}

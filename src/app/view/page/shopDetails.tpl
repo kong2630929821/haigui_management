@@ -1,6 +1,6 @@
 <div w-class="page" on-tap="close">
     <div w-class="narBar">
-        <div>商品库</div>
+        <div on-tap="gotoShop">商品库</div>
         <div>></div>
         <div>商品详情</div>
     </div>

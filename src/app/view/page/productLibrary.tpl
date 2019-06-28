@@ -1,4 +1,5 @@
 <div w-class="page" ev-detail-back="detailBack" on-tap="close">
+    {{if it.showAddProduct==0}}
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>
         <div w-class="filterBox">
@@ -29,9 +30,18 @@
     </div>
     <div w-class="ctroller">
         <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
-        <div w-class="onShelves">上架商品</div>
+        <div w-class="onShelves" on-tap="addProduct">添加产品</div>
         <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
             <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
         </div>
     </div>
+    {{elseif it.showAddProduct==1}}
+        <div ev-change-showProduct="showProduct">
+            <widget w-tag="app-view-page-addProduct"></widget>
+        </div>
+    {{else}}
+        <div ev-change-showProduct="showProduct">
+            <widget w-tag="app-view-page-addProduct">{data:{{it.currentData}},status:{{it.showAddProduct==3?1:2}} }</widget>
+        </div>
+    {{end}}
 </div>

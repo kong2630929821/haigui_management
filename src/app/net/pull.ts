@@ -740,6 +740,9 @@ export const getAllProduct = (start_time:number,end_time:number) => {
                 arr[index].unshift(...item);
                 arr[index][6] = `￥${priceFormat(arr[index][6])}`;
                 arr[index][8] = timestampFormat(arr[index][8]);
+                if (arr[index][7].length) {
+                    arr[index][7] = `${timestampFormat(arr[index][7][0])}~${timestampFormat(arr[index][7][1])}`;
+                }
             });
 
             return [num,arr];
@@ -748,12 +751,12 @@ export const getAllProduct = (start_time:number,end_time:number) => {
     });
 };
 // 搜索产品信息
-export const searchProduct = (key:any) => {
+export const searchProduct = (keyValue:any) => {
     let item = 0;
-    if (isNaN(parseInt(key))) {
-        item = key;
+    if (keyValue.indexOf('1011') === -1) {
+        item = keyValue;
     } else {
-        item = parseInt(key);
+        item = parseInt(keyValue);
     }
     const msg = {
         type:'select_inventory',
@@ -765,13 +768,11 @@ export const searchProduct = (key:any) => {
     return requestAsync(msg).then(r => {
         const data = JSON.parse(r.value);
         if (!data) {
-            return [0,[]];
+            return [];
         }
-        debugger;
-        const num = data[0];
         console.log(data);
         const arr = [];
-        data[1].forEach((element,index) => {
+        data.forEach((element,index) => {
             arr.push(element);
             const item = element[0];
             arr[index].splice(0,1);
@@ -780,8 +781,40 @@ export const searchProduct = (key:any) => {
             arr[index][8] = timestampFormat(arr[index][8]);
         });
 
-        return [num,arr];
+        return arr;
     }).catch(e => {
         console.log(e);
     });
+};
+// 新增产品信息
+export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any) => {
+    const msg = {
+        type:'new_inventory',
+        param:{
+            sku,
+            supplier,
+            sku_name,
+            inventory,
+            supplier_price,
+            shelf_life
+        }
+    };
+
+    return requestAsync(msg);
+};
+// 编辑产品信息
+export const editInventory = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any) => {
+    const msg = {
+        type:'edit_inventory',
+        param:{
+            sku,
+            supplier,
+            sku_name,
+            inventory,
+            supplier_price,
+            shelf_life
+        }
+    };
+
+    return requestAsync(msg);
 };

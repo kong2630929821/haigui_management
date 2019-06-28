@@ -20,6 +20,8 @@ interface Props {
     btn1:string;// 按钮1
     btn2:string;// 按钮2
     inputValue:string;// 搜索框
+    showAddProduct:number;
+    currentData:any;
 }
 // 状态筛选
 export enum StatuType {
@@ -53,7 +55,9 @@ export class CommodityLibrary extends Widget {
         dataList:[],
         btn1:'编辑',
         btn2:'详情',
-        inputValue:''
+        inputValue:'',
+        showAddProduct:0,
+        currentData:[]
     };
 
     public create() {
@@ -96,7 +100,12 @@ export class CommodityLibrary extends Widget {
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = perPage[e.value];
-        this.init();
+        if (this.props.inputValue) {
+            this.search();
+        } else {
+            this.init();
+        }
+        
     }
     // 重置页面的展开状态
     public close() {
@@ -153,10 +162,33 @@ export class CommodityLibrary extends Widget {
     public search() {
         console.log(this.props.inputValue);
         searchProduct(this.props.inputValue).then(r => {
-            this.props.shopNum = r[0];
-            this.props.dataList = r[1];
+            this.props.dataList = r;
+            this.props.shopNum = this.props.dataList.length;
             this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
             this.paint();
         });
+    }
+    // 添加产品
+    public addProduct() {
+        this.props.showAddProduct = 1;
+        this.paint();
+    }
+    // 显示产品库页面
+    public showProduct() {
+        this.props.showAddProduct = 0;
+        this.init();
+    }
+    // 表格点击按钮
+    public goDetail(e:any) {
+        console.log(e);
+        this.props.currentData = e.value;
+        if (e.fg === 1) {
+            // 编辑
+            this.props.showAddProduct = 2;
+        } else {
+            // 查看
+            this.props.showAddProduct = 3;
+        }
+        this.paint();
     }
 }
