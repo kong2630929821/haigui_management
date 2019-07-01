@@ -1,3 +1,4 @@
+import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { getReturnGoods, getReturnGoodsId, getReturnStatus } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp, unicode2Str } from '../../utils/logic';
@@ -195,13 +196,26 @@ export class GoodsInfo extends Widget {
         const id = e.value[0];
         if (this.props.returnStatus === 0) {
             // 退货申请
-            this.changeReturnGoods(uid,id,0,e.num);
+            popNew('app-components-modalBox',{ content:`确认处理“<span style="color:#1991EB">${id}</span>”的申请退货` }, () => {
+                this.changeReturnGoods(uid,id,0,e.num);
+            },() => {
+                popNewMessage('你已经取消操作！');
+            });
+            
         } else if (this.props.returnStatus === 1) {
             // 退货中
             if (e.fg === 1) {
-                this.changeReturnGoods(uid,id,-1,e.num);
+                popNew('app-components-modalBox',{ content:`确认处理“<span style="color:#1991EB">${id}</span>”申请退货失败` }, () => {
+                    this.changeReturnGoods(uid,id,-1,e.num);
+                },() => {
+                    popNewMessage('你已经取消操作！');
+                });
             } else {
-                this.changeReturnGoods(uid,id,1,e.num);
+                popNew('app-components-modalBox',{ content:`确认处理“<span style="color:#1991EB">${id}</span>”申请退货成功` }, () => {
+                    this.changeReturnGoods(uid,id,1,e.num);
+                },() => {
+                    popNewMessage('你已经取消操作！');
+                }); 
             }
         }
     }

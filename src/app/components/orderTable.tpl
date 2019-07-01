@@ -12,7 +12,7 @@
                     {{end}}
 
                     {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
-                    <th w-class="th th1">操作</th>
+                    <th w-class="th">操作</th>
                     {{end}}
                 </tr>
             </thead>
@@ -46,15 +46,11 @@
                             <input type="file" on-change="importExcel(e,{{i}})"/>
                         </div>
                         {{end}}
-
-                        {{if !(it.showdatas[i][12] > 0)}}
-                        <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;">已取消</div>
-                        {{else}}
-                            {{if !it.showdatas[i][14]}}
-                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;" on-tap="showOpreation({{i}})">取消订单</div>
-                            {{end}}
+                        {{if v[12] === it.PENDINGPAYMENT ||  v[12] === it.PENDINGDELIVERED}}
+                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;" on-tap="quitOrder(e,{{i}})">取消订单</div>
+                        {{elseif v[12] === it.FAILED}}
+                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;">手动取消</div>
                         {{end}}
-
                         {{if it.inlineBtn2}}
                         <div w-class="btn" style="margin-left:0;" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
                         {{end}}
@@ -79,6 +75,7 @@
         <div w-class="searchleft" on-tap="exportOrder">导出订单</div>
 
         <div ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入运单"}</app-components-inputFileBtn></div>
+        <div w-class="searchleft" style="width:120px" on-tap="exportAllOrder">导出全部订单</div>
     </div>
 </div>
     

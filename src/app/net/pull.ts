@@ -1,5 +1,5 @@
 import { httpPort, sourceIp } from '../config';
-import { popNewMessage } from '../utils/logic';
+import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
 import { parseOrderShow } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
@@ -50,8 +50,6 @@ export const importGoodsCate = (data) => {
         return false;
     });
 };
-
-const maxNum = 30;   // 每次导入最大条数
 
  // 解析并导入商品信息
 export const importGoods = (str) => {
@@ -158,11 +156,12 @@ export const importInventory = (str) => {
  // 解析并导入运单信息
 export const importTransport = (res) => {
     const maps = new Map();
-    for (let i = 0;i < res.length;i++) {
-        const supplierId = Number(res[i].供货商ID);
-        const uid = Number(res[i].用户ID);
-        const oid = Number(res[i].订单编号);
-        const sid = res[i].物流单号;
+    for (let i = 0;i < res[1].length;i++) {
+        const ret = res[1][i];
+        const supplierId = Number(ret.供货商ID);
+        const uid = Number(ret.用户ID);
+        const oid = Number(ret.订单编号);
+        const sid = ret.物流单号;
         const item = maps.get(oid);
         if (!item) {
             maps.set(oid,[supplierId,uid,oid,sid]);
@@ -297,7 +296,6 @@ export const getOrderKey = (count,time_type,start,tail,sid,orderType,state) => {
         return [ordersShow,infos[1]];
     });
 };
-
 // 获取所有订单
 export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) => {
     let startTimestamp = 0; 
@@ -308,36 +306,61 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
     if (tail) {
         endTimestamp = new Date(tail).getTime();
     }
-    const msg = { 
-        type: 'select_all_orders',
-        param: { 
-            id:id,       // 订单id,等于0表示从最大开始获取，大于0表示从指定订单id开始获取
-            count:count,   // 需要获取的订单信息数量，即一页需要显示的数量
-            time_type:time_type,    // 时间类型，1下单，2支付，3发货， 4收货，5完成
-            start:startTimestamp ,               // 启始时间，单位毫秒
-            tail:endTimestamp,                // 结束时间，单位毫秒
-            sid:sid,                    // 供应商id，等于0表示所有供应商，大于0表示指定供应商
-            type:orderType,                // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
-            state:state                // 订单状态，0未导出，1已导出
-        } 
-    };
 
-    return requestAsync(msg).then(r => {
-        console.log('r=',r);
-        const infos = <Order[]>JSON.parse(r.value);
-        if (!infos) {
-            return [[],[]];
-        }
-        const ordersShow = parseOrderShow(infos,orderType);
-        console.log('ordersShow =====',ordersShow);
-        console.log('orders =====',infos);
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_orders?id=${id}&count=${count}&time_type=${time_type}&start=${startTimestamp}&tail=${endTimestamp}&sid=${sid}&type=${orderType}&state=${state}`).then(res => {
+        return res.json().then(r => {
+            console.log(r);
+            if (!r.value) {
+                return [[],[]];
+            }
+            const infos = <Order[]>JSON.parse(r.value);
+            if (!infos) {
+                return [[],[]];
+            }
+            const ordersShow = parseOrderShow(infos,orderType);
+            console.log('ordersShow =====',ordersShow);
+            console.log('orders =====',infos);
 
-        return [infos,ordersShow];
-    }).catch((e) => {
-        console.log(e);
-
-        return [[],[]];
+            return [infos,ordersShow];
+        }).catch(e => {
+            return  [[],[]];
+        });
+      
     });
+    // const msg = { 
+    //     type: 'select_all_orders',
+    //     param: { 
+    //         id:id,       // 订单id,等于0表示从最大开始获取，大于0表示从指定订单id开始获取
+    //         count:count,   // 需要获取的订单信息数量，即一页需要显示的数量
+    //         time_type:time_type,    // 时间类型，1下单，2支付，3发货， 4收货，5完成
+    //         start:startTimestamp ,               // 启始时间，单位毫秒
+    //         tail:endTimestamp,                // 结束时间，单位毫秒
+    //         sid:sid,                    // 供应商id，等于0表示所有供应商，大于0表示指定供应商
+    //         type:orderType,                // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
+    //         state:state                // 订单状态，0未导出，1已导出
+    //     } 
+    // };
+
+    // return requestAsync(msg).then(r => {
+    //     console.log('r=',r);
+    //     if (!r.value) {
+    //         return [[],[]];
+    //     }
+    //     const infos = <Order[]>JSON.parse(r.value);
+    //     if (!infos) {
+    //         return [[],[]];
+    //     }
+    //     const ordersShow = parseOrderShow(infos,orderType);
+    //     console.log('ordersShow =====',ordersShow);
+    //     console.log('orders =====',infos);
+
+    //     return [infos,ordersShow];
+    // }).catch((e) => {
+    //     console.log(e);
+
+    //     return  [[],[]];
+    // });
+
 };
 // 获取指定供应商指定类型的订单
 export const getOrder  = (supplier,Ordertype,oids) => {
@@ -475,11 +498,16 @@ export const changeWithdrawState = (id:number,uid:number,state:number) => {
         }
     };
 
-    return requestAsync(msg);
+    return requestAsync(msg).then(r => {
+        return r;
+    }).catch(e => {
+
+        return e;
+    });
 };
 
 /**
- * 获取会员列表
+ * 获取会员列表    
  */
 export const getVipMember = () => {
     // const msg = {
@@ -554,20 +582,22 @@ export const getGoodsKey = (count:number) => {
 };
 // 获取所有的商品信息，支付分页
 export const getAllGoods = (star:number,num:number) => {
-    const msg = { 
-        type: 'select_all_goods',
-        param: { 
-            id:star,
-            count:num
-        } 
-    };
-    
-    return requestAsync(msg).then(r => {
-        // console.log('r=',r);
 
-        return r;
-    }).catch((e) => {
-        console.log(e);
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}`).then(res => {
+        return res.json();
+        // return res.json().then(r => {
+        //     const data = JSON.parse(r.value);
+        //     const arr = [];
+        //     data.forEach((index,item) => {
+        //         const typeList = [];
+        //         item.forEach((i,v) => {
+        //             typeList.push()
+        //         });
+        //         arr.push({ id:item[0][0],name:item[0][1],typeName_1:item[0][16][0][1],typeName_2:item[0][16][1][1],img:'' });
+        //     });
+
+        //     return r;
+        // });
     });
 };
 // 获取当前商品的信息
@@ -670,7 +700,7 @@ export const getExportTime = () => {
 };
 
 // 取消订单
-export const quitOrder = (orderId) => {
+export const quitOrder = (orderId:number) => {
     const msg = {
         type:'console_cancel_order',
         param:{
@@ -683,6 +713,194 @@ export const quitOrder = (orderId) => {
 
         return r;
     }).catch((e) => {
+        console.log(e);
+    });
+
+};
+
+// 修改资产
+// tslint:disable-next-line:no-reserved-keywords
+export const changeMoney = (type:number,uid:number,money:number) => {
+    const msg = {
+        type:'console_alter_balance',
+        param:{
+            type,
+            uid,
+            money,
+            note:''
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        console.log(r);
+        
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
+// 获取所有产品信息
+export const getAllProduct = (start_time:number,end_time:number) => {
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_inventory?start_time=${start_time}&end_time=${end_time}`).then(res => {
+        return res.json().then(r => {
+            
+            const data = JSON.parse(r.value);
+            const num = data[0];
+            console.log(data);
+            const arr = [];
+            data[1].forEach((element,index) => {
+                arr.push(element);
+                const item = element[0];
+                arr[index].splice(0,1);
+                arr[index].unshift(...item);
+                arr[index][6] = `￥${priceFormat(arr[index][6])}`;
+                arr[index][8] = timestampFormat(arr[index][8]);
+                if (arr[index][7].length) {
+                    arr[index][7] = `${timestampFormat(arr[index][7][0])}~${timestampFormat(arr[index][7][1])}`;
+                }
+            });
+
+            return [num,arr];
+            
+        });
+    });
+};
+// 搜索产品信息
+export const searchProduct = (keyValue:any) => {
+    let item = 0;
+    if (keyValue.indexOf('1011') === -1) {
+        item = keyValue;
+    } else {
+        item = parseInt(keyValue);
+    }
+    const msg = {
+        type:'select_inventory',
+        param:{
+            key:item
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        const data = JSON.parse(r.value);
+        if (!data) {
+            return [];
+        }
+        console.log(data);
+        const arr = [];
+        data.forEach((element,index) => {
+            arr.push(element);
+            const item = element[0];
+            arr[index].splice(0,1);
+            arr[index].unshift(...item);
+            arr[index][6] = `￥${priceFormat(arr[index][6])}`;
+            arr[index][8] = timestampFormat(arr[index][8]);
+        });
+
+        return arr;
+    }).catch(e => {
+        console.log(e);
+    });
+};
+// 新增产品信息
+export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any) => {
+    const msg = {
+        type:'new_inventory',
+        param:{
+            sku,
+            supplier,
+            sku_name,
+            inventory,
+            supplier_price,
+            shelf_life
+        }
+    };
+
+    return requestAsync(msg);
+};
+// 编辑产品信息
+export const editInventory = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any) => {
+    const msg = {
+        type:'edit_inventory',
+        param:{
+            sku,
+            supplier,
+            sku_name,
+            inventory,
+            supplier_price,
+            shelf_life
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 上架商品获取产品信息
+export const getSearchProduct = (keyValue:any) => {
+    let item = 0;
+    if (keyValue.indexOf('1011') === -1) {
+        item = keyValue;
+    } else {
+        item = parseInt(keyValue);
+    }
+    const msg = {
+        type:'select_inventory',
+        param:{
+            key:item
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        const data = JSON.parse(r.value);
+        if (!data) {
+            return [];
+        }
+        console.log(data);
+        const arr = [];
+        const dataShow = [];
+        data.forEach((element,index) => {
+            arr.push(element);
+            const item = element[0];
+            arr[index].splice(0,1);
+            arr[index].unshift(...item);
+            arr[index][6] = `￥${priceFormat(arr[index][6])}`;
+            arr[index][8] = timestampFormat(arr[index][8]);
+            dataShow.push({ title:[element[2],item[0]],info:arr[0] });
+        });
+
+        return dataShow;
+    }).catch(e => {
+        console.log(e);
+    });
+};
+// 获取所有供应商
+export const getAllSuppliers = () => {
+    const msg = { 
+        type: 'console_get_supplier',
+        param: { 
+        } 
+    };
+    
+    return requestAsync(msg).then(r => {
+        console.log('所有的供应商:',r.value);
+
+        return r.value;
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+// 获取分组信息
+export const getGroup = (typeStatus:number) => {
+    const msg = {
+        type:'console_get_group',
+        param:{
+            type:typeStatus
+        }
+    };
+   
+    return requestAsync(msg).then(r => {
+        
+        return r;
+    }).catch(e => {
         console.log(e);
     });
 };

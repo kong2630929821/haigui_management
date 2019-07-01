@@ -10,23 +10,46 @@ interface Props {
     currentIndex:number; // 初始页
     pagesList:number[]; // 默认页数
     pages:number; // 总共页数
+    numberCheck:any;// 每页展示多少条数据
+    numberCheckActiveIndex:number;// 状态筛选当前下标
+    expandIndex:number; 
 }
+
 // tslint:disable-next-line:completed-docs
 export class Pagination extends Widget {
     public props:Props = {
         currentIndex:0,
         pagesList:[0,1,2,3,4],
-        pages:-1
+        pages:-1,
+        numberCheck:[],
+        numberCheckActiveIndex:0,
+        expandIndex:-1
     };
-
     // 创建判断显示的页数
     public setProps(props:any) {
-        super.setProps(props);
+        this.props = {
+            ...this.props,
+            ...props
+        };
+        super.setProps(this.props);
         this.props.pagesList = [0,1,2,3,4];
         this.props.currentIndex = 0;
         if (this.props.pages < this.props.pagesList.length) {
             this.props.pagesList.splice(this.props.pages);
         } 
+        const timeType = [
+            {
+                status:0,
+                text:'20'
+            },{
+                status:1,
+                text:'50'
+            },{
+                status:2,
+                text:'100'
+            }
+        ];
+        this.props.numberCheck = timeType;
         console.log('=============总页数',this.props);
     }
     // 上一页
@@ -66,5 +89,9 @@ export class Pagination extends Widget {
         this.props.currentIndex = index;
         notify(event.node,'ev-changeCurrent',{ value:this.props.currentIndex });
         this.paint();
+    }
+
+    public filterTimeType(e:any) {
+        notify(e.node,'ev-perPage',{ value:e.activeIndex });
     }
 }

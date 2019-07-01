@@ -1,5 +1,7 @@
+import { popNew } from '../../pi/ui/root';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { popNewMessage } from './logic';
+import { popNewMessage, priceFormat } from './logic';
+
 /**
  * 常用工具
  */
@@ -132,7 +134,7 @@ export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
             } else {
                 goodsType = '普通商品';
             }
-            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],goodsType,info[0],timestampFormat(timestamp),info[2],info[8],info[9],addressFormat(info[11]),OrderStatusShow[localStatus]];
+            const orderShow:OrderShow = [info[1],v[0],v[1],v[3],v[4],v[5],info[0],timestampFormat(timestamp),info[2],info[8],info[9],addressFormat(info[11]),OrderStatusShow[localStatus],priceFormat(info[18]),info[19],info[20],info[21],priceFormat(v[2] * v[3]),goodsType];
             ordersShow.push(orderShow);
         }
     }
@@ -151,8 +153,10 @@ export const parseOrderShow = (infos:Order[],status:OrderStatus) => {
  */
 const parseOrderStatus = (orderTime:number,payTime:number,shipTime:number,receiptTime:number,finishTime:number,shipId:string):OrderStatus => {
     let status:OrderStatus;
-    if (orderTime === 0) {
-        status = OrderStatus.FAILED;            // 失败
+    if (orderTime < 0) {
+        status = OrderStatus.CANCEL;            // 已取消
+    } else if (orderTime === 0) {
+        status = OrderStatus.FAILED; // 失败
     } else if (payTime === 0) {
         status = OrderStatus.PENDINGPAYMENT;     // 待付款
     } else if (shipTime === 0 || !shipId) {
@@ -185,10 +189,18 @@ export const timestampFormat = (timestamp: number) => {
  * 地址格式化
  */
 export const addressFormat = (addrStr:string) => {
-    const address = JSON.parse(addrStr);
+    try {
+        const address = JSON.parse(addrStr);
 
-    return `${address[0].join('')}${address[1]}`;
+        return `${address[0].join('')}${address[1]}`;
+
+    } catch (err) {
+        return addrStr;
+        
+    }
+    
 };
+
 /**
  * 解析运费信息
  */

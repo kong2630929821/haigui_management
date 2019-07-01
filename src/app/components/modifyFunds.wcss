@@ -1,0 +1,71 @@
+.modify{
+    width:450px;
+    height:400px;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 10px 0px rgba(0,0,0,0.2);
+    border-radius:4px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -225px;
+    margin-top: -200px;
+    display: flex;
+    flex-direction: column;
+}
+.btnGroup{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+.btn1{
+    width:86px;
+    height:36px;
+    border:1px solid rgba(0,0,0,0.1);
+    text-align: center;
+    line-height: 36px;
+    font-size:14px;
+    font-family:SourceSansPro-Regular;
+    font-weight:400;
+    color:rgba(53,64,82,1);
+    cursor: pointer;
+}
+.btn2{
+    width:86px;
+    height:36px;
+    border:1px solid rgba(0,0,0,0.1);
+    background:rgba(25,145,235,1);
+    text-align: center;
+    line-height: 36px;
+    font-size:14px;
+    font-family:SourceSansPro-Semibold;
+    font-weight:600;
+    color:rgba(255,255,255,1);
+    cursor: pointer;
+    position: absolute;
+    top:6px;
+    right: 6px;
+}
+.money{
+    margin-top: 15px;
+}
+.input{
+    width:350px;
+    height:48px;
+    margin-left: 66px;
+    border:1px solid rgba(213,220,230,1);
+    position: relative;
+}
+.title{
+    margin-left: 20px;
+}
+.box{
+    height: 30px;
+    margin-top: 10px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(136,136,136,1);
+    line-height:30px;
+    text-align: right;
+    padding-right: 30px;
+}

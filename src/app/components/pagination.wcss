@@ -1,5 +1,6 @@
 .pagination{
     cursor: pointer;
+    display: flex;
 }
 .ul{
     height: 36px;
@@ -59,4 +60,10 @@
     font-family:PingFangSC-Medium;
     font-weight:600;
     color:rgba(67,77,94,1);
+}
+.filterBox{
+    display: flex;
+    height: 36px;
+    line-height: 36px;
+    margin-top: 14px;
 }

@@ -36,7 +36,6 @@ export const requestAsync = (msg: any):Promise<any> => {
         });
     });
 };
-
  // 设置重登录回调
 setReloginCallback((res) => {
     const rtype = res.type;
@@ -85,7 +84,7 @@ const conReOpen = () => {
 };
 
 /**
- * 用户登录
+ * 用户登录  
  */
 const userLogin = () => {
     const userStr = JSON.stringify(getWxUserInfo().uinfo);
@@ -100,5 +99,5 @@ const userLogin = () => {
     console.log('userLogin = ',msg);
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
-    });
-};
+    });    
+};  
