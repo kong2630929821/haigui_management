@@ -15,7 +15,7 @@ interface Props {
     inventory:number;// 库存   
     supplier_price:number;// 供货价  
     shelf_life:any;// 保质期
-    data:any;
+    data:any;// [供应商ID,SKU,产品名,已下单未支付数量,总销量,库存,供货价,保质期,修改时间]
     status:number; // 1查看 2修改
 }
 // tslint:disable-next-line:completed-docs
