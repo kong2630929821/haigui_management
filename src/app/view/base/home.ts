@@ -17,14 +17,16 @@ interface Props {
 const PAGE = {
     goodsInfo: 'goodsInfo', // 商品信息
     goodsManage:'commodityLibrary',// 商品管理
-    commodityLibrary:'onShelves',// 商品库commodityLibrary
+    commodityLibrary:'commodityLibrary',// 商品库onShelves
     productLibrary:'productLibrary',// 商品详情
     importExcel: 'importExcel', // 导入Excel
     totalOrders: 'totalOrders', // 所有订单
     returnGoods:'returnGoods', // 退货
     withdraw: 'withdraw',  // 提现
     openHWang: 'openHWang', // 开通海王
-    vipManage: 'vipManage' // 会员
+    vipManage: 'vipManage', // 会员
+    platformSettings:'platformSettings',// 平台设置
+    classSetting:'classSetting'// 分类设置
 };
 
 // tslint:disable-next-line:completed-docs
@@ -35,7 +37,11 @@ export class Home extends Widget {
         super();
         this.props = {
             pageList: [
-                
+                { name: '平台设置', page: PAGE.platformSettings, img:'chart.png',children:[
+                    { name:'供应商设置',page:PAGE.platformSettings },
+                    { name:'分类设置',page:PAGE.classSetting }],
+                    show:false 
+                },
                 { name: '商品管理', page: PAGE.commodityLibrary, img:'chart.png',children:[
                     { name:'商品库',page:PAGE.commodityLibrary },
                     { name:'产品库',page:PAGE.productLibrary }],

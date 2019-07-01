@@ -583,7 +583,22 @@ export const getGoodsKey = (count:number) => {
 // 获取所有的商品信息，支付分页
 export const getAllGoods = (star:number,num:number) => {
 
-    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}`).then(r => r.json());
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}`).then(res => {
+        return res.json();
+        // return res.json().then(r => {
+        //     const data = JSON.parse(r.value);
+        //     const arr = [];
+        //     data.forEach((index,item) => {
+        //         const typeList = [];
+        //         item.forEach((i,v) => {
+        //             typeList.push()
+        //         });
+        //         arr.push({ id:item[0][0],name:item[0][1],typeName_1:item[0][16][0][1],typeName_2:item[0][16][1][1],img:'' });
+        //     });
+
+        //     return r;
+        // });
+    });
 };
 // 获取当前商品的信息
 export const getCurrentGood = (shopValue:string) => {
@@ -817,4 +832,75 @@ export const editInventory = (sku:string,supplier:number,sku_name:string,invento
     };
 
     return requestAsync(msg);
+};
+
+// 上架商品获取产品信息
+export const getSearchProduct = (keyValue:any) => {
+    let item = 0;
+    if (keyValue.indexOf('1011') === -1) {
+        item = keyValue;
+    } else {
+        item = parseInt(keyValue);
+    }
+    const msg = {
+        type:'select_inventory',
+        param:{
+            key:item
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        const data = JSON.parse(r.value);
+        if (!data) {
+            return [];
+        }
+        console.log(data);
+        const arr = [];
+        const dataShow = [];
+        data.forEach((element,index) => {
+            arr.push(element);
+            const item = element[0];
+            arr[index].splice(0,1);
+            arr[index].unshift(...item);
+            arr[index][6] = `￥${priceFormat(arr[index][6])}`;
+            arr[index][8] = timestampFormat(arr[index][8]);
+            dataShow.push({ title:[element[2],item[0]],info:arr[0] });
+        });
+
+        return dataShow;
+    }).catch(e => {
+        console.log(e);
+    });
+};
+// 获取所有供应商
+export const getAllSuppliers = () => {
+    const msg = { 
+        type: 'console_get_supplier',
+        param: { 
+        } 
+    };
+    
+    return requestAsync(msg).then(r => {
+        console.log('所有的供应商:',r.value);
+
+        return r.value;
+    }).catch((e) => {
+        console.log(e);
+    });
+};
+// 获取分组信息
+export const getGroup = (typeStatus:number) => {
+    const msg = {
+        type:'console_get_group',
+        param:{
+            type:typeStatus
+        }
+    };
+   
+    return requestAsync(msg).then(r => {
+        
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
 };

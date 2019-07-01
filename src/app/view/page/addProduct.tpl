@@ -41,18 +41,6 @@
                     </div>
                 </div>
             </div>
-            <div w-class="productName">
-                <div w-class="title">保质期</div>
-                <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="filterTimeType">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
-                </div>
-                {{if !it.timeTypeActiveIndex}}
-                    <div w-class="title">保质期时间</div>
-                    <div style="margin-left: 20px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
-                        <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
-                    </div>
-                {{end}}
-            </div>
         </div>
     </div>
     <div w-class="ctr">

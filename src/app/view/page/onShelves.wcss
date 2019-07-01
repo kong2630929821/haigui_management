@@ -1,6 +1,8 @@
 .page{
     background: #F0F2F5;
     padding: 20px 60px;
+    height: 100%;
+    overflow: auto;
     color:#354052;
 }
 .searchBox{

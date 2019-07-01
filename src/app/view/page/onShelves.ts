@@ -1,34 +1,34 @@
 // tslint:disable-next-line:missing-jsdoc
 import { Widget } from '../../../pi/widget/widget';
+import { getSearchProduct } from '../../net/pull';
 interface Props {
-    timeType:any;// 状态筛选
-    timeTypeActiveIndex:number;// 状态筛选当前下标
-    expandIndex:number; 
-}
-// 状态筛选
-export enum StatuType {
-    statuType_1= 0,// 分类1
-    statuType_2= 1// 分类2
+    searchValue:string;
+    onShelvesType:number;
+    searchData:any;// 搜索到的产品
+    selectData:any;// 选中的产品
+    showDataTitle:any;
+
 }
 // tslint:disable-next-line:completed-docs
-export class OnShelves extends Widget{
+export class OnShelves extends Widget {
     public props:Props = {
-        timeType:[],
-        timeTypeActiveIndex:0,
-        expandIndex:-1
+        searchValue:'',
+        onShelvesType:0 ,
+        searchData:[],
+        selectData:[],
+        showDataTitle : ['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间']
     };
-    public create() {
-        super.create();
-        // 状态筛选
-        const timeType = [
-            {
-                status:StatuType.statuType_1,
-                text:'分类1'
-            },{
-                status:StatuType.statuType_2,
-                text:'分类2'
-            }
-        ];
-        this.props.timeType = timeType;
+    // 搜索框内容
+    public inputChange(e:any) {
+        this.props.searchValue = e.value;
+    }
+
+    // 搜索产品
+    public searchProduct() {
+        getSearchProduct(this.props.searchValue).then(r => {
+            console.log(r);
+            this.props.searchData = r;
+            this.paint();
+        });
     }
 }

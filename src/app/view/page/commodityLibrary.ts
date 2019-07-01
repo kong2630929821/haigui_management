@@ -1,10 +1,11 @@
 // tslint:disable-next-line:missing-jsdoc
 import { Widget } from '../../../pi/widget/widget';
+import { getAllGoods, getGoodsKey, getGroup } from '../../net/pull';
 import { timeConvert } from '../../utils/logic';
 
 interface Props {
-    timeType:any;// 状态筛选
-    timeTypeActiveIndex:number;// 状态筛选当前下标
+    statusType:any;// 状态筛选
+    statusTypeActiveIndex:number;// 状态筛选当前下标
     expandIndex:number; 
     productTypes:any;// 商品分类
     ProductTypesActiveIndex:number;// 商品分类下标
@@ -16,7 +17,7 @@ interface Props {
     showDateBox:boolean;// 时间选择
     startTime:string;
     endTime:string;
-    shopDetail:boolean;
+    shopDetail:number;  // 0 商品 1商品详情 2上架商品
 }
 // 状态筛选
 export enum StatuType {
@@ -35,9 +36,9 @@ const perPage = [5,10,15];
 // tslint:disable-next-line:completed-docs
 export class CommodityLibrary extends Widget {
     public props:Props = {
-        timeType:[],
+        statusType:[],
         productTypes:[],
-        timeTypeActiveIndex:0,
+        statusTypeActiveIndex:0,
         ProductTypesActiveIndex:0,
         expandIndex:-1,
         shopNum:123,
@@ -54,7 +55,7 @@ export class CommodityLibrary extends Widget {
         showDateBox:false,
         startTime:'',  // 查询开始时间
         endTime:'', // 查询结束时间
-        shopDetail:false
+        shopDetail:0
     };
 
     public create() {
@@ -62,42 +63,43 @@ export class CommodityLibrary extends Widget {
         // 状态筛选
         const timeType = [
             {
-                status:StatuType.statuType_1,
+                status:0,
                 text:'已上架'
             },{
-                status:StatuType.statuType_2,
+                status:1,
                 text:'已下架'
             },{
-                status:StatuType.statuType_3,
+                status:2,
                 text:'隐藏'
             }
         ];
         // 商品分类
         const productTypes = [
             {
-                status:ProductTypes.productTypese_1,
+                status:0,
                 text:'保税商品'
             },{
-                status:ProductTypes.productTypese_2,
+                status:1,
                 text:'一般贸易'
             },{
-                status:ProductTypes.productTypese_3,
+                status:2,
                 text:'海外直购'
             }
         ];
-        this.props.timeType = timeType;
+        this.props.statusType = timeType;
         this.props.productTypes = productTypes;
         const oData = new Date();
         const time = oData.setHours(23, 59, 59, 999);
         this.props.endTime =  timeConvert(time);
         this.props.startTime = '2019-05-01 00:00:000';
+        this.init(1);
     }
 
-    // 根据时间筛选
+    // 商品上架下架筛选
     public filterTimeType(e:any) {
-        this.props.timeTypeActiveIndex = e.activeIndex;
+        this.props.statusTypeActiveIndex = e.activeIndex;
     }
-    // 根据时间筛选
+    // 商品分类筛选
     public filterProductTypes(e:any) {
         this.props.ProductTypesActiveIndex = e.activeIndex;
     }
@@ -125,12 +127,29 @@ export class CommodityLibrary extends Widget {
     }
     // 展示商品详情
     public showShopDetail() {
-        this.props.shopDetail = true;
+        this.props.shopDetail = 1;
+        this.paint();
+    }
+    // 上架商品
+    public onShelves() {
+        this.props.shopDetail = 2;
         this.paint();
     }
     // 展示商品
     public showShop() {
-        this.props.shopDetail = false;
+        this.props.shopDetail = 0;
         this.paint();
+    }
+    public init(index:number) {
+        getGoodsKey(index).then(r1 => {
+            console.log('111111111',r1);
+            const data = JSON.parse(r1.value);
+            this.props.shopNum = data[1];
+            getAllGoods(index === 1 ? 0 :data[0],12).then(r => {
+                const shop = JSON.parse(r.value);
+                this.props.showDataList = shop;
+                this.paint();
+            });
+        });
     }
 }

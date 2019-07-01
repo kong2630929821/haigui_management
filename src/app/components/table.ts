@@ -80,7 +80,7 @@ export class Table extends Widget {
         console.log('123123');
         notify(e.node,'ev-table-detail',{ value:num });
     }
-
+    // 表格操作按钮
     public reDetail(e:any,num:number,fg:number) {
         notify(e.node,'ev-table-redetail',{ value:this.props.datas[num], fg:fg,num:num }); 
     }    

@@ -4,7 +4,7 @@
             <div w-class="filterBox">
                 <span>每页</span>
                 <div style="display:inline-block;height: 30px;margin-left: 10px" ev-selected="filterTimeType">
-                    <widget w-tag="app-components-simpleFilter2">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expandIndex:{{it.expandIndex}}}</widget>
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.numberCheck}},activeIndex:{{it.numberCheckActiveIndex}},expandIndex:{{it.expandIndex}},style:true}</widget>
                 </div>
             </div>
         {{end}}

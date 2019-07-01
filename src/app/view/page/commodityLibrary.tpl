@@ -1,12 +1,12 @@
 <div w-class="page" ev-detail-back="detailBack" on-tap="close">
-    {{if !it.shopDetail}}
+    {{if it.shopDetail==0}}
     <div w-class="searchBox">
             <div w-class="tableTitle">筛选查询</div>
             <div w-class="filterBox">
                 <div w-class="filterTitle">
                     <span>状态</span>
                     <div style="display:inline-block;height: 50px;margin-left: 20px;margin-top: 26px" ev-selected="filterTimeType">
-                        <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
+                        <widget w-tag="app-components-simpleFilter1">{options:{{it.statusType}},activeIndex:{{it.statusTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
                     </div>
                 </div>
                 <div w-class="filterTitle">
@@ -74,15 +74,19 @@
             </div>
             <div w-class="ctroller">
                 <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
-                <div w-class="onShelves" on-tap="showShopDetail">上架商品</div>
+                <div w-class="onShelves" on-tap="onShelves">上架商品</div>
                 <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
                     <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ 12)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
                 </div>
             </div>
         </div>
-    {{else}}
+    {{elseif it.shopDetail==1}}
         <div ev-change-showShop="showShop">
             <widget w-tag="app-view-page-shopDetails"></widget>
+        </div>
+    {{else}}
+        <div ev-change-showShop="showShop">
+            <widget w-tag="app-view-page-onShelves"></widget>
         </div>
     {{end}}
 </div>

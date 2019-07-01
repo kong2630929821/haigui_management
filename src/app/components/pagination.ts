@@ -10,24 +10,19 @@ interface Props {
     currentIndex:number; // 初始页
     pagesList:number[]; // 默认页数
     pages:number; // 总共页数
-    timeType:any;// 状态筛选
-    timeTypeActiveIndex:number;// 状态筛选当前下标
+    numberCheck:any;// 每页展示多少条数据
+    numberCheckActiveIndex:number;// 状态筛选当前下标
     expandIndex:number; 
 }
-// 状态筛选
-export enum StatuType {
-    statuType_1= 0,// 全部
-    statuType_2= 1,
-    statuType_3= 2
-}
+
 // tslint:disable-next-line:completed-docs
 export class Pagination extends Widget {
     public props:Props = {
         currentIndex:0,
         pagesList:[0,1,2,3,4],
         pages:-1,
-        timeType:[],
-        timeTypeActiveIndex:0,
+        numberCheck:[],
+        numberCheckActiveIndex:0,
         expandIndex:-1
     };
     // 创建判断显示的页数
@@ -44,17 +39,17 @@ export class Pagination extends Widget {
         } 
         const timeType = [
             {
-                status:StatuType.statuType_1,
+                status:0,
                 text:'20'
             },{
-                status:StatuType.statuType_2,
+                status:1,
                 text:'50'
             },{
-                status:StatuType.statuType_3,
+                status:2,
                 text:'100'
             }
         ];
-        this.props.timeType = timeType;
+        this.props.numberCheck = timeType;
         console.log('=============总页数',this.props);
     }
     // 上一页
