@@ -44,7 +44,11 @@
                             <div w-class="bodyTitle">
                                 <div w-class="shopId">{{v.id}}</div>
                                 <div w-class="shopName">{{v.name}}</div>
-                                <div w-class="shopType">分类：{{v.typeName}}</div>
+                                <div w-class="shopName">商品类型：{{v.shopType}}</div>
+                                <div w-class="shopName">品牌：{{v.brand}}</div>
+                                <div w-class="shopName">分类：{{v.typeName}}</div>
+                                <div w-class="shopName">税费：{{v.taxes}}</div>
+                                <div w-class="shopType">是否有折扣：{{v.discount}}</div>
                             </div>
                             <div w-class="bodyContent">
                                 <div w-class="imgShow"></div>
@@ -58,9 +62,6 @@
                                     {{end}}
                                 </div>
                                 <div w-class="status">
-                                    <div w-class="discount">{{v.discount}}</div>
-                                    <div w-class="discount">{{v.time}}</div>
-                                    <div w-class="discount">{{v.status}}</div>
                                     <div w-class="ctrollerStatus">
                                         <div w-class="btn">下架</div>
                                         <div w-class="btn">详情</div>

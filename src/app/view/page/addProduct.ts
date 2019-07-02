@@ -86,6 +86,12 @@ export class AddProduct extends Widget {
     public supplier_priceChange(e:any) {
         this.props.data[6] = Number(e.value);
     }
+    public supplierSkuChange(e:any) {
+        this.props.data[9] = Number(e.value);
+    }
+    public supplierIdChange(e:any) {
+        this.props.data[10] = Number(e.value);
+    }
     // 保存添加的产品
     public saveProduct() {
         const sku = this.props.data[1];
@@ -93,10 +99,12 @@ export class AddProduct extends Widget {
         const sku_name =  this.props.data[2];
         const inventory = this.props.data[5];
         const supplier_price = this.props.data[6];
+        const supplier_sku = this.props.data[9];
+        const supplier_id = this.props.data[10];
         
         if (this.props.status === -1) {
             // -1添加
-            addProduct(sku,supplier,sku_name,inventory,supplier_price,'').then(r => {
+            addProduct(sku,supplier,sku_name,inventory,supplier_price,'',supplier_sku,supplier_id).then(r => {
                 console.log(r);
                 if (r.result === 1) {
                     popNewMessage('添加成功');
@@ -105,7 +113,7 @@ export class AddProduct extends Widget {
         } else if (this.props.status === 2) {
             // 修改
             popNew('app-components-modalBox',{ content:`确认修改一旦修改，将及时影响品牌信息，请慎重` }, () => {
-                editInventory(sku,supplier,sku_name,inventory,supplier_price,'').then(r => {
+                editInventory(sku,supplier,sku_name,inventory,supplier_price,'',supplier_sku,supplier_id).then(r => {
                     console.log(r);
                     if (r.result === 1) {
                         popNewMessage('修改成功');

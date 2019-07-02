@@ -46,7 +46,7 @@ export class CommodityLibrary extends Widget {
         shopNum:123,
         currentIndex:0,
         perPage:perPage[0],
-        showTitleList:['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间'],
+        showTitleList:['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID'],
         // ['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']
         showDataList:[],
         showDateBox:false,

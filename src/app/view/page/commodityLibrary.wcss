@@ -163,7 +163,7 @@
 }
 .typeShow{
     display: flex;
-    width: 900px;;
+    width: 1380px;;
     font-size:14px;
     font-family:Source Sans Pro;
     font-weight:600;

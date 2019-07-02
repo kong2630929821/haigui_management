@@ -26,7 +26,9 @@ const PAGE = {
     openHWang: 'openHWang', // 开通海王
     vipManage: 'vipManage', // 会员
     platformSettings:'platformSettings',// 平台设置
-    classSetting:'classSetting'// 分类设置
+    classSetting:'classSetting',// 分类设置
+    brandSetting:'brandSetting',// 品牌设置
+    mallSetting:'mallSetting' // 商城设置
 };
 
 // tslint:disable-next-line:completed-docs
@@ -39,7 +41,9 @@ export class Home extends Widget {
             pageList: [
                 { name: '平台设置', page: PAGE.platformSettings, img:'chart.png',children:[
                     { name:'供应商设置',page:PAGE.platformSettings },
-                    { name:'分类设置',page:PAGE.classSetting }],
+                    { name:'分类设置',page:PAGE.classSetting },
+                    { name:'品牌设置',page:PAGE.brandSetting },
+                    { name:'商场设置',page:PAGE.mallSetting }],
                     show:false 
                 },
                 { name: '商品管理', page: PAGE.commodityLibrary, img:'chart.png',children:[

@@ -584,20 +584,30 @@ export const getGoodsKey = (count:number) => {
 export const getAllGoods = (star:number,num:number) => {
 
     return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}`).then(res => {
-        return res.json();
-        // return res.json().then(r => {
-        //     const data = JSON.parse(r.value);
-        //     const arr = [];
-        //     data.forEach((index,item) => {
-        //         const typeList = [];
-        //         item.forEach((i,v) => {
-        //             typeList.push()
-        //         });
-        //         arr.push({ id:item[0][0],name:item[0][1],typeName_1:item[0][16][0][1],typeName_2:item[0][16][1][1],img:'' });
-        //     });
+        // return res.json();
+        return res.json().then(r => {
+            const data = JSON.parse(r.value);
+            const arr = [];
+            data.forEach(item => {
+                const typeList = [];
+                item.forEach(v => {
+                    let time = '';
+                    if (v[20] === '') {
+                        time = '';
+                    } else {
+                        time = `${timestampFormat(v[20][0])}~${timestampFormat(v[20][1])}`;
+                    }
+                    typeList.push([v[3],v[2],`${v[10]}/${v[11]}/${v[12]}`,'差价',v[8],v[4],v[22],v[23],time]);
+                });
+                let str = '';
+                if (item[0][13]) {
+                    str = '保税商品';
+                }
+                arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:'平台',typeName_1:item[0][16][0][1],typeName_2:item[0][16][1][1],img:item[16],discount:priceFormat(item[0][15]),type:typeList });
+            });
 
-        //     return r;
-        // });
+            return arr;
+        });
     });
 };
 // 获取当前商品的信息
@@ -802,7 +812,7 @@ export const searchProduct = (keyValue:any) => {
     });
 };
 // 新增产品信息
-export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any) => {
+export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any,supplier_sku:number,supplier_goodsId:number) => {
     const msg = {
         type:'new_inventory',
         param:{
@@ -811,14 +821,16 @@ export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:
             sku_name,
             inventory,
             supplier_price,
-            shelf_life
+            shelf_life,
+            supplier_sku,
+            supplier_goodsId
         }
     };
 
     return requestAsync(msg);
 };
 // 编辑产品信息
-export const editInventory = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any) => {
+export const editInventory = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any,supplier_sku:number,supplier_goodsId:number) => {
     const msg = {
         type:'edit_inventory',
         param:{
@@ -827,7 +839,9 @@ export const editInventory = (sku:string,supplier:number,sku_name:string,invento
             sku_name,
             inventory,
             supplier_price,
-            shelf_life
+            shelf_life,
+            supplier_sku,
+            supplier_goodsId
         }
     };
 
@@ -881,11 +895,9 @@ export const getAllSuppliers = () => {
     };
     
     return requestAsync(msg).then(r => {
-        console.log('所有的供应商:',r.value);
-
-        return r.value;
-    }).catch((e) => {
-        console.log(e);
+        if (r.result === 1) {
+            console.log(1);
+        }
     });
 };
 // 获取分组信息

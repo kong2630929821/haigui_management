@@ -103,6 +103,9 @@ export class TotalOrder extends Widget {
         },{
             status:OrderStatus.FINISHED,
             text:'已完成'
+        },{
+            status:OrderStatus.CANCEL,
+            text:'已取消'
         }];
 
         // 订单状态

@@ -41,6 +41,20 @@
                     </div>
                 </div>
             </div>
+            <div w-class="productName">
+                    <div w-class="item">
+                        <div w-class="title">供应商SKU</div>
+                        <div w-class="input" ev-input-change="supplierSkuChange" style="width: 464px;">
+                            <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[9]}},disabled:{{it.status==1?true:false}}}</widget>
+                        </div>
+                    </div>
+                    <div w-class="item">
+                        <div w-class="title">供应商商品id</div>
+                        <div w-class="input" ev-input-change="supplierIdChange" style="width: 464px;">
+                            <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[10]}},disabled:{{it.status==1?true:false}}}</widget>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
     <div w-class="ctr">
