@@ -725,3 +725,16 @@ export const changeMoney = (type:number,uid:number,money:number) => {
         console.log(e);
     });
 };
+
+// 更改绑定关系
+export const changeBindding = (uid:number,code:string) => {
+    const msg = {
+        type:'mall_mgr/members@change_user_bind',
+        param:{
+            uid,
+            code
+        }
+    };
+
+    return requestAsync(msg);
+};
