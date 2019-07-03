@@ -13,6 +13,7 @@
         <div w-class="input" ev-input-change="inputChange">
             <widget w-tag="app-components-input">{placeHolder:"输入邀请码"}</widget>
         </div>
+       
         {{end}}
         <div w-class="btns">
             <div w-class="btn-cancel" on-tap="cancelBtnClick">{{it.cancelText}}</div>

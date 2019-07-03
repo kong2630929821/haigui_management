@@ -1,10 +1,13 @@
 import { Widget } from '../../pi/widget/widget';
+import { changeBindding } from '../net/pull';
+import { popNewMessage } from '../utils/logic';
 interface Props {
     title:string;
     sureText:string;
     cancelText:string;
     inputValue:string;// 输入验证码
     style:boolean;// true则填写邀请码 false文本提示框
+    uid:number;
 }
 /**
  * 模态框
@@ -19,10 +22,11 @@ export class ModalBox extends Widget {
         sureText:'确认',
         cancelText:'取消',
         inputValue:'',
-        style:false
+        style:false,
+        uid:-1
         
     };
-    public ok: (val:string) => void;
+    public ok: () => void;
     public cancel: () => void;   // fg为false表示退出APP(或点击取消)，true表示忘记密码
 
     public setProps(props:any) {
@@ -47,7 +51,27 @@ export class ModalBox extends Widget {
      * 点击确认按钮
      */
     public okBtnClick() {
-        this.ok && this.ok(this.props.inputValue);
+        if (this.props.style) {
+            if (this.props.inputValue === '') {
+                popNewMessage('请输入邀请码');
+                
+                return; 
+            }
+            changeBindding(this.props.uid,this.props.inputValue).then(r => {
+                if (r.result === 1) {
+                    popNewMessage('修改成功');
+                    this.ok && this.ok();
+                } else {
+                    popNewMessage('修改失败');
+                }
+            }).catch(e => {
+                popNewMessage('修改失败');
+            });
+
+        } else {
+            this.ok && this.ok();
+        }
+       
     }
     
 }

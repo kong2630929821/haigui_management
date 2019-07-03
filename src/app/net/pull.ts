@@ -735,6 +735,6 @@ export const changeBindding = (uid:number,code:string) => {
             code
         }
     };
-
+   
     return requestAsync(msg);
 };
