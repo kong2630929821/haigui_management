@@ -4,6 +4,7 @@
         <div>></div>
         <div>上架商品</div>
     </div>
+    {{if it.onShelvesType==0}}
     {{ if it.selectData.length}}
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">已选产品</div>
@@ -40,7 +41,6 @@
         </div>
     </div>
     {{end}}
-    {{if it.onShelvesType==0}}
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">选择产品</div>
         <div w-class="search">
@@ -86,11 +86,11 @@
     {{end}}
     {{if it.onShelvesType==1}}
         <div ev-change-showProduct="showProduct">
-            <widget w-tag="app-view-page-onShelvesImg"></widget>
+            <widget w-tag="app-view-page-onShelvesImg">{selectData:{{it.selectData}} }</widget>
         </div>
     {{end}}
     <div w-class="ctr">
         <div w-class="btn" on-tap="gotoShop">取消</div>
-        <div w-class="btn" on-tap="saveProduct">下一步</div>
+        <div w-class="btn {{it.selectData.length?'':'btn1'}}" on-tap="next">下一步</div>
     </div>
 </div>

@@ -1,7 +1,6 @@
 .page{
     background: #F0F2F5;
     height: 100%;
-    overflow: auto;
     color:#354052;
 }
 .searchBox{
@@ -43,6 +42,9 @@
     line-height:48px;
     text-align: center;
     color:rgba(255,255,255,1);
+}
+.btn1{
+    background:rgba(126,126,126,1);
 }
 .input{
     width:567px;

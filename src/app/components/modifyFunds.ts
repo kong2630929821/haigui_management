@@ -8,7 +8,7 @@ interface Props {
     uid:number;
     changeNum:number;
 }
-const changeNum = [
+let changeNum = [
         { title:'资金',num:0 },
         { title:'海贝',num:0 },
         { title:'积分',num:0 }
@@ -51,7 +51,11 @@ export class Modify extends Widget {
             console.log('11111111111111',r);
             popNewMessage('修改成功');
             this.props.showData[index].num = (Number(this.props.showData[index].num) + Number(changeNum[index].num)).toFixed(2);
-           
+            changeNum = [
+                { title:'资金',num:0 },
+                { title:'海贝',num:0 },
+                { title:'积分',num:0 }
+            ];
             this.paint();
         });
     }

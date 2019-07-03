@@ -7,7 +7,7 @@ interface Props {
     onShelvesType:number;
     searchData:any;// 搜索到的产品
     selectData:any;// 选中的产品
-    showDataTitle:any;
+    showDataTitle:any;// 标题
     selectIndex:any;// 选中的数据下标
 }
 // tslint:disable-next-line:completed-docs
@@ -46,8 +46,21 @@ export class OnShelves extends Widget {
         this.paint();
     }
 
-    //删除已选中的产品
-    public remove(index:number){
-        this.props.searchData.splice()
+    // 删除已选中的产品
+    public remove(index:number) {
+        const i = this.props.selectIndex[index];// 原始数据的下标
+        const item = this.props.selectData[index];
+        this.props.searchData.splice(i,0,item);
+        this.props.selectData.splice(index,1);
+        this.props.selectIndex.splice(index,1);
+        this.paint();
+    }
+
+    // 执行下一步操作
+    public next() {
+        if (this.props.selectData.length) {
+            this.props.onShelvesType = 1;
+            this.paint();
+        }
     }
 }
