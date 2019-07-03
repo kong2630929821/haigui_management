@@ -8,14 +8,14 @@
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">已选产品</div>
         <div w-class="searchItem" style="height:356px">
-            {{for i,v of [1,1,1]}}
+            {{for i,v of it.selectData}}
             <div w-class="item">
                 <div w-class="bodyTitle">
                     <div w-class="shopId" style="flex:1;margin-left: 93px;">商品名称（ID）</div>
-                    <div w-class="shopName" style="flex:1;">2018款怀集系列见覅拉尔金属怀旧连衣裙-红色（1515）</div>
+                    <div w-class="shopName" style="flex:1;">{{v[2]}}</div>
                     <div w-class="shopType" style="flex:1;">
                         <span w-class="discount">供应商（ID）</span>
-                        <span style="margin-left:12px;">附加类水果（15511）</span>
+                        <span style="margin-left:12px;">{{v[0]}}</span>
                     </div>
                     <div w-class="shopType" style="flex:1;">
                         <span w-class="discount">品牌</span>
@@ -24,15 +24,15 @@
                 </div>
                 <div w-class="itemBox">
                     <div w-class="productList">
-                        {{for i,v of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}}
+                        {{for index,item of v}}
                         <div w-class="product_info">
-                            <div>sku</div>
-                            <div>15484848848</div>
+                            <div>{{it.showDataTitle[index]}}：</div>
+                            <div>{{item}}</div>
                         </div>
                         {{end}}
                     </div>
                     <div w-class="btnGroup">
-                        <div w-class="btn">移除</div>
+                        <div w-class="btn" on-tap="remove({{i}})">移除</div>
                     </div>
                 </div>
             </div>
@@ -55,10 +55,10 @@
                 <div w-class="item">
                 <div w-class="bodyTitle">
                     <div w-class="shopId" style="flex:1;margin-left: 93px;">产品名称（ID）</div>
-                    <div w-class="shopName" style="flex:1;">{{v.title[0]}}</div>
+                    <div w-class="shopName" style="flex:1;">{{v[2]}}</div>
                     <div w-class="shopType" style="flex:1;">
                         <span w-class="discount">供应商（ID）</span>
-                        <span style="margin-left:12px;">{{v.title[1]}}</span>
+                        <span style="margin-left:12px;">{{v[0]}}</span>
                     </div>
                     <div w-class="shopType" style="flex:1;">
                         <span w-class="discount">品牌</span>
@@ -67,15 +67,15 @@
                 </div>
                 <div w-class="itemBox">
                     <div w-class="productList">
-                        {{for index,item of v.info}}
+                        {{for index,item of v}}
                         <div w-class="product_info">
-                            <div>{{it.showDataTitle[index]}}</div>
+                            <div>{{it.showDataTitle[index]}}：</div>
                             <div style="margin-left:15px">{{item}}</div>
                         </div>
                         {{end}}
                     </div>
                     <div w-class="btnGroup">
-                        <div w-class="btn">选择</div>
+                        <div w-class="btn" on-tap="check({{i}})">选择</div>
                     </div>
                 </div>
             </div>

@@ -53,7 +53,7 @@
 .searchItem{
     display: flex;
     flex-direction: column;
-    height: 240px;
+    height: 235px;
     overflow: auto;
 }
 .bodyTitle{

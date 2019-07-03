@@ -767,39 +767,35 @@ export const getAllProduct = (start_time:number,end_time:number) => {
 };
 // 搜索产品信息
 export const searchProduct = (keyValue:any) => {
-    let item = 0;
+    let product_id = 0;
+    let sku = '';
     if (keyValue.indexOf('1011') === -1) {
-        item = keyValue;
+        sku = keyValue;
     } else {
-        item = parseInt(keyValue);
+        product_id = parseInt(keyValue);
     }
-    const msg = {
-        type:'select_inventory',
-        param:{
-            key:item
-        }
-    };
-    debugger;
-    return requestAsync(msg).then(r => {
-        const data = JSON.parse(r.value);
-        
-        if (!data) {
-            return [];
-        }
-        console.log(data);
-        const arr = [];
-        data.forEach((element,index) => {
-            arr.push(element);
-            const item = element[0];
-            arr[index].splice(0,1);
-            arr[index].unshift(...item);
-            arr[index][6] = `￥${priceFormat(arr[index][6])}`;
-            arr[index][8] = timestampFormat(arr[index][8]);
-        });
 
-        return arr;
-    }).catch(e => {
-        console.log(e);
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_inventory?id=${product_id}&name=${sku}`).then(res => {
+        return res.json().then(r => {
+            const data = JSON.parse(r.value);
+            if (!data) {
+                return [];
+            }
+            console.log(data);
+            const arr = [];
+            data.forEach((element,index) => {
+                arr.push(element);
+                const item = element[0];
+                arr[index].splice(0,1);
+                arr[index].unshift(...item);
+                arr[index][6] = `￥${priceFormat(arr[index][6])}`;
+                arr[index][8] = timestampFormat(arr[index][8]);
+            });
+
+            return arr;
+        }).catch(e => {
+            console.log(e);
+        });
     });
 };
 // 新增产品信息
@@ -837,45 +833,6 @@ export const editInventory = (sku:string,supplier:number,sku_name:string,invento
     };
 
     return requestAsync(msg);
-};
-
-// 上架商品获取产品信息
-export const getSearchProduct = (keyValue:any) => {
-    let item = 0;
-    if (keyValue.indexOf('1011') === -1) {
-        item = keyValue;
-    } else {
-        item = parseInt(keyValue);
-    }
-    const msg = {
-        type:'select_inventory',
-        param:{
-            key:item
-        }
-    };
-
-    return requestAsync(msg).then(r => {
-        const data = JSON.parse(r.value);
-        if (!data) {
-            return [];
-        }
-        console.log(data);
-        const arr = [];
-        const dataShow = [];
-        data.forEach((element,index) => {
-            arr.push(element);
-            const item = element[0];
-            arr[index].splice(0,1);
-            arr[index].unshift(...item);
-            arr[index][6] = `￥${priceFormat(arr[index][6])}`;
-            arr[index][8] = timestampFormat(arr[index][8]);
-            dataShow.push({ title:[element[2],item[0]],info:arr[0] });
-        });
-
-        return dataShow;
-    }).catch(e => {
-        console.log(e);
-    });
 };
 // 获取所有供应商
 export const getAllSuppliers = () => {
