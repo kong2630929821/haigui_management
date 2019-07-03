@@ -670,3 +670,34 @@ const Tip = (temparr,row) => {
 
     return true;
 };
+
+// 解析商品信息
+export const analyzeGoods = (data:any) => {
+    if (!data) {
+        return [];
+    }
+    const arr = [];
+    data.forEach(item => {
+        const typeList = [];
+        
+        item.forEach(v => {
+            let time = '';
+            if (v[22] === '') {
+                time = '';
+            } else {
+                time = `${timestampFormat(v[22][0])}~${timestampFormat(v[22][1])}`;
+            }
+            typeList.push([v[3],v[2],`${priceFormat(v[12])}/${priceFormat(v[13])}/${priceFormat(v[14])}`,'差价',v[11],v[4],v[24],v[25],time]);
+        });
+        let str = '';// 是否报税
+        if (item[0][16]) {
+            str = '保税商品';
+        } else {
+            str = '普通商品';
+        }
+        
+        arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:'平台',typeName_1:item[0][19][0][0] ? item[0][19][0][0][1] :'',typeName_2:item[0][19][0][0] ? item[0][19][1][0][1] :'',img:item[0][18],discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],type:typeList });
+    });
+
+    return arr;
+};

@@ -1,6 +1,6 @@
 <div class="new-page" w-class="page" ev-detail-back="detailBack" on-tap="close">
     <div w-class="narBar">
-        <div on-tap="gotoProduct">商品库</div>
+        <div on-tap="gotoShop">商品库</div>
         <div>></div>
         <div>上架商品</div>
     </div>
@@ -84,13 +84,13 @@
         {{end}}
     </div>
     {{end}}
-    {{if 0==1}}
+    {{if it.onShelvesType==1}}
         <div ev-change-showProduct="showProduct">
             <widget w-tag="app-view-page-onShelvesImg"></widget>
         </div>
     {{end}}
     <div w-class="ctr">
-        <div w-class="btn" on-tap="gotoProduct">取消</div>
+        <div w-class="btn" on-tap="gotoShop">取消</div>
         <div w-class="btn" on-tap="saveProduct">下一步</div>
     </div>
 </div>

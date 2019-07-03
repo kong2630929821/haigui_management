@@ -46,12 +46,21 @@
                                 <div w-class="shopName">{{v.name}}</div>
                                 <div w-class="shopName">商品类型：{{v.shopType}}</div>
                                 <div w-class="shopName">品牌：{{v.brand}}</div>
-                                <div w-class="shopName">分类：{{v.typeName}}</div>
-                                <div w-class="shopName">税费：{{v.taxes}}</div>
-                                <div w-class="shopType">是否有折扣：{{v.discount}}</div>
+                                <div w-class="shopName">分类：{{v.typeName_1}}-{{v.typeName_2}}</div>
+                                <div w-class="shopName">税费：{{v.tax}}</div>
+                                <div w-class="shopName">是否有折扣：{{v.discount}}</div>
+                                {{if v.state==0}}
+                                <div w-class="shopType" style="color:red">已下架</div>
+                                {{elseif v.state==1}}
+                                <div w-class="shopType" style="color:#21811C;">已上架</div>
+                                {{else}}
+                                <div w-class="shopType">删除</div>
+                                {{end}}
                             </div>
                             <div w-class="bodyContent">
-                                <div w-class="imgShow"></div>
+                                <div w-class="imgShow">
+                                    <img style="width: 100%;height: 100%;" src="{{it.mallImagPre}}/{{v.img[0]?v.img[0][0]:''}}" alt=""/>
+                                </div>
                                 <div w-class="typeShow">
                                     {{for j,t of v.type}}
                                         <div w-class="row">
@@ -63,9 +72,17 @@
                                 </div>
                                 <div w-class="status">
                                     <div w-class="ctrollerStatus">
-                                        <div w-class="btn">下架</div>
+                                            {{if v.state==0}}
+                                            <div w-class="btn" on-tap="shelf(1,{{v.id}})">上架</div>
+                                            {{elseif v.state==1}}
+                                            <div w-class="btn" on-tap="shelf(0,{{v.id}})">下架</div>
+                                            {{else}}
+                                            <div w-class="btn" on-tap="shelf(-1,{{v.id}})">删除</div>
+                                            {{end}}
                                         <div w-class="btn">详情</div>
+                                        {{if v.state==0}}
                                         <div w-class="btn">删除</div>
+                                        {{end}}
                                     </div>
                                 </div>
                             </div>

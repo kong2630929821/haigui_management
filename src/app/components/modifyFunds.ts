@@ -10,8 +10,8 @@ interface Props {
 }
 const changeNum = [
         { title:'资金',num:0 },
-        { title:'海贝',num:1 },
-        { title:'积分',num:2 }
+        { title:'海贝',num:0 },
+        { title:'积分',num:0 }
 ];
 // tslint:disable-next-line:completed-docs
 export class Modify extends Widget {
@@ -41,6 +41,11 @@ export class Modify extends Widget {
         let money = Number(changeNum[index].num);
         if (index === 0) {
             money = money * 100;
+        }
+        if (money === 0) {
+            popNewMessage('请输入金额');
+
+            return; 
         }
         changeMoney(index + 1,Number(this.props.uid),money).then(r => {
             console.log('11111111111111',r);

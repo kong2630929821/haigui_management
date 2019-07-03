@@ -17,6 +17,10 @@ interface Props {
     shelf_life:any;// 保质期
     data:any;// [供应商ID,SKU,产品名,已下单未支付数量,总销量,库存,供货价,保质期,修改时间]
     status:number; // 1查看 2修改
+    shelfLife:any;// 是否有保质期
+    shelfLifeActiveIndex:number;// 下标
+    expandIndex:number;
+
 }
 // tslint:disable-next-line:completed-docs
 export class AddProduct extends Widget {
@@ -31,12 +35,25 @@ export class AddProduct extends Widget {
         supplier_price:0,
         shelf_life:[0,0],
         data:[],
-        status:-1
+        status:-1,
+        shelfLife:[],
+        shelfLifeActiveIndex:0,
+        expandIndex:-1
     };
     public create() {
         super.create();
+        const shelfLife = [
+            {
+                status:0,
+                text:'是'
+            },{
+                status:1,
+                text:'否'
+            }
+        ];
         const oData = new Date();
         const time = oData.setHours(23, 59, 59, 999);
+        this.props.shelfLife = shelfLife;
         this.props.endTime =  timeConvert(time);
         this.props.startTime = '2019-05-01 00:00:000';
     }
@@ -54,10 +71,15 @@ export class AddProduct extends Widget {
         }
         console.log(props);
     }
-
+    // 是否有保质期变化
+    public shelfLifeChange(e:any) {
+        this.props.shelfLifeActiveIndex = e.activeIndex;
+        this.paint();
+    }
     // 重置页面的展开状态
     public close() {
         this.props.showDateBox = false;
+        this.props.expandIndex++;
         this.paint();
     }
          // 日期选择框显示
@@ -101,10 +123,11 @@ export class AddProduct extends Widget {
         const supplier_price = this.props.data[6];
         const supplier_sku = this.props.data[9];
         const supplier_id = this.props.data[10];
-        
+        const star_time = transitTimeStamp(this.props.startTime);
+        const end_time = transitTimeStamp(this.props.endTime);
         if (this.props.status === -1) {
             // -1添加
-            addProduct(sku,supplier,sku_name,inventory,supplier_price,'',supplier_sku,supplier_id).then(r => {
+            addProduct(sku,supplier,sku_name,inventory,supplier_price,[star_time,end_time],supplier_sku,supplier_id).then(r => {
                 console.log(r);
                 if (r.result === 1) {
                     popNewMessage('添加成功');
@@ -113,7 +136,7 @@ export class AddProduct extends Widget {
         } else if (this.props.status === 2) {
             // 修改
             popNew('app-components-modalBox',{ content:`确认修改一旦修改，将及时影响品牌信息，请慎重` }, () => {
-                editInventory(sku,supplier,sku_name,inventory,supplier_price,'',supplier_sku,supplier_id).then(r => {
+                editInventory(sku,supplier,sku_name,inventory,supplier_price,[star_time,end_time],supplier_sku,supplier_id).then(r => {
                     console.log(r);
                     if (r.result === 1) {
                         popNewMessage('修改成功');

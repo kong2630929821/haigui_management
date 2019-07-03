@@ -1,7 +1,8 @@
 // tslint:disable-next-line:missing-jsdoc
 import { Widget } from '../../../pi/widget/widget';
-import { getAllGoods, getGoodsKey, getGroup } from '../../net/pull';
-import { timeConvert } from '../../utils/logic';
+import { mallImagPre } from '../../config';
+import { getAllGoods, getCurrentGood, getGoodsKey, getGroup, shelf } from '../../net/pull';
+import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
 
 interface Props {
     statusType:any;// 状态筛选
@@ -18,6 +19,8 @@ interface Props {
     startTime:string;
     endTime:string;
     shopDetail:number;  // 0 商品 1商品详情 2上架商品
+    mallImagPre:string;// 图片路径
+    inputValue:string;// 输入框
 }
 // 状态筛选
 export enum StatuType {
@@ -31,8 +34,9 @@ export enum ProductTypes {
     productTypese_2= 1,// 一般贸易
     productTypese_3= 2// 海外直购
 }
+
 // 每页多少数据
-const perPage = [5,10,15];
+const perPage = [20,50,100];
 // tslint:disable-next-line:completed-docs
 export class CommodityLibrary extends Widget {
     public props:Props = {
@@ -44,18 +48,15 @@ export class CommodityLibrary extends Widget {
         shopNum:123,
         currentIndex:0,
         perPage:perPage[0],
-        showDateTitle:['商品ID','商品名称','规格','价格（普通价/会员价）','库存','供应商（ID）','供应商SKU','供应商商品ID','保质期','操作'],
+        showDateTitle:['商品ID','商品名称','规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商（ID）','供应商SKU','供应商商品ID','保质期','操作'],
         // ['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']
-        showDataList:[
-            { id:'00001',name:'2018款怀集系列见覅拉尔金属怀旧连衣裙',shopType:'报税商品',brand:'哈哈',typeName:'女士-外套',taxes:'12',img:'',type:[['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品','111','222'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']],discount:'9.5折',time:'2018-12-24 12:20:20',status:'已上架' },
-            { id:'00001',name:'2018款怀集系列见覅拉尔金属怀旧连衣裙',shopType:'报税商品',brand:'哈哈',typeName:'女士-外套',taxes:'12',img:'',type:[['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品','111','222'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']],discount:'9.5折',time:'2018-12-24 12:20:20',status:'已上架' },
-            { id:'00001',name:'2018款怀集系列见覅拉尔金属怀旧连衣裙',shopType:'报税商品',brand:'哈哈',typeName:'女士-外套',taxes:'12',img:'',type:[['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品','111','222'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']],discount:'9.5折',time:'2018-12-24 12:20:20',status:'已上架' },
-            { id:'00001',name:'2018款怀集系列见覅拉尔金属怀旧连衣裙',shopType:'报税商品',brand:'哈哈',typeName:'女士-外套',taxes:'12',img:'',type:[['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品','111','222'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']],discount:'9.5折',time:'2018-12-24 12:20:20',status:'已上架' }
-        ],
+        showDataList:[],
         showDateBox:false,
         startTime:'',  // 查询开始时间
         endTime:'', // 查询结束时间
-        shopDetail:0
+        shopDetail:0,
+        mallImagPre:mallImagPre,
+        inputValue:''
     };
 
     public create() {
@@ -70,7 +71,7 @@ export class CommodityLibrary extends Widget {
                 text:'已下架'
             },{
                 status:2,
-                text:'隐藏'
+                text:'已删除'
             }
         ];
         // 商品分类
@@ -94,10 +95,14 @@ export class CommodityLibrary extends Widget {
         this.props.startTime = '2019-05-01 00:00:000';
         this.init(1);
     }
-
+    // 输入框改变
+    public inputChange(e:any) {
+        this.props.inputValue = e.value;
+    }
     // 商品上架下架筛选
     public filterTimeType(e:any) {
         this.props.statusTypeActiveIndex = e.activeIndex;
+        this.init(1);
     }
     // 商品分类筛选
     public filterProductTypes(e:any) {
@@ -106,11 +111,21 @@ export class CommodityLibrary extends Widget {
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = perPage[e.value];
-        this.paint();
+        if (this.props.inputValue) {
+            this.search();
+        } else {
+            this.init(1);
+        }
+        
     }
     // 重置页面的展开状态
     public close() {
         this.props.expandIndex++;
+        // 判断时间选择框是否展开过
+        if (this.props.showDateBox) {
+            console.log('时间筛选',this.props.startTime,this.props.endTime);
+            this.init(1);
+        }
         this.props.showDateBox = false;
         this.paint();
     }
@@ -140,18 +155,57 @@ export class CommodityLibrary extends Widget {
         this.props.shopDetail = 0;
         this.paint();
     }
+    // 分页变化
+    public pageChange(e:any) {
+        console.log(e.value);
+        console.log('当前页数据：',this.props.showDataList);
+        const index = (e.value) * this.props.perPage;
+        this.init(index === 0 ? 1 :index);
+        this.paint();
+    }
+    // 获取数据列表
     public init(index:number) {
+        const star_time = transitTimeStamp(this.props.startTime);
+        const end_time = transitTimeStamp(this.props.endTime);
+        const status = this.props.statusTypeActiveIndex === 0 ? 1 :(this.props.statusTypeActiveIndex === 1 ? 0 :-1);// 0已下架 1已上架 -1已删除
         getGoodsKey(index).then(r1 => {
             console.log('111111111',r1);
             const data = JSON.parse(r1.value);
             this.props.shopNum = data[1];
-            getAllGoods(index === 1 ? 0 :data[0],12).then(r => {
-             
+            getAllGoods(index === 1 ? 0 :data[0],this.props.perPage,status,star_time,end_time).then(r => {
                 const shop = r;
                 this.props.showDataList = shop;
-                console.log('11111111111111111111',shop);
                 this.paint();
             });
+        });
+    }
+    // 搜索指定ID
+    public search() {
+        console.log(this.props.inputValue);
+        if (!this.props.inputValue) {
+            return ;
+        }
+        getCurrentGood(this.props.inputValue).then(r => {
+            this.props.showDataList = r;
+            this.props.shopNum = this.props.showDataList.length;
+            this.paint();
+        }).catch(e => {
+            this.props.showDataList = [];
+            this.props.shopNum = 0;
+            this.paint();
+        });
+    }
+
+    // 上下架商品
+    public shelf(state:number,id:number) {
+
+        shelf(id,state).then(r => {
+            if (r.result === 1) {
+                popNewMessage('操作成功');
+                this.init(1);
+            } else {
+                popNewMessage('操作失败');
+            }
         });
     }
 }

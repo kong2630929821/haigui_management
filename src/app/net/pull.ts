@@ -1,6 +1,6 @@
 import { httpPort, sourceIp } from '../config';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { parseOrderShow } from '../utils/tools';
+import { analyzeGoods, parseOrderShow } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -581,32 +581,14 @@ export const getGoodsKey = (count:number) => {
     });
 };
 // 获取所有的商品信息，支付分页
-export const getAllGoods = (star:number,num:number) => {
-
-    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}`).then(res => {
+export const getAllGoods = (star:number,num:number,state:number,start_time:number,end_time:number) => {
+    
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}&state=${state}&start_time=${start_time}&end_time=${end_time}`).then(res => {
         // return res.json();
         return res.json().then(r => {
             const data = JSON.parse(r.value);
-            const arr = [];
-            data.forEach(item => {
-                const typeList = [];
-                item.forEach(v => {
-                    let time = '';
-                    if (v[20] === '') {
-                        time = '';
-                    } else {
-                        time = `${timestampFormat(v[20][0])}~${timestampFormat(v[20][1])}`;
-                    }
-                    typeList.push([v[3],v[2],`${v[10]}/${v[11]}/${v[12]}`,'差价',v[8],v[4],v[22],v[23],time]);
-                });
-                let str = '';
-                if (item[0][13]) {
-                    str = '保税商品';
-                }
-                arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:'平台',typeName_1:item[0][16][0][1],typeName_2:item[0][16][1][1],img:item[16],discount:priceFormat(item[0][15]),type:typeList });
-            });
 
-            return arr;
+            return analyzeGoods(data);
         });
     });
 };
@@ -614,22 +596,30 @@ export const getAllGoods = (star:number,num:number) => {
 export const getCurrentGood = (shopValue:string) => {
     let shopID = 0;
     let shopName = '';
+    let supplier_id = 0;
     if (isNaN(parseInt(shopValue))) {
         shopName = shopValue;
     } else {
-        shopID = parseInt(shopValue);
+        if (shopValue.indexOf('1011') !== -1) {
+            supplier_id = parseInt(shopValue);
+        } else {
+            shopID = parseInt(shopValue);
+        }
+        
     }
     const msg = {
         type:'select_goods',
         param:{
             id:shopID,
-            name:shopName
+            name:shopName,
+            supplier_id
         }
     };
-
+  
     return requestAsync(msg).then(r => {
-        
-        return r;
+        const data = JSON.parse(r.value);
+    
+        return analyzeGoods(data);
     }).catch(e => {
         console.log(e);
     });
@@ -789,9 +779,10 @@ export const searchProduct = (keyValue:any) => {
             key:item
         }
     };
-
+    debugger;
     return requestAsync(msg).then(r => {
         const data = JSON.parse(r.value);
+        
         if (!data) {
             return [];
         }
@@ -915,4 +906,17 @@ export const getGroup = (typeStatus:number) => {
     }).catch(e => {
         console.log(e);
     });
+};
+
+// 商品上下架
+export const shelf = (id:number,state:number) => {
+    const msg = {
+        type:'set_goods_sale',
+        param:{
+            id,
+            state
+        }
+    };
+
+    return requestAsync(msg);
 };

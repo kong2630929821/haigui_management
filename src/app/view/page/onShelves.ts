@@ -1,6 +1,7 @@
 // tslint:disable-next-line:missing-jsdoc
+import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { getSearchProduct } from '../../net/pull';
+import { getSearchProduct, searchProduct } from '../../net/pull';
 interface Props {
     searchValue:string;
     onShelvesType:number;
@@ -25,10 +26,14 @@ export class OnShelves extends Widget {
 
     // 搜索产品
     public searchProduct() {
-        getSearchProduct(this.props.searchValue).then(r => {
-            console.log(r);
+        searchProduct(this.props.searchValue).then(r => {
             this.props.searchData = r;
+            debugger;
             this.paint();
         });
+    }
+    // 去商品库
+    public gotoShop(e:any) {
+        notify(e.node,'ev-change-showShop',null);
     }
 }
