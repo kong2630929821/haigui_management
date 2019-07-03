@@ -3,6 +3,8 @@ interface Props {
     title:string;
     sureText:string;
     cancelText:string;
+    inputValue:string;// 输入验证码
+    style:boolean;// true则填写邀请码 false文本提示框
 }
 /**
  * 模态框
@@ -15,9 +17,12 @@ export class ModalBox extends Widget {
     public props: Props = {
         title:'',
         sureText:'确认',
-        cancelText:'取消'
+        cancelText:'取消',
+        inputValue:'',
+        style:false
+        
     };
-    public ok: () => void;
+    public ok: (val:string) => void;
     public cancel: () => void;   // fg为false表示退出APP(或点击取消)，true表示忘记密码
 
     public setProps(props:any) {
@@ -27,6 +32,10 @@ export class ModalBox extends Widget {
         };
         super.setProps(this.props);
         
+    }
+    // 输入邀请码框
+    public inputChange(e:any) {
+        this.props.inputValue = e.value;
     }
     /**
      * 点击取消按钮
@@ -38,7 +47,7 @@ export class ModalBox extends Widget {
      * 点击确认按钮
      */
     public okBtnClick() {
-        this.ok && this.ok();
+        this.ok && this.ok(this.props.inputValue);
     }
     
 }
