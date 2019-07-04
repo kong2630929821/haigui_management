@@ -39,18 +39,18 @@ export class Modify extends Widget {
      */
     public okBtnClick(index:number) {
         let money = Number(changeNum[index].num);
-        if (isNaN(money)) {
-            popNewMessage('请输入正确值');
+        if (isNaN(money) || !money) { 
+            popNewMessage('请输入正确的金额');
 
             return;
         }
-        if (index === 0) {
+        if (Math.abs(money) > 1000000) {
+            popNewMessage('调整金额不能超过一百万');
+
+            return;
+        }
+        if (index === 0) {  // 现金 单位为分
             money = money * 100;
-        }
-        if (money === 0) {
-            popNewMessage('请输入金额');
-
-            return;
         }
         changeMoney(index + 1,Number(this.props.uid),money).then(r => {
             console.log('11111111111111',r);

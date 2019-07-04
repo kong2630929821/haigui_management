@@ -4,7 +4,7 @@
     <div w-class="money">
         <p w-class="title">{{v.title}} ￥{{v.num}}</p>
         <div w-class="input" ev-input-change="inputChange(e,{{i}})">
-            <widget w-tag="app-components-input">{placeHolder:{{v.num}}}</widget>
+            <widget w-tag="app-components-input">{placeHolder:{{v.num}},maxLength:10,itype:"number"}</widget>
             <div w-class="btn2" on-tap="okBtnClick({{i}})">修改</div>
         </div>
     </div>

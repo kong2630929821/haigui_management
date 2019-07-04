@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { changeBindding, getVipDetail, setHwangLabel } from '../../net/pull';
+import { getVipDetail, setHwangLabel } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 import { addressFormat } from '../../utils/tools';
 interface Props {
@@ -16,14 +16,11 @@ interface Props {
     userLabel:string;  // 查看用户的标签
     curShowDataList:any[]; // 当前页显示数据
     curPage:number; // 当前页码
+    moneyDatas:any[];  // 所有金额数据
 }
 const userType = ['','海王','海宝','白客'];
 const UserLabel = ['海王','市代理','省代理'];
-const showData = [
-    { title:'资金',num:0 },
-    { title:'海贝',num:1 },
-    { title:'积分',num:2 }
-];
+
 /**
  * 会员详情查看
  */
@@ -41,7 +38,8 @@ export class VipDetail extends Widget {
         baikDatas:[],
         userLabel:'',
         curShowDataList:[],
-        curPage:0
+        curPage:0,
+        moneyDatas:[]
     };
 
     public setProps(props:any) {
@@ -75,6 +73,11 @@ export class VipDetail extends Widget {
                     { th:'地址信息',td:addressFormat(unicode2Str(v[3])) },
                     { th:'身份证号',td:v[7][1] },
                     { th:'邀请码',td:v[11] }
+                ];
+                this.props.moneyDatas = [
+                    { title:'资金',num:priceFormat(v[6][0]) },
+                    { title:'海贝',num:v[6][1] },
+                    { title:'积分',num:v[6][2] }
                 ];
             }
             if (r.haib) {
@@ -169,12 +172,7 @@ export class VipDetail extends Widget {
     public changeMoney() {
         console.log(this.props.userData[6]);
         const uid = this.props.userData[0].td;
-        const data = this.props.userData[6].td;
-        const arr = data.split(' ');
-        showData[0].num = arr[0].substring(4,arr[0].length - 1);
-        showData[1].num = arr[1].substring(3,arr[1].length - 1);
-        showData[2].num = arr[2].substring(3,arr[2].length - 1);
-        popNew('app-components-modifyFunds',{ showData ,uid },(r) => {
+        popNew('app-components-modifyFunds',{ showData:this.props.moneyDatas ,uid },(r) => {
             console.log(r);
         },() => {
             this.init();

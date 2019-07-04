@@ -114,8 +114,8 @@ export class Input extends Widget {
         }
         // 数字输入时检验输入格式
         if (this.props.itype === 'number' && currentValue.length > 0) {
-            currentValue = currentValue.replace(/[^\d\.]/g,''); 
-            if (!this.numberJudge(currentValue)) {
+            currentValue = currentValue.replace(/[^\d\.\-\+]/g,'');
+            if (!this.numberJudge(currentValue) && currentValue.length > 1) {
                 currentValue = currentValue.slice(0,currentValue.length - 1); 
             }
         }
@@ -181,10 +181,10 @@ export class Input extends Widget {
      * 判断输入是否是正确的数字格式
      */
     public numberJudge(num:string) {
-        const reg = /(^[1-9][0-9]*\.|^0\.)[0-9]*$/;
-        const reg1 = /^([1-9][0-9]*|0)$/;
-
-        return reg.test(num) || reg1.test(num);
+        const reg = /^(\-|\+)?\d+\.?\d*$/;
+        const reg1 = /^0{2,}/;
+        
+        return reg.test(num) && !reg1.test(num);
     }
 
 }
