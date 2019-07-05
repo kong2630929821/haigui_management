@@ -4,6 +4,9 @@ import { Widget } from '../../../pi/widget/widget';
 interface Props {
     currentData:any;// 当前数据
 }
+/**
+ * 添加分类
+ */
 // tslint:disable-next-line:completed-docs
 export class AddClass extends Widget {
     public props:Props = {

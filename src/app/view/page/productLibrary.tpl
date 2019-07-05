@@ -36,11 +36,11 @@
         </div>
     </div>
     {{elseif it.showAddProduct==1}}
-        <div ev-change-showProduct="showProduct">
+        <div ev-change-showProduct="showProduct" ev-change-save="saveProduct">
             <widget w-tag="app-view-page-addProduct"></widget>
         </div>
     {{else}}
-        <div ev-change-showProduct="showProduct">
+        <div ev-change-showProduct="showProduct" ev-change-save="saveProduct">
             <widget w-tag="app-view-page-addProduct">{data:{{it.currentData}},status:{{it.showAddProduct==3?1:2}} }</widget>
         </div>
     {{end}}

@@ -1,4 +1,5 @@
 // tslint:disable-next-line:missing-jsdoc
+import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { getAllSuppliers } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
@@ -14,6 +15,9 @@ interface Props {
     currentValue:any;// 当前编辑的值
     dataList:any;// 原始数据
 }
+/**
+ * 供应商设置
+ */
 // tslint:disable-next-line:completed-docs
 export class PlatformSettings extends Widget {
     public props:Props = {
@@ -92,7 +96,7 @@ export class PlatformSettings extends Widget {
     public goDetail(e:any) {
         console.log(e);
         this.props.showAddSupplier = true;
-        this.props.currentValue = this.props.dataList[e.num];
+        this.props.currentValue = deepCopy(this.props.dataList[e.num]);
         this.paint();
     }
 }

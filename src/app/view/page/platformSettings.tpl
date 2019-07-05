@@ -20,7 +20,7 @@
     </div>
     {{else}}
     <div ev-change-showShop="showSupplier">
-        <widget w-tag="app-view-page-addSupplier">{currentData:{{it.currentValue}} }</widget>
+        <widget w-tag="app-view-page-addSupplier">{currentData:{{it.currentValue}},style:{{it.showAddSupplier}} }</widget>
     </div>
     {{end}}
 </div>

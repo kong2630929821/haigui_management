@@ -1,6 +1,7 @@
 // tslint:disable-next-line:missing-jsdoc
 import { Widget } from '../../../pi/widget/widget';
-import { unicode2Str } from '../../utils/logic';
+import { addSupplier } from '../../net/pull';
+import { popNewMessage, unicode2Str } from '../../utils/logic';
 import { importRead } from '../../utils/tools';
 
 interface Props {
@@ -12,6 +13,9 @@ interface Props {
     currentData:any;// 当前编辑的数据
     style:boolean;// 当前状态 true编辑  false 添加
 }
+/**
+ * 添加供应商
+ */
 // tslint:disable-next-line:completed-docs
 export class AddSupplier extends Widget {
     public props:Props = {
@@ -64,9 +68,35 @@ export class AddSupplier extends Widget {
     }
     // 保存
     public save() {
+        if (!this.props.currentData[0] || !this.props.currentData[2] || !this.props.currentData[1][0]) {
+            popNewMessage('输入信息不能为空');
+
+            return ;
+        }
+        if (isNaN(this.props.currentData[0])) {
+            popNewMessage('供应商ID输入错误');
+
+            return;
+        }
+        if (!/^1[3456789]\d{9}$/.test(this.props.currentData[2])) { 
+            popNewMessage('电话号码格式错误');
+
+            return;
+        } 
         if (this.props.style) {
             // 编辑保存
             console.log(this.props.currentData);
+            const id = parseInt(this.props.currentData[0]);
+            const name = this.props.currentData[1][0];
+            const supplier_desc = this.props.currentData[1][2];
+            const supplier_phone = this.props.currentData[2];
+            addSupplier(id,name,supplier_desc,'',supplier_phone).then(r => {
+                if (r.result === 1) {
+                    popNewMessage('修改成功');
+                } else {
+                    popNewMessage('修改失败');
+                }
+            });
         }
     }
     // 重置页面的展开状态

@@ -37,6 +37,9 @@ export enum ProductTypes {
 
 // 每页多少数据
 const perPage = [20,50,100];
+/**
+ * 商品库
+ */
 // tslint:disable-next-line:completed-docs
 export class CommodityLibrary extends Widget {
     public props:Props = {

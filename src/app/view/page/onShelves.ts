@@ -10,6 +10,9 @@ interface Props {
     showDataTitle:any;// 标题
     selectIndex:any;// 选中的数据下标
 }
+/**
+ * 添加商品
+ */
 // tslint:disable-next-line:completed-docs
 export class OnShelves extends Widget {
     public props:Props = {

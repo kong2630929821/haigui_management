@@ -7,6 +7,9 @@ interface Props {
     shopNum:number;
     brandShow:number;// 品牌显示状态  0品牌列表 1添加 2修改
 }
+/**
+ * 品牌设置
+ */
 // tslint:disable-next-line:completed-docs
 export class BrandSetting extends Widget {
     public props:Props = {

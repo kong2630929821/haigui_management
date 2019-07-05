@@ -1,4 +1,5 @@
 // tslint:disable-next-line:missing-jsdoc
+import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { getAllProduct, searchProduct } from '../../net/pull';
 import { timeConvert, transitTimeStamp } from '../../utils/logic';
@@ -37,6 +38,9 @@ export enum ProductTypes {
 }
 // 每页多少数据
 const perPage = [20,50,100];
+/**
+ * 产品库
+ */
 // tslint:disable-next-line:completed-docs
 export class CommodityLibrary extends Widget {
     public props:Props = {
@@ -46,7 +50,7 @@ export class CommodityLibrary extends Widget {
         shopNum:123,
         currentIndex:0,
         perPage:perPage[0],
-        showTitleList:['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID'],
+        showTitleList:['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
         // ['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']
         showDataList:[],
         showDateBox:false,
@@ -183,7 +187,7 @@ export class CommodityLibrary extends Widget {
     // 表格点击按钮
     public goDetail(e:any) {
         console.log(e);
-        this.props.currentData = e.value;
+        this.props.currentData = deepCopy(e.value);
         if (e.fg === 1) {
             // 编辑
             this.props.showAddProduct = 2;
@@ -192,5 +196,10 @@ export class CommodityLibrary extends Widget {
             this.props.showAddProduct = 3;
         }
         this.paint();
+    }
+    // 添加产品成功
+    public saveProduct() {
+        this.props.showAddProduct = 0;
+        this.init();
     }
 }

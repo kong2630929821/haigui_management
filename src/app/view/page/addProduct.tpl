@@ -67,6 +67,28 @@
                     </div>
                 {{end}}
             </div>
+            <div w-class="productName">
+                <div w-class="item">
+                    <div w-class="title">退货信息</div>
+                    <div w-class="input" ev-input-change="returnGoodsInfo" style="width: 664px;">
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[11]}},disabled:{{it.status==1?true:false}}}</widget>
+                    </div>
+                </div>
+            </div>
+            <div w-class="productName">
+                <div w-class="item">
+                    <div w-class="title">收件人</div>
+                    <div w-class="input" ev-input-change="recipient" style="width: 464px;">
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[12]}},disabled:{{it.status==1?true:false}}}</widget>
+                    </div>
+                </div>
+                <div w-class="item">
+                    <div w-class="title">联系电话</div>
+                    <div w-class="input" ev-input-change="phoneChange" style="width: 464px;">
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[13]}},disabled:{{it.status==1?true:false}}}</widget>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div w-class="ctr">

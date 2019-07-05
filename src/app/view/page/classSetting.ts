@@ -2,6 +2,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
 import { getGroup } from '../../net/pull';
+import { deepCopy } from '../../../pi/util/util';
 
 interface Props {
     showDataTitle:any;// 标题
@@ -11,6 +12,9 @@ interface Props {
     mallImagPre:string;// 图片路径
     currentData:any;// 当前编辑的数据
 }
+/**
+ * 分类设置
+ */
 // tslint:disable-next-line:completed-docs
 export class ClassSetting extends Widget {
     public props:Props = {
@@ -36,7 +40,7 @@ export class ClassSetting extends Widget {
     // 改变当前分类
     public changeRow(index:number) {
         this.props.style = 2;
-        this.props.currentData = this.props.showDataList[index];
+        this.props.currentData = deepCopy(this.props.showDataList[index]);
         this.paint();
     }
 }

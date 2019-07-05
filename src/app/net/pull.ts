@@ -751,6 +751,7 @@ export const getAllProduct = (start_time:number,end_time:number) => {
             data[1].forEach((element,index) => {
                 arr.push(element);
                 const item = element[0];
+                const returnGoodsInfo = element[10];
                 arr[index].splice(0,1);
                 arr[index].unshift(...item);
                 arr[index][6] = `￥${priceFormat(arr[index][6])}`;
@@ -758,6 +759,14 @@ export const getAllProduct = (start_time:number,end_time:number) => {
                 if (arr[index][7].length) {
                     arr[index][7] = `${timestampFormat(arr[index][7][0])}~${timestampFormat(arr[index][7][1])}`;
                 }
+                arr[index][12] = '';
+                arr[index][13] = '';
+                if (returnGoodsInfo.length) {
+                    arr[index][11] = returnGoodsInfo[0];
+                    arr[index][12] = returnGoodsInfo[1];
+                    arr[index][13] = returnGoodsInfo[2];
+                }
+
             });
 
             return [num,arr];
@@ -786,10 +795,21 @@ export const searchProduct = (keyValue:any) => {
             data.forEach((element,index) => {
                 arr.push(element);
                 const item = element[0];
+                const returnGoodsInfo = element[10];
                 arr[index].splice(0,1);
                 arr[index].unshift(...item);
                 arr[index][6] = `￥${priceFormat(arr[index][6])}`;
                 arr[index][8] = timestampFormat(arr[index][8]);
+                if (arr[index][7].length) {
+                    arr[index][7] = `${timestampFormat(arr[index][7][0])}~${timestampFormat(arr[index][7][1])}`;
+                }
+                arr[index][12] = '';
+                arr[index][13] = '';
+                if (returnGoodsInfo.length) {
+                    arr[index][11] = returnGoodsInfo[0];
+                    arr[index][12] = returnGoodsInfo[1];
+                    arr[index][13] = returnGoodsInfo[2];
+                }
             });
 
             return arr;
@@ -799,7 +819,7 @@ export const searchProduct = (keyValue:any) => {
     });
 };
 // 新增产品信息
-export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any,supplier_sku:number,supplier_goodsId:number) => {
+export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any,supplier_sku:number,supplier_goodsId:number, return_address:any) => {
     const msg = {
         type:'new_inventory',
         param:{
@@ -810,14 +830,15 @@ export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:
             supplier_price,
             shelf_life,
             supplier_sku,
-            supplier_goodsId
+            supplier_goodsId,
+            return_address
         }
     };
 
     return requestAsync(msg);
 };
 // 编辑产品信息
-export const editInventory = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any,supplier_sku:number,supplier_goodsId:number) => {
+export const editInventory = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any,supplier_sku:number,supplier_goodsId:number, return_address:any) => {
     const msg = {
         type:'edit_inventory',
         param:{
@@ -828,7 +849,8 @@ export const editInventory = (sku:string,supplier:number,sku_name:string,invento
             supplier_price,
             shelf_life,
             supplier_sku,
-            supplier_goodsId
+            supplier_goodsId,
+            return_address
         }
     };
 
@@ -891,6 +913,22 @@ export const getAllArea = () => {
     const msg = {
         type:'console_get_area',
         param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+// 新增供应商
+export const addSupplier = (supplier:number,supplier_name:string,supplier_desc:string,supplier_image:any,supplier_phone:string) => {
+    const msg = {
+        type:'console_add_supplier',
+        param:{
+            supplier,
+            supplier_name,
+            supplier_desc,
+            supplier_image,
+            supplier_phone 
+        }
     };
 
     return requestAsync(msg);

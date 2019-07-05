@@ -22,6 +22,9 @@ interface Props {
     expandIndex:number;
 
 }
+/**
+ * 添加产品
+ */
 // tslint:disable-next-line:completed-docs
 export class AddProduct extends Widget {
     public props:Props = {
@@ -114,8 +117,17 @@ export class AddProduct extends Widget {
     public supplierIdChange(e:any) {
         this.props.data[10] = Number(e.value);
     }
+    public returnGoodsInfo(e:any) {
+        this.props.data[11] = e.value;
+    }
+    public recipient(e:any) {
+        this.props.data[12] = e.value;
+    }
+    public phoneChange(e:any) {
+        this.props.data[13] = e.value;
+    }
     // 保存添加的产品
-    public saveProduct() {
+    public saveProduct(e:any) {
         const sku = this.props.data[1];
         const supplier = this.props.data[0];
         const sku_name =  this.props.data[2];
@@ -123,28 +135,45 @@ export class AddProduct extends Widget {
         const supplier_price = this.props.data[6];
         const supplier_sku = this.props.data[9];
         const supplier_id = this.props.data[10];
-        const star_time = transitTimeStamp(this.props.startTime);
-        const end_time = transitTimeStamp(this.props.endTime);
+        let time = null;
+        if (!sku || !supplier || !sku_name || !inventory || !supplier_price || !supplier_sku || !supplier_id) {
+            popNewMessage('请填写信息');
+            
+            return ;
+        }
+        if (this.props.shelfLifeActiveIndex === 0) {
+            time = [transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime)];
+        } else {
+            time = '';
+        }
+
+        const returnInfo = [this.props.data[11],this.props.data[12],this.props.data[13]];
         if (this.props.status === -1) {
             // -1添加
-            addProduct(sku,supplier,sku_name,inventory,supplier_price,[star_time,end_time],supplier_sku,supplier_id).then(r => {
+            addProduct(sku,supplier,sku_name,inventory,supplier_price,time,supplier_sku,supplier_id,returnInfo).then(r => {
                 console.log(r);
                 if (r.result === 1) {
                     popNewMessage('添加成功');
+                    notify(e.node,'ev-change-save',null);  
                 } else {
                     popNewMessage('添加失败');
                 }
+            }).catch(e => {
+                popNewMessage('添加失败');
             });
         } else if (this.props.status === 2) {
             // 修改
             popNew('app-components-modalBox',{ content:`确认修改一旦修改，将及时影响品牌信息，请慎重` }, () => {
-                editInventory(sku,supplier,sku_name,inventory,supplier_price,[star_time,end_time],supplier_sku,supplier_id).then(r => {
+                editInventory(sku,supplier,sku_name,inventory,supplier_price,time,supplier_sku,supplier_id,returnInfo).then(r => {
                     console.log(r);
                     if (r.result === 1) {
                         popNewMessage('修改成功');
+                        notify(e.node,'ev-change-save',null);  
                     } else {
                         popNewMessage('修改失败');
                     }
+                }).catch(e => {
+                    popNewMessage('修改失败');
                 });
             },() => {
                 popNewMessage('你已经取消操作！');

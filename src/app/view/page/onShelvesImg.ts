@@ -16,6 +16,9 @@ interface Props {
     spreadList:any;// 差价列表
     inputTitle:any;// 输入框标题
 }
+/**
+ * 上传商品图片
+ */
 // tslint:disable-next-line:completed-docs
 export class OnShelvesImg extends Widget {
     public props:Props = {
