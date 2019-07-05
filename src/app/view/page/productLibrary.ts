@@ -149,7 +149,9 @@ export class CommodityLibrary extends Widget {
             const aoa = [jsonHead];
             const jsonData = r[1];
             for (const v of jsonData) {
-                v[0] = v[0].toString();
+                for (let i = 0;i < v.length;i++) {
+                    v[i] = v[i].toString();
+                }
                 aoa.push(v);
             }
             console.log(aoa);

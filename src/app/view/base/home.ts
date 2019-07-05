@@ -17,7 +17,7 @@ interface Props {
 const PAGE = {
     goodsInfo: 'goodsInfo', // 商品信息
     goodsManage:'commodityLibrary',// 商品管理
-    commodityLibrary:'commodityLibrary',// 商品库onShelves
+    commodityLibrary:'commodityLibrary',// 商品库onShelves        onShelvesImg       
     productLibrary:'productLibrary',// 商品详情
     importExcel: 'importExcel', // 导入Excel
     totalOrders: 'totalOrders', // 所有订单

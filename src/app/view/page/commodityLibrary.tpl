@@ -54,7 +54,6 @@
                                 {{elseif v.state==1}}
                                 <div w-class="shopType" style="color:#21811C;">已上架</div>
                                 {{else}}
-                                <div w-class="shopType">删除</div>
                                 {{end}}
                             </div>
                             <div w-class="bodyContent">
@@ -77,12 +76,8 @@
                                             {{elseif v.state==1}}
                                             <div w-class="btn" on-tap="shelf(0,{{v.id}})">下架</div>
                                             {{else}}
-                                            <div w-class="btn" on-tap="shelf(-1,{{v.id}})">删除</div>
                                             {{end}}
                                         <div w-class="btn">详情</div>
-                                        {{if v.state==0}}
-                                        <div w-class="btn">删除</div>
-                                        {{end}}
                                     </div>
                                 </div>
                             </div>

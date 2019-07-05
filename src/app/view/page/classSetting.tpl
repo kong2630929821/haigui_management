@@ -1,5 +1,5 @@
 <div class="new-page" w-class="page" ev-detail-back="detailBack" on-tap="close">
-    {{if 0==1}}
+    {{if it.style==0}}
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>
         <div w-class="searchItem" style="height:92px">
@@ -15,7 +15,7 @@
             </div>
         </div>
     </div>
-    <div w-class="shopSum">共计：5个一级分类 23个二级分类</div>
+    <div w-class="shopSum">共计：{{it.num[0]}}个一级分类 {{it.num[1]}}个二级分类</div>
     <div w-class="searchBoxType">
         <div w-class="tableTitle">商品分类</div>
         <div w-class="searchItem_1">
@@ -24,28 +24,36 @@
                     <div w-class="data_item">{{v}}</div>
                 {{end}}
             </div>
-            {{for index,item of [1,2,3,4]}}
+            {{for i,v of it.showDataList}}
             <div w-class="tableItem">
-                <div w-class="data_item">面部护理</div>
+                <div w-class="data_item">{{v.name}}</div>
                 <div w-class="data_item_1">
-                    {{for i,v of it.showDataTitle}}
+                    {{for index,item of v.children}}
                         <div w-class="col_item">
-                            <div>面膜</div>
-                            <div w-class="imgIcon"></div>
+                            <div>{{item[0]}}</div>
+                            <div w-class="imgIcon">
+                                {{if item[1].length}}
+                                <img style="width:100%;height: 100%;" src="{{it.mallImagPre}}/{{item[1][0]}}" alt=""/>
+                                {{end}}
+                            </div>
                         </div>
                     {{end}}
                 </div>
-                <div w-class="data_item">2018-12-24 12:20:20</div>
+                <div w-class="data_item">{{v.time}}</div>
                 <div w-class="data_item_1">
-                    <div w-class="btn">编辑</div>
+                    <div w-class="btn" on-tap="changeRow({{i}})">编辑</div>
                 </div>
             </div>
             {{end}}
         </div>
     </div>
-    {{else}}
+    {{elseif it.style==1}}
     <div ev-change-showShop="showSupplier">
         <widget w-tag="app-view-page-addClass"></widget>
     </div>
+    {{else}}
+    <div ev-change-showShop="showSupplier">
+            <widget w-tag="app-view-page-addClass"></widget>
+        </div>
     {{end}}
 </div>

@@ -3,15 +3,15 @@
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>
         <div w-class="searchItem" style="height:92px">
-            <div w-class="input" ev-input-change="supplierChange" style="width: 464px;">
-                <widget w-tag="app-components-input">{placeHolder:"供应商ID/名称"}</widget>
+            <div w-class="input" ev-input-change="inputChange" style="width: 464px;">
+                <widget w-tag="app-components-input">{placeHolder:"供应商ID",input:{{it.searchValue}}}</widget>
             </div>
-            <div w-class="btn">查询</div>
+            <div w-class="btn" on-tap="search">查询</div>
         </div>
     </div>
-    <div w-class="shopSum">共{{it.shopNum}}件商品</div> 
+    <div w-class="shopSum">共{{it.shopNum}}个供应商</div> 
     <div ev-table-detail="goDetail">
-        <div w-class="tableTitle">产品列表</div>
+        <div w-class="tableTitle">供应商列表</div>
         <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
     </div>
     <div w-class="ctroller">
@@ -20,7 +20,7 @@
     </div>
     {{else}}
     <div ev-change-showShop="showSupplier">
-        <widget w-tag="app-view-page-addSupplier"></widget>
+        <widget w-tag="app-view-page-addSupplier">{currentData:{{it.currentValue}} }</widget>
     </div>
     {{end}}
 </div>

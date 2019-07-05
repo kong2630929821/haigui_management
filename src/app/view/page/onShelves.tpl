@@ -83,14 +83,14 @@
         </div>
         {{end}}
     </div>
+    <div w-class="ctr">
+        <div w-class="btn" on-tap="gotoShop">取消</div>
+        <div w-class="btn {{it.selectData.length?'':'btn1'}}" on-tap="next">下一步</div>
+    </div>
     {{end}}
     {{if it.onShelvesType==1}}
         <div ev-change-showProduct="showProduct">
             <widget w-tag="app-view-page-onShelvesImg">{selectData:{{it.selectData}} }</widget>
         </div>
     {{end}}
-    <div w-class="ctr">
-        <div w-class="btn" on-tap="gotoShop">取消</div>
-        <div w-class="btn {{it.selectData.length?'':'btn1'}}" on-tap="next">下一步</div>
-    </div>
 </div>

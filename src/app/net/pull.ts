@@ -1,6 +1,6 @@
 import { httpPort, sourceIp } from '../config';
-import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { analyzeGoods, parseOrderShow } from '../utils/tools';
+import { popNewMessage, priceFormat, timestampFormat,  unicode2Str } from '../utils/logic';
+import { analyzeGoods, parseOrderShow, processingGrouping, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -835,17 +835,25 @@ export const editInventory = (sku:string,supplier:number,sku_name:string,invento
     return requestAsync(msg);
 };
 // 获取所有供应商
-export const getAllSuppliers = () => {
+export const getAllSuppliers = (ids?:any) => {
     const msg = { 
         type: 'console_get_supplier',
         param: { 
         } 
     };
-    
+    if (ids) {
+        msg.param = { ids:ids };
+    }
+
     return requestAsync(msg).then(r => {
         if (r.result === 1) {
-            console.log(1);
+            const data = r.supplierInfo;
+            
+            return [data,supplierProcessing(data)];
         }
+    }).catch(e => {
+        
+        return [[],[]];
     });
 };
 // 获取分组信息
@@ -858,8 +866,9 @@ export const getGroup = (typeStatus:number) => {
     };
    
     return requestAsync(msg).then(r => {
-        
-        return r;
+        const res = r.groupInfo;
+     
+        return processingGrouping(res);
     }).catch(e => {
         console.log(e);
     });
@@ -873,6 +882,15 @@ export const shelf = (id:number,state:number) => {
             id,
             state
         }
+    };
+
+    return requestAsync(msg);
+};
+// 获取所有地区ID
+export const getAllArea = () => {
+    const msg = {
+        type:'console_get_area',
+        param:{}
     };
 
     return requestAsync(msg);

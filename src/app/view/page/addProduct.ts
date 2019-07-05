@@ -131,6 +131,8 @@ export class AddProduct extends Widget {
                 console.log(r);
                 if (r.result === 1) {
                     popNewMessage('添加成功');
+                } else {
+                    popNewMessage('添加失败');
                 }
             });
         } else if (this.props.status === 2) {
@@ -140,6 +142,8 @@ export class AddProduct extends Widget {
                     console.log(r);
                     if (r.result === 1) {
                         popNewMessage('修改成功');
+                    } else {
+                        popNewMessage('修改失败');
                     }
                 });
             },() => {
