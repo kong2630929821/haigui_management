@@ -19,7 +19,7 @@
 .filterBox{
     display: flex;
     flex-direction: column;
-    height:370px;
+    height:453px;
     justify-content: space-around
 }
 .narBar{

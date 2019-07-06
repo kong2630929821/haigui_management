@@ -138,9 +138,19 @@ export class AddProduct extends Widget {
         let time = null;
         if (!sku || !supplier || !sku_name || !inventory || !supplier_price || !supplier_sku || !supplier_id) {
             popNewMessage('请填写信息');
-            
+
             return ;
         }
+        if (!this.props.data[11] || !this.props.data[12] || !this.props.data[13]) {
+            popNewMessage('请填写信息');
+
+            return ;
+        }
+        if (!/^1[3456789]\d{9}$/.test(this.props.data[13])) { 
+            popNewMessage('电话号码格式错误');
+
+            return;
+        } 
         if (this.props.shelfLifeActiveIndex === 0) {
             time = [transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime)];
         } else {
