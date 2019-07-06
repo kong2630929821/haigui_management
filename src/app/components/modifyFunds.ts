@@ -49,6 +49,11 @@ export class Modify extends Widget {
 
             return;
         }
+        if ((Number(this.props.showData[index].num) + money) < 0) {
+            popNewMessage('减去金额不能大于原有金额');
+
+            return;
+        }
         if (index === 0) {  // 现金 单位为分
             money = money * 100;
         }
