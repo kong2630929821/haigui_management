@@ -1,7 +1,6 @@
-import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { orderMaxCount } from '../../config';
-import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport, quitOrder } from '../../net/pull';
+import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport } from '../../net/pull';
 import { dateToString, popNewMessage } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
 
@@ -22,7 +21,7 @@ export enum OrderStatus {
     PENDINGFINISH = 4,     // 待完成     确认收货后7天算已完成   这个时间段内的订单可以申请退货
     FINISHED = 5,    // 已完成  已过7天 
     ALL = 6 ,              // 全部
-    CANCEL= 7
+    CANCEL= 7// 已取消
 }
 
 // 订单状态
@@ -347,14 +346,5 @@ export class TotalOrder extends Widget {
             });
         }
         
-    }
-    public quitOrder(e:any) {
-        const orderId = this.props.contentShowList[e.value][0];
-        const currentPageId = this.props.contentShowList[0][0];
-        popNew('app-components-confirmQuitOrder',{},() => {
-            quitOrder(orderId).then(r => {
-                this.filterOrderQuery(currentPageId);
-            });
-        });
     }
 }

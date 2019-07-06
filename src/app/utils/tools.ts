@@ -1,4 +1,3 @@
-import { popNew } from '../../pi/ui/root';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
 import { popNewMessage, priceFormat, unicode2Str } from './logic';
 
@@ -156,7 +155,7 @@ const parseOrderStatus = (orderTime:number,payTime:number,shipTime:number,receip
     if (orderTime < 0) {
         status = OrderStatus.CANCEL;            // 已取消
     } else if (orderTime === 0) {
-        status = OrderStatus.FAILED; // 失败
+        status = OrderStatus.FAILED;            // 失败
     } else if (payTime === 0) {
         status = OrderStatus.PENDINGPAYMENT;     // 待付款
     } else if (shipTime === 0 || !shipId) {
