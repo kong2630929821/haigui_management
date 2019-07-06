@@ -1,5 +1,5 @@
 import { httpPort, sourceIp } from '../config';
-import { popNewMessage, priceFormat, timestampFormat,  unicode2Str } from '../utils/logic';
+import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
 import { analyzeGoods, parseOrderShow, processingGrouping, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
@@ -306,9 +306,10 @@ export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) 
     if (tail) {
         endTimestamp = new Date(tail).getTime();
     }
-
+   
     return fetch(`http://${sourceIp}:${httpPort}/console/select_all_orders?id=${id}&count=${count}&time_type=${time_type}&start=${startTimestamp}&tail=${endTimestamp}&sid=${sid}&type=${orderType}&state=${state}`).then(res => {
         return res.json().then(r => {
+            
             console.log(r);
             if (!r.value) {
                 return [[],[]];
@@ -928,6 +929,19 @@ export const addSupplier = (supplier:number,supplier_name:string,supplier_desc:s
             supplier_desc,
             supplier_image,
             supplier_phone 
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 更改绑定关系
+export const changeBindding = (uid:number,code:string) => {
+    const msg = {
+        type:'mall_mgr/members@change_user_bind',
+        param:{
+            uid,
+            code
         }
     };
 
