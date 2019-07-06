@@ -1,4 +1,5 @@
 // tslint:disable-next-line:missing-jsdoc
+import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { addSupplier } from '../../net/pull';
 import { popNewMessage, unicode2Str } from '../../utils/logic';
@@ -25,7 +26,7 @@ export class AddSupplier extends Widget {
         showDataList:[],
         showTitleList:['ID','地区','邮费'],
         currentData:[],
-        style:false
+        style:true
     };
     public create() {
         super.create();
@@ -60,6 +61,7 @@ export class AddSupplier extends Widget {
     }
     // 供应商名称变化
     public supplierChange(e:any) {
+        debugger;
         this.props.currentData[1][0] = e.value;
     }
     // 描述变化
@@ -97,6 +99,9 @@ export class AddSupplier extends Widget {
                     popNewMessage('修改失败');
                 }
             });
+        } else {
+            // 添加
+            alert(1);
         }
     }
     // 重置页面的展开状态
@@ -106,7 +111,7 @@ export class AddSupplier extends Widget {
     }
     // 下拉选择框
     public filterTimeType(e:any) {
-        this.props.statusTypeActiveIndex = e.value;
+        this.props.statusTypeActiveIndex = e.activeIndex;
         this.paint();
     }
     // 导入运单号
@@ -116,5 +121,9 @@ export class AddSupplier extends Widget {
         importRead(file,(res) => {
             console.log(res);
         });
+    }
+    // 取消
+    public cancel(e:any) {
+        notify(e.node,'showSupplier',null);
     }
 }

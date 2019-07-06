@@ -1,6 +1,6 @@
 <div class="new-page" w-class="page" ev-detail-back="detailBack" on-tap="close">
     <div w-class="narBar">
-        <div on-tap="gotoProduct">供应商配置</div>
+        <div on-tap="cancel">供应商配置</div>
         <div>></div>
         <div>添加供应商</div>
     </div>
@@ -10,25 +10,25 @@
                 <div w-class="item">
                     <div w-class="title">供应商ID</div>
                     <div w-class="input" ev-input-change="inputChange({{0}},e)" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.currentData[0]}}}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.style?it.currentData[0]:""}} }</widget>
                     </div>
                 </div>
                 <div w-class="item">
                     <div w-class="title">供应商名称</div>
                     <div w-class="input" ev-input-change="supplierChange" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.currentData[1][0]}}}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.style?it.currentData[1][0]:""}} }</widget>
                     </div>
                 </div>
                 <div w-class="item">
                     <div w-class="title">手机号码</div>
                     <div w-class="input" ev-input-change="inputChange({{2}},e)" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.currentData[2]}}}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.style?it.currentData[2]:""}}}</widget>
                     </div>
                 </div>
                 <div w-class="item">
                     <div w-class="title">描述备注</div>
                     <div w-class="input" ev-input-change="textareaChange" style="width: 464px;height:  114px;">
-                        <widget w-tag="app-components-textarea">{input:{{it.currentData[1][2]}},placehold:"",disabled:false,clearable:false,itype:"text",style:"",autofacus:false,maxLength:150}</widget>
+                        <widget w-tag="app-components-textarea">{input:{{it.style?it.currentData[1][2]:""}},placehold:"",disabled:false,clearable:false,itype:"text",style:"",autofacus:false,maxLength:150}</widget>
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@
         </div>
     </div>
     <div w-class="ctr">
-        <div w-class="btn" on-tap="gotoProduct">取消</div>
+        <div w-class="btn" on-tap="cancel">取消</div>
         <div w-class="btn" on-tap="save">保存</div>
     </div>
 </div>
