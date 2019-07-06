@@ -1,6 +1,6 @@
 import { popNew } from '../../pi/ui/root';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { popNewMessage, priceFormat } from './logic';
+import { popNewMessage, priceFormat, unicode2Str } from './logic';
 
 /**
  * 常用工具
@@ -669,4 +669,78 @@ const Tip = (temparr,row) => {
     }
 
     return true;
+};
+
+// 解析商品信息
+export const analyzeGoods = (data:any) => {
+    if (!data) {
+        return [];
+    }
+    const arr = [];
+    data.forEach(item => {
+        const typeList = [];
+        
+        item.forEach(v => {
+            let time = '';
+            if (v[22] === '') {
+                time = '';
+            } else {
+                time = `${timestampFormat(v[22][0])}~${timestampFormat(v[22][1])}`;
+            }
+            typeList.push([v[3],v[2],`${priceFormat(v[12])}/${priceFormat(v[13])}/${priceFormat(v[14])}`,'差价',v[11],v[4],v[24],v[25],time]);
+        });
+        let str = '';// 是否报税
+        if (item[0][16]) {
+            str = '保税商品';
+        } else {
+            str = '普通商品';
+        }
+        
+        arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:'平台',typeName_1:item[0][19][0][0] ? item[0][19][0][0][1] :'',typeName_2:item[0][19][0][0] ? item[0][19][1][0][1] :'',img:item[0][18],discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],type:typeList });
+    });
+
+    return arr;
+};
+// 处理分组
+export const processingGrouping = (r:any) => {
+    if (!r.length) {
+        return [];
+    }
+    const data = [];
+    let i = 0;// 一级分类个数
+    let j = 0;// 二级分类个数
+    r.forEach(item => {
+        const arr = [];// 二级分组
+        // if (JSON.parse(item[2])) {
+        //     item[6].forEach(v => {
+        //         arr.push([unicode2Str(v[1]),v[4]]);
+        //     });
+        //     i++;
+        //     data.push({ name:unicode2Str(item[1]),group_type:item[2],children:arr,time:timestampFormat(item[7]) });
+        // } else {
+        //     j++;
+        //     data.push({ name:'',group_type:item[2],children:[[unicode2Str(item[1]),item[4]]],time:timestampFormat(item[7]) });
+        // }   
+        item[6].forEach(v => {
+            j++;
+            arr.push([unicode2Str(v[1]),v[4]]);
+        });
+        i++;
+        data.push({ name:unicode2Str(item[1]),group_type:item[2],children:arr,time:timestampFormat(item[7]) });
+        
+    });
+
+    return [i,j,data];
+};
+// 处理所有供应商
+export const supplierProcessing = (r:any) => {
+    if (!r.length) {
+        return [];
+    }
+    const data = [];
+    r.forEach(v => {
+        data.push([v[0],unicode2Str(v[1][0]),v[1][2],v[2],timestampFormat(v[3])]);
+    });
+    
+    return data;
 };

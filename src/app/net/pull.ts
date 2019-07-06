@@ -1,6 +1,6 @@
 import { httpPort, sourceIp } from '../config';
-import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { parseOrderShow } from '../utils/tools';
+import { popNewMessage, priceFormat, timestampFormat,  unicode2Str } from '../utils/logic';
+import { analyzeGoods, parseOrderShow, processingGrouping, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -581,45 +581,45 @@ export const getGoodsKey = (count:number) => {
     });
 };
 // 获取所有的商品信息，支付分页
-export const getAllGoods = (star:number,num:number) => {
+export const getAllGoods = (star:number,num:number,state:number,start_time:number,end_time:number) => {
+    
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}&state=${state}&start_time=${start_time}&end_time=${end_time}`).then(res => {
+        // return res.json();
+        return res.json().then(r => {
+            const data = JSON.parse(r.value);
 
-    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}`).then(res => {
-        return res.json();
-        // return res.json().then(r => {
-        //     const data = JSON.parse(r.value);
-        //     const arr = [];
-        //     data.forEach((index,item) => {
-        //         const typeList = [];
-        //         item.forEach((i,v) => {
-        //             typeList.push()
-        //         });
-        //         arr.push({ id:item[0][0],name:item[0][1],typeName_1:item[0][16][0][1],typeName_2:item[0][16][1][1],img:'' });
-        //     });
-
-        //     return r;
-        // });
+            return analyzeGoods(data);
+        });
     });
 };
 // 获取当前商品的信息
 export const getCurrentGood = (shopValue:string) => {
     let shopID = 0;
     let shopName = '';
+    let supplier_id = 0;
     if (isNaN(parseInt(shopValue))) {
         shopName = shopValue;
     } else {
-        shopID = parseInt(shopValue);
+        if (shopValue.indexOf('1011') !== -1) {
+            supplier_id = parseInt(shopValue);
+        } else {
+            shopID = parseInt(shopValue);
+        }
+        
     }
     const msg = {
         type:'select_goods',
         param:{
             id:shopID,
-            name:shopName
+            name:shopName,
+            supplier_id
         }
     };
-
+  
     return requestAsync(msg).then(r => {
-        
-        return r;
+        const data = JSON.parse(r.value);
+    
+        return analyzeGoods(data);
     }).catch(e => {
         console.log(e);
     });
@@ -751,6 +751,7 @@ export const getAllProduct = (start_time:number,end_time:number) => {
             data[1].forEach((element,index) => {
                 arr.push(element);
                 const item = element[0];
+                const returnGoodsInfo = element[10];
                 arr[index].splice(0,1);
                 arr[index].unshift(...item);
                 arr[index][6] = `￥${priceFormat(arr[index][6])}`;
@@ -758,6 +759,14 @@ export const getAllProduct = (start_time:number,end_time:number) => {
                 if (arr[index][7].length) {
                     arr[index][7] = `${timestampFormat(arr[index][7][0])}~${timestampFormat(arr[index][7][1])}`;
                 }
+                arr[index][12] = '';
+                arr[index][13] = '';
+                if (returnGoodsInfo.length) {
+                    arr[index][11] = returnGoodsInfo[0];
+                    arr[index][12] = returnGoodsInfo[1];
+                    arr[index][13] = returnGoodsInfo[2];
+                }
+
             });
 
             return [num,arr];
@@ -767,42 +776,50 @@ export const getAllProduct = (start_time:number,end_time:number) => {
 };
 // 搜索产品信息
 export const searchProduct = (keyValue:any) => {
-    let item = 0;
+    let product_id = 0;
+    let sku = '';
     if (keyValue.indexOf('1011') === -1) {
-        item = keyValue;
+        sku = keyValue;
     } else {
-        item = parseInt(keyValue);
+        product_id = parseInt(keyValue);
     }
-    const msg = {
-        type:'select_inventory',
-        param:{
-            key:item
-        }
-    };
 
-    return requestAsync(msg).then(r => {
-        const data = JSON.parse(r.value);
-        if (!data) {
-            return [];
-        }
-        console.log(data);
-        const arr = [];
-        data.forEach((element,index) => {
-            arr.push(element);
-            const item = element[0];
-            arr[index].splice(0,1);
-            arr[index].unshift(...item);
-            arr[index][6] = `￥${priceFormat(arr[index][6])}`;
-            arr[index][8] = timestampFormat(arr[index][8]);
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_inventory?id=${product_id}&name=${sku}`).then(res => {
+        return res.json().then(r => {
+            const data = JSON.parse(r.value);
+            if (!data) {
+                return [];
+            }
+            console.log(data);
+            const arr = [];
+            data.forEach((element,index) => {
+                arr.push(element);
+                const item = element[0];
+                const returnGoodsInfo = element[10];
+                arr[index].splice(0,1);
+                arr[index].unshift(...item);
+                arr[index][6] = `￥${priceFormat(arr[index][6])}`;
+                arr[index][8] = timestampFormat(arr[index][8]);
+                if (arr[index][7].length) {
+                    arr[index][7] = `${timestampFormat(arr[index][7][0])}~${timestampFormat(arr[index][7][1])}`;
+                }
+                arr[index][12] = '';
+                arr[index][13] = '';
+                if (returnGoodsInfo.length) {
+                    arr[index][11] = returnGoodsInfo[0];
+                    arr[index][12] = returnGoodsInfo[1];
+                    arr[index][13] = returnGoodsInfo[2];
+                }
+            });
+
+            return arr;
+        }).catch(e => {
+            console.log(e);
         });
-
-        return arr;
-    }).catch(e => {
-        console.log(e);
     });
 };
 // 新增产品信息
-export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any) => {
+export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any,supplier_sku:number,supplier_goodsId:number, return_address:any) => {
     const msg = {
         type:'new_inventory',
         param:{
@@ -811,14 +828,17 @@ export const addProduct = (sku:string,supplier:number,sku_name:string,inventory:
             sku_name,
             inventory,
             supplier_price,
-            shelf_life
+            shelf_life,
+            supplier_sku,
+            supplier_goodsId,
+            return_address
         }
     };
 
     return requestAsync(msg);
 };
 // 编辑产品信息
-export const editInventory = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any) => {
+export const editInventory = (sku:string,supplier:number,sku_name:string,inventory:number,supplier_price:number,shelf_life:any,supplier_sku:number,supplier_goodsId:number, return_address:any) => {
     const msg = {
         type:'edit_inventory',
         param:{
@@ -827,65 +847,35 @@ export const editInventory = (sku:string,supplier:number,sku_name:string,invento
             sku_name,
             inventory,
             supplier_price,
-            shelf_life
+            shelf_life,
+            supplier_sku,
+            supplier_goodsId,
+            return_address
         }
     };
 
     return requestAsync(msg);
 };
-
-// 上架商品获取产品信息
-export const getSearchProduct = (keyValue:any) => {
-    let item = 0;
-    if (keyValue.indexOf('1011') === -1) {
-        item = keyValue;
-    } else {
-        item = parseInt(keyValue);
-    }
-    const msg = {
-        type:'select_inventory',
-        param:{
-            key:item
-        }
-    };
-
-    return requestAsync(msg).then(r => {
-        const data = JSON.parse(r.value);
-        if (!data) {
-            return [];
-        }
-        console.log(data);
-        const arr = [];
-        const dataShow = [];
-        data.forEach((element,index) => {
-            arr.push(element);
-            const item = element[0];
-            arr[index].splice(0,1);
-            arr[index].unshift(...item);
-            arr[index][6] = `￥${priceFormat(arr[index][6])}`;
-            arr[index][8] = timestampFormat(arr[index][8]);
-            dataShow.push({ title:[element[2],item[0]],info:arr[0] });
-        });
-
-        return dataShow;
-    }).catch(e => {
-        console.log(e);
-    });
-};
 // 获取所有供应商
-export const getAllSuppliers = () => {
+export const getAllSuppliers = (ids?:any) => {
     const msg = { 
         type: 'console_get_supplier',
         param: { 
         } 
     };
-    
-    return requestAsync(msg).then(r => {
-        console.log('所有的供应商:',r.value);
+    if (ids) {
+        msg.param = { ids:ids };
+    }
 
-        return r.value;
-    }).catch((e) => {
-        console.log(e);
+    return requestAsync(msg).then(r => {
+        if (r.result === 1) {
+            const data = r.supplierInfo;
+            
+            return [data,supplierProcessing(data)];
+        }
+    }).catch(e => {
+        
+        return [[],[]];
     });
 };
 // 获取分组信息
@@ -898,9 +888,48 @@ export const getGroup = (typeStatus:number) => {
     };
    
     return requestAsync(msg).then(r => {
-        
-        return r;
+        const res = r.groupInfo;
+     
+        return processingGrouping(res);
     }).catch(e => {
         console.log(e);
     });
+};
+
+// 商品上下架
+export const shelf = (id:number,state:number) => {
+    const msg = {
+        type:'set_goods_sale',
+        param:{
+            id,
+            state
+        }
+    };
+
+    return requestAsync(msg);
+};
+// 获取所有地区ID
+export const getAllArea = () => {
+    const msg = {
+        type:'console_get_area',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+// 新增供应商
+export const addSupplier = (supplier:number,supplier_name:string,supplier_desc:string,supplier_image:any,supplier_phone:string) => {
+    const msg = {
+        type:'console_add_supplier',
+        param:{
+            supplier,
+            supplier_name,
+            supplier_desc,
+            supplier_image,
+            supplier_phone 
+        }
+    };
+
+    return requestAsync(msg);
 };

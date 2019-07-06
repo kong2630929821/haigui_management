@@ -29,3 +29,6 @@ export enum GroupsLocation {
 
 // 一次性最多获取多少订单
 export const orderMaxCount = 20;
+
+// 图片路径
+export const mallImagPre = `http://cshop.baomtx.com/dst/imgs/`;

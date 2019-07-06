@@ -1,8 +1,6 @@
 .page{
     background: #F0F2F5;
-    padding: 20px 60px;
     height: 100%;
-    overflow: auto;
     color:#354052;
 }
 .searchBox{
@@ -45,6 +43,9 @@
     text-align: center;
     color:rgba(255,255,255,1);
 }
+.btn1{
+    background:rgba(126,126,126,1);
+}
 .input{
     width:567px;
     height:48px;
@@ -54,7 +55,7 @@
 .searchItem{
     display: flex;
     flex-direction: column;
-    height: 240px;
+    height: 235px;
     overflow: auto;
 }
 .bodyTitle{

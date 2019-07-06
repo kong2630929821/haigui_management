@@ -163,7 +163,7 @@
 }
 .typeShow{
     display: flex;
-    width: 900px;;
+    width: 1380px;;
     font-size:14px;
     font-family:Source Sans Pro;
     font-weight:600;
@@ -171,6 +171,7 @@
     color:rgba(53,64,82,1);
     margin-left: 50px;
     flex-direction: column;
+    justify-content: center;
 }
 .row{
     width: 100%;
@@ -210,6 +211,8 @@
     line-height:36px;
     color:rgba(255,255,255,1);
     text-align: center;
+    cursor: pointer;
+    margin-top: 10px;
 }
 .dataBody{
     height: 550px;

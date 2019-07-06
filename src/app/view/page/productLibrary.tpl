@@ -23,24 +23,24 @@
             </div>
         </div>
     </div>
-    <div w-class="shopSum">共{{it.shopNum}}件商品</div> 
+    <div w-class="shopSum">共{{it.shopNum}}个SKU</div> 
     <div ev-table-detail="goDetail">
-        <div w-class="tableTitle">产品列表</div>
+        <div w-class="tableTitle">SKU列表</div>
         <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
     </div>
     <div w-class="ctroller">
         <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
-        <div w-class="onShelves" on-tap="addProduct">添加产品</div>
+        <div w-class="onShelves" on-tap="addProduct">添加SKU</div>
         <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
             <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
         </div>
     </div>
     {{elseif it.showAddProduct==1}}
-        <div ev-change-showProduct="showProduct">
+        <div ev-change-showProduct="showProduct" ev-change-save="saveProduct">
             <widget w-tag="app-view-page-addProduct"></widget>
         </div>
     {{else}}
-        <div ev-change-showProduct="showProduct">
+        <div ev-change-showProduct="showProduct" ev-change-save="saveProduct">
             <widget w-tag="app-view-page-addProduct">{data:{{it.currentData}},status:{{it.showAddProduct==3?1:2}} }</widget>
         </div>
     {{end}}

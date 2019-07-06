@@ -6,29 +6,32 @@
     </div>
     <div w-class="searchBox">
         <div w-class="tableTitle">基本信息</div>
-        <div w-class="filterBox">
-            <div w-class="productName">
+        <div w-class="filterBox" style="flex-direction: row; flex-wrap: wrap;align-items: center;">
+                <div w-class="item">
+                    <div w-class="title">供应商ID</div>
+                    <div w-class="input" ev-input-change="inputChange({{0}},e)" style="width: 464px;">
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.currentData[0]}}}</widget>
+                    </div>
+                </div>
                 <div w-class="item">
                     <div w-class="title">供应商名称</div>
                     <div w-class="input" ev-input-change="supplierChange" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入"}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.currentData[1][0]}}}</widget>
                     </div>
                 </div>
                 <div w-class="item">
-                    <div w-class="title">联系电话</div>
-                    <div w-class="input" ev-input-change="sku_nameChange" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入"}</widget>
+                    <div w-class="title">手机号码</div>
+                    <div w-class="input" ev-input-change="inputChange({{2}},e)" style="width: 464px;">
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.currentData[2]}}}</widget>
                     </div>
                 </div>
-            </div>
-            <div w-class="productName">
                 <div w-class="item">
                     <div w-class="title">描述备注</div>
-                    <div w-class="input" ev-input-change="inventoryChange" style="width: 464px;height:  114px;">
-                        <widget w-tag="app-components-textarea">{input:"",placehold:"",disabled:false,clearable:false,itype:"text",style:"",autofacus:false,maxLength:150}</widget>
+                    <div w-class="input" ev-input-change="textareaChange" style="width: 464px;height:  114px;">
+                        <widget w-tag="app-components-textarea">{input:{{it.currentData[1][2]}},placehold:"",disabled:false,clearable:false,itype:"text",style:"",autofacus:false,maxLength:150}</widget>
                     </div>
                 </div>
-            </div>
+
         </div>
     </div>
     <div w-class="searchBox_1">
@@ -53,6 +56,6 @@
     </div>
     <div w-class="ctr">
         <div w-class="btn" on-tap="gotoProduct">取消</div>
-        <div w-class="btn" on-tap="saveProduct" style="cursor: {{0==1?'not-allowed':''}};">保存</div>
+        <div w-class="btn" on-tap="save">保存</div>
     </div>
 </div>
