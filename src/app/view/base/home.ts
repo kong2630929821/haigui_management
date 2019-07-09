@@ -44,7 +44,7 @@ export class Home extends Widget {
                     { name:'分类设置',page:PAGE.classSetting },
                     { name:'品牌设置',page:PAGE.brandSetting },
                     { name:'商场设置',page:PAGE.mallSetting }],
-                    show:false 
+                    show:true 
                 },
                 { name: '商品管理', page: PAGE.commodityLibrary, img:'chart.png',children:[
                     { name:'商品库',page:PAGE.commodityLibrary },
@@ -63,7 +63,7 @@ export class Home extends Widget {
             rightBox:true
         };
         
-        this.props.activePage = this.props.pageList[0];
+        this.props.activePage = this.props.pageList[0].children[3];
     }
 
     // 切换默认过滤器页面

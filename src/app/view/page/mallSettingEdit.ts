@@ -1,3 +1,4 @@
+import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 
 interface Props {
@@ -7,22 +8,16 @@ interface Props {
 }
 
 /**
- * 商城配置
+ * 商城配置编辑详情
  */
-export class MallSetting extends Widget {
+export class MallSettingEdit extends Widget {
     public props:Props = {
         isEdit:true,
         activeTab:0,
         showEdit:true
     };
 
-    public closeEdit() {
-        this.props.showEdit = false;
-        this.paint();
-    }
-
-    public goEdit() {
-        this.props.showEdit = true;
-        this.paint();
+    public goBack(e:any) {
+        notify(e.node,'ev-detail-back',{});
     }
 }

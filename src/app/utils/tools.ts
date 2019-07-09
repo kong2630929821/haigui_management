@@ -702,7 +702,7 @@ export const analyzeGoods = (data:any) => {
     return arr;
 };
 // 处理分组
-export const processingGrouping = (r:any) => {
+export const parseGroups = (r:any) => {
     if (!r.length) {
         return [];
     }
@@ -711,22 +711,24 @@ export const processingGrouping = (r:any) => {
     let j = 0;// 二级分类个数
     r.forEach(item => {
         const arr = [];// 二级分组
-        // if (JSON.parse(item[2])) {
-        //     item[6].forEach(v => {
-        //         arr.push([unicode2Str(v[1]),v[4]]);
-        //     });
-        //     i++;
-        //     data.push({ name:unicode2Str(item[1]),group_type:item[2],children:arr,time:timestampFormat(item[7]) });
-        // } else {
-        //     j++;
-        //     data.push({ name:'',group_type:item[2],children:[[unicode2Str(item[1]),item[4]]],time:timestampFormat(item[7]) });
-        // }   
-        item[6].forEach(v => {
-            j++;
-            arr.push([unicode2Str(v[1]),v[4]]);
-        });
+        if (item[6]) {
+            item[6].forEach(v => {
+                j++;
+                arr.push({ 
+                    id:v[0],
+                    name:unicode2Str(v[1]),
+                    imgs:v[4] 
+                });
+            });
+        } 
         i++;
-        data.push({ name:unicode2Str(item[1]),group_type:item[2],children:arr,time:timestampFormat(item[7]) });
+        data.push({ 
+            id:item[0],
+            name:unicode2Str(item[1]),
+            imgs:item[4],
+            children:arr,
+            time:timestampFormat(item[7]) 
+        });
         
     });
 

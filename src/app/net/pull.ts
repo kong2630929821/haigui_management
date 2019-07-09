@@ -1,8 +1,9 @@
-import { httpPort, sourceIp } from '../config';
+import { GroupsLocation, httpPort, sourceIp } from '../config';
 import { popNewMessage, priceFormat, timestampFormat,  unicode2Str } from '../utils/logic';
 import { analyzeGoods, parseOrderShow, processingGrouping, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
+import { parseAllGroups } from './parse';
 
 /**
  * 通信接口
@@ -878,6 +879,7 @@ export const getAllSuppliers = (ids?:any) => {
         return [[],[]];
     });
 };
+
 // 获取分组信息
 export const getGroup = (typeStatus:number) => {
     const msg = {
@@ -894,6 +896,70 @@ export const getGroup = (typeStatus:number) => {
     }).catch(e => {
         console.log(e);
     });
+};
+
+// 添加分组信息
+export const addGroup = (name:string,images:[string,number,number][],children:any) => {
+    const msg = {
+        type:'console_add_group',
+        param:{
+            name,
+            group_type:'true',
+            is_show:'true',
+            images,  // 图片url 图片类型 图片样式1静态
+            detail:'',
+            children
+        }
+    };
+   
+    return requestAsync(msg);
+};
+
+// 更新分组信息
+export const updateGroup = (group:any) => {
+    const msg = {
+        type:'console_update_group',
+        param:{
+            group
+        }
+    };
+   
+    return requestAsync(msg);
+};
+
+// 删除分组信息
+export const delGroup = (id:number) => {
+    const msg = {
+        type:'console_delete_group',
+        param:{
+            id
+        }
+    };
+   
+    return requestAsync(msg);
+};
+
+/**
+ * 根据位置获取分组信息
+ */
+export const getGroupsByLocation = () => {
+
+    return fetch(`http://${sourceIp}:${httpPort}/console/get_groups_tree`).then(res => {
+        return res.json();
+    });
+};
+
+// 绑定分组ID到location上
+export const updateLocation = (id:number,groupId:number) => {
+    const msg = {
+        type:'update_group_location',
+        param:{
+            id,
+            group_id:groupId
+        }
+    };
+
+    return requestAsync(msg);
 };
 
 // 商品上下架

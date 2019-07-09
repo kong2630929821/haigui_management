@@ -1,12 +1,14 @@
 .page{
     background: #F0F2F5;
     color:#354052;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-bottom: 80px;
 }
-.searchBox{
+.bannerBox{
     margin:20px 0;
     background: #fff;
     cursor: pointer;
-    border: 1px solid #eee;
 }
 .tableTitle{
     height:48px;
@@ -28,6 +30,31 @@
     text-align: center;
     color:rgba(255,255,255,1);
 }
+.item{
+    display: flex;
+    flex-direction: column;
+}
+.itemTitle{
+    height:24px;
+    background:rgba(240,240,240,1);
+    line-height: 24px;
+    display: flex;
+    justify-content: space-between;
+}
+.itemContent{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.tab{
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    margin: 0 10px;
+}
 .btn1{
     width:100px;
     height:36px;
@@ -39,55 +66,17 @@
     color:rgba(255,255,255,1);
     margin: 10px;
 }
-.typeItem{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 16px;
-}
-.updataImg{
-    width:120px;
-    height:120px;
-    border:1px solid rgba(112,112,112,1);
-    opacity:1;
-}
-.filterBoxItem{
-    display: flex;
-    flex-direction: column;
-    max-height: 600px;
-    overflow: auto;
-    padding-bottom: 20px;
-}
-.updataTitle{
-    margin-left: 30px;
-}
-.ctr{
-    cursor: pointer;
-    display: flex;
-    justify-content: space-around;
-    margin-top: 30px;
-}
-.tab{
-    width: 220px;
-    display: flex;
-    text-align: center;
-    align-items: center;
-    margin: 20px 10px;
-}
 .inputBox{
     border: 1px solid #888;
-    height: 100px;
-    width: 140px;
+    height: 120px;
+    margin: 10px;
+}
+.guessTab{
+    width: 360px;
     display: flex;
-    flex-direction: column;
     text-align: center;
     align-items: center;
-    margin: 0 10px;
-}
-.imgIcon{
-    width: 50px;
-    height: 50px;
-    margin-left: 20px;
+    margin: 10px;
 }
 .back{
     width:120px;
