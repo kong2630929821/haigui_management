@@ -44,14 +44,15 @@
                 </div>
             </div>
             <div w-class="productName">
-                <div w-class="searchleft" on-tap="exportOrder">导出表单</div>
-                <div ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入表单"}</app-components-inputFileBtn></div>
+                <div style=";margin-left: 30px;" ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入表单"}</app-components-inputFileBtn></div>
                 <div style="line-height: 31px;margin-left: 30px;">最新导入时间：2018-05-06 12:48:41</div>
+                <div w-class="searchleft" on-tap="userForm">应用表单</div>
+                <div w-class="searchleft" on-tap="exportForm">导出表单</div>
             </div>
         </div>
         <div ev-table-detail="goDetail">
             <div w-class="tableTitle">邮费列表</div>
-            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
+            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
         </div>
     </div>
     <div w-class="ctr">

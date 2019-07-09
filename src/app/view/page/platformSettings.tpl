@@ -19,11 +19,11 @@
         <div w-class="onShelves" on-tap="addSupplier">添加供应商</div>
     </div>
     {{elseif it.showAddSupplier==1}}
-    <div ev-change-showShop="showSupplier">
+    <div ev-change-showShop="showSupplier" ev-save-change="saveChange">
         <widget w-tag="app-view-page-addSupplier">{style:false}</widget>
     </div>
     {{else}}
-    <div ev-change-showShop="showSupplier">
+    <div ev-change-showShop="showSupplier" ev-save-change="saveChange">
         <widget w-tag="app-view-page-addSupplier">{currentData:{{it.currentValue}},style:{{it.showAddSupplier}} }</widget>
     </div>
     {{end}}

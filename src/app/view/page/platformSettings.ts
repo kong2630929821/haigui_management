@@ -99,4 +99,9 @@ export class PlatformSettings extends Widget {
         this.props.currentValue = deepCopy(this.props.dataList[e.num]);
         this.paint();
     }
+    // 保存编辑添加触发
+    public saveChange() {
+        this.props.showAddSupplier = 0;
+        this.init();
+    }
 }

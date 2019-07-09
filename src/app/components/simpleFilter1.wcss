@@ -74,3 +74,7 @@
  .active{
      background:#f0f0f0;
  }
+ .input{
+    height:44px;
+    display: inline-block;
+}

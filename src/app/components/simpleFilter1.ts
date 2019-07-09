@@ -11,6 +11,7 @@ interface Props {
     options:Option[];// 选项
     expand:boolean;// 是否展开所有选项 
     activeIndex:number;   // 当前选择的数组下标
+    search:boolean;// 带输入的下拉
 }
 
 interface Option {
@@ -23,7 +24,8 @@ export class SimpleFilter1 extends Widget {
     public props:Props = {
         options:[],
         expand:false,
-        activeIndex:0
+        activeIndex:0,
+        search:false
     };
     
     public setProps(props:any) {
@@ -48,6 +50,11 @@ export class SimpleFilter1 extends Widget {
         this.props.expand = false;
         notify(e.node,'ev-selected',{ activeIndex:num });
         this.paint();
+    }
+
+    // input
+    public inputChange(e:any) {
+        notify(e.node,'ev-searchInput',{ value:e.value });
     }
 
 }

@@ -1,6 +1,6 @@
 import { httpPort, sourceIp } from '../config';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { analyzeGoods, parseOrderShow, processingGrouping, supplierProcessing } from '../utils/tools';
+import { analyzeGoods, brandProcessing, parseOrderShow, processingGrouping, processingPostage, supplierProcessing, processingGroupingType } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -588,7 +588,7 @@ export const getAllGoods = (star:number,num:number,state:number,start_time:numbe
         // return res.json();
         return res.json().then(r => {
             const data = JSON.parse(r.value);
-
+            
             return analyzeGoods(data);
         });
     });
@@ -946,4 +946,97 @@ export const changeBindding = (uid:number,code:string) => {
     };
 
     return requestAsync(msg);
+};
+
+// v2导入运费
+export const getFreight = (supplier:number,goods_type:number,input:any) => {
+    const msg = {
+        type:'set_freight_price',
+        param:{
+            supplier,
+            goods_type,
+            input
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 获取所有品牌
+export const getAllBrand = (ids?:any) => {
+    const msg = { 
+        type: 'console_get_brand',
+        param: { 
+        } 
+    };
+    if (ids) {
+        msg.param = { ids:ids };
+    }
+
+    return requestAsync(msg).then(r => {
+        if (r.result === 1) {
+            const data = r.brandInfo;
+
+            return [data, brandProcessing(data)];
+        }
+    }).catch(e => {
+        
+        return [[],[]];
+    });
+};
+
+// 上传图片
+export const upLoadImg = (param:any) => {
+ 
+    return fetch(`http://${sourceIp}/upload_goods_img`,{
+        body:param,
+        method:'POST',
+        mode: 'cors'
+    }).then(res => res.json());
+};
+
+// 获取当前供应商的运费
+export const getFreightInfo = (supplier:number,goods_type:number) => {
+    const msg = {
+        type:'get_freight_config',
+        param:{
+            supplier,
+            goods_type
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return processingPostage(r.freight);
+    });
+};
+
+// 新增商品
+export const addShop = (input:any) => {
+    const msg = {
+        type:'console_add_goods',
+        param:{
+            input
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 上架商品获取一级分类二级分类
+export const getClassType = (typeStatus:number) => {
+    const msg = {
+        type:'console_get_group',
+        param:{
+            type:typeStatus
+        }
+    };
+   
+    return requestAsync(msg).then(r => {
+        const res = r.groupInfo;
+     
+        return processingGroupingType(res);
+    }).catch(e => {
+        console.log(e);
+    });
 };
