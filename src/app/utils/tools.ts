@@ -694,10 +694,9 @@ export const analyzeGoods = (data:any) => {
         } else {
             str = '普通商品';
         }
-        
-        arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:'平台',typeName_1:item[0][19][0][0] ? item[0][19][0][0][1] :'',typeName_2:item[0][19][0][0] ? item[0][19][1][0][1] :'',img:item[0][18],discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],type:typeList });
+        arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:item[0][6],typeName_1:item[0][19][0][0] ? item[0][19][0] :'',typeName_2:item[0][19][0][0] ? item[0][19][1] :'',img:item[0][18],discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],type:typeList,area:item[0][7] });
     });
-
+  
     return arr;
 };
 // 处理分组
@@ -738,8 +737,65 @@ export const supplierProcessing = (r:any) => {
     }
     const data = [];
     r.forEach(v => {
-        data.push([v[0],unicode2Str(v[1][0]),v[1][2],v[2],timestampFormat(v[3])]);
+        data.push([v[0],unicode2Str(v[1][0]),unicode2Str(v[1][2]),v[2],timestampFormat(v[3])]);
     });
     
     return data;
+};
+
+// 处理品牌信息
+export const brandProcessing = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+    const data = [];
+    r.forEach(v => {
+        data.push([v[0],unicode2Str(v[1][0]),v[1][1][1][0],v[1][2],v[1][3],timestampFormat(v[2])]);
+    });
+
+    return data;
+};
+
+// 处理邮费
+export const processingPostage = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+    const data = [];
+    const arr = [];// 原始数据
+    r.forEach(v => {
+        let str = '';
+        if (v[2] === 1) {
+            str = '微信';
+        }
+        arr.push([v[0],unicode2Str(v[1]),v[2],v[3]]);
+        data.push([v[0],unicode2Str(v[1]),str,`￥${priceFormat(v[3])}`]);
+    });
+
+    return [arr,data];
+};
+
+// 处理上传商品的分类
+export const processingGroupingType = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+    const data = [];
+    r.forEach(v => {
+        const arr = [];
+        v[6].forEach(item => {
+            arr.push([item[0],unicode2Str(item[1])]);
+        });
+        data.push([v[0],unicode2Str(v[1]),arr]);
+    });
+
+    return [data];
+};
+
+// 判断input是否有值
+export const isInputValue = (data:any) => {
+    return isNaN(parseInt(data));
 };

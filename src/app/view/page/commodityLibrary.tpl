@@ -46,7 +46,11 @@
                                 <div w-class="shopName">{{v.name}}</div>
                                 <div w-class="shopName">商品类型：{{v.shopType}}</div>
                                 <div w-class="shopName">品牌：{{v.brand}}</div>
-                                <div w-class="shopName">分类：{{v.typeName_1}}-{{v.typeName_2}}</div>
+                                <div w-class="shopName">分类：
+                                    {{for j,t of v.typeName_1}}
+                                        {{t[1]}}-{{v.typeName_2[j][1]}}
+                                    {{end}}
+                                </div>
                                 <div w-class="shopName">税费：{{v.tax}}</div>
                                 <div w-class="shopName">是否有折扣：{{v.discount}}</div>
                                 {{if v.state==0}}
@@ -58,7 +62,7 @@
                             </div>
                             <div w-class="bodyContent">
                                 <div w-class="imgShow">
-                                    <img style="width: 100%;height: 100%;" src="{{it.mallImagPre}}/{{v.img[0]?v.img[0][0]:''}}" alt=""/>
+                                    <img style="width: 100%;height: 100%;" src="{{it.mallImagPre}}{{v.img[0]?v.img[0][0]:''}}" alt=""/>
                                 </div>
                                 <div w-class="typeShow">
                                     {{for j,t of v.type}}
@@ -77,6 +81,7 @@
                                             <div w-class="btn" on-tap="shelf(0,{{v.id}})">下架</div>
                                             {{else}}
                                             {{end}}
+                                        <div w-class="btn" on-tap="change({{i}},e)">编辑</div> 
                                         <div w-class="btn">详情</div>
                                     </div>
                                 </div>
@@ -97,9 +102,15 @@
         <div ev-change-showShop="showShop">
             <widget w-tag="app-view-page-shopDetails"></widget>
         </div>
-    {{else}}
+    {{elseif it.shopDetail==2}}
         <div ev-change-showShop="showShop">
             <widget w-tag="app-view-page-onShelves"></widget>
         </div>
+    {{elseif it.shopDetail==3}}
+    <div w-class="page1">
+        <div ev-change-showShop="showShop">
+            <widget w-tag="app-view-page-onShelvesImg">{dataList:{{it.currentData}}}</widget>
+        </div>
+    </div>
     {{end}}
 </div>

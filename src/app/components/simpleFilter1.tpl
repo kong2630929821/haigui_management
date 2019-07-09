@@ -11,7 +11,13 @@
         {{end}}
     {{end}}
     <div on-tap="change" w-class="{{it.style?'show_1':'show'}}">
+        {{if it.search}}
+        <div w-class="input" ev-input-change="inputChange" style="width: 300px;margin-left: 46px;">
+            <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.options[it.activeIndex].text}} }</widget>
+        </div>
+        {{else}}
         <span w-class="showTesxt">{{it.options[it.activeIndex].text}}</span>
+        {{end}}
         <img src="../res/images/arrowDown.png" w-class="arrow"/>
     </div>
     {{if !it.style}}

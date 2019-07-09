@@ -229,3 +229,8 @@
     font-weight:600;
     color:rgba(53,64,82,1);
 }
+.page1{
+    background: #F0F2F5;
+    height: 100%;
+    color:#354052;
+}
