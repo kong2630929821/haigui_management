@@ -1,6 +1,7 @@
 // tslint:disable-next-line:missing-jsdoc
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
+import { mallImagPre } from '../config';
 
 interface Props {
     title:any[];// 表格标题
@@ -15,6 +16,7 @@ interface Props {
     inputFile:string;
     color:boolean;
     auto:boolean;
+    mallImagPre:string;
 }
 // tslint:disable-next-line:completed-docs
 export class Table extends Widget {
@@ -30,7 +32,8 @@ export class Table extends Widget {
         inlineBtn2:'',
         inputFile:'',
         color:false,
-        auto:false
+        auto:false,
+        mallImagPre:mallImagPre
     };
     
     public setProps(props:any) {

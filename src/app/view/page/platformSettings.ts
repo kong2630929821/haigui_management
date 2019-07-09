@@ -10,7 +10,7 @@ interface Props {
     showDataList:any;// 展示的数据
     showTitleList:any; // 标题
     btn1:string;// 表格操作按钮
-    showAddSupplier:boolean;// 是否显示添加供应商页面
+    showAddSupplier:number;// 是否显示添加供应商页面  0 供应商页面  1添加  2编辑
     searchValue:string;// 搜索框值
     currentValue:any;// 当前编辑的值
     dataList:any;// 原始数据
@@ -25,7 +25,7 @@ export class PlatformSettings extends Widget {
         showDataList:[],
         showTitleList:['供应商（ID）','供应商名','备注描述','手机号码','最后一次调整时间'],
         btn1:'编辑',
-        showAddSupplier:false,
+        showAddSupplier:0,
         searchValue:'',
         currentValue:[],
         dataList:[]
@@ -46,12 +46,12 @@ export class PlatformSettings extends Widget {
     }
     // 显示供应商设置页面
     public showSupplier() {
-        this.props.showAddSupplier = false;
+        this.props.showAddSupplier = 0;
         this.paint();
     }
     // 显示添加供应商页面
     public addSupplier() {
-        this.props.showAddSupplier = true;
+        this.props.showAddSupplier = 1;
         this.paint();
     }
     // 输入框发生变化
@@ -79,7 +79,7 @@ export class PlatformSettings extends Widget {
             console.log('getAllProduct',r);
             const jsonHead = this.props.showTitleList;
             const aoa = [jsonHead];
-            const jsonData = r;
+            const jsonData = r[1];
             for (const v of jsonData) {
                 for (let i = 0;i < v.length;i++) {
                     v[i] = v[i].toString();
@@ -95,8 +95,13 @@ export class PlatformSettings extends Widget {
     // 编辑供应商
     public goDetail(e:any) {
         console.log(e);
-        this.props.showAddSupplier = true;
+        this.props.showAddSupplier = 2;
         this.props.currentValue = deepCopy(this.props.dataList[e.num]);
         this.paint();
+    }
+    // 保存编辑添加触发
+    public saveChange() {
+        this.props.showAddSupplier = 0;
+        this.init();
     }
 }

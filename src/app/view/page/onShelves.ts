@@ -2,6 +2,7 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { searchProduct } from '../../net/pull';
+import { popNewMessage } from '../../utils/logic';
 interface Props {
     searchValue:string;
     onShelvesType:number;
@@ -20,7 +21,7 @@ export class OnShelves extends Widget {
         onShelvesType:0 ,
         searchData:[],
         selectData:[],
-        showDataTitle : ['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID'],
+        showDataTitle : ['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
         selectIndex:[]
     };
     // 搜索框内容
@@ -43,6 +44,17 @@ export class OnShelves extends Widget {
 
     // 添加到选中的产品中
     public check(index:number) {
+        let flag = false;
+        this.props.selectData.forEach(v => {
+            if (v[0] !== this.props.searchData[index][0]) {
+                flag = true;
+            }
+        });
+        if (flag) {
+            popNewMessage('供应商ID不一致');
+
+            return;
+        }
         this.props.selectData.push(this.props.searchData[index]);
         this.props.searchData.splice(index,1);
         this.props.selectIndex.push(index);
@@ -65,5 +77,10 @@ export class OnShelves extends Widget {
             this.props.onShelvesType = 1;
             this.paint();
         }
+    }
+
+    // 添加成功
+    public showShopOk(e:any) {
+        this.gotoShop(e);
     }
 }

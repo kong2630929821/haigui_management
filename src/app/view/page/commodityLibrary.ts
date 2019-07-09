@@ -21,6 +21,7 @@ interface Props {
     shopDetail:number;  // 0 商品 1商品详情 2上架商品
     mallImagPre:string;// 图片路径
     inputValue:string;// 输入框
+    currentData:any;// 当前操作的值
 }
 // 状态筛选
 export enum StatuType {
@@ -59,7 +60,8 @@ export class CommodityLibrary extends Widget {
         endTime:'', // 查询结束时间
         shopDetail:0,
         mallImagPre:mallImagPre,
-        inputValue:''
+        inputValue:'',
+        currentData:[]
     };
 
     public create() {
@@ -156,7 +158,7 @@ export class CommodityLibrary extends Widget {
     // 展示商品
     public showShop() {
         this.props.shopDetail = 0;
-        this.paint();
+        this.init(1);
     }
     // 分页变化
     public pageChange(e:any) {
@@ -210,5 +212,12 @@ export class CommodityLibrary extends Widget {
                 popNewMessage('操作失败');
             }
         });
+    }
+
+    // 编辑
+    public change(index:number,e:any) {
+        this.props.currentData = this.props.showDataList[index];
+        this.props.shopDetail = 3;
+        this.paint();
     }
 }

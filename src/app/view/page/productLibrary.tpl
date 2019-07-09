@@ -4,12 +4,6 @@
         <div w-class="tableTitle">筛选查询</div>
         <div w-class="filterBox">
             <div w-class="filterTitle">
-                <span>产品类型</span>
-                <div style="display:inline-block;height: 50px;margin-left: 20px;margin-top: 26px" ev-selected="filterTimeType">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
-                </div>
-            </div>
-            <div w-class="filterTitle">
                 <span>修改时间</span>   
             </div>
             <div style="margin: 28px 0 28px 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">

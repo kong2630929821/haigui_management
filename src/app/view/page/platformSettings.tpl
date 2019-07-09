@@ -1,5 +1,5 @@
 <div class="new-page" w-class="page" ev-detail-back="detailBack" on-tap="close">
-    {{if !it.showAddSupplier}}
+    {{if it.showAddSupplier==0}}
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>
         <div w-class="searchItem" style="height:92px">
@@ -18,8 +18,12 @@
         <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
         <div w-class="onShelves" on-tap="addSupplier">添加供应商</div>
     </div>
+    {{elseif it.showAddSupplier==1}}
+    <div ev-change-showShop="showSupplier" ev-save-change="saveChange">
+        <widget w-tag="app-view-page-addSupplier">{style:false}</widget>
+    </div>
     {{else}}
-    <div ev-change-showShop="showSupplier">
+    <div ev-change-showShop="showSupplier" ev-save-change="saveChange">
         <widget w-tag="app-view-page-addSupplier">{currentData:{{it.currentValue}},style:{{it.showAddSupplier}} }</widget>
     </div>
     {{end}}

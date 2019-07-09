@@ -12,15 +12,11 @@
             {{for i,v of it.selectData}}
             <div w-class="item">
                 <div w-class="bodyTitle">
-                    <div w-class="shopId" style="flex:1;margin-left: 93px;">商品名称（ID）</div>
+                    <div w-class="shopId" style=";margin-left: 93px;">商品名称（ID）</div>
                     <div w-class="shopName" style="flex:1;">{{v[2]}}</div>
                     <div w-class="shopType" style="flex:1;">
                         <span w-class="discount">供应商（ID）</span>
                         <span style="margin-left:12px;">{{v[0]}}</span>
-                    </div>
-                    <div w-class="shopType" style="flex:1;">
-                        <span w-class="discount">品牌</span>
-                        <span style="margin-left:12px;">巴黎</span>
                     </div>
                 </div>
                 <div w-class="itemBox">
@@ -54,15 +50,11 @@
             {{for i,v of it.searchData}}
                 <div w-class="item">
                 <div w-class="bodyTitle">
-                    <div w-class="shopId" style="flex:1;margin-left: 93px;">产品名称（ID）</div>
+                    <div w-class="shopId" style="margin-left: 93px;">产品名称（ID）</div>
                     <div w-class="shopName" style="flex:1;">{{v[2]}}</div>
                     <div w-class="shopType" style="flex:1;">
                         <span w-class="discount">供应商（ID）</span>
                         <span style="margin-left:12px;">{{v[0]}}</span>
-                    </div>
-                    <div w-class="shopType" style="flex:1;">
-                        <span w-class="discount">品牌</span>
-                        <span style="margin-left:12px;">XXXXXX</span>
                     </div>
                 </div>
                 <div w-class="itemBox">
@@ -89,7 +81,7 @@
     </div>
     {{end}}
     {{if it.onShelvesType==1}}
-        <div ev-change-showProduct="showProduct">
+        <div ev-change-showProduct="showProduct" ev-change-showShopOk="showShopOk">
             <widget w-tag="app-view-page-onShelvesImg">{selectData:{{it.selectData}} }</widget>
         </div>
     {{end}}

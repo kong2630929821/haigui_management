@@ -14,7 +14,7 @@
         {{end}}
         <div style="display:flex;flex:1 0 0;">
             <div w-class="th">操作</div>
-            <div w-class="td">
+            <div w-class="td1">
                 {{if it.userLabel == "市代理"}}
                 <div w-class="btn" on-tap="dnUserType(e,0)">降为海王</div>
                 <div w-class="btn" on-tap="upUserType(e,2)">升为省代理</div>
@@ -23,6 +23,7 @@
                 {{elseif it.userLabel == "省代理"}}
                 <div w-class="btn" on-tap="dnUserType(e,1)">降为市代理</div>
                 {{end}}
+                <div w-class="btn" on-tap="changeBinding">调整绑定人</div>
             </div>
         </div>
     </div>
