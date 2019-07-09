@@ -15,18 +15,8 @@
     left: 0;
     opacity: 0;
 }
-.lineRow{
-    width:39px;
-    height:0px;
-    border:1px solid rgba(112,112,112,1);
-    transform: translateY(20px);
-}
-.lineCol{
-    width:0px;
-    height:32px;
-    border:1px solid rgba(112,112,112,1);
-    opacity:1;
-    transform: translateX(20px);
+.addBox{
+    font-size: 32px;
 }
 .addImg{
     position: absolute;

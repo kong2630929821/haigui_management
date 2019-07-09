@@ -22,9 +22,24 @@ export const wsUrl = `ws://${erlangLogicIp}:${erlangLogicPort}`;
 
 // 分组位置定义
 export enum GroupsLocation {
-    FIRST = 1,    // 位置1 （顶部轮播图）
-    SECOND = 2,  //  位置2 （轮播图下方分组）
-    THIRD = 3   //   位置3  （剩下分组）
+    CLASSIFICATION = 20001,    // 分类页
+    FIRST = 10001,    //   首页位置1  轮播图
+    SECOND = 10002,   //   首页位置2 
+    THIRD = 10003,    //   首页位置3 
+    FOUR = 10004,     //   首页位置4 
+    FIVE = 10005,     //   首页位置5 
+    SIX = 10006,      //   首页位置6 
+    SEVEN = 10007,    //   首页位置7 
+    EIGHT = 10008,    //   首页位置8 
+    NINE = 10009,     //   首页位置9 
+    TEN = 10010,      //   首页位置10 
+    ELEVEN = 10011,   //   首页位置11 
+    TWLEVE = 10012,   //   首页位置12 
+    THIRTEEN = 10013, //   首页位置13 
+    FOURTEEN = 10014, //   首页位置14 
+    FIFTEEN = 10015,  //   首页位置15 
+    SIXTEEN = 10016,  //   首页位置16 
+    SEVENTEEN = 10017 //   首页位置17 
 }
 
 // 一次性最多获取多少订单
