@@ -228,15 +228,23 @@ export class OnShelvesImg extends Widget {
     // 主图上传
     public updataImgMain(index:number,e:any) {
         this.props.mainPicture[index] = [`${e.src}`,2,2];
+        if (this.props.mainPictureList.length === 5) {
+            this.paint();
+            
+            return ;
+        }
+        this.props.mainPictureList.push(1);
         this.paint();
     }
     // 详细图
     public updataImgInfo(index:number,e:any) {
         this.props.infoPicture[index] = [[],[],`${e.src}`,3,3];
-        if (this.props.infoPictureList.length !== 20) {
-            this.props.infoPictureList.push(1);
-            debugger;
+        if (this.props.infoPictureList.length === 20) {
+            this.paint();
+
+            return ;
         }
+        this.props.infoPictureList.push(1);
         this.paint();
     }
     // 下一步
