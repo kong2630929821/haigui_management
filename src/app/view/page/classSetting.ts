@@ -3,7 +3,8 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { GroupsLocation, mallImagPre } from '../../config';
 import { getGroupsByLocation } from '../../net/pull';
-import { parseGroups } from '../../utils/tools';
+import { getStore, Locate, setStore } from '../../store/memstore';
+import { parseAllGroups, parseGroups } from '../../utils/tools';
 
 interface Props {
     datas:any;  // 原始数据
@@ -14,6 +15,7 @@ interface Props {
     currentData:any;// 当前编辑的数据
     active:number;  // 当前展示的分组位置  0 商城首页 1 分类汇总
     showEdit:boolean;  // 显示编辑页面
+    addNewClass:boolean;  // 新增分组
 }
 /**
  * 分类设置
@@ -28,10 +30,13 @@ export class ClassSetting extends Widget {
         mallImagPre:mallImagPre,
         currentData:{
             name:'',
-            children:[]
+            children:[],
+            imgs:[],
+            localId: GroupsLocation.FIRST
         },
         active:1,
-        showEdit:false
+        showEdit:false,
+        addNewClass:false
     };
     public create() {
         super.create();
@@ -39,14 +44,16 @@ export class ClassSetting extends Widget {
     }
     public init() {
         getGroupsByLocation().then(res => {
-            this.props.datas = res.groupInfo;
-            this.props.datas.forEach(r => {
-                if (r[0] === GroupsLocation.CLASSIFICATION) {
-                    const val = parseGroups(r[6]);
-                    this.props.showDataList = val[2];
-                    this.props.num = [val[0],val[1]];
+            this.props.datas = parseAllGroups(res.groupInfo);
+            const index = this.props.datas.findIndex(r => r.id === GroupsLocation.CLASSIFICATION);
+            this.props.showDataList = this.props.datas[index].groups;
+            let second = 0;   // 二级分组的长度
+            for (const v of this.props.showDataList) {
+                if (v.groupType) {
+                    second += v.children.length;
                 }
-            });
+            }
+            this.props.num = [this.props.showDataList.length,second];
             this.paint();
             console.log(this.props.showDataList);
         });
@@ -56,7 +63,9 @@ export class ClassSetting extends Widget {
         this.props.showEdit = false;
         this.props.currentData = {
             name:'',
-            children:[]
+            children:[],
+            imgs:[],
+            localId: GroupsLocation.FIRST
         };
         this.paint();
     }
@@ -66,33 +75,37 @@ export class ClassSetting extends Widget {
         this.props.showEdit = true;
         if (index > -1) {
             this.props.currentData = deepCopy(this.props.showDataList[index]);
+            this.props.addNewClass = false;
+        } else {
+            this.props.addNewClass = true;
         }
         this.paint();
     }
 
+    // 切换查看位置
     public changeLocation(e:any) {
         this.props.active = e.value;
+        this.props.showDataList = [];
+
         if (e.value === 1) {   // 返回分类汇总页
-            this.props.datas.forEach(r => {
-                if (r[0] === GroupsLocation.CLASSIFICATION) {
-                    const val = parseGroups(r[6]);
-                    this.props.showDataList = val[2];
-                    this.props.num = [val[0],val[1]];
-                }
-            });
+            const index = this.props.datas.findIndex(r => r.id === GroupsLocation.CLASSIFICATION);
+            this.props.showDataList = this.props.datas[index].groups;
+            
         } else {   // 返回商城首页所有分类
-            this.props.showDataList = [];
-            this.props.num = [0,0];
             this.props.datas.forEach(r => {
-                if (r[0] !== GroupsLocation.CLASSIFICATION) {
-                    const val = parseGroups(r[6]);
-                    this.props.showDataList = this.props.showDataList.concat(val[2]);
-                    this.props.num[0] += val[0];
-                    this.props.num[1] += val[1];
+                if (r.id !== GroupsLocation.CLASSIFICATION) {
+                    this.props.showDataList = this.props.showDataList.concat(r.groups);
                 }
                 
             });
         }
+        let second = 0;   // 二级分组的长度
+        for (const v of this.props.showDataList) {
+            if (v.groupType) {
+                second += v.children.length;
+            }
+        }
+        this.props.num = [this.props.showDataList.length, second];
         console.log(this.props.showDataList);
         this.paint();
     }

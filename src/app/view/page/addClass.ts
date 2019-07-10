@@ -1,40 +1,36 @@
-// tslint:disable-next-line:missing-jsdoc
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { mallImagPre } from '../../config';
-import { addGroup, delGroup } from '../../net/pull';
+import { GroupsLocation, mallImagPre } from '../../config';
+import { addGroup, updateGroup, updateLocation } from '../../net/pull';
+import { getStore, ImageType } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
 
 interface Props {
     currentData:any;// 当前数据
     addClass:boolean;  // 添加新的二级分类
     mallImagPre:string;// 图片路径
-    firstName:string;  // 一级分类名字
     secondName:string; // 二级分类名字
     secondImg:string;  // 二级分类图片
+    addNewClass:boolean;  // 新增一级分组
 }
-// 图片类型枚举
-export enum ImageType {
-    THUMBNAIL = 1,   // 缩略图
-    MAIN = 2,       // 主图
-    DETAIL = 3,      // 详情图
-    ICON = 4          // 小图 图标
-}
+
 /**
  * 添加分类
  */
 // tslint:disable-next-line:completed-docs
 export class AddClass extends Widget {
+    public groupIDs:number[];  // 当前跟分组下的所有分组ID
     public props:Props = {
         currentData:{
+            id:0,
             name:'',
             children:[]
         },
         addClass:false,
         mallImagPre:mallImagPre,
-        firstName:'',
         secondName:'',
-        secondImg:''
+        secondImg:'',
+        addNewClass:true
     };
     public setProps(props:any) {
         this.props = {
@@ -42,12 +38,14 @@ export class AddClass extends Widget {
             ...props
         };
         super.setProps(this.props);
-        this.props.firstName = props.currentData.name;
+        const locations = getStore('locations',[]);
+        const index = locations.findIndex(r => r.location === GroupsLocation.CLASSIFICATION); 
+        this.groupIDs = index > -1 ? locations[index].children :[];
     }
 
     // 输入一级分类
     public firstNameChange(e:any) {
-        this.props.firstName = e.value;
+        this.props.currentData.name = e.value;
     }
 
     // 输入二级分类
@@ -57,16 +55,16 @@ export class AddClass extends Widget {
 
     // 上传图片
     public secondImgUpload(e:any) {
-        this.props.secondImg = 'aaaa';
+        this.props.secondImg = e.src;
     }
 
-    // 添加一个二级分类编辑
+    // 添加二级分类编辑
     public addBtn() {
         this.props.addClass = true;
         this.paint();
     }
 
-    // 添加二级分类编辑
+    // 删除二级分类编辑
     public delBtn() {
         this.props.addClass = false;
         this.paint();
@@ -74,22 +72,48 @@ export class AddClass extends Widget {
 
     // 添加一级分类
     public addClass(e:any) {
-        if (!this.props.firstName) {
+        if (!this.props.currentData.name) {
             popNewMessage('一级分类名称不能为空');
 
         } else if (this.props.addClass) {
             popNewMessage('请先保存二级分类');
 
-        } else {
+        } else if (this.props.addNewClass) {  // 新增一级分组
             const data = this.props.currentData.children.map(r => r.id);
-            addGroup(this.props.firstName, [], data).then(r => {
-                popNewMessage('保存成功');
-                this.goBack(e);
+            const locId = GroupsLocation.CLASSIFICATION;
+            addGroup(this.props.currentData.name, [], data, 'true').then(r => {
+                this.groupIDs.push(r.id[0]);
+                updateLocation(locId, this.groupIDs).then(r => {  // 将跟分组绑定到location上
+                    popNewMessage('保存成功');
+                    this.goBack(e);
+                });
+                
             }).catch(r => {
                 popNewMessage('保存失败');
             });
 
+        } else {  // 修改一级分类
+            const curData = this.props.currentData;
+            const ids = curData.children.map(r => r.id);
+            updateGroup(curData.id, curData.name, curData.imgs, ids, 'true').then(r => {
+                popNewMessage('保存成功');
+                this.goBack(e);
+    
+            }).catch(r => {
+                popNewMessage('保存失败');
+            });
         }
+    }
+
+    // 删除一级分类（从根分组中移除）
+    public delClass(e:any) {
+        const locId = GroupsLocation.CLASSIFICATION;
+        const index = this.groupIDs.findIndex(r => r === this.props.currentData.id); 
+        index > -1 && this.groupIDs.splice(index,1);
+        updateLocation(locId, this.groupIDs).then(r => {  // 将跟分组绑定到location上
+            popNewMessage('删除成功');
+            this.goBack(e);
+        });
     }
 
     // 添加二级分类
@@ -98,9 +122,9 @@ export class AddClass extends Widget {
             popNewMessage('二级分类信息未填写完整');
 
         } else {
-            addGroup(this.props.secondName,[[this.props.secondImg, ImageType.THUMBNAIL,1]],[]).then(r => {
+            addGroup(this.props.secondName,[[this.props.secondImg, ImageType.THUMBNAIL,1]],[],'false').then(r => {
                 this.props.currentData.children.push({
-                    id:r,
+                    id:r.id[0],
                     name:this.props.secondName,
                     imgs:[[this.props.secondImg, ImageType.THUMBNAIL,1]]
                 });
@@ -114,23 +138,22 @@ export class AddClass extends Widget {
         }
     }
 
+     // 修改二级分类
+    public upSecondClass(ind:number) {
+        const res = this.props.currentData.children[ind];
+        updateGroup(res.id,res.name,[],[],'false').then(r => {
+            this.props.secondName = '';
+            this.paint();
+            popNewMessage('保存成功');
+        }).catch(r => {
+            popNewMessage('保存失败');
+        });
+    }
+
     // 删除二级分类
     public delSecondClass(ind:number) {
         this.props.currentData.children.splice(ind,1);
         this.paint();
-    }
-
-    // 删除一级分类
-    public delClass() {
-        delGroup(this.props.currentData.id).then(r => {
-            popNewMessage('删除成功');
-        }).catch(r => {
-            if (r.type === 2141) {
-                popNewMessage('分组被使用不能删除');
-            } else {
-                popNewMessage('删除失败');
-            }
-        });
     }
 
     public goBack(e:any) {

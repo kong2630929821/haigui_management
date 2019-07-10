@@ -2,10 +2,10 @@
     <div w-class="body">
         {{if it.title}}
         <div w-class="title">
-            {{it.title}}
+            <pi-ui-html>{{it.title}}</pi-ui-html>
         </div>
         {{end}}
-        <div w-class="input">
+        <div w-class="input" ev-input-change="messChange">
             <widget w-tag="app-components-input">{plceHolder:{{it.placeHolder}} }</widget>        
         </div>
 

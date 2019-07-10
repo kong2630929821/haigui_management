@@ -44,7 +44,6 @@
 .itemContent{
     display: flex;
     align-items: center;
-    justify-content: space-between;
     flex-wrap: wrap;
 }
 .tab{
@@ -72,7 +71,6 @@
     margin: 10px;
 }
 .guessTab{
-    width: 360px;
     display: flex;
     text-align: center;
     align-items: center;
@@ -87,4 +85,10 @@
     line-height: 48px;
     font-size: 18px;
     margin-bottom: 20px;
+}
+.btns{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
 }

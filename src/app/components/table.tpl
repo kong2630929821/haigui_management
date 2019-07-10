@@ -52,6 +52,10 @@
                         {{if it.inlineBtn2}}
                         <div w-class="btn" style="margin-left:0;" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
                         {{end}}
+
+                        {{if it.inlineBtn3}}
+                        <div w-class="btn" style="color:#222;padding: 0 10px;" on-tap="goDetail(e,{{i}},3)">{{it.inlineBtn3}}</div>
+                        {{end}}
                        
                     </td>
                     {{end}}

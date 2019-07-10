@@ -4,6 +4,7 @@ interface Props {
     sureText:string;
     cancelText:string;
     placeHolder:string;
+    message:string;   // 输入内容
 }
 /**
  * 模态框
@@ -13,15 +14,16 @@ interface Props {
  * cancelText：取消按钮名称
  */
 export class ModalBox extends Widget {
+    public ok: (mess:string) => void;
+    public cancel: () => void; 
     public props: Props = {
         title:'',
         sureText:'确认',
         cancelText:'取消',
-        placeHolder:''
+        placeHolder:'',
+        message:''
     };
-    public ok: () => void;
-    public cancel: () => void; 
-
+    
     public setProps(props:any) {
         this.props = { 
             ...this.props,
@@ -30,17 +32,20 @@ export class ModalBox extends Widget {
         super.setProps(this.props);
         
     }
-    /**
-     * 点击取消按钮
-     */
+
+    // 点击取消按钮
     public cancelBtnClick() {
         this.cancel && this.cancel();
     }
-    /**
-     * 点击确认按钮
-     */
+
+    // 点击确认按钮
     public okBtnClick() {
-        this.ok && this.ok();
+        this.ok && this.ok(this.props.message);
+    }
+
+    // 输入内容
+    public messChange(e:any) {
+        this.props.message = e.value;
     }
     
 }

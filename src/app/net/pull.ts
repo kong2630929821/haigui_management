@@ -1,9 +1,8 @@
-import { GroupsLocation, httpPort, sourceIp } from '../config';
+import { httpPort, sourceIp } from '../config';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { analyzeGoods, brandProcessing, parseOrderShow, processingGrouping, processingGroupingType, processingLogs, processingPostage, processingUser, processingUserType, supplierProcessing } from '../utils/tools';
+import { analyzeGoods, brandProcessing, parseOrderShow, processingGroupingType, processingLogs, processingPostage, processingUser, processingUserType, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
-import { parseAllGroups } from './parse';
 
 /**
  * 通信接口
@@ -445,13 +444,14 @@ export const getHWangApply = (stTime?:number,edTime?:number) => {
  * @param uid uid
  * @param state 1: 处理中 2：同意 3：拒绝
  */
-export const changeHWangState = (id:number,uid:number,state:number) => {
+export const changeHWangState = (id:number,uid:number,state:number,reason:string) => {
     const msg = {
         type:'mall_mgr/members@haiwang_application_state',
         param:{
             id,
             uid,
-            state
+            state,
+            reason
         }
     };
 
@@ -489,14 +489,16 @@ export const getWithdrawApply = (stTime?:number,edTime?:number) => {
  * @param id id
  * @param uid uid
  * @param state 1: 处理中 2：同意 3：拒绝
+ * @param note 拒绝理由
  */
-export const changeWithdrawState = (id:number,uid:number,state:number) => {
+export const changeWithdrawState = (id:number,uid:number,state:number,note:string) => {
     const msg = {
         type:'mall_mgr/members@withdraw_application_state',
         param:{
             id,
             uid,
-            state
+            state,
+            note
         }
     };
 
@@ -666,13 +668,14 @@ export const getReturnGoodsId = (id:number) => {
 };
 
 // 改变退货状态
-export const getReturnStatus = (uid:number,id:number,state:number) => {
+export const setReturnStatus = (uid:number,id:number,state:number,reason:string) => {
     const msg = {
         type:'set_return_goods',
         param:{
             uid,
             id,
-            state
+            state,
+            reason
         }
     };
 
@@ -881,31 +884,13 @@ export const getAllSuppliers = (ids?:any) => {
     });
 };
 
-// 获取分组信息
-export const getGroup = (typeStatus:number) => {
-    const msg = {
-        type:'console_get_group',
-        param:{
-            type:typeStatus
-        }
-    };
-   
-    return requestAsync(msg).then(r => {
-        const res = r.groupInfo;
-     
-        return processingGrouping(res);
-    }).catch(e => {
-        console.log(e);
-    });
-};
-
 // 添加分组信息
-export const addGroup = (name:string,images:[string,number,number][],children:any) => {
+export const addGroup = (name:string,images:[string,number,number][],children:number[],group_type:string) => {
     const msg = {
         type:'console_add_group',
         param:{
             name,
-            group_type:'true',
+            group_type,   // 是否有子分组
             is_show:'true',
             images,  // 图片url 图片类型 图片样式1静态
             detail:'',
@@ -917,11 +902,17 @@ export const addGroup = (name:string,images:[string,number,number][],children:an
 };
 
 // 更新分组信息
-export const updateGroup = (group:any) => {
+export const updateGroup = (id:number,name:string,images:[string,number,number][],children:number[],group_type:string) => {
     const msg = {
         type:'console_update_group',
         param:{
-            group
+            id,
+            name,
+            group_type,   // 是否有子分组
+            is_show:'true',
+            images,  // 图片url 图片类型 图片样式1静态
+            detail:'',
+            children
         }
     };
    
@@ -950,8 +941,12 @@ export const getGroupsByLocation = () => {
     });
 };
 
-// 绑定分组ID到location上
-export const updateLocation = (id:number,groupId:number) => {
+/**
+ * 绑定分组ID到location上
+ * @param id location
+ * @param groupId group
+ */
+export const updateLocation = (id:number,groupId:number[]) => {
     const msg = {
         type:'update_group_location',
         param:{

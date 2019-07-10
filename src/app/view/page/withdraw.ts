@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { changeWithdrawState, getWithdrawApply, getWithdrawTotal } from '../../net/pull';
-import { dateToString, parseDate, popNewMessage, priceFormat, timestampFormat } from '../../utils/logic';
+import { dateToString, parseDate, popNewMessage, priceFormat, timestampFormat, unicode2Str } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
 const DEFAULT_NUM = 5;
@@ -50,7 +50,7 @@ export class Withdraw extends Widget {
         showDataList:[
             // ['123456','￥500.00','现金','2017-12-25 14:35','申请中']
         ],
-        showTitleList:['用户ID','提现金额','手续费','提现渠道','提交时间','受理状态','微信支付单号','处理时间'],
+        showTitleList:['用户ID','提现金额','手续费','提现渠道','提交时间','受理状态','拒绝理由','微信支付单号','处理时间'],
         activeTab:0,
         withdrawIdList:[],
         datas:[],
@@ -140,6 +140,7 @@ export class Withdraw extends Widget {
                         '微信',            // 提现渠道
                         timestampFormat(item[5]), // 时间
                         Status[item[4]],       // 状态
+                        unicode2Str(item[6]),   // note 拒绝理由
                         item[7], // 微信单号
                         timestampFormat(item[8]) // 处理时间
                     ];
@@ -161,23 +162,26 @@ export class Withdraw extends Widget {
         const uid = this.props.showDataList[e.num + this.props.curPage  * DEFAULT_NUM][0];
         if (id && uid) {
             if (e.fg === 1) {
-                popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
-                    await changeWithdrawState(id, uid, 3).then(r => {
-                        if (r.result !== 1) {
-                            popNewMessage(r.error_code);
-                        } else {
-                            popNewMessage('处理完成');
-                        }
-                    }).catch(e => {
-                        popNewMessage(e.error_code);
-                    });  // 拒绝
-                    
-                    this.getData();
+                popNew('app-components-modalBoxInput',{ title:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的提现申请`,placeHolder:'请输入拒绝理由' },async (r) => {
+                    if (!r) {
+                        popNewMessage('请输入拒绝理由！');
+                    } else {
+                        await changeWithdrawState(id, uid, 3, r).then(r => { // 拒绝
+                            if (r.result !== 1) {
+                                popNewMessage(r.error_code);
+                            } else {
+                                popNewMessage('处理完成');
+                            }
+                        }).catch(e => {
+                            popNewMessage(e.error_code);
+                        });
+                        this.getData();
+                    }  
                 });
                 
             } else {
                 if (this.props.activeTab === 0) {
-                    await changeWithdrawState(id, uid, 1).then(r => {
+                    await changeWithdrawState(id, uid, 1,'').then(r => {
                         console.log(r);
                         if (r.result !== 1) {
                             popNewMessage(r.error_code);
@@ -190,7 +194,7 @@ export class Withdraw extends Widget {
                     this.getData();
                 } else {
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
-                        await changeWithdrawState(id, uid, 2).then(r => {
+                        await changeWithdrawState(id, uid, 2,'').then(r => {
                             if (r.result !== 1) {
                                 popNewMessage(r.error_code);
                             } else {
@@ -213,7 +217,7 @@ export class Withdraw extends Widget {
         const id = this.props.withdrawIdList[e.num + this.props.curPage * DEFAULT_NUM];
         const uid = this.props.showDataList[e.num + this.props.curPage * DEFAULT_NUM][0];
         popNew('app-components-modalBox',{ content:`确认重新处理用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
-            await changeWithdrawState(id, uid, 1).then(r => {
+            await changeWithdrawState(id, uid, 1, '').then(r => {
                 if (r.result !== 1) {
                     popNewMessage(r.error_code);
                 }

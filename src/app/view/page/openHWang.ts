@@ -36,7 +36,7 @@ export class OpenHWang extends Widget {
         showDataList:[
             // ['123456','张三','15534429570','四川省成都市金牛区XX街道XX小区XX','申请中']
         ],
-        showTitleList:['用户ID','姓名','手机号','地址信息','微信名','邀请人id','申请时间','受理状态'],
+        showTitleList:['用户ID','姓名','手机号','地址信息','微信名','邀请人id','申请时间','受理状态','拒绝理由'],
         activeTab:0,
         datas:[],
         btn1:'',
@@ -108,7 +108,8 @@ export class OpenHWang extends Widget {
                         unicode2ReadStr(item[3]),   // 微信名
                         item[7],    // 邀请人id
                         dateToString(item[6],1), // 申请时间
-                        Status[item[5]]  // 状态
+                        Status[item[5]],  // 状态
+                        unicode2Str(item[9])  // 拒绝理由
                     ];
                 });
                 this.changeTab(this.props.activeTab);
@@ -128,20 +129,26 @@ export class OpenHWang extends Widget {
         const uid = this.props.curShowDataList[e.num][0];
         if (id && uid) {
             if (e.fg === 1) {
-                popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
-                    await changeHWangState(id, uid, 3);  // 拒绝
-                    popNewMessage('处理完成');
-                    this.getData();
+               
+                popNew('app-components-modalBoxInput',{ title:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请`,placeHolder:'请输入拒绝理由' },async (r) => {
+                    if (!r) {
+                        popNewMessage('请输入拒绝理由！');
+                    } else {
+                        await changeHWangState(id, uid, 3, r);  // 拒绝
+                        popNewMessage('处理完成');
+                        this.getData();
+                    }
+                    
                 });
                 
             } else {
                 if (this.props.activeTab === 0) {
-                    await changeHWangState(id, uid, 1);  // 开始处理
+                    await changeHWangState(id, uid, 1, '');  // 开始处理
                     popNewMessage('处理完成');
                     this.getData();
                 } else {
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
-                        await changeHWangState(id, uid, 2);  // 同意
+                        await changeHWangState(id, uid, 2, '');  // 同意
                         popNewMessage('处理完成');
                         this.getData();
                     });
