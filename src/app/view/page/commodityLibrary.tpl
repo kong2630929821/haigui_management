@@ -77,12 +77,12 @@
                                     <div w-class="ctrollerStatus">
                                             {{if v.state==0}}
                                             <div w-class="btn" on-tap="shelf(1,{{v.id}})">上架</div>
+                                            <div w-class="btn" on-tap="change({{i}},e)">编辑</div> 
                                             {{elseif v.state==1}}
                                             <div w-class="btn" on-tap="shelf(0,{{v.id}})">下架</div>
                                             {{else}}
                                             {{end}}
-                                        <div w-class="btn" on-tap="change({{i}},e)">编辑</div> 
-                                        <div w-class="btn">详情</div>
+                                        <div w-class="btn" on-tap="lookInfo({{i}},e)">详情</div>
                                     </div>
                                 </div>
                             </div>
@@ -99,17 +99,17 @@
             </div>
         </div>
     {{elseif it.shopDetail==1}}
-        <div ev-change-showShop="showShop">
-            <widget w-tag="app-view-page-shopDetails"></widget>
+        <div ev-change-cancel="lookCancel">
+            <widget w-tag="app-view-page-onShelvesImg">{dataList:{{it.currentData}},disable:true}</widget>
         </div>
     {{elseif it.shopDetail==2}}
-        <div ev-change-showShop="showShop">
+        <div ev-change-showShop="showShop"  ev-change-cancel="lookCancel">
             <widget w-tag="app-view-page-onShelves"></widget>
         </div>
     {{elseif it.shopDetail==3}}
     <div w-class="page1">
-        <div ev-change-showShop="showShop">
-            <widget w-tag="app-view-page-onShelvesImg">{dataList:{{it.currentData}}}</widget>
+        <div ev-change-showShop="showShop"  ev-change-cancel="lookCancel">
+            <widget w-tag="app-view-page-onShelvesImg">{dataList:{{it.currentData}},style:false}</widget>
         </div>
     </div>
     {{end}}

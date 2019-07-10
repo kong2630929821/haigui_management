@@ -1,6 +1,6 @@
 import { GroupsLocation, httpPort, sourceIp } from '../config';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { analyzeGoods, brandProcessing, parseOrderShow, processingGrouping, processingPostage, supplierProcessing, processingGroupingType } from '../utils/tools';
+import { analyzeGoods, brandProcessing, parseOrderShow, processingGrouping, processingGroupingType, processingLogs, processingPostage, processingUser, processingUserType, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 import { parseAllGroups } from './parse';
@@ -986,11 +986,10 @@ export const getAllArea = () => {
 };
 
 // 新增供应商
-export const addSupplier = (supplier:number,supplier_name:string,supplier_desc:string,supplier_image:any,supplier_phone:string) => {
+export const addSupplier = (supplier_name:string,supplier_desc:string,supplier_image:any,supplier_phone:string) => {
     const msg = {
         type:'console_add_supplier',
         param:{
-            supplier,
             supplier_name,
             supplier_desc,
             supplier_image,
@@ -1104,5 +1103,203 @@ export const getClassType = (typeStatus:number) => {
         return processingGroupingType(res);
     }).catch(e => {
         console.log(e);
+    });
+};
+
+// 修改商品
+export const changeShop = (input:any) => {
+    const msg = {
+        type:'console_update_goods',
+        param:{
+            input
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 获取商品销售量
+export const getShopSale = (goods_id:number,start:number,end:number) => {
+    const msg = {
+        type:'console_get_daily_sold',
+        param:{
+            goods_id,
+            start,
+            end
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 编辑供应商
+export const changeSupplier = (supplier:number,supplier_name:string,supplier_desc:string,supplier_image:any,supplier_phone:string) => {
+    const msg = {
+        type:'console_update_supplier',
+        param:{
+            supplier,
+            supplier_name,
+            supplier_desc,
+            supplier_image,
+            supplier_phone 
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 新增品牌
+export const addBrand = (brand_name:string,brand_image:any, brand_desc:string) => {
+    const msg = {
+        type:'console_add_brand',
+        param:{
+            brand_name,
+            brand_image,
+            brand_desc
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 编辑品牌
+export const changeBrand = (brand_id:number,brand_name:string,brand_image:any,brand_desc:string,brand_goods:any) => {
+    const msg = {
+        type:'console_edit_brand',
+        param:{
+            brand_id,
+            brand_name,
+            brand_image,
+            brand_desc,
+            brand_goods
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 删除品牌
+export const removeBrand = (brand_id:number) => {
+    const msg = {
+        type:'console_delete_brand',
+        param:{
+            brand_id
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 获取操作日志
+export const getOperationLog = (start_time:number,end_time:number) => {
+    const msg = {
+        type:'mall_mgr/manager@get_log',
+        param:{
+            start_time,
+            end_time
+        }
+    };
+    
+    return requestAsync(msg).then(r => {
+
+        return processingLogs(r.log);
+    }).catch(e => {
+        return [];
+    });
+};
+
+// 获取所有用户
+export const getAllUser = () => {
+    const msg = {
+        type:'mgr_show_user_list',
+        param:{}
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return processingUser(r.value);
+    }).catch(e => {
+        
+        return [];
+    });
+};
+
+// 获取所有账号类型
+export const getAllUserType = () => {
+    const msg = {
+        type:'mgr_get_group_info',
+        param:{}
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return processingUserType(r.value);
+    }).catch(e => {
+        
+        return [];
+    });
+};
+
+// 添加账号
+export const addAccount = (user:string,password:string) => {
+    const msg = {
+        type:'mgr_create_user',
+        param:{
+            user,
+            password
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 添加用户到权限组
+export const addUserToUserType = (user:string,name:string) => {
+    const msg = {
+        type:'mgr_add_user_group_auth',
+        param:{
+            user,
+            name
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 修改账号
+export const changeUser = (user:string,password:string) => {
+    const msg = {
+        type:'mgr_modify_user',
+        param:{
+            user,
+            password
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 删除账户
+export const removeUser = (user:string) => {
+    const msg = {
+        type:'mgr_del_user',
+        param:{
+            user
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 获取大转盘信息
+export const getBigTurntable = () => {
+    const msg = {
+        type:'mall_mgr/members@get_lottery_config',
+        param:{}
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
     });
 };

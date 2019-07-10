@@ -28,7 +28,13 @@ const PAGE = {
     platformSettings:'platformSettings',// 平台设置
     classSetting:'classSetting',// 分类设置
     brandSetting:'brandSetting',// 品牌设置
-    mallSetting:'mallSetting' // 商城设置
+    mallSetting:'mallSetting', // 商城设置
+    dataStatistics:'dataStatistics',// 数据统计
+    operationLog:'operationLog',// 操作日志
+    accountSettings:'accountSettings',// 账号设置
+    activitySettings:'activitySettings',// 活动设置-大转盘设置
+    invitationSettings:'invitationSettings',// 邀请设置
+    rebateSetting:'rebateSetting'// 返利设置
 };
 
 // tslint:disable-next-line:completed-docs
@@ -39,12 +45,21 @@ export class Home extends Widget {
         super();
         this.props = {
             pageList: [
+                { name: '活动设置', page: PAGE.activitySettings, img:'chart.png',children:[
+                    { name:'大转盘设置',page:PAGE.activitySettings },
+                    { name:'邀请奖励设置',page:PAGE.invitationSettings },
+                    { name:'返利设置',page:PAGE.rebateSetting }],
+                    show:true 
+                },
+                { name: '账号设置', page: PAGE.accountSettings, img:'chart.png' },
+                { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' },
+                { name: '操作日志', page: PAGE.operationLog, img:'chart.png' },
                 { name: '平台设置', page: PAGE.platformSettings, img:'chart.png',children:[
                     { name:'供应商设置',page:PAGE.platformSettings },
                     { name:'分类设置',page:PAGE.classSetting },
                     { name:'品牌设置',page:PAGE.brandSetting },
                     { name:'商场设置',page:PAGE.mallSetting }],
-                    show:true 
+                    show:false 
                 },
                 { name: '商品管理', page: PAGE.commodityLibrary, img:'chart.png',children:[
                     { name:'商品库',page:PAGE.commodityLibrary },
@@ -63,7 +78,7 @@ export class Home extends Widget {
             rightBox:true
         };
         
-        this.props.activePage = this.props.pageList[0].children[3];
+        this.props.activePage = this.props.pageList[0];
     }
 
     // 切换默认过滤器页面
