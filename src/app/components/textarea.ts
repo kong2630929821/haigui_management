@@ -38,7 +38,6 @@ export class Input extends Widget {
     public setProps(props: Props, oldProps: Props) {
         super.setProps(props,oldProps);
         this.state.currentValue = props.input ? props.input :'';
-        this.props.surplus = this.props.maxLength - props.input.length;
         
     }
     /**

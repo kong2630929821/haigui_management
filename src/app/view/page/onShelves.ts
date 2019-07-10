@@ -83,4 +83,10 @@ export class OnShelves extends Widget {
     public showShopOk(e:any) {
         this.gotoShop(e);
     }
+
+    // 取消
+    public showProduct() {
+        this.props.onShelvesType = 0;
+        this.paint();
+    }
 }

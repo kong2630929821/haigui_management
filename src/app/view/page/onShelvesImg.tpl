@@ -1,13 +1,24 @@
-<div>
-    {{if it.style==true}}
+<div on-tap="close">
+    <div w-class="narBar">
+        {{if !it.style}}
+        <div on-tap="gotoShop">商品库</div>
+        <div>></div>
+        <div>修改商品</div>
+        {{end}}
+        {{if it.disable}}
+        <div on-tap="gotoShop">商品库</div>
+        <div>></div>
+        <div>商品详情</div>
+        {{end}}
+    </div>
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">基本信息</div>
-        <div w-class="searchItem" style="height:264px;flex-direction: row;flex-wrap: wrap;">
+        <div w-class="searchItem" style="height:296px;flex-direction: row;flex-wrap: wrap;">
             {{for i,v of it.inputTitle}}
                 <div w-class="item1">
                     <div w-class="title">{{v}}</div>
                     <div w-class="input" ev-input-change="inputChange({{i}},e)" style="width: 300px;margin-left: 46px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[i]}} }</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[i]?it.data[i]:JSON.stringify(it.data[i])}},disabled:{{it.disable}} }</widget>
                     </div>
                 </div>
             {{end}}
@@ -37,7 +48,7 @@
             <div w-class="item1">
                 <div w-class="title">税费</div>
                 <div w-class="input" ev-input-change="taxChange" style="width: 300px;margin-left: 46px;">
-                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.tax}} }</widget>
+                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{JSON.stringify(it.tax)}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
             {{end}}
@@ -56,27 +67,37 @@
                 <div>缩略图</div>
                 <div w-class="img_info">
                     <div w-class="img_item" ev-input-file="updataImg">
-                        <app-components-inputImg>{path:{{it.path}}}</app-components-inputImg>
+                        <app-components-inputImg>{path:{{it.path}},src:{{it.thumbnail.length!=0?it.thumbnail[0][0]:''}}}</app-components-inputImg>
                     </div>
                 </div>
             </div>
             <div w-class="shopImg">
                 <div>主图({{it.mainPicture.length}}/5)</div>
                 <div w-class="img_info">
-                    {{for i,v of it.mainPictureList}}
+                    {{for i,v of it.mainPicture}}
                         <div w-class="img_item" ev-input-file="updataImgMain({{i}},e)">
-                            <app-components-inputImg>{path:{{it.path}}}</app-components-inputImg>
+                            <app-components-inputImg>{path:{{it.path}},src:{{it.mainPicture[i][0]}} }</app-components-inputImg>
                         </div>
+                    {{end}}
+                    {{if it.mainPicture.length!=5}}
+                    <div w-class="img_item" ev-input-file="addMainImg">
+                        <app-components-inputImg>{path:{{it.path}} }</app-components-inputImg>
+                    </div>
                     {{end}}
                 </div>
             </div>
             <div w-class="shopImg">
                 <div>详情图({{it.infoPicture.length}}/20)</div>
                 <div w-class="img_info">
-                    {{for i,v of it.infoPictureList}}
+                    {{for i,v of it.infoPicture}}
                         <div w-class="img_item" ev-input-file="updataImgInfo({{i}},e)">
-                            <app-components-inputImg>{path:{{it.path}}}</app-components-inputImg>
+                            <app-components-inputImg>{path:{{it.path}},src:{{it.infoPicture[i][0]}} }</app-components-inputImg>
                         </div>
+                    {{end}}
+                    {{if it.infoPicture.length!=20}}
+                    <div w-class="img_item" ev-input-file="addInfoImg">
+                        <app-components-inputImg>{path:{{it.path}},src:"" }</app-components-inputImg>
+                    </div>
                     {{end}}
                 </div>
             </div>
@@ -107,7 +128,7 @@
                             <div>差价：</div>
                             <div>
                                 <div w-class="input" ev-input-change="spread(e,{{i}})" style="width: 124px;margin-left: 46px;height: 30px;">
-                                    <widget w-tag="app-components-input">{placeHolder:"请输入"}</widget>
+                                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{JSON.stringify(it.spreadList[i][1])}},disabled:{{it.disable}} }</widget>
                                 </div>
                             </div>
                         </div>
@@ -117,99 +138,27 @@
             {{end}}
         </div>
     </div>
-    {{else}}
-    <div w-class="searchBox">
-            <div w-class="onShelvesTitle">基本信息</div>
-            <div w-class="searchItem" style="height:286px;overflow: auto;">
-                <div w-class="prductTitle">
-                    <div w-class="shopId" style="margin-left: 25px;">商品名称（ID）</div>
-                    <div w-class="shopName">2018款怀集系列见覅拉尔金属怀旧连衣裙-红色（1515）</div>
-                    <div w-class="shopType">
-                        <span w-class="discount">所属分类</span>
-                        <span style="margin-left:12px;">服饰-上装</span>
-                    </div>
-                    <div w-class="shopType">
-                        <span w-class="discount">折扣</span>
-                        <span style="margin-left:12px;">无折扣</span>
-                    </div>
-                </div>
-                {{for i,v of [1,1,1]}}
-                <div w-class="item">
-                    <div w-class="bodyTitle">
-                        <div w-class="shopId" style="margin-left: 25px;">商品名称（ID）</div>
-                        <div w-class="shopName">2018款怀集系列见覅拉尔金属怀旧连衣裙-红色（1515）</div>
-                        <div w-class="shopType">
-                            <span w-class="discount">供应商（ID）</span>
-                            <span style="margin-left:12px;">附加类水果（15511）</span>
-                        </div>
-                        <div w-class="shopType">
-                            <span w-class="discount">品牌</span>
-                            <span style="margin-left:12px;">巴黎</span>
-                        </div>
-                    </div>
-                    <div w-class="itemBox">
-                        <div w-class="productList">
-                            {{for i,v of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}}
-                            <div w-class="product_info">
-                                <div>sku</div>
-                                <div>15484848848</div>
-                            </div>
-                            {{end}}
-                        </div>
-                    </div>
-                </div>
-                {{end}}
-            </div>
-        </div>
-        <div w-class="searchBox">
-            <div w-class="onShelvesTitle">基本信息</div>
-            <div w-class="bodyTitle">
-                <div w-class="shopId" style="margin-left: 93px;">商品名称（ID）</div>
-                <div w-class="shopName">2018款怀集系列见覅拉尔金属怀旧连衣裙-红色（1515）</div>
-                <div w-class="shopType">
-                    <span w-class="discount">是否打折</span>
-                    <span style="margin-left:12px;">9.5折</span>
-                </div>
-            </div>
-            <div w-class="updataImg">
-                <div w-class="shopImg">
-                    <div>商品封面图(4/5)</div>
-                    <div w-class="img_info">
-                        {{for i,v of [1,2,3,4,5]}}
-                            <div w-class="img_item"></div>
-                        {{end}}
-                    </div>
-                </div>
-                <div w-class="shopImg">
-                    <div>商品详情图（12/20）</div>
-                    <div w-class="img_info">
-                        {{for i,v of [1,2,3,4,5,1,1,1,1,1]}}
-                            <div w-class="img_item"></div>
-                        {{end}}
-                    </div>
-                </div>
-                <div w-class="shopImg">
-                    <div>商品轮播（12/20）</div>
-                    <div w-class="img_info">
-                        {{for i,v of [1,2,3,4,5]}}
-                            <div w-class="img_item"></div>
-                        {{end}}
+    {{if it.disable}}
+    <div w-class="saleBox" style="height:144px">
+        <div w-class="tableTitle">销售信息</div>
+        <div w-class="saleInfo">
+            <div w-class="saleNum">该商品总销售量：{{it.sale[0]}}</div>
+            <div w-class="saleCtr">
+                <div w-class="saleTime">时间段销售量：{{it.sale[1]}}</div>
+                <div style="display: flex;margin-left: 40px;">
+                    <div w-class="checkTime">选择时间段</div>
+                    <div ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
+                        <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
                     </div>
                 </div>
             </div>
         </div>
-        <div w-class="searchBox">
-            <div w-class="onShelvesTitle">商品展示</div>
-            <div w-class="showShop">
-                <div w-class="title">所属分类</div>
-                <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="filterTimeType">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
-                </div>
-            </div>
-        </div>
+    </div>
     {{end}}
     <div w-class="ctr">
         <div w-class="btn" on-tap="gotoShop">取消</div>
-        <div w-class="btn" on-tap="next">确认</div>
+        {{if !it.disable}}
+        <div w-class="btn" on-tap="next">{{it.btn}}</div>
+        {{end}}
     </div>
 </div>

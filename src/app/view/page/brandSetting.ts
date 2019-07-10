@@ -2,7 +2,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
-import { getAllBrand } from '../../net/pull';
+import { getAllBrand, removeBrand } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
@@ -52,6 +52,7 @@ export class BrandSetting extends Widget {
     // 分页变化
     public pageChange(e:any) {
         console.log(e.value);
+        this.props.currentIndex = e.value;
         this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         console.log('当前页数据：',this.props.showDataList);
         this.paint();
@@ -105,22 +106,41 @@ export class BrandSetting extends Widget {
 
     // 表格操作按钮
     public goDetail(e:any) {
-        popNew('app-components-modalBox',{ content:`确认删除ID为“<span style="color:#1991EB">${e.value[0]}</span>的品牌` }, () => {
-            this.remove();
-        },() => {
-            popNewMessage('你已经取消操作！');
-        });
+        if (e.fg === 1) {
+            // 编辑
+            popNew('app-components-addBrand',{ title:'编辑品牌',data:e.value,sureText:'修改',style:false },() => {
+                this.init();
+            });
+        } else {
+            popNew('app-components-modalBox',{ content:`确认删除ID为“<span style="color:#1991EB">${e.value[0]}</span>的品牌` }, () => {
+                this.remove(e.value[0],e.num);
+            },() => {
+                popNewMessage('你已经取消操作！');
+            });
+        }
+
     }
 
     // 添加品牌
     public addBrand() {
         popNew('app-components-addBrand',{ title:'添加品牌' },() => {
-            popNewMessage('添加成功');
+            this.init();
         });
     }
 
     // 删除操作
-    public remove() {
-        popNewMessage('删除成功');
+    public remove(id:number,index:number) {
+        removeBrand(id).then(r => {
+            if (r.result === 1) {
+                popNewMessage('删除成功');
+                this.init();
+                this.paint();
+            } else {
+                popNewMessage('删除失败');
+            }
+        }).catch(e => {
+            popNewMessage('删除失败');
+        });
+        
     }
 }

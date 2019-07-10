@@ -1,6 +1,6 @@
 import { setStore } from '../store/memstore';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { popNewMessage, priceFormat, unicode2Str } from './logic';
+import { popNewMessage, priceFormat, timeConvert, unicode2Str } from './logic';
 
 /**
  * 常用工具
@@ -687,7 +687,7 @@ export const analyzeGoods = (data: any) => {
             } else {
                 time = `${timestampFormat(v[22][0])}~${timestampFormat(v[22][1])}`;
             }
-            typeList.push([v[3], v[2], `${priceFormat(v[12])}/${priceFormat(v[13])}/${priceFormat(v[14])}`, '差价', v[11], v[4], v[24], v[25], time]);
+            typeList.push([v[3],v[2][0],`${priceFormat(v[12])}/${priceFormat(v[13])}/${priceFormat(v[14])}`,priceFormat(v[2][1]),v[11],v[4],v[24],v[25],time]);
         });
         let str = '';// 是否报税
         if (item[0][16]) {
@@ -695,7 +695,13 @@ export const analyzeGoods = (data: any) => {
         } else {
             str = '普通商品';
         }
-        arr.push({ id: item[0][0], name: item[0][1], shopType: str, brand: item[0][6], typeName_1: item[0][19][0][0] ? item[0][19][0] : '', typeName_2: item[0][19][0][0] ? item[0][19][1] : '', img: item[0][18], discount: priceFormat(item[0][15]), tax: priceFormat(item[0][17]), state: item[0][20], type: typeList, area: item[0][7] });
+        const imgType2 = [...item[0][18][0]];
+        const img = item[0][18];
+        img.splice(0,1);
+        img.forEach(v => {
+            imgType2.push(v[2]);
+        });
+        arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:item[0][6],typeName_1:item[0][19][0][0] ? item[0][19][0] :'',typeName_2:item[0][19][0][0] ? item[0][19][1] :'',img:imgType2,discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],type:typeList,area:item[0][7] });
     });
 
     return arr;
@@ -762,7 +768,8 @@ export const brandProcessing = (r: any) => {
     }
     const data = [];
     r.forEach(v => {
-        data.push([v[0], unicode2Str(v[1][0]), v[1][1][1][0], v[1][2], v[1][3], timestampFormat(v[2])]);
+        
+        data.push([v[0],unicode2Str(v[1][0]),v[1][1][1][0],unicode2Str(v[1][2]),v[1][3],timestampFormat(v[2])]);
     });
 
     return data;
@@ -809,4 +816,49 @@ export const processingGroupingType = (r: any) => {
 // 判断input是否有值
 export const isInputValue = (data: any) => {
     return isNaN(parseInt(data));
+};
+
+// 处理日志
+export const processingLogs = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+
+    const data = [];
+    r.forEach(v => {
+        data.push([timeConvert(v[0]),v[2],v[1],unicode2Str(v[3]),unicode2Str(v[4])]);
+    });
+
+    return data;
+};
+
+// 处理所有用户信息
+export const processingUser = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+
+    const data = [];
+    r.forEach(v => {
+        data.push([v[0],unicode2Str(v[1])]);
+    });
+
+    return data;
+};
+
+// 处理所有账号类型分组
+export const processingUserType = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+
+    const data = [];
+    r.forEach(v => {
+        data.push(unicode2Str(v[0]));
+    });
+
+    return data;
 };

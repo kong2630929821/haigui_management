@@ -116,3 +116,84 @@
     text-align: center;
     color:rgba(255,255,255,1);
 }
+.itemBox{
+    display: flex;
+}
+.discount{
+    font-size:18px;
+    font-family:Source Sans Pro;
+    font-weight:600;
+    line-height:23px;
+    color:rgba(53,64,82,1);
+}
+.productList{
+    height:92px;
+    background:rgba(255,255,255,1);
+    opacity:1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.product_info{
+    min-width: 200px;
+    height: 20px;
+    display: flex;
+    font-size:14px;
+    font-family:Source Sans Pro;
+    font-weight:600;
+    line-height:18px;
+    color:rgba(53,64,82,1);
+    flex: 8;
+}
+.item{
+    display: flex;
+    flex-direction: column;
+}
+.narBar{
+    display: flex;
+    cursor: pointer;
+    font-size:24px;
+    font-family:PingFangSC-Regular;
+    line-height:32px;
+    color:rgba(0,0,0,1);
+}
+.saleBox{
+    margin:20px 0 0 0;
+    background: #fff;
+    cursor: pointer;
+    height:140px;
+    background:rgba(255,255,255,1);
+    border:1px solid rgba(204,204,204,1);
+    opacity:1;
+    font-size:18px;
+    font-family:PingFangSC-Regular;
+    color:rgba(0,0,0,1);
+}
+.saleInfo{
+    display: flex;
+    align-items: center;
+}
+.saleNum{
+    flex: 1;
+    margin-left: 14px;
+}
+.saleCtr{
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+.checkTime{
+    width:120px;
+    height:48px;
+    line-height: 48px;
+    text-align: center;
+    border:1px solid rgba(0,0,0,0.10196078431372549);
+    opacity:1;
+    font-size:14px;
+    font-family:Source Sans Pro;
+    font-weight:600;
+    color:rgba(136,136,136,1);
+}
+.saleTime{
+    line-height:92px; 
+}

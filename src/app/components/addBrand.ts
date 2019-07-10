@@ -1,15 +1,20 @@
 import { popNew } from '../../pi/ui/root';
 import { Widget } from '../../pi/widget/widget';
+import { addBrand, changeBrand } from '../net/pull';
 import { popNewMessage } from '../utils/logic';
 interface Props {
     title:string;
     sureText:string;
     cancelText:string;
-    inputValue:string;// 输入验证码
-    style:boolean;// true则填写邀请码 false文本提示框
-    textArea:string;
-    path:string;
-    cussess:boolean;// 是否上传成功
+    inputValue:string;// 输入品牌名
+    style:boolean;// true添加 false编辑
+    textArea:string;// 描述
+    path:string;// 路径
+    src:any;// 图片数组
+    img:string;// 图片
+    data:any;// 编辑数据
+    brand_goods:any;// 品牌下的商品
+    brand_id:number;// 品牌ID
 }
 /**
  * 模态框
@@ -24,14 +29,23 @@ export class ModalBox extends Widget {
         sureText:'确认',
         cancelText:'取消',
         inputValue:'',
-        style:false,
+        style:true,
         textArea:'',
         path:'',
-        cussess:false
+        src:[],
+        img:'',
+        data:[],
+        brand_goods:[],
+        brand_id:0
         
     };
     public ok: () => void;
     public cancel: () => void;   // fg为false表示退出APP(或点击取消)，true表示忘记密码
+    public create() {
+        super.create();
+        const oData = new Date();
+        this.props.path = `goods_brand/${oData.getFullYear()}/${oData.getMonth() + 1}/${oData.getDate()}`;
+    }
 
     public setProps(props:any) {
         this.props = { 
@@ -39,8 +53,18 @@ export class ModalBox extends Widget {
             ...props
         };
         super.setProps(this.props);
-        const oData = new Date();
-        this.props.path = `${oData.getFullYear()}/${oData.getMonth() + 1}/${oData.getDay()}`;
+        if (props.data) {
+            this.props.inputValue = this.props.data[1];
+            this.props.textArea = this.props.data[3];
+            this.props.src = [this.props.data[2],1,1];
+            const imgList = this.props.data[2].split('/');
+            imgList.pop();
+            this.props.path = imgList.join('/');
+            this.props.img = this.props.data[2];
+            this.props.brand_goods = this.props.data[4];
+            this.props.brand_id = this.props.data[0];
+        }
+       
     }
     // 输入品牌名
     public brandName(e:any) {
@@ -62,9 +86,9 @@ export class ModalBox extends Widget {
     }
     // 图片上传
     public updataImg(e:any) {
-        if (e.value === 1) {
-            this.props.cussess = true;
-        }   
+        this.props.src = [e.src,1,1];
+        this.props.img = e.src;
+        this.paint();  
     }
     /**
      * 点击确认按钮
@@ -77,12 +101,37 @@ export class ModalBox extends Widget {
 
             return;
         }
-        if (!this.props.cussess) {
+        if (!this.props.src.length) {
             popNewMessage('请上传图片');
 
             return;
         }
-        this.ok && this.ok();
+        
+        if (this.props.style) {
+            const arr = [[[],4,1],this.props.src,[[],2,1]];
+            addBrand(name,arr,this.props.textArea).then(r => {
+                if (r.result === 1) {
+                    popNewMessage('添加成功');
+                    this.ok && this.ok();
+                } else {
+                    popNewMessage('添加失败');
+                }
+            }).catch(e => {
+                popNewMessage('添加失败');
+            });
+        } else {
+            changeBrand(this.props.brand_id,name,[[[],4,1],this.props.src,[[],2,1]],description,this.props.brand_goods).then(r => {
+                if (r.result === 1) {
+                    popNewMessage('修改成功');
+                    this.ok && this.ok();
+                } else {
+                    popNewMessage('修改失败');
+                }
+            }).catch(e => {
+                popNewMessage('修改失败');
+            });
+        }
+        
     }
     
 }

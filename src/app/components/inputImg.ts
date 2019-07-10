@@ -28,7 +28,10 @@ export class InputImg extends Widget {
             ...props
         };
         super.setProps(this.props);
-        this.props.src = `${this.props.mallImagPre}${this.props.path}/${props.src}`;
+        if (props.src) {
+            this.props.src = `${this.props.mallImagPre}${props.src}`;
+        }
+       
     }
     public importTransport(e:any) {
         // 获取图片
@@ -48,6 +51,7 @@ export class InputImg extends Widget {
                 close.callback(close.widget);
                 this.props.src = `${this.props.mallImagPre}${this.props.path}/${file.name}`;
                 notify(e.node,'ev-input-file',{ src:`${this.props.path}/${file.name}` });
+                this.props.src = '';
                 popNewMessage('上传成功');
                 this.paint();
             }

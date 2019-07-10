@@ -6,13 +6,7 @@
     </div>
     <div w-class="searchBox">
         <div w-class="tableTitle">基本信息</div>
-        <div w-class="filterBox" style="flex-direction: row; flex-wrap: wrap;align-items: center;">
-                <div w-class="item">
-                    <div w-class="title">供应商ID</div>
-                    <div w-class="input" ev-input-change="inputChange({{0}},e)" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.style?it.currentData[0]:""}} }</widget>
-                    </div>
-                </div>
+        <div w-class="filterBox1" style="flex-direction: row; flex-wrap: wrap;align-items: center;">
                 <div w-class="item">
                     <div w-class="title">供应商名称</div>
                     <div w-class="input" ev-input-change="supplierChange" style="width: 464px;">
@@ -27,8 +21,8 @@
                 </div>
                 <div w-class="item">
                     <div w-class="title">描述备注</div>
-                    <div w-class="input" ev-input-change="textareaChange" style="width: 464px;height:  114px;">
-                        <widget w-tag="app-components-textarea">{input:{{it.style?it.currentData[1][2]:""}},placehold:"",disabled:false,clearable:false,itype:"text",style:"",autofacus:false,maxLength:150}</widget>
+                    <div w-class="input" ev-input-change="textareaChange" style="width: 481px;">
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.style?it.currentData[1][2]:""}}}</widget>
                     </div>
                 </div>
 
