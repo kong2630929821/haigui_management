@@ -1,5 +1,4 @@
 import { Widget } from '../../pi/widget/widget';
-import { addAccount, addUserToUserType, changeUser, getAllUserType } from '../net/pull';
 import { popNewMessage } from '../utils/logic';
 
 // tslint:disable-next-line:missing-jsdoc
@@ -26,7 +25,7 @@ export class AddTurntable extends Widget {
         currentData:[],
         style:true
     };
-    public ok:() => void;
+    public ok:(val:any) => void;
     public cancel:() => void;
     public setProps(props:any) {
         this.props = {
@@ -55,6 +54,27 @@ export class AddTurntable extends Widget {
 
     // 保存修改
     public okBtnClick() {
-       //
+        const price = this.props.price;
+        const probability = this.props.probability;
+        if (!price) {
+            popNewMessage('请输入金额');
+
+            return; 
+        }
+        if (!probability) {
+            popNewMessage('请输入概率');
+
+            return; 
+        }
+        if (isNaN(Number(price)) || isNaN(Number(probability))) {
+            popNewMessage('输入金额或概率错误');
+
+            return;
+        }
+
+        if (this.props.style) {
+            // 添加
+
+        }
     }
 }

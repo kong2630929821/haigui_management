@@ -45,11 +45,11 @@ export class BigTurntable extends Widget {
     public goDetail(e:any) {
         if (e.fg === 1) {
             // 编辑
-            popNew('app-components-addUser',{ title:'编辑账号',currentData:e.value,sureText:'修改',style:false },() => {
+            popNew('app-components-addTurntable',{ title:'编辑梯度',currentData:e.value,sureText:'修改',style:false },() => {
                 this.init();
             });
         } else {
-            popNew('app-components-modalBox',{ content:`确认删除账号“<span style="color:#1991EB">${e.value[0]}</span>` }, () => {
+            popNew('app-components-modalBox',{ content:`确认删除梯度“<span style="color:#1991EB">${e.value[0]}</span>` }, () => {
                 this.remove(e.value[0]);
             },() => {
                 popNewMessage('你已经取消操作！');
@@ -59,7 +59,7 @@ export class BigTurntable extends Widget {
     }
     // 添加梯度
     public addUser() {
-        popNew('app-components-addUser',{ title:'添加账号' },() => {
+        popNew('app-components-addTurntable',{ title:'添加梯度' },() => {
             this.init();
         });
     }

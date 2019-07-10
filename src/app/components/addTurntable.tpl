@@ -12,7 +12,7 @@
     </div>
     <div w-class="row">
         <div w-class="title">中奖概率(%)：</div>
-        <div w-class="input" ev-input-change="probabilityChange" style="width: 382px;">
+        <div w-class="input" ev-input-change="probabilityChange" style="width: 314px;">
             <widget w-tag="app-components-input">{input:{{it.probability}},placeHolder:"请输入概率"}</widget>
         </div>
     </div>
