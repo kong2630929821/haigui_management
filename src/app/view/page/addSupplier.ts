@@ -1,7 +1,7 @@
 // tslint:disable-next-line:missing-jsdoc
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { addSupplier, getFreight, getFreightInfo } from '../../net/pull';
+import { addSupplier, changeSupplier, getFreight, getFreightInfo } from '../../net/pull';
 import { popNewMessage, priceFormat, unicode2Str } from '../../utils/logic';
 import { analysisFreightData, exportExcel, importRead } from '../../utils/tools';
 
@@ -61,9 +61,12 @@ export class AddSupplier extends Widget {
         }
         
         getFreightInfo(this.props.currentData[0],this.props.statusTypeActiveIndex).then(r => {
-            this.props.showDataList = r[1];
-            this.props.freightList = r[0];
-            this.paint();
+            if (r.length) {
+                this.props.showDataList = r[1];
+                this.props.freightList = r[0];
+                this.paint();
+            }
+            
         });
     }
     // input框输入
@@ -85,15 +88,10 @@ export class AddSupplier extends Widget {
         const name = this.props.currentData[1][0];
         const supplier_desc = this.props.currentData[1][2];
         const supplier_phone = this.props.currentData[2];
-        if (!id || !supplier_phone || !name) {
+        if (!supplier_phone || !name) {
             popNewMessage('输入信息不能为空');
 
             return ;
-        }
-        if (isNaN(id)) {
-            popNewMessage('供应商ID输入错误');
-
-            return;
         }
         if (!/^1[3456789]\d{9}$/.test(supplier_phone)) { 
             popNewMessage('电话号码格式错误');
@@ -109,7 +107,7 @@ export class AddSupplier extends Widget {
             // 编辑保存
             console.log(this.props.currentData);
            
-            addSupplier(id,name,supplier_desc,'',supplier_phone).then(r => {
+            changeSupplier(id,name,supplier_desc,'',supplier_phone).then(r => {
                 if (r.result === 1) {
                     // 是否修改运费
                     if (this.props.isChange) {
@@ -132,9 +130,9 @@ export class AddSupplier extends Widget {
             });
         } else {
             // 添加
-            addSupplier(id,name,supplier_desc,'',supplier_phone).then(r => {
+            addSupplier(name,supplier_desc,'',supplier_phone).then(r => {
                 if (r.result === 1) {
-                    getFreight(id,this.props.statusTypeActiveIndex,this.props.freightList).then(res => {
+                    getFreight(r.id,this.props.statusTypeActiveIndex,JSON.stringify(this.props.freightList)).then(res => {
                         if (res.result === 1) {
                             popNewMessage('添加成功');
                             notify(e.node,'ev-save-change',{});
@@ -159,9 +157,15 @@ export class AddSupplier extends Widget {
     public filterTimeType(e:any) {
         this.props.statusTypeActiveIndex = e.activeIndex;
         getFreightInfo(this.props.currentData[0],this.props.statusTypeActiveIndex).then(r => {
-            this.props.showDataList = r[1];
-            this.props.freightList = r[0];
-            this.paint();
+            if (r.length) {
+                this.props.showDataList = r[1];
+                this.props.freightList = r[0];
+                this.paint();
+            } else {
+                this.props.showDataList = [];
+                this.props.freightList = [];
+                this.paint();
+            }
         });
     }
     // 导入运单号

@@ -85,12 +85,12 @@ export class AddProduct extends Widget {
         this.props.expandIndex++;
         this.paint();
     }
-         // 日期选择框显示
+    // 日期选择框显示
     public changeDateBox(e:any) {
         this.props.showDateBox = e.value;
         this.paint();
     } 
-        // 改变时间
+    // 改变时间
     public  changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];

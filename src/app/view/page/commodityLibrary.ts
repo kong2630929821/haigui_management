@@ -74,9 +74,6 @@ export class CommodityLibrary extends Widget {
             },{
                 status:1,
                 text:'已下架'
-            },{
-                status:2,
-                text:'已删除'
             }
         ];
         // 商品分类
@@ -144,11 +141,6 @@ export class CommodityLibrary extends Widget {
     public  changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
-    }
-    // 展示商品详情
-    public showShopDetail() {
-        this.props.shopDetail = 1;
-        this.paint();
     }
     // 上架商品
     public onShelves() {
@@ -218,6 +210,18 @@ export class CommodityLibrary extends Widget {
     public change(index:number,e:any) {
         this.props.currentData = this.props.showDataList[index];
         this.props.shopDetail = 3;
+        this.paint();
+    }
+    // 详情
+    public lookInfo(index:number,e:any) {
+        this.props.currentData = this.props.showDataList[index];
+        this.props.shopDetail = 1;
+        this.paint();
+    }
+
+    // 显示商品列表
+    public lookCancel() {
+        this.props.shopDetail = 0;
         this.paint();
     }
 }

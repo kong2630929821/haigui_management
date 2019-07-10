@@ -145,8 +145,9 @@ export class CommodityLibrary extends Widget {
     }
     // 导出全部数据
     public exportShop() {
-        const start_time = transitTimeStamp(this.props.startTime);
-        const end_time = transitTimeStamp(this.props.endTime);
+        const oData = new Date();
+        const end_time = oData.setHours(23, 59, 59, 999);
+        const start_time = 0;
         getAllProduct(start_time,end_time).then(r => {
             console.log('getAllProduct',r);
             const jsonHead = this.props.showTitleList;
