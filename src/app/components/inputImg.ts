@@ -28,6 +28,7 @@ export class InputImg extends Widget {
             ...props
         };
         super.setProps(this.props);
+        this.props.src = `${this.props.mallImagPre}${this.props.path}/${props.src}`;
     }
     public importTransport(e:any) {
         // 获取图片

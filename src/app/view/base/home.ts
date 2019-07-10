@@ -39,11 +39,13 @@ export class Home extends Widget {
         super();
         this.props = {
             pageList: [
-                { name: '平台设置', page: PAGE.platformSettings, img:'chart.png',children:[
+                { name: '平台设置', page: PAGE.platformSettings, img:'chart.png',
+                    children:[
                     { name:'供应商设置',page:PAGE.platformSettings },
                     { name:'分类设置',page:PAGE.classSetting },
-                    { name:'品牌设置',page:PAGE.brandSetting },
-                    { name:'商场设置',page:PAGE.mallSetting }],
+                    { name:'品牌设置',page:PAGE.brandSetting }
+                    // { name:'商场设置',page:PAGE.mallSetting }
+                    ],
                     show:true 
                 },
                 { name: '商品管理', page: PAGE.commodityLibrary, img:'chart.png',children:[
@@ -51,7 +53,6 @@ export class Home extends Widget {
                     { name:'产品库',page:PAGE.productLibrary }],
                     show:false 
                 },
-                { name: '商品信息', page: PAGE.goodsInfo, img:'chart.png' },
                 { name: '导入Excel', page: PAGE.importExcel, img:'chart.png'  },
                 { name: '所有订单', page: PAGE.totalOrders, img:'chart.png' },
                 { name: '退货', page: PAGE.returnGoods, img:'chart.png' },
@@ -63,7 +64,7 @@ export class Home extends Widget {
             rightBox:true
         };
         
-        this.props.activePage = this.props.pageList[0].children[3];
+        this.props.activePage = this.props.pageList[0].children[0];
     }
 
     // 切换默认过滤器页面

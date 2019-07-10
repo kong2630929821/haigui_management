@@ -13,6 +13,7 @@ interface Props {
     btn2:string;
     inlineBtn1:string;
     inlineBtn2:string;
+    inlineBtn3:string;
     inputFile:string;
     color:boolean;
     auto:boolean;
@@ -30,6 +31,7 @@ export class Table extends Widget {
         btn2:'',
         inlineBtn1:'',
         inlineBtn2:'',
+        inlineBtn3:'',
         inputFile:'',
         color:false,
         auto:false,

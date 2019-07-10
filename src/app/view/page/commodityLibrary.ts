@@ -1,7 +1,7 @@
 // tslint:disable-next-line:missing-jsdoc
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
-import { getAllGoods, getCurrentGood, getGoodsKey, getGroup, shelf } from '../../net/pull';
+import { getAllGoods, getCurrentGood, getGoodsKey, shelf } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
 
 interface Props {

@@ -2,8 +2,8 @@
 import { Widget } from '../../pi/widget/widget';
 
 interface Props {
-    width : number;
-    heigth?: number;
+    width : string;   // 100px
+    heigth?: string;
     imgURL: string;
     inline?: boolean;
     isRound?:boolean;

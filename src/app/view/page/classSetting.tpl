@@ -21,8 +21,10 @@
             <div w-class="tableItem">
                 <div w-class="data_item">{{v.name}}</div>
                 <div w-class="data_item_1">
-                    {{for index,item of v.children}}
-                        <div w-class="col_item">{{item.name}}</div>
+                    {{if v.groupType}}
+                        {{for index,item of v.children}}
+                            <div w-class="col_item">{{item.name}}</div>
+                        {{end}}
                     {{end}}
                 </div>
                 <div w-class="data_item">{{v.time}}</div>
@@ -35,12 +37,12 @@
     </div>
     {{elseif it.active==0}}
     <div ev-detail-back="closeEdit">
-        <widget w-tag="app-view-page-mallSettingEdit">{currentData:{{it.currentData}} }</widget>
+        <widget w-tag="app-view-page-mallSettingEdit">{currentData:{{it.currentData}},addNewClass:{{it.addNewClass}} }</widget>
     </div>
 
     {{elseif it.active==1}}
     <div ev-detail-back="closeEdit">
-        <widget w-tag="app-view-page-addClass">{currentData:{{it.currentData}} }</widget>
+        <widget w-tag="app-view-page-addClass">{currentData:{{it.currentData}},addNewClass:{{it.addNewClass}}  }</widget>
     </div>
     {{end}}
 </div>
