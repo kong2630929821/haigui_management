@@ -2,7 +2,7 @@
     <div w-class="narBar">
         <div on-tap="gotoProduct">产品库</div>
         <div>></div>
-        <div>添加产品</div>
+        <div>{{it.title}}</div>
     </div>
     <div w-class="searchBox">
         <div w-class="tableTitle">基本信息</div>

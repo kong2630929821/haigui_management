@@ -1,6 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { getVipMember, login } from '../../net/pull';
+import { getAllProduct, getVipMember, login } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
 import { popNewMessage, unicode2ReadStr } from '../../utils/logic';
 import { addressFormat } from '../../utils/tools';
@@ -77,6 +77,15 @@ export class Login extends Widget {
                     }
                 });
                 setStore('vipTotal',vipTotal);
+                // 登录成功获取SKU
+                const skuTotal = getStore('skuTotal',{});
+                const oData = new Date();
+                const time = oData.setHours(23, 59, 59, 999);
+                getAllProduct(0,time).then(r => {
+                    skuTotal.skuNum = r[0];
+                    skuTotal.skuData = r[1];
+                    setStore('skuTotal',skuTotal);
+                });
 
             }).catch(() => {
                 popNewMessage('账号密码错误','error');

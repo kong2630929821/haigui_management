@@ -20,6 +20,7 @@ interface Props {
     shelfLife:any;// 是否有保质期
     shelfLifeActiveIndex:number;// 下标
     expandIndex:number;
+    title:string;// 标题
 
 }
 /**
@@ -41,7 +42,8 @@ export class AddProduct extends Widget {
         status:-1,
         shelfLife:[],
         shelfLifeActiveIndex:0,
-        expandIndex:-1
+        expandIndex:-1,
+        title:'添加SKU'
     };
     public create() {
         super.create();
@@ -71,6 +73,12 @@ export class AddProduct extends Widget {
             const timeArr = this.props.data[7].split('~');
             this.props.startTime = timeArr[0];
             this.props.endTime = timeArr[1];
+        }
+        if (this.props.status === 1) {
+            this.props.title = '查看SKU';
+        }
+        if (this.props.status === 2) {
+            this.props.title = '修改SKU';
         }
         console.log(props);
     }

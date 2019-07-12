@@ -2,6 +2,7 @@
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { getAllProduct, searchProduct } from '../../net/pull';
+import { getStore } from '../../store/memstore';
 import { timeConvert, transitTimeStamp } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
@@ -50,7 +51,7 @@ export class ProductLibrary extends Widget {
         shopNum:123,
         currentIndex:0,
         perPage:perPage[0],
-        showTitleList:['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
+        showTitleList:['供应商id','SKU','sku名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
         // ['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']
         showDataList:[],
         showDateBox:false,
@@ -87,6 +88,14 @@ export class ProductLibrary extends Widget {
         this.init();
     }
     public init() {
+        const skuTotal = getStore('skuTotal',{});
+        if (skuTotal.skuNum) {
+            this.props.shopNum = skuTotal.skuNum;
+            this.props.dataList = skuTotal.skuData;
+            this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
+       
+            return ;
+        }
         const start_time = transitTimeStamp(this.props.startTime);
         const end_time = transitTimeStamp(this.props.endTime);
         getAllProduct(start_time,end_time).then(r => {
@@ -183,7 +192,7 @@ export class ProductLibrary extends Widget {
     // 显示产品库页面
     public showProduct() {
         this.props.showAddProduct = 0;
-        this.init();
+        this.paint();
     }
     // 表格点击按钮
     public goDetail(e:any) {
