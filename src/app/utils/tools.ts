@@ -1,4 +1,4 @@
-import { setStore } from '../store/memstore';
+import { GroupInfo, setStore } from '../store/memstore';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
 import { popNewMessage, priceFormat, timeConvert, unicode2Str } from './logic';
 
@@ -729,7 +729,7 @@ export const parseAllGroups = (data: any) => {
 // 处理分组
 export const parseGroups = (data: any, localId: number) => {
     if (!data) return [];
-    const res = [];
+    const res:GroupInfo[] = [];
     data.forEach(elem => {
         res.push({
             id: elem[0],

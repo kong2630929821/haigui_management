@@ -1,10 +1,11 @@
 <div w-class="page">
+    {{if it.selGoods === -1}}
     <div w-class="back" on-tap="goBack">返回</div>
-    {{:imgs = it.currentData.imgs}}
     {{%===========================聚合专区设置===========================}}
     <div w-class="bannerBox">
         <div w-class="tableTitle">聚合页专区设置</div>
         <div w-class="itemContent">
+            {{:imgs = it.currentData.imgs}}
             <div w-class="guessTab">
                 <span style="margin-right:10px;">专区封面图</span>
                 <div w-class="tab inputBox" ev-input-file="imgUpload(e,0)">
@@ -30,15 +31,18 @@
 
     {{%===========================专区分类===========================}}
     <div w-class="bannerBox" style="min-height:300px;">
-        <div w-class="tableTitle">专区分类<div w-class="btn" on-tap="addBtn">添加</div></div>
+        <div w-class="tableTitle">
+            <div>专区分类</div>
+            <div w-class="btn" on-tap="addBtn">{{it.isSoloPart?"选择商品":"添加"}}</div>
+        </div>
         <div w-class="itemContent">
-            {{if it.currentData.groupType}}
+            {{if it.currentData.groupType && !it.isSoloPart}}
                 {{for i,v of it.currentData.children}}
                 <div w-class="guessTab" style="margin-right:50px;"  ev-input-change="secondNameChange(e,{{i}})">
                     <span style="margin-right:10px;">分类</span>
                     <widget w-tag="app-components-input">{placeHolder:"输入名称",input:{{v.name}},style:"border:1px solid #eee;"}</widget>
                     <div w-class="btn1" on-tap="delSecondClass({{i}})">删除</div>
-                    <div w-class="btn1" on-tap="upSecondClass({{i}})">保存</div>
+                    <div w-class="btn1" on-tap="upSecondClass({{i}})">选择商品</div>
                 </div>
                 {{end}}
             {{end}}
@@ -59,4 +63,10 @@
         {{end}}
         <div w-class="btn" on-tap="addClass">保存</div>
     </div>
+
+    {{else}}
+    <div ev-selGoods="selectGoods" ev-goodsInfo-back="cancelSel">
+        <widget w-tag="app-view-page-goodsInfo">{goodsId:{{it.goodsId}}}</widget>
+    </div>
+    {{end}}
 </div>

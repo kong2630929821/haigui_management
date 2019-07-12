@@ -584,18 +584,29 @@ export const getGoodsKey = (count:number) => {
         console.log(e);
     });
 };
-// 获取所有的商品信息，支付分页
-export const getAllGoods = (star:number,num:number,state:number,start_time:number,end_time:number) => {
+
+// // 获取所有的商品信息，支付分页
+// export const getAllGoods = (star:number,num:number,state:number,start_time:number,end_time:number) => {
     
-    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}&state=${state}&start_time=${start_time}&end_time=${end_time}`).then(res => {
-        // return res.json();
-        return res.json().then(r => {
-            const data = JSON.parse(r.value);
+//     return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}&state=${state}&start_time=${start_time}&end_time=${end_time}`).then(res => {
+//         // return res.json();
+//         return res.json().then(r => {
+//             const data = JSON.parse(r.value);
             
-            return analyzeGoods(data);
-        });
-    });
+//             return analyzeGoods(data);
+//         });
+//     });
+// };
+
+// 获取所有的商品信息，支付分页
+export const getAllGoods = async (star:number,num:number,state:number,start_time:number,end_time:number) => {
+    const response = await _fetch(fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}&state=${state}&start_time=${start_time}&end_time=${end_time}`), 30 * 1000); 
+    const body = await response.json();
+    const data = JSON.parse(body.value);
+    
+    return analyzeGoods(data);
 };
+
 // 获取当前商品的信息
 export const getCurrentGood = (shopValue:string) => {
     let shopID = 0;
@@ -1297,4 +1308,27 @@ export const getBigTurntable = () => {
 
         return r;
     });
+};
+
+export const _fetch = (fetch_promise, timeout) => {
+    let abort_fn = null;
+
+    // 这是一个可以被reject的promise
+    const abort_promise = new Promise((resolve, reject) => {
+        abort_fn = () => {
+            reject('abort promise');
+        };
+    });
+
+    // 这里使用Promise.race，以最快 resolve 或 reject 的结果来传入后续绑定的回调
+    const abortable_promise = Promise.race([
+        fetch_promise,
+        abort_promise
+    ]);
+
+    setTimeout(() => {
+        abort_fn();
+    }, timeout);
+
+    return abortable_promise;
 };

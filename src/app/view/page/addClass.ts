@@ -2,16 +2,18 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { GroupsLocation, mallImagPre } from '../../config';
 import { addGroup, updateGroup, updateLocation } from '../../net/pull';
-import { getStore, ImageType } from '../../store/memstore';
+import { getStore, GroupInfo, ImageType } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
 
 interface Props {
-    currentData:any;// 当前数据
+    currentData:GroupInfo;// 当前数据
     addClass:boolean;  // 添加新的二级分类
     mallImagPre:string;// 图片路径
     secondName:string; // 二级分类名字
     secondImg:string;  // 二级分类图片
     addNewClass:boolean;  // 新增一级分组
+    selGoods:number;    // 去选择商品的二级分类下标
+    goodsId:number[];   // 已选择的商品ID
 }
 
 /**
@@ -22,15 +24,23 @@ export class AddClass extends Widget {
     public groupIDs:number[];  // 当前跟分组下的所有分组ID
     public props:Props = {
         currentData:{
-            id:0,
-            name:'',
-            children:[]
+            id: 0,
+            name: '',
+            groupType: true,    // 是否有子分组
+            isShow: true,       // 是否展示分组
+            imgs: [],
+            detail: '',
+            children: [],    // 二级分组  商品ID
+            time: '',   // 最后更新时间
+            localId:0 
         },
         addClass:false,
         mallImagPre:mallImagPre,
         secondName:'',
         secondImg:'',
-        addNewClass:true
+        addNewClass:true,
+        selGoods:-1,
+        goodsId:[]
     };
     public setProps(props:any) {
         this.props = {
@@ -126,7 +136,13 @@ export class AddClass extends Widget {
                 this.props.currentData.children.push({
                     id:r.id[0],
                     name:this.props.secondName,
-                    imgs:[[this.props.secondImg, ImageType.THUMBNAIL,1]]
+                    imgs:[[this.props.secondImg, ImageType.THUMBNAIL,1]],
+                    groupType: true,    // 是否有子分组
+                    isShow: true,       // 是否展示分组
+                    detail: '',
+                    children: [],    // 二级分组  商品ID
+                    time: '',   // 最后更新时间
+                    localId:0 
                 });
                 this.props.secondName = '';
                 this.props.secondImg = '';
@@ -138,16 +154,11 @@ export class AddClass extends Widget {
         }
     }
 
-     // 修改二级分类
+     // 修改二级分类 (去选择商品)
     public upSecondClass(ind:number) {
-        const res = this.props.currentData.children[ind];
-        updateGroup(res.id,res.name,[],[],'false').then(r => {
-            this.props.secondName = '';
-            this.paint();
-            popNewMessage('保存成功');
-        }).catch(r => {
-            popNewMessage('保存失败');
-        });
+        this.props.selGoods = ind;
+        this.props.goodsId = this.props.currentData.children[ind].children;
+        this.paint();
     }
 
     // 删除二级分类
@@ -158,5 +169,26 @@ export class AddClass extends Widget {
 
     public goBack(e:any) {
         notify(e.node,'ev-detail-back',{});
+    }
+
+    // 确认选择商品 并保存二级分类
+    public selectGoods(e:any) {
+        this.props.goodsId = e.value;
+        const res = this.props.currentData.children[this.props.selGoods];
+        updateGroup(res.id,res.name,res.imgs,e.value,'false').then(r => {
+            this.props.secondName = '';
+            this.paint();
+            popNewMessage('保存成功');
+        }).catch(r => {
+            popNewMessage('保存失败');
+        });
+        this.cancelSel();
+    }
+
+    // 取消选择商品
+    public cancelSel() {
+        this.props.selGoods = -1;
+        this.props.goodsId = [];
+        this.paint();
     }
 }

@@ -45,5 +45,12 @@ export enum GroupsLocation {
 // 一次性最多获取多少订单
 export const orderMaxCount = 20;
 
-// 图片路径
+// 商城图片路径
 export const mallImagPre = `http://cshop.baomtx.com/dst/imgs/`;
+// export const mallImagPre = `http://${window.localStorage.severIp ? window.localStorage.severIp :sourceIp}/dst/imgs/`;
+
+// 未支付订单15分钟后回到购物车中，库存也会回退
+export const PendingPaymentDuration = 15 * 60 * 1000;
+
+// 获取图片路径
+export const serverFilePath = `http://${sourceIp}:${sourcePort}/service/get_file?sid=`;
