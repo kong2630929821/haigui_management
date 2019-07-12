@@ -79,7 +79,7 @@ export class AccountSetting extends Widget {
                 this.init();
             });
         } else {
-            popNew('app-components-modalBox',{ content:`确认删除账号“<span style="color:#1991EB">${e.value[0]}</span>` }, () => {
+            popNew('app-components-modalBox',{ content:`确认删除账号“<span style="color:#1991EB">${e.value[0]}</span>”` }, () => {
                 this.remove(e.value[0]);
             },() => {
                 popNewMessage('你已经取消操作！');

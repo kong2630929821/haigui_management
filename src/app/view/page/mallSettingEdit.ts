@@ -1,7 +1,7 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { GroupsLocation } from '../../config';
-import { addGroup, getGoodsInfo, updateGroup, updateLocation } from '../../net/pull';
+import { addGroup, updateGroup, updateLocation } from '../../net/pull';
 import { getStore, ImageType } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
 
@@ -223,17 +223,17 @@ export class MallSettingEdit extends Widget {
     // 修改二级分类
     public upSecondClass(i:number) {
         const res = this.props.currentData.children[i];
-        if (res.children.length > 0) {
-            getGoodsInfo(res.children[0]).then(res => {
-                console.log('!!!!!!!!!!!!!getGoodsInfo',res);
-            });
-        }
+        // if (res.children.length > 0) {
+        //     getGoodsInfo(res.children[0]).then(res => {
+        //         console.log('!!!!!!!!!!!!!getGoodsInfo',res);
+        //     });
+        // }
 
-        // updateGroup(res.id,res.name,[],[],'false').then(r => {
-        //     popNewMessage('保存成功');
-        // }).catch(r => {
-        //     popNewMessage('保存失败');
-        // });
+        updateGroup(res.id,res.name,[],[],'false').then(r => {
+            popNewMessage('保存成功');
+        }).catch(r => {
+            popNewMessage('保存失败');
+        });
     }
 
     // 删除二级分类

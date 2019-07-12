@@ -128,7 +128,7 @@
                             <div>差价：</div>
                             <div>
                                 <div w-class="input" ev-input-change="spread(e,{{i}})" style="width: 124px;margin-left: 46px;height: 30px;">
-                                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{JSON.stringify(it.spreadList[i][1])}},disabled:{{it.disable}} }</widget>
+                                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.spreadList[i]?JSON.stringify(it.spreadList[i][1]):''}},disabled:{{it.disable}} }</widget>
                                 </div>
                             </div>
                         </div>

@@ -1,0 +1,53 @@
+.page{
+    background: #F0F2F5;
+    padding: 20px 60px;
+    color:#354052;
+}
+.searchBox{
+    margin:20px 0;
+    background: #fff;
+    cursor: pointer;
+}
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
+}
+.filterBox{
+    display: flex;
+    height: 150px;
+    justify-content: space-around;
+}
+.filterTitle{
+    font-size:18px;
+    font-family:PingFangSC-Regular;
+    line-height:96px;
+    color:rgba(0,0,0,1);
+    margin-left: 28px;
+}
+.row{
+    display: flex;
+    margin-top: 14px;
+    align-items: center;
+}
+.input{
+    width:300px;
+    height:48px;
+    border:1px solid rgba(0,0,0,0.1);
+    display: inline-block;
+    margin-left: 49px;
+}
+.edit{
+    width:100px;
+    height:36px;
+    line-height: 36px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    background:#1991EB;
+    cursor: pointer;
+    margin: 5px 20px;
+}

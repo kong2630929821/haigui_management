@@ -862,3 +862,31 @@ export const processingUserType = (r:any) => {
 
     return data;
 };
+
+// 处理商品礼包配置
+export const processingShopSetting = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+    const data = [];
+    r.forEach((v,i) => {
+        data.push([v[0],...v[1]]);
+    });
+
+    return data;
+};
+
+// 处理会员流水
+export const processingVip = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+    const data = [];
+    r.forEach((v,i) => {
+        data.push([i + 1,v[0],unicode2Str(v[1]),v[2]]);
+    });
+
+    return data;
+};

@@ -1,8 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { getAllUser, getBigTurntable, removeUser } from '../../net/pull';
+import {  getBigTurntable, settingTruntable } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
-import { exportExcel } from '../../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
 interface Props {
@@ -41,40 +40,76 @@ export class BigTurntable extends Widget {
             }
         });
     }
-        // 表格操作按钮
+    // 真实梯度表格操作按钮
     public goDetail(e:any) {
         if (e.fg === 1) {
             // 编辑
-            popNew('app-components-addUser',{ title:'编辑账号',currentData:e.value,sureText:'修改',style:false },() => {
-                this.init();
+            popNew('app-components-addTurntable',{ title:'编辑真实转盘梯度',currentData:e.value,sureText:'修改',style:false },(val) => {
+                this.props.real[e.num] = val;
+                this.paint();
             });
         } else {
-            popNew('app-components-modalBox',{ content:`确认删除账号“<span style="color:#1991EB">${e.value[0]}</span>` }, () => {
-                this.remove(e.value[0]);
+            popNew('app-components-modalBox',{ content:`确认删除梯度"<span style="color:#1991EB">${e.value[0]}</span>"` }, () => {
+                this.props.real.splice(e.num,1);
+                this.props.realSum = this.props.real.length;
+                this.paint();
             },() => {
                 popNewMessage('你已经取消操作！');
             });
         }
     
     }
-    // 添加梯度
-    public addUser() {
-        popNew('app-components-addUser',{ title:'添加账号' },() => {
-            this.init();
+    // 对外显示梯度表格操作按钮
+    public goDetailOut(e:any) {
+        if (e.fg === 1) {
+                    // 编辑
+            popNew('app-components-addTurntable',{ title:'编辑对外显示转盘梯度',currentData:e.value,sureText:'修改',style:false },(val) => {
+                this.props.foreign[e.num] = val;
+                this.paint();
+            });
+        } else {
+            popNew('app-components-modalBox',{ content:`确认删除梯度"<span style="color:#1991EB">${e.value[0]}</span>"` }, () => {
+                this.props.foreign.splice(e.num,1);
+                this.props.foreignSum = this.props.foreign.length;
+                this.paint();
+            },() => {
+                popNewMessage('你已经取消操作！');
+            });
+        }
+            
+    }
+    // 添加真实梯度
+    public addGradientIn() {
+        popNew('app-components-addTurntable',{ title:'添加真实转盘梯度' },(val) => {
+            this.props.real.push(val);
+            this.props.realSum = this.props.real.length;
+            this.paint();
+        });
+    }
+    // 添加对外显示梯度
+    public addGradientOut() {
+        popNew('app-components-addTurntable',{ title:'添加对外显示转盘梯度' },(val) => {
+            this.props.foreign.push(val);
+            this.props.foreignSum = this.props.foreign.length;
+            this.paint();
         });
     }
 
-    // 删除账号
-    public remove(user:string) {
-        removeUser(user).then(r => {
+    // 应用设置
+    public application(fg:number) {
+        let data = this.props.real;
+        if (fg === 2) {
+            // 真实中奖设置
+            data = this.props.foreign;
+        }
+        settingTruntable(fg,JSON.stringify(data)).then(r => {
             if (r.result === 1) {
-                popNewMessage('删除成功');
-                this.init();
+                popNewMessage('设置成功');
             } else {
-                popNewMessage('删除失败');
+                popNewMessage('设置失败');
             }
         }).catch(e => {
-            popNewMessage('删除失败');
+            popNewMessage('设置失败');
         });
     }
 }
