@@ -1,6 +1,6 @@
 import { setStore } from '../store/memstore';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { popNewMessage, priceFormat, timeConvert, unicode2Str } from './logic';
+import { getCashLogName, popNewMessage, priceFormat, timeConvert, unicode2Str } from './logic';
 
 /**
  * 常用工具
@@ -886,6 +886,19 @@ export const processingVip = (r:any) => {
     const data = [];
     r.forEach((v,i) => {
         data.push([i + 1,v[0],unicode2Str(v[1]),v[2]]);
+    });
+
+    return data;
+};
+
+// 处理资金流水明细
+export const processingBalanceLog = (r:any) => {
+    if (!r.length) {
+        return [];
+    }
+    const data = [];
+    r.forEach(v => {
+        data.push([timestampFormat(v[4]),getCashLogName(v[1]), `${v[2] > 0 ? '+' :''}${priceFormat(v[2])}`]);
     });
 
     return data;

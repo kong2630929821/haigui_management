@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { changeBindding, getVipDetail, setHwangLabel } from '../../net/pull';
+import { changeBindding, getAmountDetail, getVipDetail, setHwangLabel } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 import { addressFormat } from '../../utils/tools';
 interface Props {
@@ -16,11 +16,16 @@ interface Props {
     userLabel:string;  // 查看用户的标签
     curShowDataList:any[]; // 当前页显示数据
     curPage:number; // 当前页码
+    fundDetails:any[];// 资金明细
+    seaShell:any[];// 海贝
+    integral:any[];// 积分
+    
 }
 const userType = ['','海王','海宝','白客'];
 const UserLabel = ['海王','市代理','省代理'];
 const tableTitle = [
-    ['用户ID','微信名','手机号','地址信息','ta的本月收益','ta的总收益']
+    ['用户ID','微信名','手机号','地址信息','ta的本月收益','ta的总收益'],
+    ['时间','类型','金额']
 
 ];
 const showData = [
@@ -45,7 +50,10 @@ export class VipDetail extends Widget {
         baikDatas:[],
         userLabel:'',
         curShowDataList:[],
-        curPage:0
+        curPage:0,
+        fundDetails:[],
+        seaShell:[],
+        integral:[]
     };
 
     public setProps(props:any) {
@@ -120,16 +128,45 @@ export class VipDetail extends Widget {
             this.changeTab(0);
             this.paint();
         });
+        getAmountDetail(this.props.uid,1).then(r => {
+            this.props.fundDetails = r;
+            this.paint();
+        });
+        getAmountDetail(this.props.uid,2).then(r => {
+            this.props.seaShell = r;
+            this.paint();
+        });
+        getAmountDetail(this.props.uid,3).then(r => {
+            this.props.integral = r;
+            this.paint();
+        });
     }
     // 切换
     public changeTab(num:number) {
         this.props.activeTab = num;
-        if (num === 0) {
-            this.props.showDataList = this.props.hWangDatas;
-        } else if (num === 1) {
-            this.props.showDataList = this.props.hBaoDatas;
-        } else {
-            this.props.showDataList = this.props.baikDatas;
+        switch (num) {
+            case 0:
+                this.props.showDataList = this.props.hWangDatas;
+                break;
+            case 1:
+                this.props.showDataList = this.props.hBaoDatas;
+                break;
+            case 2:
+                this.props.showDataList = this.props.baikDatas;
+                break;
+            case 3:// 资金 
+                this.props.showDataList = this.props.fundDetails;
+                this.props.showTitleList = tableTitle[1];
+                break;
+            case 4:// 海贝 
+                this.props.showDataList = this.props.seaShell;
+                this.props.showTitleList = tableTitle[1];
+                break;
+            case 5:// 积分 
+                this.props.showDataList = this.props.integral;
+                this.props.showTitleList = tableTitle[1];
+                break;
+            default:
         }
         this.props.curPage = 0;
         this.changePage({ value:0 });

@@ -1,6 +1,6 @@
 import { httpPort, sourceIp } from '../config';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { analyzeGoods, brandProcessing, parseOrderShow, processingGroupingType, processingLogs, processingPostage, processingShopSetting, processingUser, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
+import { analyzeGoods, brandProcessing, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShopSetting, processingUser, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -1416,5 +1416,12 @@ export const getAmountDetail = (uid:number,types:number) => {
         }
     };
 
-    return requestAsync(msg);
+    return requestAsync(msg).then(r => {
+        if (r.result === 1) {
+            return processingBalanceLog(r.value);
+        } else {
+            return [];
+        }
+        
+    });
 };
