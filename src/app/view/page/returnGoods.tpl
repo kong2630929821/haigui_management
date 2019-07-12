@@ -1,5 +1,4 @@
 <div w-class="page" on-tap="close">
-    {{if !it.showDetail}}
     <div w-class="tabRow">
         <div w-class="{{it.returnStatus==0?'activeTitle':'title'}}" on-tap="checkType(0)">退货申请({{it.numberOfApplications}})</div>
         <div w-class="{{it.returnStatus==1?'activeTitle':'title'}}" on-tap="checkType(1)">退货中</div>
@@ -32,8 +31,5 @@
             <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,color:true,inlineBtn3:"查看详情"}</widget>
         {{end}}
     </div>
-    
-    {{else}}
-    <widget w-tag="app-view-page-vipDetail"></widget>
-    {{end}}
+   
 </div>

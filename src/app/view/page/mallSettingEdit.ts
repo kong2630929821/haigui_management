@@ -2,16 +2,19 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { GroupsLocation } from '../../config';
 import { addGroup, updateGroup, updateLocation } from '../../net/pull';
-import { getStore, ImageType } from '../../store/memstore';
+import { getStore, GroupInfo, ImageType } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
 
 interface Props {
     locations: any[]; // 展示位置
     addClass:boolean;  // 添加新的二级分类
     activeLoc:number;  // 当前选择的位置
-    currentData:any;// 当前编辑的数据
+    currentData:GroupInfo;// 当前编辑的数据
     secondName:string;  // 新增二级分类名称
     addNewClass:boolean;  // 新增一级分组
+    selGoods:number;    // 去选择商品的二级分类下标
+    goodsId:number[];   // 已选择的商品ID
+    isSoloPart:boolean;  // 是否当前选择的单链专区
 }
 
 /**
@@ -43,14 +46,21 @@ export class MallSettingEdit extends Widget {
         addClass:false,
         activeLoc:0,
         currentData:{
-            id:0,
-            name:'',
-            children:[],
-            imgs:[],
-            localId: GroupsLocation.FIRST  // 所属的根分组ID
+            id: 0,
+            name: '',
+            groupType: true,    // 是否有子分组
+            isShow: true,       // 是否展示分组
+            imgs: [],
+            detail: '',
+            children: [],    // 二级分组  商品ID
+            time: '',   // 最后更新时间
+            localId: GroupsLocation.FIRST 
         },
         secondName:'',
-        addNewClass:false
+        addNewClass:false,
+        selGoods:-1,
+        goodsId:[],
+        isSoloPart:false
     };
 
     public setProps(props:any) {
@@ -61,6 +71,7 @@ export class MallSettingEdit extends Widget {
         super.setProps(this.props);
         const index = this.props.locations.findIndex(r => r.status === this.props.currentData.localId);
         this.props.activeLoc = index > -1 ? index :0;
+        this.props.isSoloPart = index > 13;
 
         const locations = getStore('locations',[]);
         const num = locations.findIndex(r => r.location === this.props.currentData.localId); 
@@ -77,19 +88,25 @@ export class MallSettingEdit extends Widget {
         this.props.activeLoc = e.activeIndex;
         if (this.props.activeLoc > 13) {
             this.props.addClass = false;
-            popNewMessage('单链专区不能添加二级分类');
-            this.paint();
-        }
-    }
-
-    // 添加一个二级分类编辑
-    public addBtn() {
-        if (this.props.activeLoc > 13) {
+            this.props.isSoloPart = true;
             popNewMessage('单链专区不能添加二级分类');
         } else {
-            this.props.addClass = true;
-            this.paint();
+            this.props.isSoloPart = false;
         }
+        this.paint();
+
+    }
+
+    // 添加一个二级分类编辑 (如果是单链专区则是去选择商品)
+    public addBtn() {
+        if (this.props.isSoloPart) {
+            this.props.selGoods = 0;
+            this.props.goodsId = this.props.currentData.children;
+            this.props.addClass = false;
+        } else {
+            this.props.addClass = true;
+        }
+        this.paint();
     }
     
     // 删除二级分类编辑
@@ -131,23 +148,30 @@ export class MallSettingEdit extends Widget {
             return;
         } 
         const curData = this.props.currentData;
-        const ids = curData.children.map(r => r.id);
-        const groupType = this.props.activeLoc > 13; // 是否新增单链专区
-        if (groupType && ids.length > 0) {
+        let ids = curData.children.map(r => r.id);
+        if (!this.props.isSoloPart && ids.length > 0) {
             popNewMessage('单链专区不能添加二级分类');
 
             return;
         }
+        if (this.props.isSoloPart && this.props.goodsId.length !== 1) {
+            popNewMessage('单链专区只能且必须选择一个商品');
+            
+            return;
+        } 
+        if (this.props.isSoloPart) {
+            ids = this.props.goodsId;   // 单链专区的下级为商品ID
+        }
 
         if (this.props.addNewClass) {  // 新增一级分组
-            addGroup(curData.name, curData.imgs, ids, JSON.stringify(groupType)).then(r => {
+            addGroup(curData.name, curData.imgs, ids, JSON.stringify(!this.props.isSoloPart)).then(r => {
                 this.initLocation(e,r.id[0],true);
             }).catch(r => {
                 popNewMessage('保存失败');
             });
 
         } else {  // 修改一级分类
-            updateGroup(curData.id, curData.name, curData.imgs, ids, 'true').then(r => {
+            updateGroup(curData.id, curData.name, curData.imgs, ids, JSON.stringify(!this.props.isSoloPart)).then(r => {
                 this.initLocation(e,curData.id,false);
 
             }).catch(r => {
@@ -157,7 +181,7 @@ export class MallSettingEdit extends Widget {
         
     }
 
-    // 更新位置信息
+    // 更新位置信息 isNew 新增分组
     public async initLocation(e:any,groupId:number,isNew:boolean) {
         const newId = this.props.locations[this.props.activeLoc].status;   // 当前选择的新位置
         const orgId = this.props.currentData.localId;  // 原位置
@@ -171,11 +195,18 @@ export class MallSettingEdit extends Widget {
         try {
             // 切换位置 先从原位置删除
             if (!isNew && orgInd > -1) {
+                if (orgId === newId) {   // 没有切换则直接退出
+                    popNewMessage('保存成功');
+                    this.goBack(e);
+
+                    return;
+                }
+
                 this.groupIDs.splice(orgInd,1);
                 await updateLocation(orgId, this.groupIDs);
             }
 
-            // 新位置没有 添加到新位置
+            // 新位置没有该分组 添加到新位置
             if (newInd === -1) {
                 newGroups.push(groupId);
                 await updateLocation(newId, newGroups);  // 将分组绑定到新位置
@@ -209,7 +240,14 @@ export class MallSettingEdit extends Widget {
             addGroup(this.props.secondName,[],[],'false').then(r => {
                 this.props.currentData.children.push({
                     id:r.id[0],
-                    name:this.props.secondName
+                    name:this.props.secondName,
+                    imgs:[],
+                    groupType: true,    // 是否有子分组
+                    isShow: true,       // 是否展示分组
+                    detail: '',
+                    children: [],    // 二级分组  商品ID
+                    time: '',   // 最后更新时间
+                    localId:0 
                 });
                 this.props.secondName = '';
                 this.paint();
@@ -221,24 +259,42 @@ export class MallSettingEdit extends Widget {
     }
 
     // 修改二级分类
-    public upSecondClass(i:number) {
-        const res = this.props.currentData.children[i];
-        // if (res.children.length > 0) {
-        //     getGoodsInfo(res.children[0]).then(res => {
-        //         console.log('!!!!!!!!!!!!!getGoodsInfo',res);
-        //     });
-        // }
-
-        updateGroup(res.id,res.name,[],[],'false').then(r => {
-            popNewMessage('保存成功');
-        }).catch(r => {
-            popNewMessage('保存失败');
-        });
+    public upSecondClass(ind:number) {
+        this.props.selGoods = ind;
+        this.props.goodsId = this.props.currentData.children[ind].children;
+        this.paint();
     }
 
     // 删除二级分类
     public delSecondClass(ind:number) {
         this.props.currentData.children.splice(ind,1);
+        this.paint();
+    }
+
+    // 确认选择商品 并保存二级分类
+    public selectGoods(e:any) {
+        this.props.goodsId = e.value;
+        const res = this.props.currentData.children[this.props.selGoods];
+        if (this.props.isSoloPart) {
+            this.props.selGoods = -1;
+            this.paint();
+
+            return;
+        }
+        updateGroup(res.id, res.name, res.imgs, e.value, 'false').then(r => {
+            this.props.secondName = '';
+            this.paint();
+            popNewMessage('保存成功');
+        }).catch(r => {
+            popNewMessage('保存失败');
+        });
+        this.cancelSel();
+    }
+
+    // 取消选择商品
+    public cancelSel() {
+        this.props.selGoods = -1;
+        this.props.goodsId = [];
         this.paint();
     }
 }

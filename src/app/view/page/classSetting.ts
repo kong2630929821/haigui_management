@@ -3,6 +3,7 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { GroupsLocation, mallImagPre } from '../../config';
 import { getGroupsByLocation } from '../../net/pull';
+import { GroupInfo } from '../../store/memstore';
 import { parseAllGroups } from '../../utils/tools';
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
     showDataList:any;// 数据
     num:any;// [一级分类个数，2级分类个数]
     mallImagPre:string;// 图片路径
-    currentData:any;// 当前编辑的数据
+    currentData:GroupInfo;// 当前编辑的数据
     active:number;  // 当前展示的分组位置  0 商城首页 1 分类汇总
     showEdit:boolean;  // 显示编辑页面
     addNewClass:boolean;  // 新增分组
@@ -28,10 +29,15 @@ export class ClassSetting extends Widget {
         num:[0,0],
         mallImagPre:mallImagPre,
         currentData:{
-            name:'',
-            children:[],
-            imgs:[],
-            localId: GroupsLocation.FIRST
+            id: 0,
+            name: '',
+            groupType: true,    // 是否有子分组
+            isShow: true,       // 是否展示分组
+            imgs: [],
+            detail: '',
+            children: [],    // 二级分组  商品ID
+            time: '',   // 最后更新时间
+            localId: 0
         },
         active:1,
         showEdit:false,
@@ -44,28 +50,25 @@ export class ClassSetting extends Widget {
     public init() {
         getGroupsByLocation().then(res => {
             this.props.datas = parseAllGroups(res.groupInfo);
-            const index = this.props.datas.findIndex(r => r.id === GroupsLocation.CLASSIFICATION);
-            this.props.showDataList = this.props.datas[index].groups;
-            let second = 0;   // 二级分组的长度
-            for (const v of this.props.showDataList) {
-                if (v.groupType) {
-                    second += v.children.length;
-                }
-            }
-            this.props.num = [this.props.showDataList.length,second];
-            this.paint();
-            console.log(this.props.showDataList);
+            this.changeLocation({ value:this.props.active });
         });
     }
 
+    // 关闭编辑分类页面
     public closeEdit() {
         this.props.showEdit = false;
         this.props.currentData = {
-            name:'',
-            children:[],
-            imgs:[],
-            localId: GroupsLocation.FIRST
+            id: 0,
+            name: '',
+            groupType: true,    // 是否有子分组
+            isShow: true,       // 是否展示分组
+            imgs: [],
+            detail: '',
+            children: [],    // 二级分组  商品ID
+            time: '',   // 最后更新时间
+            localId: 0
         };
+        this.init();
         this.paint();
     }
 

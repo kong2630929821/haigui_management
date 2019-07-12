@@ -101,12 +101,39 @@ export const unregister = (keyName: string, cb: Function): void => {
  */
 const handlerMap: HandlerMap = new HandlerMap();
 
+// 会员统计信息
+export interface VipTotal {
+    hBaoNum:number; // 海宝数量
+    hWangNum:number;// 海王数量
+    baikNum:number;// 白客数量
+    hBaoDatas:VipListInfo[]; // 海宝列表数据
+    hWangDatas:VipListInfo[]; // 海王列表数据
+    baikDatas:VipListInfo[]; // 白客列表数据
+}
+
+// 会员列表信息
+// uid 微信名 手机号 地址信息 ta的总收益 标签
+type VipListInfo = [number,string,string,string,string,string];
+
 // 图片类型枚举
 export enum ImageType {
     THUMBNAIL = 1,   // 缩略图
     MAIN = 2,       // 主图
     DETAIL = 3,      // 详情图
     ICON = 4          // 小图 图标
+}
+
+// 分组详细信息
+export interface GroupInfo {
+    id: number;
+    name: string;
+    groupType: boolean;    // 是否有子分组
+    isShow: boolean;       // 是否展示分组
+    imgs: [string,number,number][];
+    detail: string;
+    children: any[];    // 二级分组  商品ID
+    time: string;   // 最后更新时间
+    localId:number;    
 }
 
 // 位置
@@ -118,8 +145,17 @@ export interface Locate {
 // 海龟一号store
 interface Store {
     locations:Locate[];
+    vipTotal:VipTotal;
 }
 // 全局内存数据库
 const store:Store = {
-    locations:[]
+    locations:[],
+    vipTotal:{
+        hBaoNum:0, // 海宝数量
+        hWangNum:0,// 海王数量
+        baikNum:0,// 白客数量
+        hBaoDatas:[], // 海宝列表数据
+        hWangDatas:[], // 海王列表数据
+        baikDatas:[] // 白客列表数据
+    }
 };

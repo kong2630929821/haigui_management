@@ -42,7 +42,7 @@ const perPage = [20,50,100];
  * 产品库
  */
 // tslint:disable-next-line:completed-docs
-export class CommodityLibrary extends Widget {
+export class ProductLibrary extends Widget {
     public props:Props = {
         timeType:[],
         timeTypeActiveIndex:0,

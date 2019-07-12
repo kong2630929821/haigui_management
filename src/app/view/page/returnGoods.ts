@@ -13,7 +13,6 @@ export class GoodsInfo extends Widget {
         ],
         returnList:[],// 存所有的商品
         showTitleList:['售后单id','商品ID','商品SKU','用户ID','下单时单价','下单时数量','支付类型','状态','退货原因','申请退货的时间','回应退货申请的时间','完成退货的时间','用户姓名','用户电话','用户微信名','下单时间','支付时间','发货时间',' 收货时间','发货单号','退货运单号','退货申请图片','拒绝退货原因'],
-        showDetail:false,
         page:1,// 上一个操作是第几页
         currentIndex:0,// 当前页数
         searchValue:'',// 输入的搜索值
@@ -162,7 +161,7 @@ export class GoodsInfo extends Widget {
             });
         } else {
             console.log('开始时间',this.props.startTime,this.props.endTime);
-            console.log('开始时间搓',transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime));
+            console.log('开始时间戳',transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime));
             this.init(this.props.returnStatus + 1,transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime));
         }
         
@@ -206,8 +205,7 @@ export class GoodsInfo extends Widget {
         const id = e.value[0];
         const username = e.value[12];
         if (e.fg === 3) {  // 查看退货申请
-            // e.value[21]
-            popNew('app-view-page-returnGoodsDetail',{ content:e.value[8],username:e.value[12],imgs:['../res/images/logo.png','../res/images/logo.png','../res/images/logo.png'] });
+            popNew('app-view-page-returnGoodsDetail',{ content:e.value[8],username,imgs:e.value[21] });
             
             return;
         }
@@ -241,8 +239,5 @@ export class GoodsInfo extends Widget {
             }
         }
     }
-    public detailBack() {
-        this.props.showDetail = false;
-        this.paint();
-    }
+   
 }

@@ -1,7 +1,8 @@
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { getVipMember } from '../../net/pull';
-import { unicode2ReadStr, unicode2Str } from '../../utils/logic';
+import { getStore, setStore } from '../../store/memstore';
+import { unicode2ReadStr } from '../../utils/logic';
 import { addressFormat } from '../../utils/tools';
 
 interface Props {
@@ -55,12 +56,25 @@ export class VipManage extends Widget {
 
     // 获取数据
     public getDatas() {
+        const vipTotal = getStore('vipTotal',{});
+        // 其中一项统计数据不为0表示已经请求过数据 不再重复请求
+        if (vipTotal.hBaoNum || vipTotal.hWangNum || vipTotal.baikNum) {  
+            this.props.hBaoNum = vipTotal.hBaoNum;
+            this.props.hWangNum = vipTotal.hWangNum;
+            this.props.baikNum = vipTotal.baikNum;
+            this.props.hBaoDatas = vipTotal.hBaoDatas;
+            this.props.hWangDatas = vipTotal.hWangDatas;
+            this.props.baikDatas = vipTotal.baikDatas;
+            this.updateDatas(this.props.active);
+
+            return;
+        }
         getVipMember().then(r => {
-            this.props.hBaoNum = r.haib_count;
-            this.props.hWangNum = r.haiw_count;
-            this.props.baikNum = r.baik_count;
+            vipTotal.hBaoNum = this.props.hBaoNum = r.haib_count;
+            vipTotal.hWangNum = this.props.hWangNum = r.haiw_count;
+            vipTotal.baikNum = this.props.baikNum = r.baik_count;
             if (r.haib) {
-                this.props.hBaoDatas = r.haib.map(item => {
+                vipTotal.hBaoDatas = this.props.hBaoDatas = r.haib.map(item => {
                     return [
                         item[0],           // uid
                         unicode2ReadStr(item[1]),           // 微信名
@@ -72,7 +86,7 @@ export class VipManage extends Widget {
                 });
             }
             if (r.haiw) {
-                this.props.hWangDatas = r.haiw.map(item => {
+                vipTotal.hWangDatas = this.props.hWangDatas = r.haiw.map(item => {
                     return [
                         item[0],           // uid
                         unicode2ReadStr(item[1]),           // 微信名
@@ -84,7 +98,7 @@ export class VipManage extends Widget {
                 });
             }
             if (r.baik) {
-                this.props.baikDatas = r.baik.map(item => {
+                vipTotal.baikDatas = this.props.baikDatas = r.baik.map(item => {
                     return [
                         item[0],           // uid
                         unicode2ReadStr(item[1]),           // 微信名
@@ -95,6 +109,7 @@ export class VipManage extends Widget {
                     ];
                 });
             }
+            setStore('vipTotal', vipTotal);
             this.updateDatas(this.props.active);
         });
     }

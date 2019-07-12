@@ -584,6 +584,7 @@ export const getGoodsKey = (count:number) => {
         console.log(e);
     });
 };
+
 // 获取所有的商品信息，支付分页
 export const getAllGoods = (star:number,num:number,state:number,start_time:number,end_time:number) => {
     
@@ -596,6 +597,7 @@ export const getAllGoods = (star:number,num:number,state:number,start_time:numbe
         });
     });
 };
+
 // 获取当前商品的信息
 export const getCurrentGood = (shopValue:string) => {
     let shopID = 0;

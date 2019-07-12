@@ -1,6 +1,6 @@
 <div class="new-page" w-class="page" ev-detail-back="detailBack" on-tap="close">
+    {{if it.selGoods === -1}}
     <div w-class="back" on-tap="goBack">返回</div>
-
     <div w-class="searchBox">
         <div w-class="tableTitle">
            <div> 一级分类</div>
@@ -32,7 +32,7 @@
                     </div>
                     <div w-class="tab" style="justify-content: flex-end;">
                         <div w-class="btn1" on-tap="delSecondClass({{i}})">删除</div>
-                        <div w-class="btn1" on-tap="upSecondClass({{i}})">保存</div>
+                        <div w-class="btn1" on-tap="upSecondClass({{i}})">选择商品</div>
                     </div>
                 </div>
                 {{end}}
@@ -62,4 +62,10 @@
         {{end}}
         <div w-class="btn" on-tap="addClass">保存</div>
     </div>
+    
+    {{else}}
+    <div ev-selGoods="selectGoods" ev-goodsInfo-back="cancelSel">
+        <widget w-tag="app-view-page-goodsInfo">{goodsId:{{it.goodsId}}}</widget>
+    </div>
+    {{end}}
 </div>

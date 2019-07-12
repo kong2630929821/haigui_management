@@ -49,7 +49,7 @@ export class Home extends Widget {
                     { name:'大转盘设置',page:PAGE.activitySettings },
                     { name:'邀请奖励设置',page:PAGE.invitationSettings },
                     { name:'返利设置',page:PAGE.rebateSetting }],
-                    show:true 
+                    show:false 
                 },
                 { name: '账号设置', page: PAGE.accountSettings, img:'chart.png' },
                 { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' },
@@ -60,7 +60,7 @@ export class Home extends Widget {
                     { name:'品牌设置',page:PAGE.brandSetting }
                     // { name:'商场设置',page:PAGE.mallSetting }
                 ],
-                    show:false 
+                    show:true 
                 },
                 { name: '商品管理', page: PAGE.commodityLibrary, img:'chart.png',children:[
                     { name:'商品库',page:PAGE.commodityLibrary },
@@ -78,17 +78,16 @@ export class Home extends Widget {
             rightBox:true
         };
         
-        this.props.activePage = this.props.pageList[0].children[0];
+        this.props.activePage = this.props.pageList[4].children[1];
     }
 
     // 切换默认过滤器页面
     public changePage(num: number) {
-        this.props.activePage = this.props.pageList[num];
+        const res = this.props.pageList[num];
+        this.props.activePage = res;
         // 是否展开子页面
-        if (this.props.pageList[num].show) {
-            this.props.pageList[num].show = false;
-        } else {
-            this.props.pageList[num].show = true;
+        if (res.children) {
+            res.show = !res.show;
         }
         this.paint();
     }
