@@ -6,7 +6,7 @@
             <div w-class="row">
                 <div w-class="title">{{v}}</div>
                 <div w-class="input" ev-input-change="haiWangChange({{0}},{{i}},e)">
-                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.haiWang[i]?it.haiWang[i]:JSON.stringify(it.haiWang[i])}},disabled:{{it.style[0]}}}</widget>
+                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.haiWang[i]?it.haiWang[i]:JSON.stringify(it.haiWang[i])}},disabled:{{it.style[0]}},itype:"number"}</widget>
                 </div>
             </div>
             {{end}}
@@ -23,7 +23,7 @@
             <div w-class="row">
                 <div w-class="title">{{v}}</div>
                 <div w-class="input" ev-input-change="haiWangChange({{1}},{{i}},e)" style="width:200px;margin-left:20px;">
-                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.haiBao[i]?it.haiBao[i]:JSON.stringify(it.haiBao[i])}},disabled:{{it.style[1]}}}</widget>
+                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.haiBao[i]?it.haiBao[i]:JSON.stringify(it.haiBao[i])}},disabled:{{it.style[1]}},itype:"number"}</widget>
                 </div>
             </div>
             {{end}}
@@ -40,7 +40,7 @@
             <div w-class="row">
                 <div w-class="title">{{v}}</div>
                 <div w-class="input" ev-input-change="haiWangChange({{2}},{{i}},e)">
-                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.shopping[i]?it.shopping[i]:JSON.stringify(it.shopping[i])}},disabled:{{it.style[2]}}}</widget>
+                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.shopping[i]?it.shopping[i]:JSON.stringify(it.shopping[i])}},disabled:{{it.style[2]}},itype:"number"}</widget>
                 </div>
             </div>
             {{end}}

@@ -70,7 +70,6 @@ export class RebateSetting extends Widget {
     // 0海王保存,1海宝保存,2购物收益保存
     public confirm(fg:number) {
         let data = this.props.haiWang;
-        let state = 0;
         let str = '海王';
         let cfgName = cfg.haiWang;
         if (fg === 0) {
@@ -87,19 +86,8 @@ export class RebateSetting extends Widget {
             cfgName = cfg.shopping;
         }
         data.forEach((v,i) => {
-            if (isNaN(v)) {
-
-                state++;
-
-                return ;
-            }
             data[i] = Number(data[i]);
         });
-        if (state) {
-            popNewMessage('请输入数字');
-
-            return; 
-        }
         // 保存海王
         haiWangSetting(cfgName,JSON.stringify(data)).then(r => {
             if (r.result === 1) {
