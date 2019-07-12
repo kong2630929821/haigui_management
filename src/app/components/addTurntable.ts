@@ -32,7 +32,12 @@ export class AddTurntable extends Widget {
             ...this.props,
             ...props
         };
-        super.setProps(this.props);  
+        super.setProps(this.props);
+        if (props.style === false) {
+            this.props.price = props.currentData[0];
+            this.props.probability = props.currentData[1];  
+        }
+        
     }
 
     // 金额
@@ -74,7 +79,12 @@ export class AddTurntable extends Widget {
 
         if (this.props.style) {
             // 添加
-
+            const arr = [Number(price),Number(probability)];
+            this.ok && this.ok(arr);
+        } else {
+            // 修改
+            const arr = [Number(price),Number(probability)];
+            this.ok && this.ok(arr);
         }
     }
 }

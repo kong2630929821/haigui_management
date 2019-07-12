@@ -3,8 +3,7 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { GroupsLocation, mallImagPre } from '../../config';
 import { getGroupsByLocation } from '../../net/pull';
-import { getStore, Locate, setStore } from '../../store/memstore';
-import { parseAllGroups, parseGroups } from '../../utils/tools';
+import { parseAllGroups } from '../../utils/tools';
 
 interface Props {
     datas:any;  // 原始数据
