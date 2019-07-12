@@ -3,7 +3,7 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { addShop, changeShop, getAllArea, getClassType, getGroupsByLocation, getShopSale, searchProduct } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
-import { isInputValue, parseGroups } from '../../utils/tools';
+import { isInputValue, parseAllGroups, parseGroups } from '../../utils/tools';
 interface Props {
     selectData:any;// 选中的产品
     showDataTitle:any;// 标题
@@ -141,9 +141,9 @@ export class OnShelvesImg extends Widget {
         const typeClass1 = [];
         let typeClass2 = [];
         getGroupsByLocation().then(res => {
-            res.groupInfo.forEach(r => {
-                const val = parseGroups(r[6]);
-                val[2].forEach(v => {
+            const data = parseAllGroups(res.groupInfo);
+            data.forEach(r => {
+                r.groups.forEach(v => {
                     const class2 = [];
                     v.children.forEach(t => { 
                         class2.push([t.id,t.name]);
@@ -152,6 +152,7 @@ export class OnShelvesImg extends Widget {
                    
                 });
             });
+            
             this.props.classList.forEach((r,t) => {
                 typeClass1.push({ status:t,text:r[1] });
             });

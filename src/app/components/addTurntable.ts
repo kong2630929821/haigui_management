@@ -1,5 +1,4 @@
 import { Widget } from '../../pi/widget/widget';
-import { addAccount, addUserToUserType, changeUser, getAllUserType } from '../net/pull';
 import { popNewMessage } from '../utils/logic';
 
 // tslint:disable-next-line:missing-jsdoc
@@ -26,14 +25,19 @@ export class AddTurntable extends Widget {
         currentData:[],
         style:true
     };
-    public ok:() => void;
+    public ok:(val:any) => void;
     public cancel:() => void;
     public setProps(props:any) {
         this.props = {
             ...this.props,
             ...props
         };
-        super.setProps(this.props);  
+        super.setProps(this.props);
+        if (props.style === false) {
+            this.props.price = props.currentData[0];
+            this.props.probability = props.currentData[1];  
+        }
+        
     }
 
     // 金额
@@ -55,6 +59,16 @@ export class AddTurntable extends Widget {
 
     // 保存修改
     public okBtnClick() {
-       //
+        const price = this.props.price;
+        const probability = this.props.probability;
+        if (this.props.style) {
+            // 添加
+            const arr = [Number(price),Number(probability)];
+            this.ok && this.ok(arr);
+        } else {
+            // 修改
+            const arr = [Number(price),Number(probability)];
+            this.ok && this.ok(arr);
+        }
     }
 }

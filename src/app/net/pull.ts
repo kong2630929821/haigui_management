@@ -1,6 +1,6 @@
 import { httpPort, sourceIp } from '../config';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { analyzeGoods, brandProcessing, parseOrderShow, processingGroupingType, processingLogs, processingPostage, processingUser, processingUserType, supplierProcessing } from '../utils/tools';
+import { analyzeGoods, brandProcessing, parseOrderShow, processingGroupingType, processingLogs, processingPostage, processingShopSetting, processingUser, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -585,26 +585,17 @@ export const getGoodsKey = (count:number) => {
     });
 };
 
-// // 获取所有的商品信息，支付分页
-// export const getAllGoods = (star:number,num:number,state:number,start_time:number,end_time:number) => {
-    
-//     return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}&state=${state}&start_time=${start_time}&end_time=${end_time}`).then(res => {
-//         // return res.json();
-//         return res.json().then(r => {
-//             const data = JSON.parse(r.value);
-            
-//             return analyzeGoods(data);
-//         });
-//     });
-// };
-
 // 获取所有的商品信息，支付分页
-export const getAllGoods = async (star:number,num:number,state:number,start_time:number,end_time:number) => {
-    const response = await _fetch(fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}&state=${state}&start_time=${start_time}&end_time=${end_time}`), 30 * 1000); 
-    const body = await response.json();
-    const data = JSON.parse(body.value);
+export const getAllGoods = (star:number,num:number,state:number,start_time:number,end_time:number) => {
     
-    return analyzeGoods(data);
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_goods?id=${star}&count=${num}&state=${state}&start_time=${start_time}&end_time=${end_time}`).then(res => {
+        // return res.json();
+        return res.json().then(r => {
+            const data = JSON.parse(r.value);
+            
+            return analyzeGoods(data);
+        });
+    });
 };
 
 // 获取当前商品的信息
@@ -1310,25 +1301,122 @@ export const getBigTurntable = () => {
     });
 };
 
-export const _fetch = (fetch_promise, timeout) => {
-    let abort_fn = null;
+// 设置大转盘信息
+export const settingTruntable = (types:number,cfg:any) => {
+    const msg = {
+        type:'mall_mgr/members@update_lottery_config',
+        param:{
+            type:types,
+            cfg
+        }
+    };
 
-    // 这是一个可以被reject的promise
-    const abort_promise = new Promise((resolve, reject) => {
-        abort_fn = () => {
-            reject('abort promise');
-        };
+    return requestAsync(msg);
+};
+
+// 获取收益设置
+export const getIncome = () => {
+    const msg = {
+        type:'mall_mgr/members@get_award_config',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+// 设置海王海宝设置购物收益
+export const haiWangSetting = (types:string,cfg:any) => {
+    const msg = {
+        type:'mall_mgr/members@update_award_config',
+        param:{
+            type:types,
+            cfg
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 查看礼包配置
+export const getGiftSetting = () => {
+    const msg = {
+        type:'mall_mgr/members@get_gift_config',
+        param:{}
+    };
+
+    return requestAsync(msg).then(r => {
+        if (r.result === 1) {
+            const goodsConfig = processingShopSetting(r.goods_config);
+            const r1 = processingShopSetting(r.goods_limit_config[0][1]);
+            const r2 = processingShopSetting(r.goods_limit_config[1][1]);
+            const r3 = processingShopSetting(r.goods_limit_config[2][1]);
+
+            return [goodsConfig,r1,r2,r3];
+        } else {
+            return [[],[]];
+        }
     });
+};
 
-    // 这里使用Promise.race，以最快 resolve 或 reject 的结果来传入后续绑定的回调
-    const abortable_promise = Promise.race([
-        fetch_promise,
-        abort_promise
-    ]);
+// 更改礼包商品配置
+export const changeGiftSetting = (types:string,cfg:any) => {
+    const msg = {
+        type:'mall_mgr/members@update_gift_config',
+        param:{
+            type:types,
+            cfg
+        }
+    };
 
-    setTimeout(() => {
-        abort_fn();
-    }, timeout);
+    return requestAsync(msg);
+};
 
-    return abortable_promise;
+// 更改礼包商品配置level
+export const changeLevelGift = (types:string,level:number,cfg:any) => {
+    const msg = {
+        type:'mall_mgr/members@update_gift_config',
+        param:{
+            type:types,
+            level,
+            cfg
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 获取会员流水信息
+export const getVipTurnover = () => {
+    const msg = {
+        type:'mall_mgr/members@members_data_info',
+        param:{
+
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        if (r.result === 1) {
+            const invite_top10 = processingVip(r.invite_top10);
+            const share_top10 = processingVip(r.share_top10);
+            const member_total = r.member_total;
+            
+            return [invite_top10,share_top10,member_total];
+        } else {
+
+            return [];
+        }
+    });
+};
+
+// 获取余额流水
+export const getAmountDetail = (uid:number,types:number) => {
+    const msg = {
+        type:'mall_mgr/members@balance_log',
+        param:{
+            uid,
+            type:types
+        }
+    };
+
+    return requestAsync(msg);
 };

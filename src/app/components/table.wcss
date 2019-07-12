@@ -117,7 +117,7 @@
     border-right: 1px solid #ccc;
 }
 .autoBody{
-    max-height: 609px;
+    max-height: 625px;
     border-left: 1px solid #ccc;
 }
 .exportFile{

@@ -19,6 +19,10 @@ interface Props {
 }
 const userType = ['','海王','海宝','白客'];
 const UserLabel = ['海王','市代理','省代理'];
+const tableTitle = [
+    ['用户ID','微信名','手机号','地址信息','ta的本月收益','ta的总收益']
+
+];
 const showData = [
     { title:'资金',num:0 },
     { title:'海贝',num:1 },
@@ -33,7 +37,7 @@ export class VipDetail extends Widget {
         showDataList:[
             // ['123456','张三','15534429570','四川省成都市金牛区XX街道XX小区XX','￥1200','￥1200']
         ],
-        showTitleList:['用户ID','微信名','手机号','地址信息','ta的本月收益','ta的总收益'],
+        showTitleList:tableTitle[0],
         activeTab:0,
         uid:0,
         hBaoDatas:[],

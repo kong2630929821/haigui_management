@@ -1,8 +1,9 @@
 // tslint:disable-next-line:missing-jsdoc
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
-import { getAllGoods, getCurrentGood, getGoodsKey, shelf } from '../../net/pull';
+import { getAllGoods, getAllGoods1, getCurrentGood, getGoodsKey, shelf } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
+import { exportExcel } from '../../utils/tools';
 
 interface Props {
     statusType:any;// 状态筛选
@@ -223,5 +224,33 @@ export class CommodityLibrary extends Widget {
     public lookCancel() {
         this.props.shopDetail = 0;
         this.paint();
+    }
+
+    // 导出全部数据
+    public exportShop() {
+        const star_time = transitTimeStamp(this.props.startTime);
+        const end_time = transitTimeStamp(this.props.endTime);
+        const status = this.props.statusTypeActiveIndex === 0 ? 1 :(this.props.statusTypeActiveIndex === 1 ? 0 :-1);// 0已下架 1已上架 -1已删除
+        getGoodsKey(1).then(r1 => {
+            console.log('111111111',r1);
+            const data = JSON.parse(r1.value);
+            this.props.shopNum = data[1];
+            getAllGoods1(data[0],500,status,star_time,end_time).then(r => {
+                const jsonHead = this.props.showDateTitle;
+                const aoa = [jsonHead];
+                const jsonData = r;
+                for (const v of jsonData) {
+                    for (let i = 0;i < v.length;i++) {
+                        v[i] = v[i].toString();
+                    }
+                    aoa.push(v);
+                }
+                console.log(aoa);
+                exportExcel(aoa,`商品信息表.xlsx`);
+        
+                console.log('contentList ===',jsonData);
+            });
+        });
+        
     }
 }
