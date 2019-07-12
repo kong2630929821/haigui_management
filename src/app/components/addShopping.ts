@@ -101,22 +101,11 @@ export class AddShopping extends Widget {
 
     // 保存
     public okBtnClick() {
-        let state = 0;
         const arr = [];
         let str = null;
         this.props.data.forEach(v => {
-            if (v === '' || isNaN(v)) {
-                state++;
-
-                return;
-            }
             arr.push(JSON.parse(v));
         });
-        if (state) {
-            popNewMessage('请输入数字');
-
-            return;
-        }
         if (this.props.style === 0) {
             // 添加
         } else if (this.props.style === 1) {

@@ -61,22 +61,6 @@ export class AddTurntable extends Widget {
     public okBtnClick() {
         const price = this.props.price;
         const probability = this.props.probability;
-        if (!price) {
-            popNewMessage('请输入金额');
-
-            return; 
-        }
-        if (!probability) {
-            popNewMessage('请输入概率');
-
-            return; 
-        }
-        if (isNaN(Number(price)) || isNaN(Number(probability))) {
-            popNewMessage('输入金额或概率错误');
-
-            return;
-        }
-
         if (this.props.style) {
             // 添加
             const arr = [Number(price),Number(probability)];

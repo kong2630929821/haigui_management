@@ -9,7 +9,7 @@
             <div w-class="row">
                 <div w-class="title">{{v}}</div>
                 <div w-class="input" ev-input-change="change({{i}},e)" style="width:382px;">
-                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.style!=0?it.data[i]?it.data[i]:JSON.stringify(it.data[i]):""}},disabled:{{i==0?true:false}}}</widget>
+                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.style!=0?it.data[i]?it.data[i]:JSON.stringify(it.data[i]):""}},disabled:{{i==0?true:false}},itype:"number"}</widget>
                 </div>
             </div>
         {{end}}

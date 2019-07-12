@@ -32,10 +32,13 @@
         <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)">ta的海王</div>
         <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)">ta的海宝</div>
         <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)">ta的白客</div>
+        <div w-class="tabBar {{it.activeTab==3?'activeTab':''}}" on-tap="changeTab(3)">资金</div>
+        <div w-class="tabBar {{it.activeTab==4?'activeTab':''}}" on-tap="changeTab(4)">海贝</div>
+        <div w-class="tabBar {{it.activeTab==5?'activeTab':''}}" on-tap="changeTab(5)">积分</div>
     </div>
 
     <div>
-        {{:typeList = ["海王","海宝","白客"]}}
+        {{:typeList = ["海王","海宝","白客","资金明细","海贝明细","积分明细"]}}
         <div w-class="tableTitle">{{typeList[it.activeTab]}}列表</div>
         <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},needCheckBox:false }</widget>
     </div>

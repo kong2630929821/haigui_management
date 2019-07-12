@@ -1405,3 +1405,16 @@ export const getVipTurnover = () => {
         }
     });
 };
+
+// 获取余额流水
+export const getAmountDetail = (uid:number,types:number) => {
+    const msg = {
+        type:'mall_mgr/members@balance_log',
+        param:{
+            uid,
+            type:types
+        }
+    };
+
+    return requestAsync(msg);
+};
