@@ -39,26 +39,20 @@
                     </td>
                     {{end}}
 
-                    {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
                     <td w-class="td td1">
-                        {{if it.inputFile}}
-                        <div style="margin-left:0;">
-                            <input type="file" on-change="importExcel(e,{{i}})"/>
-                        </div>
+                        {{if (i > 0 ? v[0] !== it.showDatas[i - 1][0] : true)}}
+                            {{if (v[12] === it.PENDINGPAYMENT ||  v[12] === it.PENDINGDELIVERED)}}
+                            <div w-class="btn btnColor" on-tap="quitOrder(e,{{i}})">取消订单</div>
+                            {{elseif (v[12] === it.FAILED)}}
+                            <div w-class="btn" style="color: #222;">手动取消</div>
+                            
+                            {{end}}
+                            <div w-class="btn" on-tap="goDetail(e,{{i}})">查看详情</div>
                         {{end}}
-                        {{if v[12] === it.PENDINGPAYMENT ||  v[12] === it.PENDINGDELIVERED}}
-                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;" on-tap="quitOrder(e,{{i}})">取消订单</div>
-                        {{elseif v[12] === it.FAILED}}
-                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;">手动取消</div>
-                        {{end}}
-                        {{if it.inlineBtn2}}
-                        <div w-class="btn" style="margin-left:0;" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
-                        {{end}}
-                        
                     </td>
-                    {{end}}
                 </tr>
                 {{end}}
+
             </tbody>
         </table>
 

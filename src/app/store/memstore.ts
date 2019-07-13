@@ -146,6 +146,7 @@ export interface Locate {
 interface Store {
     locations:Locate[];
     vipTotal:VipTotal;
+    groupList:GroupInfo[];
 }
 // 全局内存数据库
 const store:Store = {
@@ -157,5 +158,6 @@ const store:Store = {
         hBaoDatas:[], // 海宝列表数据
         hWangDatas:[], // 海王列表数据
         baikDatas:[] // 白客列表数据
-    }
+    },
+    groupList:[]
 };

@@ -3,7 +3,7 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { GroupsLocation, mallImagPre } from '../../config';
 import { getGroupsByLocation } from '../../net/pull';
-import { GroupInfo } from '../../store/memstore';
+import { getStore, GroupInfo } from '../../store/memstore';
 import { parseAllGroups } from '../../utils/tools';
 
 interface Props {
@@ -37,16 +37,24 @@ export class ClassSetting extends Widget {
             detail: '',
             children: [],    // 二级分组  商品ID
             time: '',   // 最后更新时间
-            localId: 0
+            localId: GroupsLocation.CLASSIFICATION
         },
         active:1,
         showEdit:false,
         addNewClass:false
     };
+
     public create() {
         super.create();
-        this.init();
+        const groups = getStore('groupList',[]);
+        if (groups.length > 0) {
+            this.props.datas = groups;
+            this.changeLocation({ value:this.props.active });
+        } else {
+            this.init();
+        }
     }
+
     public init() {
         getGroupsByLocation().then(res => {
             this.props.datas = parseAllGroups(res.groupInfo);
@@ -66,7 +74,7 @@ export class ClassSetting extends Widget {
             detail: '',
             children: [],    // 二级分组  商品ID
             time: '',   // 最后更新时间
-            localId: 0
+            localId: GroupsLocation.CLASSIFICATION
         };
         this.init();
         this.paint();

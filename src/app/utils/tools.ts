@@ -1,6 +1,8 @@
+import { userAgent } from '../../pi/util/html';
 import { GroupInfo, setStore } from '../store/memstore';
+import { OrderDetailBase, OrderDetailGoods, OrderDetailRebate } from '../view/page/orderDetail';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { popNewMessage, priceFormat, timeConvert, unicode2Str } from './logic';
+import { popNewMessage, priceFormat, timeConvert, unicode2ReadStr, unicode2Str } from './logic';
 
 /**
  * 常用工具
@@ -118,7 +120,7 @@ export const exportExcel = (aoa: any[][], excelName: string) => {
     openDownloadDialog(sheet2blob(sheet), excelName);
 };
 
-// 解析订单
+// 解析订单列表
 export const parseOrderShow = (infos: Order[], status: OrderStatus) => {
     let localStatus = status;
     const ordersShow: OrderShow[] = [];
@@ -126,13 +128,15 @@ export const parseOrderShow = (infos: Order[], status: OrderStatus) => {
         if (status === OrderStatus.ALL) {   // 全部订单  自己解析订单状态
             localStatus = parseOrderStatus(info[12], info[13], info[14], info[15], info[16], info[17]);
         }
-        for (const v of info[3]) {
+        for (const v of info[3]) {  // 商品信息
             const timestamp = localStatus === OrderStatus.PENDINGPAYMENT ? info[12] : info[13];
             let goodsType = '';
-            if (v[6]) {
+            if (v[6] === 1) {
                 goodsType = '保税商品';
-            } else {
+            } else if (v[6] === 0) {
                 goodsType = '普通商品';
+            } else {
+                goodsType = '海外直购';
             }
             const orderShow: OrderShow = [info[1], v[0], v[1], v[3], v[4], v[5], info[0], timestampFormat(timestamp), info[2], info[8], info[9], addressFormat(info[11]), OrderStatusShow[localStatus], priceFormat(info[18]), info[19], info[20], info[21], priceFormat(v[2] * v[3]), goodsType];
             ordersShow.push(orderShow);
@@ -140,6 +144,71 @@ export const parseOrderShow = (infos: Order[], status: OrderStatus) => {
     }
 
     return ordersShow;
+};
+
+enum UserType {
+    hWang= 1,  // 海王
+    hBao= 2,   // 海宝
+    baiKe= 3,  // 白客
+    city= 11,   // 市代理
+    province= 12,  // 省代理
+    hWangTest= 19,  // 海王体验
+    hBaoTest= 29   // 海宝体验
+}
+
+const UserTypeShow = {
+    hWang:'海王',
+    hBao:'海宝',
+    baiKe:'白客',
+    city:'市代理',
+    province:'省代理',
+    hWangTest:'海王体验',
+    hBaoTest:'海宝体验'
+};
+
+const RebateType = ['','现金','海贝'];
+
+// 解析订单详情
+export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
+    let localStatus = status;
+    const orderGoods:OrderDetailGoods[] = [];
+    const orderRebate:OrderDetailRebate[] = [];
+
+    // 身份  用户等级+用户标签（只能是1,2） 
+    const usertype = UserTypeShow[UserType[Number(`${info[23]}${info[24] > 0 ? info[24] :''}`)]];
+    if (status === OrderStatus.ALL) {   // 全部订单  自己解析订单状态
+        localStatus = parseOrderStatus(info[12], info[13], info[14], info[15], info[16], info[17]);
+    }
+
+    // 订单基础信息
+    const orderBase: OrderDetailBase = [info[1],info[0],info[2],timestampFormat(info[12]), OrderStatusShow[localStatus],info[17],timestampFormat(info[13]),info[19],priceFormat(info[5]),priceFormat(info[6]),priceFormat(info[18]),info[20],info[21],unicode2ReadStr(info[22]),usertype,info[8],info[9],addressFormat(info[11])];
+    
+    // 商品信息
+    for (const v of info[3]) {  
+        let goodsType = '';
+        if (v[6] === 1) {
+            goodsType = '保税商品';
+        } else if (v[6] === 0) {
+            goodsType = '普通商品';
+        } else {
+            goodsType = '海外直购';
+        }
+        
+        const goods: OrderDetailGoods = [v[0], v[1], v[4], v[5], v[12][1],goodsType,v[10].join('/'),v[3],v[12][2],priceFormat(v[7]),priceFormat(v[8]),priceFormat(v[9]),v[11][0],v[11][1],v[11][2]];
+        orderGoods.push(goods);
+    }
+    
+    // 返利信息
+    for (const v of info[25]) {
+        const rebate:OrderDetailRebate = [v[0],v[1],RebateType[v[2]],priceFormat(v[3]),timestampFormat(v[4])];
+        orderRebate.push(rebate);
+    }
+
+    return {
+        orderBase,
+        orderGoods,
+        orderRebate
+    };
 };
 
 /**
@@ -722,7 +791,8 @@ export const parseAllGroups = (data: any) => {
         });
     });
     setStore('locations', locations);
-
+    setStore('groupList', ans);
+    
     return ans;
 };
 
