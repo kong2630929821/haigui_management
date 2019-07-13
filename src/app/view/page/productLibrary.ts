@@ -2,6 +2,7 @@
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { getAllProduct, searchProduct } from '../../net/pull';
+import { getStore, setStore } from '../../store/memstore';
 import { timeConvert, transitTimeStamp } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
@@ -10,7 +11,6 @@ interface Props {
     timeTypeActiveIndex:number;// 状态筛选当前下标
     expandIndex:number; 
     shopNum:number;// 商品個數
-    currentIndex:number;// 当前分页下标
     perPage:number;// 每页多少条数据
     showTitleList:any;// 标题
     showDataList:any;// 数据
@@ -48,9 +48,8 @@ export class ProductLibrary extends Widget {
         timeTypeActiveIndex:0,
         expandIndex:-1,
         shopNum:123,
-        currentIndex:0,
         perPage:perPage[0],
-        showTitleList:['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
+        showTitleList:['供应商id','SKU','sku名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
         // ['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']
         showDataList:[],
         showDateBox:false,
@@ -84,7 +83,15 @@ export class ProductLibrary extends Widget {
         const time = oData.setHours(23, 59, 59, 999);
         this.props.endTime =  timeConvert(time);
         this.props.startTime = '2019-05-01 00:00:000';
-        this.init();
+        const skuTotal = getStore('skuTotal',{});
+        if (skuTotal.skuNum) {
+            this.props.shopNum = skuTotal.skuNum;
+            this.props.dataList = skuTotal.skuData;
+            this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
+        } else {
+            this.init();
+        }
+        
     }
     public init() {
         const start_time = transitTimeStamp(this.props.startTime);
@@ -94,6 +101,7 @@ export class ProductLibrary extends Widget {
             this.props.shopNum = r[0];
             this.props.dataList = r[1];
             this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
+            setStore('skuTotal', r[1]);
             this.paint();
         });
     }
@@ -183,7 +191,7 @@ export class ProductLibrary extends Widget {
     // 显示产品库页面
     public showProduct() {
         this.props.showAddProduct = 0;
-        this.init();
+        this.paint();
     }
     // 表格点击按钮
     public goDetail(e:any) {

@@ -31,6 +31,10 @@ export class OnShelves extends Widget {
 
     // 搜索产品
     public searchProduct() {
+        if (!this.props.searchValue) {
+
+            return ;
+        }
         searchProduct(this.props.searchValue).then(r => {
             this.props.searchData = r;
             console.log('搜索到的产品',r);

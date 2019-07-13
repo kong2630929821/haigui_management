@@ -64,7 +64,7 @@ export class Home extends Widget {
                 },
                 { name: '商品管理', page: PAGE.commodityLibrary, img:'chart.png',children:[
                     { name:'商品库',page:PAGE.commodityLibrary },
-                    { name:'产品库',page:PAGE.productLibrary }],
+                    { name:'SKU库',page:PAGE.productLibrary }],
                     show:false 
                 },
                 { name: '导入Excel', page: PAGE.importExcel, img:'chart.png'  },

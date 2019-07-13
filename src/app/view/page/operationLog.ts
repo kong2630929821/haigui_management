@@ -13,7 +13,6 @@ interface Props {
     sum:number;// 记录条数
     dataList:any;// 全部数据
     perPage:number;// 每页多少条数据
-    currentIndex:number;
 }
 // 每页多少数据
 const perPage = [20,50,100];
@@ -29,8 +28,7 @@ export class OperationLog extends Widget {
         endTime:'',
         sum:0,
         dataList:[],
-        perPage:perPage[0],
-        currentIndex:0
+        perPage:perPage[0]
     };
 
     public create() {

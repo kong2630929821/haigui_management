@@ -10,12 +10,6 @@
                     </div>
                 </div>
                 <div w-class="filterTitle">
-                    <span>商品类型</span>
-                    <div style="display:inline-block;height: 50px;margin-left: 20px;margin-top: 26px" ev-selected="filterProductTypes">
-                        <widget w-tag="app-components-simpleFilter1">{options:{{it.productTypes}},activeIndex:{{it.ProductTypesActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
-                    </div>
-                </div>
-                <div w-class="filterTitle">
                     <span>上架时间</span>      
                 </div>
                 <div style="margin: 28px 0 28px 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
