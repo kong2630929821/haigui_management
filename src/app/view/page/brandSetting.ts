@@ -12,7 +12,6 @@ interface Props {
     shopNum:number;
     mallImagPre:string;// 服务器地址
     brandList:any;// 原始数据
-    currentIndex:number;// 当前分页下标
     perPage:number;// 每页多少条数据
     inputValue:string;// 搜索
     dataList:any;// 总数据
@@ -30,7 +29,6 @@ export class BrandSetting extends Widget {
         shopNum:0,
         mallImagPre:mallImagPre,
         brandList:[],
-        currentIndex:0,
         perPage:perPage[0],
         inputValue:'',
         dataList:[]
@@ -52,7 +50,6 @@ export class BrandSetting extends Widget {
     // 分页变化
     public pageChange(e:any) {
         console.log(e.value);
-        this.props.currentIndex = e.value;
         this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         console.log('当前页数据：',this.props.showDataList);
         this.paint();

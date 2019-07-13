@@ -13,7 +13,7 @@
     <div w-class="row">
         <div w-class="title">密码：</div>
         <div w-class="input" ev-input-change="userPassWord" style="width: 382px;">
-            <widget w-tag="app-components-input">{input:{{it.password}},placeHolder:"请输入密码"}</widget>
+            <widget w-tag="app-components-input">{input:{{it.password}},placeHolder:"请输入密码",itype:"password"}</widget>
         </div>
     </div>
     <div w-class="row">

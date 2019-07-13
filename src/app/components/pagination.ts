@@ -72,7 +72,7 @@ export class Pagination extends Widget {
         if (this.props.currentIndex + 1 === this.props.pages) {
      
             return;
-        } else if (this.props.currentIndex >= 4) {
+        } else if (this.props.currentIndex >= 4 && this.props.pagesList.indexOf(this.props.currentIndex + 1) === -1) {
             this.props.currentIndex++;
             this.props.pagesList.shift();
             this.props.pagesList.push(this.props.currentIndex);
@@ -90,7 +90,36 @@ export class Pagination extends Widget {
         notify(event.node,'ev-changeCurrent',{ value:this.props.currentIndex });
         this.paint();
     }
-
+    // 首页尾页
+    public goto(fg:number,e:any) {
+        let index = 0;
+        let t = this.props.pages - 1;
+        if (fg === 1) {
+            // 首页
+            let j = 0;
+            this.props.pagesList = [];
+            for (let i = 0;i < 5;i++) {
+                if (j > t || j > 4) {
+                    break; 
+                }
+                this.props.pagesList.push(j++);
+                this.paint();
+            }
+        }
+        if (fg === 2) {
+            // 尾页
+            index = this.props.pages - 1;
+            this.props.pagesList = [];
+            for (let i = 0;i < 5;i++) {
+                if (t < 0) {
+                    break; 
+                }
+                this.props.pagesList.unshift(t--);
+            }
+            this.paint();
+        }
+        this.currentClick(e,index);
+    }
     public filterTimeType(e:any) {
         notify(e.node,'ev-perPage',{ value:e.activeIndex });
     }

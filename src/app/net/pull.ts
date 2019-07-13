@@ -1427,3 +1427,48 @@ export const getAmountDetail = (uid:number,types:number) => {
         
     });
 };
+
+// 获取商品销售排名TOP10
+export const getShopSaleTop = (count:number,start:number,end:number) => {
+    const msg = {
+        type:'get_sold_top_goods',
+        param:{
+            count,
+            start,
+            end
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        if (r.result === 1) {
+            return processingVip(r.goods_list);
+        } else {
+            return [];
+        }
+    });
+};
+
+export const getAllShopSaleInfo = () => {
+    const msg = {
+        type:'get_goods_statistics_info',
+        param:{}
+    };
+
+    return requestAsync(msg).then(r => {
+        
+        if (r.result === 1) {
+            const data = [];
+            const arr = [];
+            const title = ['试用装','课程',''];
+            r.gift_sold.forEach((v,i) => {
+                arr.push([title[i],v[0],v[0] - v[1] >= 0 ? 1 :2]);
+            });
+            data.push(arr,arr.splice(2,1));
+            data.push([['上架商品',r.on_sale,0],['下架商品',r.off_sale,0]]);
+            data.push([['一级分类',r.group1,0],['二级分类',r.group2,0]]);
+            data.push([['',r.order_count,0]],[['',priceFormat(r.order_price),0]]);
+         
+            return data;
+        }
+    });
+};

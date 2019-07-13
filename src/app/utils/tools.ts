@@ -1,4 +1,4 @@
-import { GroupInfo, setStore } from '../store/memstore';
+import { setStore } from '../store/memstore';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
 import { getCashLogName, popNewMessage, priceFormat, timeConvert, unicode2Str } from './logic';
 
@@ -690,10 +690,12 @@ export const analyzeGoods = (data: any) => {
             typeList.push([v[3],v[2][0],`${priceFormat(v[12])}/${priceFormat(v[13])}/${priceFormat(v[14])}`,priceFormat(v[2][1]),v[11],v[4],v[24],v[25],time]);
         });
         let str = '';// 是否报税
-        if (item[0][16]) {
+        if (item[0][16] === 1) {
             str = '保税商品';
-        } else {
+        } else if (item[0][16] === 0) {
             str = '普通商品';
+        } else {
+            str = '海外直购';
         }
         const imgType2 = [...item[0][18][0]];
         const img = item[0][18];
@@ -729,7 +731,7 @@ export const parseAllGroups = (data: any) => {
 // 处理分组
 export const parseGroups = (data: any, localId: number) => {
     if (!data) return [];
-    const res:GroupInfo[] = [];
+    const res = [];
     data.forEach(elem => {
         res.push({
             id: elem[0],
