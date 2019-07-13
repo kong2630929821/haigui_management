@@ -145,3 +145,42 @@ export const unicode2ReadStr = (item:any) => {
     }
     
 };
+
+// 现金来源类型
+export enum CashLogType {
+    upHwang = 1,  // 其他人升级海王获得收益
+    upHbao,    // 其他人升级海宝获得收益
+    reShop,   // 购物返利
+    reInvite,  // 邀请返利
+    recharge,   // 充值
+    withdraw,  // 提现
+    shopping,    // 购物
+    reCash,     // 提现退款
+    other,       // 其他
+    turntable,    // 大转盘
+    shopReturn,     // 购物退款
+    manage        // 管理端调整
+}
+// 现金来源名称
+const CashLogName = {
+    upHwang:'升级海王',
+    upHbao:'升级海宝',
+    reShop:'购物返利',
+    reInvite:'邀请返利',
+    recharge:'充值',
+    withdraw:'提现',
+    shopping:'购物',
+    reCash:'提现退款',
+    other:'其他',
+    turntable:'大转盘',
+    shopReturn:'退款',
+    manage:'客服调整'
+};
+
+/**
+ * 获取现金来源名称
+ * @param ttype type
+ */
+export const getCashLogName = (ttype:number) => {
+    return CashLogName[CashLogType[ttype]];
+};

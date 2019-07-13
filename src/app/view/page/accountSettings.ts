@@ -9,7 +9,6 @@ interface Props {
     showDataList:any;// 表格数据
     showTitleList:any;// 表格标题
     sum:number;// 数据条数
-    currentIndex:number;
     dataList:any;// 全部数据
     perPage:number;// 每页显示多少个
 }
@@ -23,7 +22,6 @@ export class AccountSetting extends Widget {
         showDataList:[],
         showTitleList:['账号','账号类型'],
         sum:0,
-        currentIndex:0,
         dataList:[],
         perPage:perPage[0]
     };

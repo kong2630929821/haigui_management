@@ -1,8 +1,7 @@
-import { userAgent } from '../../pi/util/html';
-import { GroupInfo, setStore } from '../store/memstore';
+import { setStore } from '../store/memstore';
 import { OrderDetailBase, OrderDetailGoods, OrderDetailRebate } from '../view/page/orderDetail';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { popNewMessage, priceFormat, timeConvert, unicode2ReadStr, unicode2Str } from './logic';
+import { getCashLogName, popNewMessage, priceFormat, timeConvert, unicode2ReadStr, unicode2Str } from './logic';
 
 /**
  * 常用工具
@@ -759,10 +758,12 @@ export const analyzeGoods = (data: any) => {
             typeList.push([v[3],v[2][0],`${priceFormat(v[12])}/${priceFormat(v[13])}/${priceFormat(v[14])}`,priceFormat(v[2][1]),v[11],v[4],v[24],v[25],time]);
         });
         let str = '';// 是否报税
-        if (item[0][16]) {
+        if (item[0][16] === 1) {
             str = '保税商品';
-        } else {
+        } else if (item[0][16] === 0) {
             str = '普通商品';
+        } else {
+            str = '海外直购';
         }
         const imgType2 = [...item[0][18][0]];
         const img = item[0][18];
@@ -799,7 +800,7 @@ export const parseAllGroups = (data: any) => {
 // 处理分组
 export const parseGroups = (data: any, localId: number) => {
     if (!data) return [];
-    const res:GroupInfo[] = [];
+    const res = [];
     data.forEach(elem => {
         res.push({
             id: elem[0],
@@ -956,6 +957,19 @@ export const processingVip = (r:any) => {
     const data = [];
     r.forEach((v,i) => {
         data.push([i + 1,v[0],unicode2Str(v[1]),v[2]]);
+    });
+
+    return data;
+};
+
+// 处理资金流水明细
+export const processingBalanceLog = (r:any) => {
+    if (!r.length) {
+        return [];
+    }
+    const data = [];
+    r.forEach(v => {
+        data.push([timestampFormat(v[4]),getCashLogName(v[1]), `${v[2] > 0 ? '+' :''}${priceFormat(v[2])}`]);
     });
 
     return data;

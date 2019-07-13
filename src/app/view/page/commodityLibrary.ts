@@ -105,7 +105,7 @@ export class CommodityLibrary extends Widget {
     // 商品上架下架筛选
     public filterTimeType(e:any) {
         this.props.statusTypeActiveIndex = e.activeIndex;
-        this.init(1);
+        this.changeType();
     }
     // 商品分类筛选
     public filterProductTypes(e:any) {
@@ -165,7 +165,7 @@ export class CommodityLibrary extends Widget {
     public init(index:number) {
         const star_time = transitTimeStamp(this.props.startTime);
         const end_time = transitTimeStamp(this.props.endTime);
-        const status = this.props.statusTypeActiveIndex === 0 ? 1 :(this.props.statusTypeActiveIndex === 1 ? 0 :-1);// 0已下架 1已上架 -1已删除
+        const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
         getGoodsKey(index).then(r1 => {
             console.log('111111111',r1);
             const data = JSON.parse(r1.value);
@@ -252,5 +252,16 @@ export class CommodityLibrary extends Widget {
             });
         });
         
+    }
+    // 筛选上下架变化数据
+    public changeType() {
+        const star_time = transitTimeStamp(this.props.startTime);
+        const end_time = transitTimeStamp(this.props.endTime);
+        const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
+        getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
+            this.props.showDataList = r;
+            this.props.shopNum = r.length;
+            this.paint();
+        });
     }
 }

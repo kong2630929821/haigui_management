@@ -146,6 +146,7 @@ export interface Locate {
 interface Store {
     locations:Locate[];
     vipTotal:VipTotal;
+    skuTotal:SkuInfo;
     groupList:GroupInfo[];
 }
 // 全局内存数据库
@@ -159,5 +160,18 @@ const store:Store = {
         hWangDatas:[], // 海王列表数据
         baikDatas:[] // 白客列表数据
     },
+    skuTotal:{
+        skuNum:0,// 数量
+        skuData:[]// 列表
+    },
     groupList:[]
 };
+
+// SKU
+export interface SkuInfo {
+    skuNum:number; // sku数量
+    skuData:SkuListInfo[]; // sku列表数据
+}
+// SKU列表信息
+// '供应商id','SKU','sku名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'
+type SkuListInfo = [number,string,string,number,number,number,string,string,number,number,string,string,string];
