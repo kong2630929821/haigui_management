@@ -974,3 +974,35 @@ export const processingBalanceLog = (r:any) => {
 
     return data;
 };
+
+// 处理商品排行
+export const processingShoppingTop10 = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+    const data = [];
+    r.forEach((v,i) => {
+        data.push([i + 1,v[1],unicode2Str(v[2]),v[0]]);
+    });
+
+    return data;
+};
+
+// 处理用户等级变动
+export const processingUserLevelChange = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+    const data = [];
+    r.forEach(v => {
+        let str = '管理端更改';
+        if (v[5] === 0) {
+            str = '用户升级';
+        }
+        data.push([v[0],UserTypeShow[UserType[v[1]]],UserTypeShow[UserType[v[2]]],v[3],unicode2Str(v[4]),str]);
+    });
+    
+    return data;
+};

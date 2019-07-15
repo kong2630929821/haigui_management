@@ -92,10 +92,13 @@ export class OnShelvesImg extends Widget {
         const bonded = [
             {
                 status:0,
-                text:'否'
+                text:'普通商品'
             },{
                 status:1,
-                text:'是'
+                text:'保税商品'
+            },{
+                status:2,
+                text:'海外直购'
             }
         ];
       
@@ -194,6 +197,8 @@ export class OnShelvesImg extends Widget {
         this.props.tax = Math.floor(Number(arr.tax) * 100);
         if (this.props.dataList.shopType === '保税商品') {
             this.props.bondedActiveIndex = 1;
+        } else if (this.props.dataList.shopType === '海外直购') {
+            this.props.bondedActiveIndex = 2;
         }
         // 图片展示
         arr.img.forEach(v => {
@@ -313,7 +318,7 @@ export class OnShelvesImg extends Widget {
         const cost = Number(this.props.data[2]);// 成本价
         const origin = Number(this.props.data[3]);// 普通售价
         const vip_price = Number(this.props.data[4]);// 会员价
-        const has_tax = this.props.bondedActiveIndex ? true :false;// 是否报税
+        const has_tax = this.props.bondedActiveIndex;// 是否报税
         const tax = Number(this.props.tax);// 税费
         const discount = this.props.data[5] ? Number(this.props.data[5]) :0;// 折扣价
         const labels = this.props.spreadList;// 规格
