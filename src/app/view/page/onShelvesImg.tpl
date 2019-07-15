@@ -152,6 +152,9 @@
         </div>
     </div>
     {{end}}
+    {{if !it.style}}
+    
+    {{end}}
     <div w-class="ctr">
         <div w-class="btn" on-tap="gotoShop">取消</div>
         {{if !it.disable}}
