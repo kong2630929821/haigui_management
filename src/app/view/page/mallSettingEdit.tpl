@@ -9,13 +9,13 @@
             <div w-class="guessTab">
                 <span style="margin-right:10px;">专区封面图</span>
                 <div w-class="tab inputBox" ev-input-file="imgUpload(e,0)">
-                    <widget w-tag="app-components-inputImg">{src:{{imgs[0]?imgs[0][0]:""}} }</widget>
+                    <widget w-tag="app-components-inputImg">{src:{{imgs[0].length > 0 ? imgs[0][0]:""}} }</widget>
                 </div>
             </div>
             <div w-class="guessTab">
                 <span style="margin-right:10px;">专区头图</span>
                 <div w-class="tab inputBox" ev-input-file="imgUpload(e,1)">
-                    <widget w-tag="app-components-inputImg">{src:{{imgs[1]?imgs[1][0]:""}} }</widget>
+                    <widget w-tag="app-components-inputImg">{src:{{imgs[1].length > 0 ? imgs[1][0]:""}} }</widget>
                 </div>
             </div>
             <div w-class="guessTab" style="flex:1 0 0;" ev-input-change="firstNameChange">

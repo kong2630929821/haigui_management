@@ -6,10 +6,10 @@
 }
 .filterBox{
     display: flex;
+    flex-wrap: wrap;
 }
 .searchBox{
     margin:20px 0;
-    height: 150px;
     background: #fff;
     cursor: pointer;
 }
