@@ -193,7 +193,12 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
             goodsType = '海外直购';
         }
         
-        const goods: OrderDetailGoods = [v[0], v[1], v[4], v[5], v[12][1],goodsType,v[10].join('/'),v[3],v[12][2],priceFormat(v[7]),priceFormat(v[8]),priceFormat(v[9]),v[11][0],v[11][1],v[11][2]];
+        const group = [];
+        for (const r of v[10]) {
+            // 一级分组/二级分组
+            group.push(`${r[1]}/${r[3] ? r[3] :''}`);
+        }
+        const goods: OrderDetailGoods = [v[0], v[1], v[4], v[5], v[12][1],goodsType, group.join(','),v[3],v[12][2],priceFormat(v[7]),priceFormat(v[8]),priceFormat(v[9]),v[11][0],v[11][1],v[11][2]];
         orderGoods.push(goods);
     }
     
