@@ -34,9 +34,13 @@ export class AddUser extends Widget {
     };
     public ok:() => void;
     public cancel:() => void;
-    // 创建
-    public create() {
-        super.create();
+ 
+    public setProps(props:any) {
+        this.props = {
+            ...this.props,
+            ...props
+        };
+        super.setProps(this.props);
         // 状态筛选
         const userType = [
             {
@@ -48,13 +52,6 @@ export class AddUser extends Widget {
             }
         ];
         this.props.userTypes = userType;
-    }
-    public setProps(props:any) {
-        this.props = {
-            ...this.props,
-            ...props
-        };
-        super.setProps(this.props);
         // 获取所有账号类型
         getAllUserType().then(r => {
             const userType = [];
