@@ -75,8 +75,8 @@ export class Login extends Widget {
                             ];
                         });
                     }
+                    setStore('vipTotal',vipTotal);
                 });
-                setStore('vipTotal',vipTotal);
                 // 登录成功获取SKU
                 const skuTotal = getStore('skuTotal',{});
                 const oData = new Date();

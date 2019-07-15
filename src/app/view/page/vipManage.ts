@@ -1,7 +1,7 @@
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { getVipMember } from '../../net/pull';
-import { getStore, setStore } from '../../store/memstore';
+import { getStore, register, setStore } from '../../store/memstore';
 import { unicode2ReadStr } from '../../utils/logic';
 import { addressFormat } from '../../utils/tools';
 
