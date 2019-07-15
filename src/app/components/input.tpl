@@ -7,7 +7,7 @@
         type="{{ty}}" 
         autocomplete="off" 
         placeholder="{{it && it.placeHolder ? it.placeHolder : ''}}" 
-        value="{{it1 && it1.currentValue ? it1.currentValue : ''}}"
+        value="{{it1 && (it1.currentValue || it1.currentValue==0) ? it1.currentValue : ''}}"
         maxlength="{{it && it.maxLength ? it.maxLength : ''}}"
         on-input="change"
         on-blur="onBlur"

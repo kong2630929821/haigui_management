@@ -34,6 +34,9 @@ export class InputImg extends Widget {
        
     }
     public importTransport(e:any) {
+        if (!(<any>getRealNode(e.node)).files) {
+            return; 
+        }
         // 获取图片
         const file = (<any>getRealNode(e.node)).files[0];
         const f1 = new FormData();
@@ -49,11 +52,14 @@ export class InputImg extends Widget {
         upLoadImg(f1).then(r => {
             if (r.result === 1) {
                 close.callback(close.widget);
-                this.props.src = `${this.props.mallImagPre}${this.props.path}/${file.name}`;
-                notify(e.node,'ev-input-file',{ src:`${this.props.path}/${file.name}` });
+                const imgSrc = `${this.props.mallImagPre}${this.props.path}/${file.name}`;
+                this.props.src = imgSrc;
+                console.log('imgSrc',imgSrc);
                 this.props.src = '';
                 popNewMessage('上传成功');
                 this.paint();
+                notify(e.node,'ev-input-file',{ src:`${this.props.path}/${file.name}` });
+                
             }
         });
     }

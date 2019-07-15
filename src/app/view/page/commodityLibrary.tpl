@@ -41,8 +41,8 @@
                                 <div w-class="shopName">商品类型：{{v.shopType}}</div>
                                 <div w-class="shopName">品牌：{{v.brand}}</div>
                                 <div w-class="shopName">分类：
-                                    {{for j,t of v.typeName_1}}
-                                        {{t[1]}}-{{v.typeName_2[j][1]}}
+                                    {{for j,t of v.typeName}}
+                                        {{t[1]}}-{{t[3]}}
                                     {{end}}
                                 </div>
                                 <div w-class="shopName">税费：{{v.tax}}</div>
@@ -86,7 +86,7 @@
             </div>
             <div w-class="ctroller">
                 <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
-                <div w-class="onShelves" on-tap="onShelves">上架商品</div>
+                <div w-class="onShelves" on-tap="onShelves">添加商品</div>
                 <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
                     <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
                 </div>

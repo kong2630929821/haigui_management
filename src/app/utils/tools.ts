@@ -747,7 +747,6 @@ export const analyzeGoods = (data: any) => {
     const arr = [];
     data.forEach(item => {
         const typeList = [];
-
         item.forEach(v => {
             let time = '';
             if (v[22] === '') {
@@ -771,9 +770,9 @@ export const analyzeGoods = (data: any) => {
         img.forEach(v => {
             imgType2.push(v[2]);
         });
-        arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:item[0][6],typeName_1:item[0][19][0][0] ? item[0][19][0] :'',typeName_2:item[0][19][0][0] ? item[0][19][1] :'',img:imgType2,discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],type:typeList,area:item[0][7] });
+        arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:item[0][6],typeName:item[0][19],img:imgType2,discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],type:typeList,area:item[0][7] });
     });
-
+ 
     return arr;
 };
 
@@ -863,7 +862,7 @@ export const processingPostage = (r: any) => {
         data.push([v[0], unicode2Str(v[1]), str, `￥${priceFormat(v[3])}`]);
     });
 
-    return [arr, data];
+    return [arr, data,timestampFormat(r[0][4])];
 };
 
 // 处理上传商品的分类

@@ -184,3 +184,17 @@ const CashLogName = {
 export const getCashLogName = (ttype:number) => {
     return CashLogName[CashLogType[ttype]];
 };
+
+// 判断是否是数字
+export const isParse = (arr:any) => {
+    const data = [];
+    arr.forEach(v => {
+        if (v) {
+            data.push(JSON.parse(v));
+        } else {
+            return false;
+        }
+    });
+
+    return data;
+};

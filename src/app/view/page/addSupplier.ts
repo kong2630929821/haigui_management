@@ -15,6 +15,8 @@ interface Props {
     style:boolean;// 当前状态 true编辑  false 添加
     freightList:any;// 原始邮费数据
     isChange:boolean;// 修改数据时，是否修改运费
+    pageTitle:string;// 页面标题
+    time:any;// 修改时间
 }
 /**
  * 添加供应商
@@ -30,7 +32,9 @@ export class AddSupplier extends Widget {
         currentData:[],
         style:true,
         freightList:[],
-        isChange:false
+        isChange:false,
+        pageTitle:'添加供应商',
+        time:''
     };
     public create() {
         super.create();
@@ -64,10 +68,12 @@ export class AddSupplier extends Widget {
             if (r.length) {
                 this.props.showDataList = r[1];
                 this.props.freightList = r[0];
+                this.props.time = r[2];
                 this.paint();
             }
             
         });
+        this.props.pageTitle = '查看供应商';
     }
     // input框输入
     public inputChange(index:number,e:any) {
