@@ -1,6 +1,6 @@
 import { httpPort, sourceIp } from '../config';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { analyzeGoods, brandProcessing, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShopSetting, processingUser, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
+import { analyzeGoods, brandProcessing, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShoppingTop10, processingShopSetting, processingUser, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -1441,13 +1441,14 @@ export const getShopSaleTop = (count:number,start:number,end:number) => {
 
     return requestAsync(msg).then(r => {
         if (r.result === 1) {
-            return processingVip(r.goods_list);
+            return processingShoppingTop10(r.goods_list);
         } else {
             return [];
         }
     });
 };
 
+// 获取商品销售详细信息
 export const getAllShopSaleInfo = () => {
     const msg = {
         type:'get_goods_statistics_info',
@@ -1469,6 +1470,25 @@ export const getAllShopSaleInfo = () => {
             data.push([['',r.order_count,0]],[['',priceFormat(r.order_price),0]]);
          
             return data;
+        }
+    });
+};
+
+// 获取用户等级变动详细
+export const getUserLevelChange = (uid:number) => {
+    const msg = {
+        type:'get_level_detail',
+        param:{
+            uid
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        if (r.result === 1) {
+
+            return processingUserLevelChange(r.detail);
+        } else {
+            return [];
         }
     });
 };

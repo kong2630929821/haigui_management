@@ -905,3 +905,30 @@ export const processingBalanceLog = (r:any) => {
 
     return data;
 };
+
+// 处理商品排行
+export const processingShoppingTop10 = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+    const data = [];
+    r.forEach((v,i) => {
+        data.push([i + 1,v[1],unicode2Str(v[2]),v[0]]);
+    });
+
+    return data;
+};
+
+// 处理用户等级变动
+export const processingUserLevelChange = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+    const data = [];
+    // debugger
+    // r.forEach(v=> {
+    //     data.push([v[0],])
+    // });
+};

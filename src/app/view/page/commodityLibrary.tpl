@@ -88,7 +88,7 @@
                 <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
                 <div w-class="onShelves" on-tap="onShelves">上架商品</div>
                 <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
-                    <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ 12)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
+                    <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
                 </div>
             </div>
         </div>

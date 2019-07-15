@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div w-class="item1">
-                <div w-class="title">是否保税区产品</div>
+                <div w-class="title">商品类型</div>
                 <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="bondedChange">
                     <widget w-tag="app-components-simpleFilter1">{options:{{it.bonded}},activeIndex:{{it.bondedActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
                 </div>
