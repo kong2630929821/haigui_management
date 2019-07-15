@@ -1,84 +1,61 @@
-<div w-class='box'> 
-        <div w-class="{{it.auto?'autoBody':''}}">
-            <table w-class="table">
-                <thead w-class="has-gutter">
-                        <tr style="background:#fff;">
-                            {{if it.needCheckBox}}
-                            <th w-class="th {{it.auto?'autoTh':''}}" style="width:80px;">选择</th>
-                            {{end}}
-                            {{for i,v of it.title}}
-                            <th w-class="th {{it.auto?'autoTh':''}}">{{v}}</th>
-                            {{end}}
-        
-                            {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
-                            <th w-class="th th1 {{it.auto?'autoTh':''}}">操作</th>
-                            {{end}}
-                        </tr>
-                </thead>
-                <tbody>
-                    {{for i,v of it.datas}}
-                    <tr style="background:#fff;">
-                        {{if it.needCheckBox}}
-                        <td w-class="td {{it.auto?'autoTd':''}}" style="width:80px;" on-tap="checked({{i}})">
-                            <img src="../res/images/{{it.selectList.indexOf(i)>-1?'selectBox_active.png':'selectBox.png'}}" />
-                        </td>
-                        {{end}}
-                        
-                        {{for j,r of v}}
-                        <td w-class="td {{it.auto?'autoTd':''}}">
+<div>
+    <div w-class="body" style="max-height:600px;">
+        <table w-class="table header" style="width: 100%;">
+            {{if it.title}}
+            <thead w-class="has-gutter">
+                <tr style="background:#fff;">
+                    {{for i,v of it.title}}
+                    <th w-class="th">{{v}}</th>
+                    {{end}}
+
+                    {{if it.inlineBtn1 || it.inlineBtn2}}
+                    <th w-class="th">操作</th>
+                    {{end}}
+                </tr>
+            </thead>
+            {{end}}   
+            <tbody>
+                {{for i,v of it.datas}}
+                <tr style="background:#fff;">
+                    
+                    {{for j,r of v}}
+                    <td w-class="td">
+                        {{if it.img}}
                             {{if j==2&& r!="" }}
                                 <img style="width: 30px ;height:30px;" src="{{it.mallImagPre}}{{r}}" alt=""/>
                             {{else}}
                                 <span style="word-break: break-all;">{{typeof(r)=="string" ? r :JSON.stringify(r)}}</span>
                             {{end}}
-                        </td>
+                        {{else}}
+                            <span style="word-break: break-all;">{{typeof(r)=="string" ? r :JSON.stringify(r)}}</span>
                         {{end}}
-    
-                        {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
-                        <td w-class="td td1 {{it.auto?'autoTd':''}}">
-                            {{if it.inputFile}}
-                            <div w-class="exportFile">
-                                <div w-class="exportFileBtn">导入表单</div>
-                                <input type="file" w-class="btn1" on-change="importExcel(e,{{i}})"/>
-                            </div>
-                            {{end}}
-                            
+                    </td>                    
+                    {{end}}
+
+                    {{if it.inlineBtn1 || it.inlineBtn2}}
+                    <td w-class="td">
+                        <div style="display: flex;justify-content: center;">                            
                             {{if it.inlineBtn1}}
-                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:10px;" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                            
+                                {{if v[5]=="提现失败"}}
+                                
+                                <div w-class="dealBtn" on-tap="reDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                                {{else}}
+                                <div w-class="dealBtn" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                                {{end}}
                             {{end}}
-    
+
                             {{if it.inlineBtn2}}
-                            <div w-class="btn" style="margin-left:10px;" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
+                            <div w-class="dealBtn" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
                             {{end}}
-                           
-                        </td>
-                        {{end}}
-                    </tr>
-                    {{end}}
-                </tbody>
-            </table>
-    
-        </div>
-    
-        {{if it.auto==0}}
-            <div w-class="bottom">
-                {{if it.needCheckBox}}
-                <div w-class="allCheck" on-tap="allChecked">
-                    <img src="../res/images/{{it.allChecked?'selectBox_active.png':'selectBox.png'}}"/>
-                    <span style="margin-left:10px;">全选</span>
-                </div>
+                        </div>
+                    </td>
+                    {{end}}                    
+
+                </tr>
                 {{end}}
-    
-                <div w-class="btns">
-                    {{if it.btn1}}
-                    <div w-class="bottomBtn" on-tap="clickBtn(e,1)">{{it.btn1}}</div>
-                    {{end}}
-    
-                    {{if it.btn2}}
-                    <div w-class="bottomBtn" on-tap="clickBtn(e,2)">{{it.btn2}}</div>
-                    {{end}}
-                </div>
-            </div>
-        {{end}}
+            </tbody>
+        </table>
+
     </div>
-    
+</div>

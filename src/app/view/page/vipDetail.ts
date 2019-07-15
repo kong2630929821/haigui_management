@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { changeBindding, getAmountDetail, getVipDetail, setHwangLabel } from '../../net/pull';
+import { changeBindding, getAmountDetail, getUserLevelChange, getVipDetail, setHwangLabel } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 import { addressFormat } from '../../utils/tools';
 interface Props {
@@ -19,6 +19,8 @@ interface Props {
     fundDetails:any[];// 资金明细
     seaShell:any[];// 海贝
     integral:any[];// 积分
+    userShowDataList:any[];// 用户等级变更信息
+    userTitleList:any[];// 用户等级变更信息标题
     
 }
 const userType = ['','海王','海宝','白客'];
@@ -53,7 +55,9 @@ export class VipDetail extends Widget {
         curPage:0,
         fundDetails:[],
         seaShell:[],
-        integral:[]
+        integral:[],
+        userShowDataList:[],
+        userTitleList:['用户id','改动之前等级','改动之后等级','邀请人id','邀请人昵称','类型']
     };
 
     public setProps(props:any) {
@@ -139,6 +143,13 @@ export class VipDetail extends Widget {
         getAmountDetail(this.props.uid,3).then(r => {
             this.props.integral = r;
             this.paint();
+        });
+        // 获取用户等级变动详细
+        getUserLevelChange(this.props.uid).then(r => {
+            if (r.length) {
+                this.props.userShowDataList = r;
+                this.paint();
+            }
         });
     }
     // 切换

@@ -18,6 +18,7 @@ interface Props {
     color:boolean;
     auto:boolean;
     mallImagPre:string;
+    img:boolean;
 }
 // tslint:disable-next-line:completed-docs
 export class Table extends Widget {
@@ -35,7 +36,8 @@ export class Table extends Widget {
         inputFile:'',
         color:false,
         auto:false,
-        mallImagPre:mallImagPre
+        mallImagPre:mallImagPre,
+        img:false
     };
     
     public setProps(props:any) {
