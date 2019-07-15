@@ -18,8 +18,8 @@
 }
 .filterBox{
     display: flex;
-    height: 150px;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 10px 0;
 }
 .filterTitle{
     font-size:18px;
@@ -30,15 +30,15 @@
 }
 .row{
     display: flex;
-    margin-top: 14px;
     align-items: center;
+    margin-left: 50px;
 }
 .input{
-    width:300px;
+    width:180px;
     height:48px;
     border:1px solid rgba(0,0,0,0.1);
     display: inline-block;
-    margin-left: 49px;
+    margin-left: 20px;
 }
 .edit{
     width:100px;
@@ -50,4 +50,7 @@
     background:#1991EB;
     cursor: pointer;
     margin: 5px 20px;
+}
+.title{
+    max-width: 150px;
 }

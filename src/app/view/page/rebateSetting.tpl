@@ -22,7 +22,7 @@
             {{for i,v of it.haiBaoTitle}}
             <div w-class="row">
                 <div w-class="title">{{v}}</div>
-                <div w-class="input" ev-input-change="haiWangChange({{1}},{{i}},e)" style="width:200px;margin-left:20px;">
+                <div w-class="input" ev-input-change="haiWangChange({{1}},{{i}},e)" style="width:160px;margin-left:20px;">
                     <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.haiBao[i]?it.haiBao[i]:JSON.stringify(it.haiBao[i])}},disabled:{{it.style[1]}},itype:"number"}</widget>
                 </div>
             </div>

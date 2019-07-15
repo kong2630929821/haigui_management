@@ -12,7 +12,7 @@
     <div w-class="shopSum">共{{it.shopNum}}个供应商</div> 
     <div ev-table-detail="goDetail">
         <div w-class="tableTitle">供应商列表</div>
-        <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
+        <widget w-tag="app-components-tableImg">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}} }</widget>
     </div>
     <div w-class="ctroller">
         <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
