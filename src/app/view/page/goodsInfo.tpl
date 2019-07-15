@@ -3,7 +3,7 @@
         <div w-class="back" on-tap="goBack">返回</div>    
         <div style="flex:1 0 0;display:flex;align-items: center;min-height: 50px;background: #fff;margin-left: 20px;padding: 0 10px;">
             <div style="font-weight: 600;flex-shrink: 0;">已选择的商品ID:</div>
-            <div style="margin:0 10px;">{{it.goodsId.join("，")}}</div>
+            <div style="margin:0 10px;">{{it.goodsId.join(", ")}}</div>
             <div w-class="btn" style="margin:0;width: 60px;flex-shrink: 0;" on-tap="confirmGoods">确认</div>
         </div>
     </div>

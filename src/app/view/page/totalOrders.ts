@@ -3,11 +3,18 @@ import { orderMaxCount } from '../../config';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport } from '../../net/pull';
 import { dateToString, popNewMessage } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
+// [商品id,商品名称,购买时价格,数量,skuId,sku名,商品类型,成本价，售价，会员价，【一级分组，二级分组】，【退货地址，姓名，电话】，【供应商SKU，供应商商品ID，保质期，最近修改时间】]
+export type GoodsDetails = [number,string,number,number,string,string,number,number,number,number,
+    [[number,string][],[number,string][]],   // 【一级分组，二级分组】
+    [string,string,string],  // 【退货地址，姓名，电话】
+    [number,number,string,number]   // 【供应商SKU，供应商商品ID，保质期，最近修改时间】
+]; 
 
-export type GoodsDetails = [number,string,number,number,string,string,boolean]; // [商品id,商品名称,购买时价格,数量,sku id,sku 描述,商品类型]
+// 返利用户id，返利用户昵称，返利类型，返利金额，返利时间
+export type RebateInfo = [number,string,number,number,number]; 
 
-// [供应商id,订单id,用户id,商品详细信息,商品原支付金额,商品税费,商品运费,其它费用,收件人姓名,收件人电话,收件人地区,收件人详细地址,下单时间,支付时间,发货时间,收货时间,完成时间,运单号,'订单总金额','微信支付单号','姓名','身份证号']
-export type Order = [number,number,number,GoodsDetails[],number,number,number,number,string,string,number,string,number,number,number,number,number,string,number,string,string,string];
+// [供应商id,订单id,用户id,商品详细信息,商品原支付金额,商品税费,商品运费,其它费用,收件人姓名,收件人电话,收件人地区,收件人详细地址,下单时间,支付时间,发货时间,收货时间,完成时间,运单号,'订单总金额','微信支付单号','姓名','身份证号',微信名，用户等级，用户标签，返利信息]
+export type Order = [number,number,number,GoodsDetails[],number,number,number,number,string,string,number,string,number,number,number,number,number,string,number,string,string,string,string,number,number,RebateInfo[]];
 
 // ['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号','金额','商品类型']
 export type OrderShow = [number,number,string,number,string,string,number,string,number,string,string,string,string,string,string,string,string,string,string];
@@ -76,7 +83,8 @@ export class TotalOrder extends Widget {
         currentPageIndex:0,    // 当前页数
         totalCount:0,     // 总数目
         forceUpdate:false,   // 强制刷新  通过不断改变其值来触发分页的setProps 分页组件目前不完美
-        expandIndex:-1        // 触发下拉列表 
+        expandIndex:-1,        // 触发下拉列表 
+        showDetail:-1    // 查看详情数据下标
     };
 
     public create() {
@@ -346,5 +354,17 @@ export class TotalOrder extends Widget {
             });
         }
         
+    }
+
+    // 查看详情
+    public goDetail(e:any) {
+        this.props.showDetail = e.num;
+        this.paint();
+    }
+
+    // 从详情页返回
+    public detailBack() {
+        this.props.showDetail = -1;
+        this.paint();
     }
 }

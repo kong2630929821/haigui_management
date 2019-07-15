@@ -147,6 +147,7 @@ interface Store {
     locations:Locate[];
     vipTotal:VipTotal;
     skuTotal:SkuInfo;
+    groupList:GroupInfo[];
 }
 // 全局内存数据库
 const store:Store = {
@@ -162,7 +163,8 @@ const store:Store = {
     skuTotal:{
         skuNum:0,// 数量
         skuData:[]// 列表
-    }
+    },
+    groupList:[]
 };
 
 // SKU

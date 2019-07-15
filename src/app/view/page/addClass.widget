@@ -1,0 +1,5 @@
+{
+    "tpl":"./addClass.tpl",
+    "js":"./mallSettingEdit.ts",
+    "css":"./addClass.wcss"
+}

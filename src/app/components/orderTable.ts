@@ -135,13 +135,8 @@ export class OrderTable extends Widget {
     }
 
     // 查看详情
-    public goDetail(e:any,num:number,fg:number) {
-        notify(e.node,'ev-table-details',{ value:this.props.showDatas[num], fg:fg,num:num });
-    }
-
-    // 导入excel
-    public importExcel(e:any,num:number) {
-        notify(e.node,'ev-table-detail',{ value:num });
+    public goDetail(e:any,num:number) {
+        notify(e.node,'ev-table-detail',{ value:this.props.showDatas[num], num:num });
     }
 
     public exportOrder(e:any) {

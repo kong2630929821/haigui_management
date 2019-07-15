@@ -1,3 +1,5 @@
+import { popNew } from '../../../pi/ui/root';
+import { deepCopy } from '../../../pi/util/util';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { GroupsLocation } from '../../config';
@@ -11,6 +13,7 @@ interface Props {
     activeLoc:number;  // 当前选择的位置
     currentData:GroupInfo;// 当前编辑的数据
     secondName:string;  // 新增二级分类名称
+    secondImg:string;  // 二级分类图片
     addNewClass:boolean;  // 新增一级分组
     selGoods:number;    // 去选择商品的二级分类下标
     goodsId:number[];   // 已选择的商品ID
@@ -24,7 +27,7 @@ export class MallSettingEdit extends Widget {
     public groupIDs:number[];  // 原始跟分组下的所有分组ID
     public props: Props = {
         locations: [
-            { text: '其他', status: 0 },
+            { text: '其他', status: GroupsLocation.CLASSIFICATION },   // 分类汇总页 不属于商城首页
             { text: '头部banner1', status: GroupsLocation.FIRST },
             { text: '小图标位置2', status: GroupsLocation.SECOND },
             { text: '聚合区位置3', status: GroupsLocation.THIRD },
@@ -57,6 +60,7 @@ export class MallSettingEdit extends Widget {
             localId: GroupsLocation.FIRST 
         },
         secondName:'',
+        secondImg:'',
         addNewClass:false,
         selGoods:-1,
         goodsId:[],
@@ -101,7 +105,7 @@ export class MallSettingEdit extends Widget {
     public addBtn() {
         if (this.props.isSoloPart) {
             this.props.selGoods = 0;
-            this.props.goodsId = this.props.currentData.children;
+            this.props.goodsId = deepCopy(this.props.currentData.children);
             this.props.addClass = false;
         } else {
             this.props.addClass = true;
@@ -135,6 +139,15 @@ export class MallSettingEdit extends Widget {
         this.props.currentData.imgs[ind] = [e.src,style,1];
     }
 
+    // 上传二级分类图片
+    public secondImgUpload(e:any,i:number) {
+        if (i === -1) {
+            this.props.secondImg = e.src;
+        } else {
+            this.props.currentData.children[i].imgs[0] = [e.src,1,1];
+        }
+    }
+
     // 保存一级分类
     public addClass(e:any) {
         if (!this.props.currentData.name) {
@@ -149,7 +162,7 @@ export class MallSettingEdit extends Widget {
         } 
         const curData = this.props.currentData;
         let ids = curData.children.map(r => r.id);
-        if (!this.props.isSoloPart && ids.length > 0) {
+        if (this.props.isSoloPart && ids.length > 0) {
             popNewMessage('单链专区不能添加二级分类');
 
             return;
@@ -222,12 +235,14 @@ export class MallSettingEdit extends Widget {
 
     // 删除一级分类（从根分组中移除）
     public delClass(e:any) {
-        const locId = this.props.currentData.localId;
-        const index = this.groupIDs.findIndex(r => r === this.props.currentData.id); 
-        index > -1 && this.groupIDs.splice(index,1);
-        updateLocation(locId, this.groupIDs).then(r => {  // 将跟分组绑定到location上
-            popNewMessage('删除成功');
-            this.goBack(e);
+        popNew('app-components-modalBox',{ content:'删除分类后，将无法找回，请谨慎操作！' },() => {
+            const locId = this.props.currentData.localId;
+            const index = this.groupIDs.findIndex(r => r === this.props.currentData.id); 
+            index > -1 && this.groupIDs.splice(index,1);
+            updateLocation(locId, this.groupIDs).then(r => {  // 将跟分组绑定到location上
+                popNewMessage('删除成功');
+                this.goBack(e);
+            });
         });
     }
 
@@ -237,11 +252,15 @@ export class MallSettingEdit extends Widget {
             popNewMessage('分类名称不能为空');
 
         } else {
-            addGroup(this.props.secondName,[],[],'false').then(r => {
+            const imgs = [];
+            if (this.props.secondImg) {
+                imgs.push([this.props.secondImg, ImageType.THUMBNAIL,1]);
+            }
+            addGroup(this.props.secondName, imgs, [],'false').then(r => {
                 this.props.currentData.children.push({
                     id:r.id[0],
                     name:this.props.secondName,
-                    imgs:[],
+                    imgs,
                     groupType: true,    // 是否有子分组
                     isShow: true,       // 是否展示分组
                     detail: '',
@@ -250,6 +269,7 @@ export class MallSettingEdit extends Widget {
                     localId:0 
                 });
                 this.props.secondName = '';
+                this.props.secondImg = '';
                 this.paint();
                 popNewMessage('保存成功');
             }).catch(r => {
@@ -258,29 +278,31 @@ export class MallSettingEdit extends Widget {
         }
     }
 
-    // 修改二级分类
+    // 修改二级分类 (去选择商品)
     public upSecondClass(ind:number) {
         this.props.selGoods = ind;
-        this.props.goodsId = this.props.currentData.children[ind].children;
+        this.props.goodsId = deepCopy(this.props.currentData.children[ind].children);
         this.paint();
     }
 
     // 删除二级分类
     public delSecondClass(ind:number) {
-        this.props.currentData.children.splice(ind,1);
-        this.paint();
+        popNew('app-components-modalBox',{ content:'从当前分类中移除该子分类，保存即生效' },() => {
+            this.props.currentData.children.splice(ind,1);
+            this.paint();
+        });
     }
 
     // 确认选择商品 并保存二级分类
     public selectGoods(e:any) {
         this.props.goodsId = e.value;
-        const res = this.props.currentData.children[this.props.selGoods];
-        if (this.props.isSoloPart) {
-            this.props.selGoods = -1;
+        if (this.props.isSoloPart) {  // 单链专区选择的商品不保存在二级分类
+            this.props.selGoods = -1;   // 关闭选择商品页面
             this.paint();
 
             return;
         }
+        const res = this.props.currentData.children[this.props.selGoods];
         updateGroup(res.id, res.name, res.imgs, e.value, 'false').then(r => {
             this.props.secondName = '';
             this.paint();

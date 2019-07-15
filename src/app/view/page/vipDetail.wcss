@@ -37,18 +37,6 @@
     justify-content: space-around;
     align-items: center;
 }
-.td1{
-    background:#fff;
-    border-bottom: 1px solid #CCCCCC;
-    border-right: 1px solid #CCCCCC;
-    min-width: 300px;
-    width: 460px;
-    height: 48px;
-    text-align: center;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
 .btn{
     width:100px;
     height:36px;
@@ -57,6 +45,7 @@
     line-height: 36px;
     background:rgba(25,145,235,1);
     cursor: pointer;
+    margin-right: 50px;
 }
 .pagination-box{
     position: fixed;
