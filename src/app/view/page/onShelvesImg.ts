@@ -30,6 +30,8 @@ interface Props {
     startTime:string;// 开始时间
     endTime:string;// 借宿时间
     sale:any;// 销售量 【总销售量，时间段销售量】
+    searchValue:string;// 搜索值
+    searchData:any;// 搜索到的SKU
 
 }
 /**
@@ -63,7 +65,9 @@ export class OnShelvesImg extends Widget {
         showDateBox:false,
         startTime:'',  // 查询开始时间
         endTime:'', // 查询结束时间
-        sale:[0,0]
+        sale:[0,0],
+        searchValue:'',
+        searchData:[]
     };
     public create() {
         super.create();
@@ -333,5 +337,17 @@ export class OnShelvesImg extends Widget {
     public  changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
+    }
+    // 搜索产品
+    public searchProduct() {
+        if (!this.props.searchValue) {
+
+            return ;
+        }
+        searchProduct(this.props.searchValue).then(r => {
+            this.props.searchData = r;
+            console.log('搜索到的产品',r);
+            this.paint();
+        });
     }
 }

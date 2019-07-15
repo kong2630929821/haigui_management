@@ -84,7 +84,9 @@ export class OperationLog extends Widget {
             const jsonData = r;
             for (const v of jsonData) {
                 for (let i = 0;i < v.length;i++) {
-                    v[i] = v[i].toString();
+                    if (v[i]) {
+                        v[i] = v[i].toString();
+                    }  
                 }
                 aoa.push(v);
             }

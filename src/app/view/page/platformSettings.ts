@@ -82,7 +82,9 @@ export class PlatformSettings extends Widget {
             const jsonData = r[1];
             for (const v of jsonData) {
                 for (let i = 0;i < v.length;i++) {
-                    v[i] = v[i].toString();
+                    if (v[i]) {
+                        v[i] = v[i].toString();
+                    }  
                 }
                 aoa.push(v);
             }
