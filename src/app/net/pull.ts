@@ -1484,7 +1484,6 @@ export const getUserLevelChange = (uid:number) => {
     };
 
     return requestAsync(msg).then(r => {
-        debugger;
         if (r.result === 1) {
 
             return processingUserLevelChange(r.detail);
