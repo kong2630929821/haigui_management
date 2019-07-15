@@ -1,9 +1,8 @@
 // tslint:disable-next-line:missing-jsdoc
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { addShop, changeShop, getAllArea, getClassType, getGroupsByLocation, getShopSale, searchProduct } from '../../net/pull';
+import { addShop, changeShop, getAllArea,  getShopSale, searchProduct } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
-import { isInputValue, parseAllGroups, parseGroups } from '../../utils/tools';
 interface Props {
     selectData:any;// 选中的产品
     showDataTitle:any;// 标题
@@ -11,8 +10,6 @@ interface Props {
     areaId:any;// 地区ID选择
     areaIdActiveIndex:number;// 地区ID下标
     expandIndex:number ;
-    classType1:any;// 分类1
-    classTypeOneActiveIndex:number;// 分类下标
     bonded:any;// 是否报税
     bondedActiveIndex:number;// 报税ID
     data:any;// 输入框数据
@@ -23,9 +20,6 @@ interface Props {
     mainPicture:any;// 主图
     infoPicture:any;// 详情图
     flag:number;// 用来判断用户是否全部填写
-    classType2:any;
-    classTypeTwoActiveIndex:number;
-    classList:any;
     groupId:number;
     tax:number;// 税费
     dataList:any;// 编辑传入的数据
@@ -46,8 +40,6 @@ export class OnShelvesImg extends Widget {
     public props:Props = {
         areaId:[],
         areaIdActiveIndex:0,
-        classType1:[],
-        classTypeOneActiveIndex:0,
         bonded:[],
         bondedActiveIndex:0,
         expandIndex:-1,
@@ -62,9 +54,6 @@ export class OnShelvesImg extends Widget {
         mainPicture:[],
         infoPicture:[],
         flag:0,
-        classType2:[],
-        classTypeTwoActiveIndex:0,
-        classList:[],
         groupId:0,
         tax:0,
         dataList:[],
@@ -78,16 +67,6 @@ export class OnShelvesImg extends Widget {
     };
     public create() {
         super.create();
-        // 分类筛选
-        const classType = [
-            {
-                status:0,
-                text:'分类1'
-            },{
-                status:1,
-                text:'分类2'
-            }
-        ];
         // 是否保税
         const bonded = [
             {
@@ -101,9 +80,6 @@ export class OnShelvesImg extends Widget {
                 text:'海外直购'
             }
         ];
-      
-        this.props.classType1 = classType;
-        this.props.classType2 = classType;
         this.props.bonded = bonded;
         this.props.areaId = bonded;
         const oData = new Date();
@@ -140,51 +116,7 @@ export class OnShelvesImg extends Widget {
                 this.paint();
             }
         });
-         // 获取一级分类默认设置二级分类;
-        const typeClass1 = [];
-        let typeClass2 = [];
-        getGroupsByLocation().then(res => {
-            const data = parseAllGroups(res.groupInfo);
-            data.forEach(r => {
-                r.groups.forEach(v => {
-                    const class2 = [];
-                    v.children.forEach(t => { 
-                        class2.push([t.id,t.name]);
-                    });
-                    this.props.classList.push([v.id,v.name,class2]);
-                   
-                });
-            });
-            
-            this.props.classList.forEach((r,t) => {
-                typeClass1.push({ status:t,text:r[1] });
-            });
-            this.props.classType1 = typeClass1;
-            this.props.classList[0][2].forEach((v,i) => {
-                typeClass2.push({ status:i,text:v[1] });
-            });
-            this.props.groupId = this.props.classList[0][2][0][0];
-            this.props.classType2 = typeClass2;
-            if (props.dataList) {
-                this.props.classList.forEach((v,i) => {
-                    if (v[0] === props.dataList.typeName_1[0][0]) {
-                        this.props.classTypeOneActiveIndex = i;
-                        typeClass2 = [];
-                        this.props.classList[i][2].forEach((item,index) => {
-                            typeClass2.push({ status:index,text:item[1] });
-                        });
-                        this.props.classType2 = typeClass2;
-                        v[2].forEach((item,index) => {
-                            if (item[0] === props.dataList.typeName_2[0][0]) {
-                                this.props.classTypeTwoActiveIndex = index;
-                                this.paint();
-                            }
-                        });
-                    }
-                });
-            } 
-            this.paint();
-        });
+        
         const oData = new Date();
         this.props.path = `goods/${oData.getFullYear()}/${oData.getMonth() + 1}/${oData.getDate()}`;
         const arr = this.props.dataList;
@@ -212,8 +144,8 @@ export class OnShelvesImg extends Widget {
                 // 主图
                 this.props.mainPicture.push(v);
             } else if (v[1] === 3) {
-                // 详情图
-                this.props.infoPicture.push(v);
+                // 详情图  [图片名字，图片描述，图片]
+                this.props.infoPicture.push(['','',v]);
             }
         });
         // SUK显示
@@ -242,22 +174,6 @@ export class OnShelvesImg extends Widget {
         this.props.areaIdActiveIndex = e.activeIndex;
         this.paint();
     }
-    // 一级分类选择改变二级分类
-    public classTypeChange1(e:any) {
-        const typeClass2 = [];
-        const index = e.activeIndex;
-        this.props.classTypeOneActiveIndex = index;
-        this.props.classList[index][2].forEach((v,i) => {
-            typeClass2.push({ status:i,text:v[1] });
-        });
-        this.props.groupId = this.props.classList[index][2][0][0];
-        this.props.classType2 = typeClass2;
-        this.paint();
-    }
-    public classTypeChange2(e:any) {
-        this.props.classTypeTwoActiveIndex = e.activeIndex;
-        this.paint();
-    }
     // 是否保税
     public bondedChange(e:any) {
         this.props.bondedActiveIndex = e.activeIndex;
@@ -266,31 +182,29 @@ export class OnShelvesImg extends Widget {
     // 税费
     public taxChange(e:any) {
         this.props.tax = e.value;
-        this.props.flag++;
     }
     // 输入框变化
     public inputChange(index:number,e:any) {
         this.props.data[index] = e.value;
-        this.props.flag++;
     }
     // 差价输入变化
     public spread(e:any,index:number) {
         const sku_id = this.props.selectData[index][1];
-        this.props.spreadList[index] = [sku_id,parseInt(e.value)];
+        this.props.spreadList[index] = [sku_id,Number(e.value)];
     }
-    // 缩略图上传
+    // 缩略图上传成功后
     public updataImg(e:any) {
-        this.props.thumbnail = [`${e.src}`,1,1];
+        this.props.thumbnail[0] = [`${e.src}`,1,1];
         this.paint();
     }
-    // 主图上传
+    // 主图上传成功后
     public updataImgMain(index:number,e:any) {
         this.props.mainPicture[index] = [`${e.src}`,2,2];
         this.paint();
     }
-    // 详细图
+    // 详细图上传成功后
     public updataImgInfo(index:number,e:any) {
-        this.props.infoPicture[index] = [[],[],[`${e.src}`,3,3]];
+        this.props.infoPicture[index] = ['','',[`${e.src}`,3,3]];
         this.paint();
     }
     // 添加主图
@@ -300,16 +214,38 @@ export class OnShelvesImg extends Widget {
     }
     // 添加详情图
     public addInfoImg(e:any) {
-        this.props.infoPicture.push([[],[],[`${e.src}`,3,3]]) ;
+        this.props.infoPicture.push(['','',[`${e.src}`,3,3]]) ;
         this.paint();
     }
     // 下一步
     public next(e:any) {
-        console.log(this.props.selectData);
-        console.log(this.props.data);
-        console.log(this.props.spreadList);
         this.props.mainPicture.unshift(this.props.thumbnail[0]);
         // '商品名称','品牌ID','成本价','普通售价','会员价','折扣价'
+        let flag = false;// 判断输入的是否有空值
+        this.props.data.forEach(v => {
+            if (v === '') {
+                flag = true;
+
+                return ;
+            }
+        });
+        if (flag) {
+            popNewMessage('请输入信息');
+
+            return;
+        }
+        if (this.props.mainPicture.length === 0 || this.props.infoPicture.length === 0) {
+            popNewMessage('请上传商品图片');
+
+            return ;
+        }
+        if (this.props.style) {
+            if (this.props.spreadList.length === 0) {
+                popNewMessage('请填写差价');
+    
+                return ;
+            }
+        }
         const name = this.props.data[0];// 商品名称
         const brand = Number(this.props.data[1]);// 品牌ID
         const area = Number(this.props.areaId[this.props.areaIdActiveIndex].text);// 地址ID
@@ -319,20 +255,17 @@ export class OnShelvesImg extends Widget {
         const origin = Number(this.props.data[3]);// 普通售价
         const vip_price = Number(this.props.data[4]);// 会员价
         const has_tax = this.props.bondedActiveIndex;// 是否报税
-        const tax = Number(this.props.tax);// 税费
+        let tax = Number(this.props.tax);// 税费
+        if (has_tax === 0) {
+            tax = 0;
+        }
         const discount = this.props.data[5] ? Number(this.props.data[5]) :0;// 折扣价
         const labels = this.props.spreadList;// 规格
         const images = this.props.mainPicture;// 图片
         const intro = [];// 商品介绍
         const spec = [];//
         const detail = this.props.infoPicture;// 详情图片
-        const group = Number(this.props.groupId);// 分组
-        // if (isInputValue(brand) || isInputValue(cost) || isInputValue(origin) || isInputValue(vip_price) || isInputValue(tax) || isInputValue(discount)) {
-        //     popNewMessage('填写商品信息错误');
-
-        //     return;
-        // }
-        const arr = [name,brand,area,supplier,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail,group];
+        const arr = [name,brand,area,supplier,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
         if (this.props.style) {
             addShop(JSON.stringify(arr)).then(r => {
                 if (r.result === 1) {

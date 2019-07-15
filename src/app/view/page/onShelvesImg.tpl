@@ -13,12 +13,12 @@
     </div>
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">基本信息</div>
-        <div w-class="searchItem" style="height:296px;flex-direction: row;flex-wrap: wrap;">
+        <div w-class="searchItem" style="flex-wrap: wrap;padding-bottom: 20px;">
             {{for i,v of it.inputTitle}}
                 <div w-class="item1">
                     <div w-class="title">{{v}}</div>
-                    <div w-class="input" ev-input-change="inputChange({{i}},e)" style="width: 300px;margin-left: 46px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[i]?it.data[i]:JSON.stringify(it.data[i])}},disabled:{{it.disable}} }</widget>
+                    <div w-class="input" ev-input-change="inputChange({{i}},e)" style="width: 300px;margin-left: 20px;">
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[i]}},disabled:{{it.disable}},itype:{{i==0?'text':'number'}} }</widget>
                     </div>
                 </div>
             {{end}}
@@ -28,16 +28,13 @@
                     <widget w-tag="app-components-simpleFilter1">{options:{{it.areaId}},activeIndex:{{it.areaIdActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
                 </div>
             </div>
-            <div w-class="item1">
-                <div w-class="title">一级分类</div>
-                <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="classTypeChange1">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.classType1}},activeIndex:{{it.classTypeOneActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
+            {{if !it.style||it.disable}}
+                <div w-class="item1">分类：
+                    {{for j,t of it.dataList.typeName}}
+                        {{t[1]}}-{{t[3]}}
+                    {{end}}
                 </div>
-                <div w-class="title">二级分类</div>
-                <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="classTypeChange2">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.classType2}},activeIndex:{{it.classTypeTwoActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
-                </div>
-            </div>
+            {{end}}
             <div w-class="item1">
                 <div w-class="title">商品类型</div>
                 <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="bondedChange">
@@ -47,8 +44,8 @@
             {{if it.bondedActiveIndex}}
             <div w-class="item1">
                 <div w-class="title">税费</div>
-                <div w-class="input" ev-input-change="taxChange" style="width: 300px;margin-left: 46px;">
-                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{JSON.stringify(it.tax)}},disabled:{{it.disable}} }</widget>
+                <div w-class="input" ev-input-change="taxChange" style="width: 300px;margin-left: 20px;">
+                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.tax?  it.tax:JSON.stringify(it.tax)}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
             {{end}}
@@ -76,7 +73,7 @@
                 <div w-class="img_info">
                     {{for i,v of it.mainPicture}}
                         <div w-class="img_item" ev-input-file="updataImgMain({{i}},e)">
-                            <app-components-inputImg>{path:{{it.path}},src:{{it.mainPicture[i][0]}} }</app-components-inputImg>
+                            <app-components-inputImg>{path:{{it.path}},src:{{it.mainPicture[i]?it.mainPicture[i][0]:""}} }</app-components-inputImg>
                         </div>
                     {{end}}
                     {{if it.mainPicture.length!=5}}
@@ -91,7 +88,7 @@
                 <div w-class="img_info">
                     {{for i,v of it.infoPicture}}
                         <div w-class="img_item" ev-input-file="updataImgInfo({{i}},e)">
-                            <app-components-inputImg>{path:{{it.path}},src:{{it.infoPicture[i][0]}} }</app-components-inputImg>
+                            <app-components-inputImg>{path:{{it.path}},src:{{it.infoPicture[i]?it.infoPicture[i][2][0]:""}} }</app-components-inputImg>
                         </div>
                     {{end}}
                     {{if it.infoPicture.length!=20}}
@@ -105,7 +102,7 @@
     </div>
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">已选产品</div>
-        <div w-class="searchItem" style="height:356px;overflow: auto;">
+        <div w-class="searchItem" style="height:356px;overflow: auto;flex-direction: column;">
             {{for i,v of it.selectData}}
             <div w-class="item">
                 <div w-class="bodyTitle">
@@ -128,7 +125,7 @@
                             <div>差价：</div>
                             <div>
                                 <div w-class="input" ev-input-change="spread(e,{{i}})" style="width: 124px;margin-left: 46px;height: 30px;">
-                                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.spreadList[i]?JSON.stringify(it.spreadList[i][1]):''}},disabled:{{it.disable}} }</widget>
+                                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.spreadList[i]?it.spreadList[i][1]:''}},disabled:{{it.disable}},itype:"number" }</widget>
                                 </div>
                             </div>
                         </div>
@@ -154,6 +151,9 @@
             </div>
         </div>
     </div>
+    {{end}}
+    {{if !it.style}}
+    
     {{end}}
     <div w-class="ctr">
         <div w-class="btn" on-tap="gotoShop">取消</div>

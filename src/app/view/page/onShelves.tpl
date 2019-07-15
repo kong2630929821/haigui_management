@@ -12,7 +12,7 @@
             {{for i,v of it.selectData}}
             <div w-class="item">
                 <div w-class="bodyTitle">
-                    <div w-class="shopId" style=";margin-left: 93px;">商品名称（ID）</div>
+                    <div w-class="shopId" style="margin-left: 93px;">商品名称（ID）</div>
                     <div w-class="shopName" style="flex:1;">{{v[2]}}</div>
                     <div w-class="shopType" style="flex:1;">
                         <span w-class="discount">供应商（ID）</span>

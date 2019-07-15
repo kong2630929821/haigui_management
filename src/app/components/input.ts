@@ -41,7 +41,7 @@ export class Input extends Widget {
         super.setProps(props,oldProps);
         this.props.itype = props.itype || 'text';
         let currentValue = '';
-        if (props.input) {
+        if (props.input || Number(props.input) === 0) {
             currentValue = props.input;
         }
         this.state = {
