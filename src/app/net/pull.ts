@@ -527,14 +527,15 @@ export const getVipMember = () => {
  * 查看会员详情
  */
 export const getVipDetail = (uid:number) => {
-    const msg = {
-        type:'mall_mgr/members@get_level_details',
-        param:{
-            uid
-        }
-    };
+    // const msg = {
+    //     type:'mall_mgr/members@get_level_details',
+    //     param:{
+    //         uid
+    //     }
+    // };
 
-    return requestAsync(msg);
+    // return requestAsync(msg);
+    return fetch(`http://${sourceIp}:${httpPort}/members/get_level_details?uid=${uid}`).then(res => res.json());
 };
 
 /**
