@@ -10,6 +10,8 @@ interface Props {
     real:any;// 真实转盘参数
     foreignSum:number;// 数据条数
     realSum:number;// 数据条数
+    flag1:boolean;// 真实梯度是否修改
+    flag2:boolean;// 对外梯度是发修改
 }
 /**
  * 大转盘
@@ -20,7 +22,9 @@ export class BigTurntable extends Widget {
         foreign:[],
         real:[],
         foreignSum:0,
-        realSum:0
+        realSum:0,
+        flag1:false,
+        flag2:false
     };
 
     public create() {
@@ -46,12 +50,14 @@ export class BigTurntable extends Widget {
             // 编辑
             popNew('app-components-addTurntable',{ title:'编辑真实转盘梯度',currentData:e.value,sureText:'修改',style:false },(val) => {
                 this.props.real[e.num] = val;
+                this.props.flag1 = true;
                 this.paint();
             });
         } else {
             popNew('app-components-modalBox',{ content:`确认删除梯度"<span style="color:#1991EB">${e.value[0]}</span>"` }, () => {
                 this.props.real.splice(e.num,1);
                 this.props.realSum = this.props.real.length;
+                this.props.flag1 = true;
                 this.paint();
             },() => {
                 popNewMessage('你已经取消操作！');
@@ -97,6 +103,15 @@ export class BigTurntable extends Widget {
 
     // 应用设置
     public application(fg:number) {
+        if (fg === 1) {
+            if (!this.props.flag1) {
+                return; 
+            }
+        } else {
+            if (!this.props.flag2) {
+                return; 
+            }
+        }
         let data = this.props.real;
         if (fg === 2) {
             // 真实中奖设置
@@ -105,6 +120,11 @@ export class BigTurntable extends Widget {
         settingTruntable(fg,JSON.stringify(data)).then(r => {
             if (r.result === 1) {
                 popNewMessage('设置成功');
+                if (fg === 1) {
+                    this.props.flag1 = false;
+                } else {
+                    this.props.flag2 = false;
+                }
             } else {
                 popNewMessage('设置失败');
             }

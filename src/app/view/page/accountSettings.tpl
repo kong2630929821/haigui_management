@@ -1,10 +1,4 @@
 <div w-class="page" ev-detail-back="detailBack" on-tap="close">
-    <div w-class="searchBox">
-        <div w-class="tableTitle">账号管理</div>
-        <div w-class="filterBox">
-  
-        </div>
-    </div>
     <div w-class="shopSum">共{{it.sum}}条记录</div> 
     <div ev-table-detail="goDetail">
         <div w-class="tableTitle">账号列表</div>
