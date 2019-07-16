@@ -82,7 +82,6 @@ export class MallSettingEdit extends Widget {
         this.groupIDs = num > -1 ? locations[num].children :[];
         console.log('!!!!!!!!!!!!!!!!!!!!!MallSettingEdit',this.props);
     }
-
     public goBack(e: any) {
         notify(e.node, 'ev-detail-back', {});
     }

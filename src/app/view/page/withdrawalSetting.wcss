@@ -1,0 +1,84 @@
+.page{
+    background: #F0F2F5;
+    padding: 20px 60px;
+    color:#354052;
+}
+.searchBox{
+    margin:20px 0;
+    background: #fff;
+    cursor: pointer;
+}
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
+}
+.filterBox{
+    display: flex;
+    height: 100px;
+    align-items: center;
+}
+.switch{
+    display: flex;
+    margin-left: 50px;
+}
+.input{
+    width:400px;
+    height:48px;
+    border:1px solid rgba(0,0,0,0.1);
+    display: inline-block;
+    margin-left: 20px;
+}
+.settingBox{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 25px 0;
+    min-height: 300px;
+}
+.box{
+    display: flex;
+    margin-left: 50px;
+    align-items: center;
+}
+.title{
+    width: 200px;
+    font-size:18px;
+    font-family:PingFangSC-Regular;
+    color:rgba(0,0,0,1);
+}
+.switchTitle{
+    font-size:18px;
+    font-family:PingFangSC-Regular;
+    color:rgba(0,0,0,1);
+}
+.btns{
+    text-align: center;
+    font-size: 14px;
+    line-height: 40px;
+    height:40px;
+    justify-content: center;
+    display: flex;
+    margin: 116px 0;
+}
+.btn-cancel{
+    width:86px;
+    border-radius:4px;
+    border:1px solid rgba(0,0,0,0.1);
+    text-align: center;
+    margin-right: 20px;
+    cursor: pointer;
+}
+.btn-ok{
+    width:86px;
+    border-radius:4px;
+    border:1px solid rgba(0,0,0,0.1);
+    background:#3294e6;
+    color: #fff;
+    margin-left: 20px;    
+    text-align: center; 
+    cursor: pointer;   
+}

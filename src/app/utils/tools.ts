@@ -997,7 +997,25 @@ export const processingShoppingTop10 = (r:any) => {
 
     return data;
 };
+enum UserLevel {
+    hWang= 10,  // 海王
+    hBao= 20,   // 海宝
+    baiKe= 30,  // 白客
+    city= 11,   // 市代理
+    province= 12,  // 省代理
+    hWangTest= 13,  // 海王体验
+    hBaoTest= 23   // 海宝体验
+}
 
+const UserLevelShow = {
+    hWang:'海王',
+    hBao:'海宝',
+    baiKe:'白客',
+    city:'市代理',
+    province:'省代理',
+    hWangTest:'海王（体验）',
+    hBaoTest:'海宝（体验）'
+};
 // 处理用户等级变动
 export const processingUserLevelChange = (r:any) => {
     if (!r.length) {
@@ -1007,10 +1025,16 @@ export const processingUserLevelChange = (r:any) => {
     const data = [];
     r.forEach(v => {
         let str = '管理端更改';
-        if (v[5] === 0) {
+        if (v[7] === 0) {
             str = '用户升级';
         }
-        data.push([v[0],UserTypeShow[UserType[v[1]]],UserTypeShow[UserType[v[2]]],v[3],unicode2Str(v[4]),str]);
+        const beforeChange = JSON.parse(`${v[1] === 4 ? 3 :v[1]}${v[3]}`);
+        const agterChange = JSON.parse(`${v[2]}${v[4]}`);
+        let name = '';
+        if (v[6] !== '') {
+            name = unicode2Str(JSON.parse(v[6]));
+        }
+        data.push([v[0],UserLevelShow[UserLevel[beforeChange]],UserLevelShow[UserLevel[agterChange]],v[5],name,str]);
     });
     
     return data;

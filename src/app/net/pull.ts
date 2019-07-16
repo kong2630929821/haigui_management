@@ -1493,3 +1493,41 @@ export const getUserLevelChange = (uid:number) => {
         }
     });
 };
+
+// 用户等级调整
+export const userLevelChange = (uid:number,level:number,label:any) => {
+    const msg = {
+        type:'mall_mgr/members@set_level',
+        param:{
+            uid,
+            level,
+            label
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 获取提现配置
+export const getWithDrawalSetting = () => {
+    const msg = {
+        type:'mall_mgr/members@get_withdraw_config',
+        param:{
+            
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 设置提现配置
+export const setWithDrawal = (withdraw_config:any) => {
+    const msg = {
+        type:'mall_mgr/members@update_withdraw_config',
+        param:{
+            withdraw_config
+        }
+    };
+
+    return requestAsync(msg);
+};
