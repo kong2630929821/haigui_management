@@ -24,7 +24,7 @@
             <div style="margin: 28px 0 28px 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
                 <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
             </div>
-            
+
             <div w-class="btnBox">
                 <div w-class="input" ev-input-change="inputChange">
                     <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
@@ -79,7 +79,8 @@
                             </div>
                             <div w-class="status">
                                 <div w-class="ctrollerStatus">
-                                    <div w-class="btn" on-tap="selectGoods({{v.id}})">选择</div>
+                                    {{:fg = it.goodsId.findIndex(t=> t == v.id)>-1}}
+                                    <div w-class="btn" style="background:{{fg ? '#ce2525':'#1991eb'}}" on-tap="selectGoods({{v.id}})">{{fg?"取消":"选择"}}</div>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +91,7 @@
     </div>
     <div style="position:relative;">
         <div ev-changeCurrent="pageChange" ev-perPage="perPage" w-class="pagination">
-            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ 12)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
         </div>
     </div>
     

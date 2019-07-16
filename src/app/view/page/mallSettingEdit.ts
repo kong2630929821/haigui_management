@@ -27,7 +27,7 @@ export class MallSettingEdit extends Widget {
     public groupIDs:number[];  // 原始跟分组下的所有分组ID
     public props: Props = {
         locations: [
-            { text: '其他', status: GroupsLocation.CLASSIFICATION },   // 分类汇总页 不属于商城首页
+            { text: '不可见', status: GroupsLocation.CLASSIFICATION },   // 分类汇总页 不属于商城首页
             { text: '头部banner1', status: GroupsLocation.FIRST },
             { text: '小图标位置2', status: GroupsLocation.SECOND },
             { text: '聚合区位置3', status: GroupsLocation.THIRD },
@@ -43,8 +43,8 @@ export class MallSettingEdit extends Widget {
             { text: '聚合区位置13', status: GroupsLocation.THIRTEEN },
             { text: '单链专区位置14', status: GroupsLocation.FOURTEEN },
             { text: '单链专区位置15', status: GroupsLocation.FIFTEEN },
-            { text: '单链专区位置16', status: GroupsLocation.THIRTEEN },
-            { text: '单链专区位置17', status: GroupsLocation.THIRTEEN }
+            { text: '单链专区位置16', status: GroupsLocation.SIXTEEN },
+            { text: '单链专区位置17', status: GroupsLocation.SEVENTEEN }
         ],
         addClass:false,
         activeLoc:0,
@@ -237,15 +237,19 @@ export class MallSettingEdit extends Widget {
 
     // 删除一级分类（从根分组中移除）
     public delClass(e:any) {
-        popNew('app-components-modalBox',{ content:'删除分类后，将无法找回，请谨慎操作！' },() => {
-            const locId = this.props.currentData.localId;
-            const index = this.groupIDs.findIndex(r => r === this.props.currentData.id); 
-            index > -1 && this.groupIDs.splice(index,1);
-            updateLocation(locId, this.groupIDs).then(r => {  // 将跟分组绑定到location上
-                popNewMessage('删除成功');
-                this.goBack(e);
+        if (this.props.currentData.children.length === 0) {
+            popNew('app-components-modalBox',{ content:'删除分类后，将无法找回，请谨慎操作！' },() => {
+                const locId = this.props.currentData.localId;
+                const index = this.groupIDs.findIndex(r => r === this.props.currentData.id); 
+                index > -1 && this.groupIDs.splice(index,1);
+                updateLocation(locId, this.groupIDs).then(r => {  // 将跟分组绑定到location上
+                    popNewMessage('删除成功');
+                    this.goBack(e);
+                });
             });
-        });
+        } else {
+            popNewMessage('该分组下还有子分组或商品，不能删除');
+        }
     }
 
     // 添加二级分类
@@ -287,12 +291,30 @@ export class MallSettingEdit extends Widget {
         this.paint();
     }
 
+    // 保存二级分类
+    public saveSecondClass(e:any) {
+        const res = this.props.currentData.children[this.props.selGoods];
+        updateGroup(res.id, res.name, res.imgs, this.props.goodsId, 'false').then(r => {
+            this.props.secondName = '';
+            this.props.secondImg = '';
+            this.paint();
+            popNewMessage('保存成功');
+        }).catch(r => {
+            popNewMessage('保存失败');
+        });
+        this.cancelSel();
+    }
+
     // 删除二级分类
     public delSecondClass(ind:number) {
-        popNew('app-components-modalBox',{ content:'确认要从当前分类中移除该子分类，保存即生效' },() => {
-            this.props.currentData.children.splice(ind,1);
-            this.paint();
-        });
+        if (this.props.currentData.children[ind].children.length === 0) {   // 没有子集才能删除
+            popNew('app-components-modalBox',{ content:'确认要从当前分类中移除该子分类，保存即生效' },() => {
+                this.props.currentData.children.splice(ind,1);
+                this.paint();
+            });
+        } else {
+            popNewMessage('该分组下还有商品，不能删除');
+        }
     }
 
     // 确认选择商品 并保存二级分类
@@ -302,17 +324,10 @@ export class MallSettingEdit extends Widget {
             this.props.selGoods = -1;   // 关闭选择商品页面
             this.paint();
 
-            return;
+        } else {
+            this.saveSecondClass(e);
         }
-        const res = this.props.currentData.children[this.props.selGoods];
-        updateGroup(res.id, res.name, res.imgs, e.value, 'false').then(r => {
-            this.props.secondName = '';
-            this.paint();
-            popNewMessage('保存成功');
-        }).catch(r => {
-            popNewMessage('保存失败');
-        });
-        this.cancelSel();
+        
     }
 
     // 取消选择商品

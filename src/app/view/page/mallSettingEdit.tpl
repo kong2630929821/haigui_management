@@ -5,17 +5,17 @@
     <div w-class="bannerBox">
         <div w-class="tableTitle">聚合页专区设置</div>
         <div w-class="itemContent">
-            {{:imgs = it.currentData.imgs}}
+            {{:imgs = it.currentData.imgs||[]}}
             <div w-class="guessTab">
                 <span style="margin-right:10px;">专区封面图</span>
                 <div w-class="tab inputBox" ev-input-file="imgUpload(e,0)">
-                    <widget w-tag="app-components-inputImg">{src:{{imgs[0].length > 0 ? imgs[0][0]:""}} }</widget>
+                    <widget w-tag="app-components-inputImg">{src:{{imgs[0] ? imgs[0][0]:""}} }</widget>
                 </div>
             </div>
             <div w-class="guessTab">
                 <span style="margin-right:10px;">专区头图</span>
                 <div w-class="tab inputBox" ev-input-file="imgUpload(e,1)">
-                    <widget w-tag="app-components-inputImg">{src:{{imgs[1].length > 0 ? imgs[1][0]:""}} }</widget>
+                    <widget w-tag="app-components-inputImg">{src:{{imgs[1] ? imgs[1][0]:""}} }</widget>
                 </div>
             </div>
             <div w-class="guessTab" style="flex:1 0 0;" ev-input-change="firstNameChange">
@@ -43,6 +43,7 @@
                     <widget w-tag="app-components-input">{placeHolder:"输入名称",input:{{v.name}},style:"border:1px solid #eee;"}</widget>
                     <div w-class="btn1" on-tap="delSecondClass({{i}})">删除</div>
                     <div w-class="btn1" on-tap="upSecondClass({{i}})">选择商品</div>
+                    <div w-class="btn1" on-tap="saveSecondClass({{i}})">保存</div>
                 </div>
                 {{end}}
             {{end}}

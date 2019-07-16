@@ -1,7 +1,8 @@
 // tslint:disable-next-line:missing-jsdoc
+import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
-import { getAllGoods, getAllGoods1, getCurrentGood, getGoodsKey, shelf } from '../../net/pull';
+import { getAllGoods, getCurrentGood, getGoodsKey, shelf } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
@@ -23,6 +24,7 @@ interface Props {
     mallImagPre:string;// 图片路径
     inputValue:string;// 输入框
     currentData:any;// 当前操作的值
+    goodsId:number[];   // 选择的商品ID
 }
 // 状态筛选
 export enum StatuType {
@@ -62,7 +64,8 @@ export class CommodityLibrary extends Widget {
         shopDetail:0,
         mallImagPre:mallImagPre,
         inputValue:'',
-        currentData:[]
+        currentData:[],
+        goodsId:[]
     };
 
     public create() {
@@ -98,6 +101,16 @@ export class CommodityLibrary extends Widget {
         this.props.startTime = '2019-05-01 00:00:000';
         this.init(1);
     }
+
+    public setProps(props:any) {
+        this.props = {
+            ...this.props,
+            ...props
+        };
+        super.setProps(this.props);
+        console.log(this.props);
+    }
+
     // 输入框改变
     public inputChange(e:any) {
         this.props.inputValue = e.value;
@@ -235,7 +248,7 @@ export class CommodityLibrary extends Widget {
             console.log('111111111',r1);
             const data = JSON.parse(r1.value);
             this.props.shopNum = data[1];
-            getAllGoods1(data[0],500,status,star_time,end_time).then(r => {
+            getAllGoods(data[0],500,status,star_time,end_time).then(r => {
                 const jsonHead = this.props.showDateTitle;
                 const aoa = [jsonHead];
                 const jsonData = r;
@@ -263,5 +276,29 @@ export class CommodityLibrary extends Widget {
             this.props.shopNum = r.length;
             this.paint();
         });
+    }
+
+    // =======================分类页面需要的方法=======================
+    
+    // 选择商品
+    public selectGoods(id:number) {
+        const ind = this.props.goodsId.findIndex(r => r === id);
+        if (ind === -1) {
+            this.props.goodsId.push(id);
+        } else {
+            this.props.goodsId.splice(ind,1);
+        }
+        this.paint();
+    }
+
+    // 确认
+    public confirmGoods(e:any) {
+        notify(e.node,'ev-selGoods',{ value:this.props.goodsId });
+        console.log('已选择的商品id：',this.props.goodsId);
+    }
+
+    // 返回上一页
+    public goBack(e:any) {
+        notify(e.node,'ev-goodsInfo-back',{});
     }
 }
