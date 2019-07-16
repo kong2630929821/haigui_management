@@ -8,7 +8,7 @@
     {{ if it.selectData.length}}
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">已选产品</div>
-        <div w-class="searchItem" style="height:356px">
+        <div w-class="searchItem" style="max-height:356px">
             {{for i,v of it.selectData}}
             <div w-class="item">
                 <div w-class="bodyTitle">

@@ -98,7 +98,7 @@
     </div>
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">已选产品</div>
-        <div w-class="searchItem" style="height:356px;overflow: auto;flex-direction: column;">
+        <div w-class="searchItem" style="max-height:356px;overflow: auto;flex-direction: column;">
             {{for i,v of it.selectData}}
             <div w-class="item">
                 <div w-class="bodyTitle">
@@ -111,14 +111,12 @@
                 </div>
                 <div w-class="itemBox">
                     <div w-class="productList">
-                         <div w-class="product_info">
                         {{for index,item of v}}
-                            <div w-class="infoItem">
-                                <div w-class="infoTitle">{{it.showDataTitle[index]}}：</div>
-                                <div>{{item}}</div>
-                            </div>
-                        {{end}}
+                        <div w-class="product_info">
+                            <div w-class="infoTitle">{{it.showDataTitle[index]}}：</div>
+                            <div>{{item}}</div>
                         </div>
+                        {{end}}
                         <div w-class="product_info" style="align-items: center;">
                             <div>差价：</div>
                             <div>
@@ -128,9 +126,11 @@
                             </div>
                         </div>
                     </div>
+                    {{if !it.style}}
                     <div w-class="btnGroup">
                         <div w-class="btn" on-tap="remove({{i}})">移除</div>
                     </div>
+                    {{end}}
                 </div>
             </div>
             {{end}}

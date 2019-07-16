@@ -55,7 +55,7 @@
 .searchItem{
     display: flex;
     flex-direction: column;
-    height: 235px;
+    max-height: 235px;
     overflow: auto;
 }
 .bodyTitle{
@@ -93,21 +93,23 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    flex: 8;
 }
 .item{
     display: flex;
     flex-direction: column;
 }
 .product_info{
-    min-width: 200px;
     height: 20px;
-    display: flex;
     font-size:14px;
     font-family:Source Sans Pro;
     font-weight:600;
     line-height:18px;
     color:rgba(53,64,82,1);
-    flex: 8;
+    max-width: 415px;
+    margin-left: 60px;
+    display: flex;
+    white-space: nowrap;
 }
 .itemBox{
     display: flex;
