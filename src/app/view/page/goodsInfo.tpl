@@ -24,7 +24,7 @@
             <div style="margin: 28px 0 28px 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
                 <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
             </div>
-            
+
             <div w-class="btnBox">
                 <div w-class="input" ev-input-change="inputChange">
                     <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
@@ -39,30 +39,26 @@
         <div w-class="tableData">
             <div w-class="tableDataTitle">
                 {{for i,v of it.showDateTitle}}
-                    <div w-class="item">{{v}}</div>
+                    <div w-class="item" style="flex:{{i==0 ? 2:1}}">{{v}}</div>
                 {{end}}
             </div>
             <div w-class="dataBody">
                 {{for i,v of it.showDataList}}
                     <div w-class="dataItme">
                         <div w-class="bodyTitle">
-                            <div w-class="shopId">{{v.id}}</div>
-                            <div w-class="shopName">{{v.name}}</div>
-                            <div w-class="shopName">商品类型：{{v.shopType}}</div>
-                            <div w-class="shopName">品牌：{{v.brand}}</div>
-                            <div w-class="shopName">分类：
-                                {{for j,t of v.typeName}}
-                                    {{t[1]}}-{{t[3]}}
+                                <div w-class="shopId">商品ID{{v.id}}</div>
+                                <div w-class="shopName">商品名称{{v.name}}</div>
+                                <div w-class="shopName">商品类型：{{v.shopType}}</div>
+                                <div w-class="shopName">品牌：{{v.brand}}</div>
+                                <div w-class="shopName">分类：{{v.typeName}}</div>
+                                <div w-class="shopName">税费：{{v.tax}}</div>
+                                <div w-class="shopName">是否有折扣：{{v.discount}}</div>
+                                {{if v.state==0}}
+                                <div w-class="shopType" style="color:red">已下架</div>
+                                {{elseif v.state==1}}
+                                <div w-class="shopType" style="color:#21811C;">已上架</div>
+                                {{else}}
                                 {{end}}
-                            </div>
-                            <div w-class="shopName">税费：{{v.tax}}</div>
-                            <div w-class="shopName">是否有折扣：{{v.discount}}</div>
-                            {{if v.state==0}}
-                            <div w-class="shopType" style="color:red">已下架</div>
-                            {{elseif v.state==1}}
-                            <div w-class="shopType" style="color:#21811C;">已上架</div>
-                            {{else}}
-                            {{end}}
                         </div>
                         <div w-class="bodyContent">
                             <div w-class="imgShow">
@@ -79,7 +75,8 @@
                             </div>
                             <div w-class="status">
                                 <div w-class="ctrollerStatus">
-                                    <div w-class="btn" on-tap="selectGoods({{v.id}})">选择</div>
+                                    {{:fg = it.goodsId.findIndex(t=> t == v.id)>-1}}
+                                    <div w-class="btn" style="background:{{fg ? '#ce2525':'#1991eb'}}" on-tap="selectGoods({{v.id}})">{{fg?"取消":"选择"}}</div>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +87,7 @@
     </div>
     <div style="position:relative;">
         <div ev-changeCurrent="pageChange" ev-perPage="perPage" w-class="pagination">
-            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ 12)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
         </div>
     </div>
     

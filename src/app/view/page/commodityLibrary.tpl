@@ -29,15 +29,15 @@
             <div w-class="tableData">
                 <div w-class="tableDataTitle">
                     {{for i,v of it.showDateTitle}}
-                        <div w-class="item">{{v}}</div>
+                        <div w-class="item" style="flex:{{i==0 ? 2:1}}">{{v}}</div>
                     {{end}}
                 </div>
                 <div w-class="dataBody">
                     {{for i,v of it.showDataList}}
                         <div w-class="dataItme">
                             <div w-class="bodyTitle">
-                                <div w-class="shopId">{{v.id}}</div>
-                                <div w-class="shopName">{{v.name}}</div>
+                                <div w-class="shopId">商品ID{{v.id}}</div>
+                                <div w-class="shopName">商品名称{{v.name}}</div>
                                 <div w-class="shopName">商品类型：{{v.shopType}}</div>
                                 <div w-class="shopName">品牌：{{v.brand}}</div>
                                 <div w-class="shopName">分类：{{v.typeName}}</div>

@@ -42,7 +42,7 @@
 
     {{elseif it.active==1}}
     <div ev-detail-back="closeEdit">
-        <widget w-tag="app-view-page-addClass">{currentData:{{it.currentData}},addNewClass:{{it.addNewClass}}  }</widget>
+        <widget w-tag="app-view-page-addClass">{currentData:{{it.currentData}},addNewClass:{{it.addNewClass}},isMallHome:false }</widget>
     </div>
     {{end}}
 </div>

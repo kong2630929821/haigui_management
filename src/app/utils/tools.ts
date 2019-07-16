@@ -204,7 +204,7 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
     
     // 返利信息
     for (const v of info[25]) {
-        const rebate:OrderDetailRebate = [v[0],v[1],RebateType[v[2]],priceFormat(v[3]),timestampFormat(v[4])];
+        const rebate:OrderDetailRebate = [v[0],unicode2ReadStr(v[1]),RebateType[v[2]],priceFormat(v[3]),timestampFormat(v[4])];
         orderRebate.push(rebate);
     }
 

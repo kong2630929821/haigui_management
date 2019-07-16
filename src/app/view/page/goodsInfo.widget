@@ -1,5 +1,5 @@
 {
     "tpl" : "./goodsInfo.tpl",
-    "js" : "./goodsInfo.ts",
+    "js" : "./commodityLibrary.ts",
     "css" : "./commodityLibrary.wcss"
 }
