@@ -24,12 +24,12 @@
                 <div w-class="typeItem">
                     <div w-class="tab" ev-input-change="secondNameChange(e,{{i}})">
                         <span style="margin:0 10px;">分类名字: </span>
-                        <widget w-tag="app-components-input">{placeHolder:"输入分类名字",style:"border:1px solid #eee;",input:{{v.name}}}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"输入分类名字",style:"border:1px solid #eee;",input:{{v.name}} }</widget>
                     </div>
                     <div w-class="tab">
                         <span style="margin-right:10px;">图标</span>
                         <div w-class="imgIcon" ev-input-file="secondImgUpload(e,{{i}})">
-                            <widget w-tag="app-components-inputImg" >{path:"group",src:{{it.secondImg}},src:{{v.imgs[0]?v.imgs[0][0]:''}} }</widget>
+                            <widget w-tag="app-components-inputImg" >{path:"group",src:{{v.imgs[0].length > 0 ? v.imgs[0][0]:''}} }</widget>
                         </div>
                     </div>
                     <div w-class="tab" style="justify-content: flex-end;">

@@ -54,7 +54,7 @@
 .filterBoxItem{
     display: flex;
     flex-direction: column;
-    max-height: 600px;
+    max-height: 550px;
     overflow: auto;
     padding-bottom: 20px;
 }

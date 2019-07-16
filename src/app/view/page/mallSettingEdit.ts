@@ -137,6 +137,7 @@ export class MallSettingEdit extends Widget {
     public imgUpload(e:any,ind:number) {
         const style = ind ? ImageType.MAIN :ImageType.THUMBNAIL;
         this.props.currentData.imgs[ind] = [e.src,style,1];
+        this.paint();
     }
 
     // 上传二级分类图片
@@ -146,6 +147,7 @@ export class MallSettingEdit extends Widget {
         } else {
             this.props.currentData.children[i].imgs[0] = [e.src,1,1];
         }
+        this.paint();
     }
 
     // 保存一级分类
@@ -287,7 +289,7 @@ export class MallSettingEdit extends Widget {
 
     // 删除二级分类
     public delSecondClass(ind:number) {
-        popNew('app-components-modalBox',{ content:'从当前分类中移除该子分类，保存即生效' },() => {
+        popNew('app-components-modalBox',{ content:'确认要从当前分类中移除该子分类，保存即生效' },() => {
             this.props.currentData.children.splice(ind,1);
             this.paint();
         });

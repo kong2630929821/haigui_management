@@ -17,18 +17,14 @@
                     <widget w-tag="app-components-simpleFilter1">{options:{{it.statusType}},activeIndex:{{it.statusTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
                 </div>
             </div>
-            <div w-class="filterTitle">
-                <span>商品类型</span>
-                <div style="display:inline-block;height: 50px;margin-left: 20px;margin-top: 26px" ev-selected="filterProductTypes">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.productTypes}},activeIndex:{{it.ProductTypesActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
-                </div>
-            </div>
+
             <div w-class="filterTitle">
                 <span>上架时间</span>      
             </div>
             <div style="margin: 28px 0 28px 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
                 <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
             </div>
+            
             <div w-class="btnBox">
                 <div w-class="input" ev-input-change="inputChange">
                     <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
@@ -55,8 +51,8 @@
                             <div w-class="shopName">商品类型：{{v.shopType}}</div>
                             <div w-class="shopName">品牌：{{v.brand}}</div>
                             <div w-class="shopName">分类：
-                                {{for j,t of v.typeName_1}}
-                                    {{t[1]}}-{{v.typeName_2[j][1]}}
+                                {{for j,t of v.typeName}}
+                                    {{t[1]}}-{{t[3]}}
                                 {{end}}
                             </div>
                             <div w-class="shopName">税费：{{v.tax}}</div>
