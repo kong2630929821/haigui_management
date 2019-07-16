@@ -71,6 +71,7 @@ export class VipDetail extends Widget {
     }
     public init() {
         getVipDetail(this.props.uid).then(r => {
+            
             const v = r.userTotal;
             if (v) {
                 let user = userType[v[9]];

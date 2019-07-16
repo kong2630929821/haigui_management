@@ -70,6 +70,7 @@ export class VipManage extends Widget {
             return;
         }
         getVipMember().then(r => {
+            // debugger;
             vipTotal.hBaoNum = this.props.hBaoNum = r.haib_count;
             vipTotal.hWangNum = this.props.hWangNum = r.haiw_count;
             vipTotal.baikNum = this.props.baikNum = r.baik_count;

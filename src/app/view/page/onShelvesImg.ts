@@ -357,7 +357,6 @@ export class OnShelvesImg extends Widget {
 
     // 删除现有的SKU
     public remove(index:number) {
-        debugger;
         this.props.selectData.splice(index,1);
         this.props.spreadList.splice(index,1);
         this.paint();
