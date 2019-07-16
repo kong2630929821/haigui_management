@@ -30,6 +30,8 @@ interface Props {
     startTime:string;// 开始时间
     endTime:string;// 借宿时间
     sale:any;// 销售量 【总销售量，时间段销售量】
+    searchValue:string;// 搜索值
+    searchData:any;// 搜索到的SKU
 
 }
 /**
@@ -63,7 +65,9 @@ export class OnShelvesImg extends Widget {
         showDateBox:false,
         startTime:'',  // 查询开始时间
         endTime:'', // 查询结束时间
-        sale:[0,0]
+        sale:[0,0],
+        searchValue:'',
+        searchData:[]
     };
     public create() {
         super.create();
@@ -333,5 +337,46 @@ export class OnShelvesImg extends Widget {
     public  changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
+    }
+    // 搜索产品
+    public searchProduct() {
+        if (!this.props.searchValue) {
+
+            return ;
+        }
+        searchProduct(this.props.searchValue).then(r => {
+            this.props.searchData = r;
+            console.log('搜索到的产品',r);
+            this.paint();
+        });
+    }
+     // 搜索SKU
+    public inputProductChange(e:any) {
+        this.props.searchValue = e.value;
+    }
+
+    // 删除现有的SKU
+    public remove(index:number) {
+        debugger;
+        this.props.selectData.splice(index,1);
+        this.props.spreadList.splice(index,1);
+        this.paint();
+    }
+    // 添加到选中的产品中
+    public check(index:number) {
+        let flag = false;
+        this.props.selectData.forEach(v => {
+            if (v[0] !== this.props.searchData[index][0]) {
+                flag = true;
+            }
+        });
+        if (flag) {
+            popNewMessage('供应商ID不一致');
+
+            return;
+        }
+        this.props.selectData.push(this.props.searchData[index]);
+        this.props.searchData.splice(index,1);
+        this.paint();
     }
 }

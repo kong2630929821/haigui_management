@@ -775,9 +775,14 @@ export const analyzeGoods = (data: any) => {
         img.forEach(v => {
             imgType2.push(v[2]);
         });
-        arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:item[0][6],typeName:item[0][19],img:imgType2,discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],type:typeList,area:item[0][7] });
+        const group = [];
+        for (const r of item[0][19]) {
+            // 一级分组/二级分组
+            group.push(`${r[1]}/${r[3] ? r[3] :''}`);
+        }
+        arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:item[0][6],typeName:group.join(','),img:imgType2,discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],type:typeList,area:item[0][7] });
     });
- 
+    
     return arr;
 };
 

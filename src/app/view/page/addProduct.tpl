@@ -17,7 +17,7 @@
                 <div w-class="item">
                     <div w-class="title">供应商id</div>
                     <div w-class="input" ev-input-change="supplierChange" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[0]}},disabled:{{it.status==1?true:false}}}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[0]}},disabled:{{it.status==1?true:false}},itype:"number"}</widget>
                     </div>
                 </div>
                 <div w-class="item">
@@ -31,13 +31,13 @@
                 <div w-class="item">
                     <div w-class="title">库存数量</div>
                     <div w-class="input" ev-input-change="inventoryChange" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[5]?it.data[5]:JOSN.stringify(it.data[5])}},disabled:{{it.status==1?true:false}}}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[5]?it.data[5]:""}},disabled:{{it.status==1?true:false}},itype:"number"}</widget>
                     </div>
                 </div>
                 <div w-class="item">
                     <div w-class="title">供货价</div>
                     <div w-class="input" ev-input-change="supplier_priceChange" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[6]}},disabled:{{it.status==1?true:false}}}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[6]}},disabled:{{it.status==1?true:false}},itype:"number"}</widget>
                     </div>
                 </div>
             </div>
@@ -45,13 +45,13 @@
                 <div w-class="item">
                     <div w-class="title">供应商SKU</div>
                     <div w-class="input" ev-input-change="supplierSkuChange" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[9]?it.data[9]:JSON.stringify(it.data[9])}},disabled:{{it.status==1?true:false}}}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[9]?it.data[9]:""}},disabled:{{it.status==1?true:false}}}</widget>
                     </div>
                 </div>
                 <div w-class="item">
                     <div w-class="title">供应商商品id</div>
                     <div w-class="input" ev-input-change="supplierIdChange" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[10]?it.data[10]:JSON.stringify(it.data[10])}},disabled:{{it.status==1?true:false}}}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[10]?it.data[10]:""}},disabled:{{it.status==1?true:false}}}</widget>
                     </div>
                 </div>
             </div>

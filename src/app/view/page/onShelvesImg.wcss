@@ -135,7 +135,6 @@
     align-items: center;
 }
 .product_info{
-    min-width: 200px;
     height: 20px;
     display: flex;
     font-size:14px;
@@ -202,4 +201,30 @@
     height:48px;
     border:1px solid rgba(0,0,0,0.1);
     display: inline-block;
+}
+.search{
+    display: flex;
+    height: 92px;
+    align-items: center;
+    justify-content: center;
+}
+.searchItem{
+    display: flex;
+    flex-direction: column;
+    height: 235px;
+    overflow: auto;
+}
+.btnGroup{
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+.infoTitle{
+    min-width: 50px;
+    max-width: 128px;
+}
+.infoItem{
+    margin-left: 30px;
 }
