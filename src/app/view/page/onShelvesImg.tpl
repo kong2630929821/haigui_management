@@ -113,7 +113,7 @@
                     <div w-class="productList">
                          <div w-class="product_info">
                         {{for index,item of v}}
-                            <div w-class="infoItem"></div>
+                            <div w-class="infoItem">
                                 <div w-class="infoTitle">{{it.showDataTitle[index]}}：</div>
                                 <div>{{item}}</div>
                             </div>
