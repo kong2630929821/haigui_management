@@ -111,20 +111,25 @@
                 </div>
                 <div w-class="itemBox">
                     <div w-class="productList">
+                         <div w-class="product_info">
                         {{for index,item of v}}
-                        <div w-class="product_info">
-                            <div>{{it.showDataTitle[index]}}：</div>
-                            <div>{{item}}</div>
-                        </div>
+                            <div w-class="infoItem"></div>
+                                <div w-class="infoTitle">{{it.showDataTitle[index]}}：</div>
+                                <div>{{item}}</div>
+                            </div>
                         {{end}}
+                        </div>
                         <div w-class="product_info" style="align-items: center;">
                             <div>差价：</div>
                             <div>
-                                <div w-class="input" ev-input-change="spread(e,{{i}})" style="width: 124px;margin-left: 46px;height: 30px;">
+                                <div w-class="input" ev-input-change="spread(e,{{i}})" style="width: 124px;margin-left: 18px;height: 30px;">
                                     <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.spreadList[i]?it.spreadList[i][1]:''}},disabled:{{it.disable}},itype:"number" }</widget>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div w-class="btnGroup">
+                        <div w-class="btn" on-tap="remove({{i}})">移除</div>
                     </div>
                 </div>
             </div>
@@ -150,16 +155,16 @@
     {{end}}
     {{if !it.style}}
     <div w-class="search">
-            <div w-class="input" ev-input-change="inputChange" style="width: 724px;">
+            <div w-class="input" ev-input-change="inputProductChange" style="width: 724px;">
                 <widget w-tag="app-components-input">{placeHolder:"SKU/产品ID/产品名称" }</widget>
             </div>
             <div w-class="btn" on-tap="searchProduct">查询</div>
         </div>
         {{if it.searchData.length}}
-        <div w-class="searchItem">
+        <div w-class="searchItem" style="background: white;">
             {{for i,v of it.searchData}}
                 <div w-class="item">
-                <div w-class="bodyTitle">
+                <div w-class="bodyTitle" style="justify-content: space-evenly;">
                     <div w-class="shopId" style="margin-left: 93px;">产品名称（ID）</div>
                     <div w-class="shopName" style="flex:1;">{{v[2]}}</div>
                     <div w-class="shopType" style="flex:1;">

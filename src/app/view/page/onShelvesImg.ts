@@ -350,4 +350,33 @@ export class OnShelvesImg extends Widget {
             this.paint();
         });
     }
+     // 搜索SKU
+    public inputProductChange(e:any) {
+        this.props.searchValue = e.value;
+    }
+
+    // 删除现有的SKU
+    public remove(index:number) {
+        debugger;
+        this.props.selectData.splice(index,1);
+        this.props.spreadList.splice(index,1);
+        this.paint();
+    }
+    // 添加到选中的产品中
+    public check(index:number) {
+        let flag = false;
+        this.props.selectData.forEach(v => {
+            if (v[0] !== this.props.searchData[index][0]) {
+                flag = true;
+            }
+        });
+        if (flag) {
+            popNewMessage('供应商ID不一致');
+
+            return;
+        }
+        this.props.selectData.push(this.props.searchData[index]);
+        this.props.searchData.splice(index,1);
+        this.paint();
+    }
 }
