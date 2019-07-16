@@ -29,11 +29,7 @@
                 </div>
             </div>
             {{if !it.style||it.disable}}
-                <div w-class="item1">分类：
-                    {{for j,t of it.dataList.typeName}}
-                        {{t[1]}}-{{t[3]}}
-                    {{end}}
-                </div>
+                <div w-class="item1">分类：{{it.dataList.typeName}}</div>
             {{end}}
             <div w-class="item1">
                 <div w-class="title">商品类型</div>
@@ -115,20 +111,25 @@
                 </div>
                 <div w-class="itemBox">
                     <div w-class="productList">
+                         <div w-class="product_info">
                         {{for index,item of v}}
-                        <div w-class="product_info">
-                            <div>{{it.showDataTitle[index]}}：</div>
-                            <div>{{item}}</div>
-                        </div>
+                            <div w-class="infoItem"></div>
+                                <div w-class="infoTitle">{{it.showDataTitle[index]}}：</div>
+                                <div>{{item}}</div>
+                            </div>
                         {{end}}
+                        </div>
                         <div w-class="product_info" style="align-items: center;">
                             <div>差价：</div>
                             <div>
-                                <div w-class="input" ev-input-change="spread(e,{{i}})" style="width: 124px;margin-left: 46px;height: 30px;">
+                                <div w-class="input" ev-input-change="spread(e,{{i}})" style="width: 124px;margin-left: 18px;height: 30px;">
                                     <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.spreadList[i]?it.spreadList[i][1]:''}},disabled:{{it.disable}},itype:"number" }</widget>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div w-class="btnGroup">
+                        <div w-class="btn" on-tap="remove({{i}})">移除</div>
                     </div>
                 </div>
             </div>
@@ -153,7 +154,41 @@
     </div>
     {{end}}
     {{if !it.style}}
-    
+    <div w-class="search">
+            <div w-class="input" ev-input-change="inputProductChange" style="width: 724px;">
+                <widget w-tag="app-components-input">{placeHolder:"SKU/产品ID/产品名称" }</widget>
+            </div>
+            <div w-class="btn" on-tap="searchProduct">查询</div>
+        </div>
+        {{if it.searchData.length}}
+        <div w-class="searchItem" style="background: white;">
+            {{for i,v of it.searchData}}
+                <div w-class="item">
+                <div w-class="bodyTitle" style="justify-content: space-evenly;">
+                    <div w-class="shopId" style="margin-left: 93px;">产品名称（ID）</div>
+                    <div w-class="shopName" style="flex:1;">{{v[2]}}</div>
+                    <div w-class="shopType" style="flex:1;">
+                        <span w-class="discount">供应商（ID）</span>
+                        <span style="margin-left:12px;">{{v[0]}}</span>
+                    </div>
+                </div>
+                <div w-class="itemBox">
+                    <div w-class="productList">
+                        {{for index,item of v}}
+                        <div w-class="product_info">
+                            <div>{{it.showDataTitle[index]}}：</div>
+                            <div style="margin-left:15px">{{item}}</div>
+                        </div>
+                        {{end}}
+                    </div>
+                    <div w-class="btnGroup">
+                        <div w-class="btn" on-tap="check({{i}})">选择</div>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+        </div>
+        {{end}}
     {{end}}
     <div w-class="ctr">
         <div w-class="btn" on-tap="gotoShop">取消</div>

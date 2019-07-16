@@ -40,11 +40,7 @@
                                 <div w-class="shopName">{{v.name}}</div>
                                 <div w-class="shopName">商品类型：{{v.shopType}}</div>
                                 <div w-class="shopName">品牌：{{v.brand}}</div>
-                                <div w-class="shopName">分类：
-                                    {{for j,t of v.typeName}}
-                                        {{t[1]}}-{{t[3]}}
-                                    {{end}}
-                                </div>
+                                <div w-class="shopName">分类：{{v.typeName}}</div>
                                 <div w-class="shopName">税费：{{v.tax}}</div>
                                 <div w-class="shopName">是否有折扣：{{v.discount}}</div>
                                 {{if v.state==0}}
