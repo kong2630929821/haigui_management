@@ -1,5 +1,5 @@
 <div w-class="page">
-    {{if it.selGoods === -1}}
+    {{if it.selGoodsIndex === -1}}
     <div w-class="back" on-tap="goBack">返回</div>
     {{%===========================聚合专区设置===========================}}
     <div w-class="bannerBox">
@@ -42,7 +42,7 @@
                     <span style="margin-right:10px;">分类</span>
                     <widget w-tag="app-components-input">{placeHolder:"输入名称",input:{{v.name}},style:"border:1px solid #eee;"}</widget>
                     <div w-class="btn1" on-tap="delSecondClass({{i}})">删除</div>
-                    <div w-class="btn1" on-tap="upSecondClass({{i}})">选择商品</div>
+                    <div w-class="btn1" on-tap="chooseGoods({{i}})">选择商品</div>
                     <div w-class="btn1" on-tap="saveSecondClass({{i}})">保存</div>
                 </div>
                 {{end}}
