@@ -1,4 +1,5 @@
 <div w-class="">
+    {{if it.status}}
     <div w-class="back" on-tap="goBack">返回</div>
     <div w-class="table">
         {{for i,v of it.userData}}
@@ -63,14 +64,19 @@
         <div w-class="tabBar {{it.activeTab==5?'activeTab':''}}" on-tap="changeTab(5)">积分</div>
     </div>
 
-    <div>
+    <div ev-table-detail="goDetail">
         {{:typeList = ["海王","海宝","白客","资金明细","海贝明细","积分明细"]}}
         <div w-class="tableTitle">{{typeList[it.activeTab]}}列表</div>
-        <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},needCheckBox:false }</widget>
+        <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn2:{{it.activeTab<3?'详情':''}} }</widget>
     </div>
     {{if Math.ceil(it.showDataList.length/5) > 0}}
     <div ev-changeCurrent="changePage" w-class="pagination-box">
         <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/5)}} }</widget>
     </div>
+    {{end}}
+    {{else}}
+        <div ev-userDetail-back="getDatas">
+            <widget w-tag="app-view-page-subordinateFundDetails">{uid:{{it.currendUid}} }</widget>
+        </div>
     {{end}}
 </div>

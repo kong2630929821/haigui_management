@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { changeBindding, getAmountDetail, getUserLevelChange, getVipDetail, setHwangLabel, userLevelChange } from '../../net/pull';
+import { changeBindding, getAmountDetail, getUserLevelChange, getVipDetail,  userLevelChange } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 import { addressFormat, getUserType } from '../../utils/tools';
 interface Props {
@@ -21,14 +21,13 @@ interface Props {
     integral:any[];// 积分
     userShowDataList:any[];// 用户等级变更信息
     userTitleList:any[];// 用户等级变更信息标题
+    currendUid:number;// 当前查看的用户ID
+    status:boolean;// true显示详情 false显示下级资金明细
     
 }
-const userType = ['','海王','海宝','白客'];
-const UserLabel = ['海王','市代理','省代理','海王（体验）'];
-const UserLabelHaiBao = ['海宝','市代理','省代理','海宝（体验）'];
 const UserTypeLabel = ['白客','海宝','海宝（体验）','海王','市代理','省代理','海王（体验）'];
 const tableTitle = [
-    ['用户ID','微信名','手机号','地址信息','ta的本月收益','ta的总收益'],
+    ['用户ID','微信名','手机号','注册时间','身份'],
     ['时间','类型','金额']
 
 ];
@@ -59,7 +58,9 @@ export class VipDetail extends Widget {
         seaShell:[],
         integral:[],
         userShowDataList:[],
-        userTitleList:['用户id','改动之前等级','改动之后等级','邀请人id','邀请人昵称','类型']
+        userTitleList:['用户id','改动之前等级','改动之后等级','邀请人id','邀请人昵称','类型'],
+        currendUid:0,
+        status:true
     };
 
     public setProps(props:any) {
@@ -71,9 +72,9 @@ export class VipDetail extends Widget {
         console.log(props);
         this.init();
     }
+    // tslint:disable-next-line:max-func-body-length
     public init() {
         getVipDetail(this.props.uid).then(r => {
-            
             const v = r.userTotal;
             if (v) {
                 // 获取用户身份
@@ -94,40 +95,26 @@ export class VipDetail extends Widget {
                     { th:'邀请码',td:v[11] }
                 ];
             }
-            if (r.haib) {
-                this.props.hBaoDatas = r.haib.map(v => {
-                    return [
+            if (r.sub_tree) {
+                // 海王
+                r.sub_tree[0][2].forEach(v => {
+                    const data = [
                         v[0],  // UID
-                        unicode2ReadStr(v[1]),  // 微信名
-                        v[2],  // 手机
-                        addressFormat(unicode2Str(v[3])),  // 地址
-                        priceFormat(v[4]),  // 本月收益
-                        priceFormat(v[5])   // 总收益
+                        unicode2ReadStr(v[1][0]),  // 微信名
+                        v[1][1],  // 手机
+                        timestampFormat(v[1][2]),  // 注册时间
+                        getUserType(v[1][3],v[1][4])// 身份
                     ];
-                });
-            }
-            if (r.haiw) {
-                this.props.hWangDatas = r.haiw.map(v => {
-                    return [
-                        v[0],  // UID
-                        unicode2ReadStr(v[1]),  // 微信名
-                        v[2],  // 手机
-                        addressFormat(unicode2Str(v[3])),  // 地址
-                        priceFormat(v[4]),  // 本月收益
-                        priceFormat(v[5])   // 总收益
-                    ];
-                });
-            }
-            if (r.baik) {
-                this.props.baikDatas = r.baik.map(v => {
-                    return [
-                        v[0],  // UID
-                        unicode2ReadStr(v[1]),  // 微信名
-                        v[2],  // 手机
-                        addressFormat(unicode2Str(v[3])),  // 地址
-                        priceFormat(v[4]),  // 本月收益
-                        priceFormat(v[5])   // 总收益
-                    ];
+                    if (v[1][3] === 1) {
+                        // 海王
+                        this.props.hWangDatas.push(data);
+                    } else if (v[1][3] === 2) {
+                        // 海宝
+                        this.props.hBaoDatas.push(data);
+                    } else {
+                        // 白客
+                        this.props.baikDatas.push(data);
+                    }
                 });
             }
             this.changeTab(0);
@@ -154,6 +141,7 @@ export class VipDetail extends Widget {
     // 切换
     public changeTab(num:number) {
         this.props.activeTab = num;
+        this.props.showTitleList = tableTitle[0];
         switch (num) {
             case 0:
                 this.props.showDataList = this.props.hWangDatas;
@@ -270,5 +258,18 @@ export class VipDetail extends Widget {
                 this.paint();
             }
         });
+    }
+
+    // 查看下级的明细
+    public goDetail(e:any) {
+        this.props.currendUid = e.value[0];
+        this.props.status = false;
+        this.paint();
+    }
+
+    // 下级明细放回
+    public getDatas() {
+        this.props.status = true;
+        this.paint();
     }
 }

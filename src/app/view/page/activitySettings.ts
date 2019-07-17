@@ -18,7 +18,7 @@ interface Props {
  */
 export class BigTurntable extends Widget {
     public props:Props = {
-        showTitleList:['金额(分)','中奖概率(%)'],
+        showTitleList:['金额(分)','中奖权重'],
         foreign:[],
         real:[],
         foreignSum:0,
