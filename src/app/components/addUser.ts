@@ -52,10 +52,12 @@ export class AddUser extends Widget {
         // 获取所有账号类型
         getAllUserType().then(r => {
             const userType = [];
-            r.forEach((v,i) => {
-                userType.push({ status:i,text:v });
-            });
-            this.props.userTypes = userType;
+            if (r.length) {
+                r.forEach((v,i) => {
+                    userType.push({ status:i,text:v });
+                });
+                this.props.userTypes = userType;
+            }
             // 编辑状态时赋值默认初始值
             if (props.style === false) {
                 userType.forEach((item,index) => {
