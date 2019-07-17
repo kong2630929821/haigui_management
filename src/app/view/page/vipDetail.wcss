@@ -38,7 +38,7 @@
     align-items: center;
 }
 .btn{
-    width:100px;
+    width:146px;
     height:36px;
     color: #fff;
     text-align: center;

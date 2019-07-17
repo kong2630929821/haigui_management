@@ -133,16 +133,19 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    flex: 8;
 }
 .product_info{
     height: 20px;
-    display: flex;
     font-size:14px;
     font-family:Source Sans Pro;
     font-weight:600;
     line-height:18px;
     color:rgba(53,64,82,1);
-    flex: 8;
+    max-width: 415px;
+    margin-left: 60px;
+    display: flex;
+    white-space: nowrap;
 }
 .item{
     display: flex;
@@ -221,10 +224,4 @@
     justify-content: center;
     margin-right: 20px;
 }
-.infoTitle{
-    max-width: 128px;
-}
-.infoItem{
-    margin-left: 30px;
-    display: flex;
-}
+

@@ -7,5 +7,5 @@
         <div>{{it.title}}</div>
     </div>
     {{end}}
-    <input type="file" on-change="importTransport" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" w-class="import-input"/>
+    <input type="file" disabled="{{it.disabled?it.disabled:''}}" on-change="importTransport" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" w-class="import-input"/>
 </div>

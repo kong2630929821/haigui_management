@@ -34,7 +34,8 @@ const PAGE = {
     accountSettings:'accountSettings',// 账号设置
     activitySettings:'activitySettings',// 活动设置-大转盘设置
     invitationSettings:'invitationSettings',// 邀请设置
-    rebateSetting:'rebateSetting'// 返利设置
+    rebateSetting:'rebateSetting',// 返利设置
+    withdrawalSetting:'withdrawalSetting'// 提现设置
 };
 
 // tslint:disable-next-line:completed-docs
@@ -57,7 +58,8 @@ export class Home extends Widget {
                 { name: '平台设置', page: PAGE.platformSettings, img:'chart.png',children:[
                     { name:'供应商设置',page:PAGE.platformSettings },
                     { name:'分类设置',page:PAGE.classSetting },
-                    { name:'品牌设置',page:PAGE.brandSetting }
+                    { name:'品牌设置',page:PAGE.brandSetting },
+                    { name:'提现设置',page:PAGE.withdrawalSetting }
                     // { name:'商场设置',page:PAGE.mallSetting }
                 ],
                     show:true 
@@ -78,7 +80,7 @@ export class Home extends Widget {
             rightBox:true
         };
         
-        this.props.activePage = this.props.pageList[4].children[1];
+        this.props.activePage = this.props.pageList[4].children[3];
     }
 
     // 切换默认过滤器页面

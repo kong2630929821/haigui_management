@@ -1,9 +1,9 @@
 import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { changeBindding, getAmountDetail, getUserLevelChange, getVipDetail, setHwangLabel } from '../../net/pull';
+import { changeBindding, getAmountDetail, getUserLevelChange, getVipDetail, setHwangLabel, userLevelChange } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
-import { addressFormat } from '../../utils/tools';
+import { addressFormat, getUserType } from '../../utils/tools';
 interface Props {
     userData:any[];  // 个人数据
     showDataList:any[];  // 显示数据
@@ -24,7 +24,9 @@ interface Props {
     
 }
 const userType = ['','海王','海宝','白客'];
-const UserLabel = ['海王','市代理','省代理'];
+const UserLabel = ['海王','市代理','省代理','海王（体验）'];
+const UserLabelHaiBao = ['海宝','市代理','省代理','海宝（体验）'];
+const UserTypeLabel = ['白客','海宝','海宝（体验）','海王','市代理','省代理','海王（体验）'];
 const tableTitle = [
     ['用户ID','微信名','手机号','地址信息','ta的本月收益','ta的总收益'],
     ['时间','类型','金额']
@@ -71,12 +73,11 @@ export class VipDetail extends Widget {
     }
     public init() {
         getVipDetail(this.props.uid).then(r => {
+            
             const v = r.userTotal;
             if (v) {
-                let user = userType[v[9]];
-                if (v[9] === 1) {  // 海王有标签 省代理 市代理
-                    user = UserLabel[v[10]];
-                }
+                // 获取用户身份
+                const user = getUserType(v[9],v[10]);
                 this.props.userLabel = user;
                 this.props.userData = [
                     { th:'用户ID',td:v[0] },
@@ -132,25 +133,23 @@ export class VipDetail extends Widget {
             this.changeTab(0);
             this.paint();
         });
+        // 获取当前用户资金明细
         getAmountDetail(this.props.uid,1).then(r => {
             this.props.fundDetails = r;
             this.paint();
         });
+        // 获取当前用户海贝明细
         getAmountDetail(this.props.uid,2).then(r => {
             this.props.seaShell = r;
             this.paint();
         });
+        // 获取当前用户积分明细
         getAmountDetail(this.props.uid,3).then(r => {
             this.props.integral = r;
             this.paint();
         });
         // 获取用户等级变动详细
-        getUserLevelChange(this.props.uid).then(r => {
-            if (r.length) {
-                this.props.userShowDataList = r;
-                this.paint();
-            }
-        });
+        this.userLevel();
     }
     // 切换
     public changeTab(num:number) {
@@ -184,25 +183,41 @@ export class VipDetail extends Widget {
     }
 
     // 升级 
-    public upUserType(e:any,num:number) {
-        popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”升级至${UserLabel[num]}` },() => {
-            setHwangLabel(this.props.uid,num).then(r => {
-                popNewMessage('升级成功');
-                this.props.userLabel = this.props.userData[4].td = UserLabel[num];
-                this.paint();
-                notify(e.node,'ev-change-userType',{});
+    public upUserType(e:any,num:number,level:number,label:any) {// e,下标，等级，标签
+        popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”升级至${UserTypeLabel[num]}` },() => {
+            userLevelChange(this.props.uid,level,label).then(r => {
+                if (r.result === 1) {
+                    popNewMessage('升级成功');
+                    this.props.userLabel = this.props.userData[4].td = UserTypeLabel[num];
+                    this.userLevel();
+                    this.paint();
+                    notify(e.node,'ev-change-userType',{});
+                } else {
+                    popNewMessage('升级失败');
+                }
+                
+            }).catch(e => {
+                popNewMessage('升级失败');
             });
         });
     }
 
     // 降级
-    public dnUserType(e:any,num:number) {
-        popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”降级至${UserLabel[num]}` },() => {
-            setHwangLabel(this.props.uid,num).then(r => {
-                popNewMessage('降级成功');
-                this.props.userLabel = this.props.userData[4].td = UserLabel[num];
-                this.paint();
-                notify(e.node,'ev-change-userType',{});
+    public dnUserType(e:any,num:number,level:number,label:any) {
+        popNew('app-components-modalBox',{ content:`将用户“<span style="color:#1991EB">${this.props.userData[2].td}</span>”降级至${UserTypeLabel[num]}` },() => {
+            userLevelChange(this.props.uid,level,label).then(r => {
+                if (r.result === 1) {
+                    popNewMessage('降级成功');
+                    this.props.userLabel = this.props.userData[4].td = UserTypeLabel[num];
+                    this.userLevel();
+                    this.paint();
+                    notify(e.node,'ev-change-userType',{});
+                } else {
+                    popNewMessage('降级失败');
+                }
+               
+            }).catch(e => {
+                popNewMessage('降级失败');
             });
         });
     }
@@ -244,6 +259,16 @@ export class VipDetail extends Widget {
                     popNewMessage('修改失败');
                 }
             });
+        });
+    }
+
+    // 获取用户等级变动详细
+    public userLevel() {     
+        getUserLevelChange(this.props.uid).then(r => {
+            if (r.length) {
+                this.props.userShowDataList = r;
+                this.paint();
+            }
         });
     }
 }

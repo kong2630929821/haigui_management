@@ -1,4 +1,3 @@
-import { isNumber } from '../../../pi/net/websocket/util';
 import { Widget } from '../../../pi/widget/widget';
 import { getIncome, haiWangSetting } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
@@ -72,6 +71,11 @@ export class RebateSetting extends Widget {
         let data = this.props.haiWang;
         let str = '海王';
         let cfgName = cfg.haiWang;
+        // 如果没点击修改则不调用接口
+        if (this.props.style[fg]) {
+
+            return; 
+        }
         if (fg === 0) {
             data = this.props.haiWang;
             str = '海王';

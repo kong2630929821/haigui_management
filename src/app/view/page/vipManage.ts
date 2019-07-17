@@ -2,7 +2,7 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { getVipMember } from '../../net/pull';
 import { getStore, register, setStore } from '../../store/memstore';
-import { unicode2ReadStr } from '../../utils/logic';
+import { timestampFormat, unicode2ReadStr } from '../../utils/logic';
 import { addressFormat } from '../../utils/tools';
 
 interface Props {
@@ -23,7 +23,7 @@ interface Props {
     curShowDataList:any[]; // 当前页显示数据
     curPage:number; // 当前页码
 }
-const UserLabel = ['','市代理','省代理'];
+const UserLabel = ['','市代理','省代理','体验号'];
 /**
  * 会员管理
  */
@@ -32,7 +32,7 @@ export class VipManage extends Widget {
         showDataList:[
             // ['123456','张三','15534429570','四川省成都市金牛区XX街道XX小区XX','￥1200','￥1200']
         ],
-        showTitleList:['用户ID','微信名','手机号','地址信息','ta的总收益'],
+        showTitleList:['用户ID','微信名','手机号','地址信息','ta的总收益','注册时间','邀请人ID','邀请人昵称'],
         showDetail:false,
         hBaoDatas:[],
         hWangDatas:[],
@@ -43,7 +43,7 @@ export class VipManage extends Widget {
         uid:0,
         searUid:'',
         active:0,
-        optionsList:['白客','海宝','海王','市代理','省代理'],
+        optionsList:['白客','海宝','海王','市代理','省代理','海王（体验）','海宝（体验）'],
         showFilterBox:false,
         curShowDataList:[],
         curPage:0
@@ -51,14 +51,14 @@ export class VipManage extends Widget {
 
     public create() {
         super.create();
-        this.getDatas();
+        this.getDatas(false);
     }
 
-    // 获取数据
-    public getDatas() {
+    // 获取数据  fg为true则强制执行请求getVipMember
+    public getDatas(fg:boolean) {
         const vipTotal = getStore('vipTotal',{});
         // 其中一项统计数据不为0表示已经请求过数据 不再重复请求
-        if (vipTotal.hBaoNum || vipTotal.hWangNum || vipTotal.baikNum) {  
+        if ((vipTotal.hBaoNum || vipTotal.hWangNum || vipTotal.baikNum) && !fg) {  
             this.props.hBaoNum = vipTotal.hBaoNum;
             this.props.hWangNum = vipTotal.hWangNum;
             this.props.baikNum = vipTotal.baikNum;
@@ -81,7 +81,11 @@ export class VipManage extends Widget {
                         item[2],           // 手机号
                         addressFormat(item[3]),           // 地址信息
                         `￥${item[4] / 100}`,            // ta的总收益
-                        UserLabel[item[5]]       // 标签
+                        timestampFormat(item[6]),// 注册时间
+                        item[7],// 邀请人ID
+                        unicode2ReadStr(item[8]),// 邀请人名字
+                        UserLabel[item[5]]     // 标签
+                        
                     ];
                 });
             }
@@ -93,7 +97,10 @@ export class VipManage extends Widget {
                         item[2],           // 手机号
                         addressFormat(item[3]),           // 地址信息
                         `￥${item[4] / 100}`,            // ta的总收益
-                        UserLabel[item[5]]       // 标签
+                        timestampFormat(item[6]),// 注册时间
+                        item[7],// 邀请人ID
+                        unicode2ReadStr(item[8]),// 邀请人名字
+                        UserLabel[item[5]]     // 标签
                     ];
                 });
             }
@@ -105,7 +112,10 @@ export class VipManage extends Widget {
                         item[2],           // 手机号
                         addressFormat(item[3]),           // 地址信息
                         `￥${item[4] / 100}`,            // ta的总收益
-                        UserLabel[item[5]]       // 标签
+                        timestampFormat(item[6]),// 注册时间
+                        item[7],// 邀请人ID
+                        unicode2ReadStr(item[8]),// 邀请人名字
+                        UserLabel[item[5]]     // 标签
                     ];
                 });
             }
@@ -140,19 +150,27 @@ export class VipManage extends Widget {
                 break;
             case 2:
                 list = this.props.hWangDatas.filter(item => {
-                    return item[5] === '';
+                    return item[8] === '';
                 });
                 break;
             case 3:// 市代理 
                 list = this.props.hWangDatas.filter(item => {
-                    return item[5] === '市代理';
+                    return item[8] === '市代理';
                 });
                 break;
             case 4:// 省代理 
                 list = this.props.hWangDatas.filter(item => {
-                    return item[5] === '省代理';
+                    return item[8] === '省代理';
                 });
                 break;
+            case 5:// 海王体验
+                list = this.props.hWangDatas.filter(item => {
+                    return item[8] === '体验号';
+                });
+            case 6:// 海宝体验
+                list = this.props.hBaoDatas.filter(item => {
+                    return item[8] === '体验号';
+                });
             default:
         }
         this.props.showDataList = list.map(t => {

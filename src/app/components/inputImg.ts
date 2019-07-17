@@ -11,6 +11,7 @@ interface Props {
     title:string;// 标题
     path:string;// 图片路径
     mallImagPre:string;
+    disabled:boolean;
 }
 /**
  * 文件选择按钮
@@ -20,7 +21,8 @@ export class InputImg extends Widget {
         src:'',
         title:'上传图片',
         path:'',
-        mallImagPre:mallImagPre
+        mallImagPre:mallImagPre,
+        disabled:false
     };
     public setProps(props:any) {
         this.props = {

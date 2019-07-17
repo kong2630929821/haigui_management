@@ -15,13 +15,35 @@
         <div style="display:flex;flex:1 0 0;">
             <div w-class="th">操作</div>
             <div w-class="td" style="justify-content:center;">
-                {{if it.userLabel == "市代理"}}
-                <div w-class="btn" on-tap="dnUserType(e,0)">降为海王</div>
-                <div w-class="btn" on-tap="upUserType(e,2)">升为省代理</div>
-                {{elseif it.userLabel == "海王"}}
-                <div w-class="btn" on-tap="upUserType(e,1)">升为市代理</div>
+                {{if it.userLabel=="白客"}}
+                    <div w-class="btn" on-tap="upUserType(e,1,2,'')">升为海宝</div>
+                    <div w-class="btn" on-tap="upUserType(e,3,1,'')">升为海王</div>
+                    <div w-class="btn" on-tap="upUserType(e,2,2,3)">升为海宝（体验）</div>
+                    <div w-class="btn" on-tap="upUserType(e,6,1,3)">升为海王（体验）</div>
+                {{elseif it.userLabel=="海宝"}}
+                    <div w-class="btn" on-tap="upUserType(e,3,1,'')">升为海王</div>
+                    <div w-class="btn" on-tap="dnUserType(e,2,2,3)">降为海宝（体验）</div>
+                    <div w-class="btn" on-tap="upUserType(e,6,1,3)">升为海王（体验）</div>
+                {{elseif it.userLabel=="海宝（体验）"}}
+                    <div w-class="btn" on-tap="upUserType(e,1,2,'')">升为海宝</div>
+                    <div w-class="btn" on-tap="upUserType(e,3,1,'')">升为海王</div>
+                    <div w-class="btn" on-tap="upUserType(e,6,1,3)">升为海王（体验）</div>
+                {{elseif it.userLabel=="海王"}}
+                    <div w-class="btn" on-tap="dnUserType(e,6,1,3)">降为海王（体验）</div>
+                    <div w-class="btn" on-tap="upUserType(e,4,1,1)">升为市代理</div>
+                    <div w-class="btn" on-tap="upUserType(e,5,1,2)">升为省代理</div>
+                {{elseif it.userLabel=="海王（体验）"}}
+                    <div w-class="btn" on-tap="upUserType(e,3,1,'')">升为海王</div>
+                    <div w-class="btn" on-tap="upUserType(e,4,1,1)">升为市代理</div>
+                    <div w-class="btn" on-tap="upUserType(e,5,1,2)">升为省代理</div>
+                {{elseif it.userLabel == "市代理"}}
+                    <div w-class="btn" on-tap="dnUserType(e,6,1,3)">降为海王（体验）</div>
+                    <div w-class="btn" on-tap="dnUserType(e,3,1,'')">降为海王</div>
+                    <div w-class="btn" on-tap="upUserType(e,5,1,2)">升为省代理</div>
                 {{elseif it.userLabel == "省代理"}}
-                <div w-class="btn" on-tap="dnUserType(e,1)">降为市代理</div>
+                    <div w-class="btn" on-tap="dnUserType(e,6,1,3)">降为海王（体验）</div>
+                    <div w-class="btn" on-tap="dnUserType(e,3,1,'')">降为海王</div>
+                    <div w-class="btn" on-tap="dnUserType(e,4,1,1)">降为市代理</div>
                 {{end}}
                 <div w-class="btn" style="margin:0px;" on-tap="changeBinding">调整绑定人</div>
             </div>

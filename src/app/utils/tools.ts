@@ -145,26 +145,6 @@ export const parseOrderShow = (infos: Order[], status: OrderStatus) => {
     return ordersShow;
 };
 
-enum UserType {
-    hWang= 1,  // 海王
-    hBao= 2,   // 海宝
-    baiKe= 3,  // 白客
-    city= 11,   // 市代理
-    province= 12,  // 省代理
-    hWangTest= 19,  // 海王体验
-    hBaoTest= 29   // 海宝体验
-}
-
-const UserTypeShow = {
-    hWang:'海王',
-    hBao:'海宝',
-    baiKe:'白客',
-    city:'市代理',
-    province:'省代理',
-    hWangTest:'海王体验',
-    hBaoTest:'海宝体验'
-};
-
 const RebateType = ['','现金','海贝'];
 
 // 解析订单详情
@@ -174,7 +154,7 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
     const orderRebate:OrderDetailRebate[] = [];
 
     // 身份  用户等级+用户标签（只能是1,2） 
-    const usertype = UserTypeShow[UserType[Number(`${info[23]}${info[24] > 0 ? info[24] :''}`)]];
+    const usertype = getUserType(info[23],info[24]);
     if (status === OrderStatus.ALL) {   // 全部订单  自己解析订单状态
         localStatus = parseOrderStatus(info[12], info[13], info[14], info[15], info[16], info[17]);
     }
@@ -1007,11 +987,38 @@ export const processingUserLevelChange = (r:any) => {
     const data = [];
     r.forEach(v => {
         let str = '管理端更改';
-        if (v[5] === 0) {
+        if (v[7] === 0) {
             str = '用户升级';
         }
-        data.push([v[0],UserTypeShow[UserType[v[1]]],UserTypeShow[UserType[v[2]]],v[3],unicode2Str(v[4]),str]);
+        let name = '';
+        if (v[6] !== '') {
+            name = unicode2Str(JSON.parse(v[6]));
+        }
+        data.push([v[0],getUserType(v[1],v[3]),getUserType(v[2],v[4]),v[5],name,str]);
     });
     
     return data;
+};
+enum UserType {
+    hWang= 1,  // 海王
+    hBao= 2,   // 海宝
+    baiKe= 3,  // 白客
+    city= 11,   // 市代理
+    province= 12,  // 省代理
+    hWangTest= 13,  // 海王体验
+    hBaoTest= 23   // 海宝体验
+}
+
+const UserTypeShow = {
+    hWang:'海王',
+    hBao:'海宝',
+    baiKe:'白客',
+    city:'市代理',
+    province:'省代理',
+    hWangTest:'海王（体验）',
+    hBaoTest:'海宝（体验）'
+};
+// 获取用户身份
+export const getUserType = (level:number,label:number) => {
+    return UserTypeShow[UserType[Number(`${level === 4 ? 3 :level}${label > 0 ? label :''}`)]];
 };

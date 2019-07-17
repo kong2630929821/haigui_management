@@ -71,12 +71,14 @@ export class BigTurntable extends Widget {
                     // 编辑
             popNew('app-components-addTurntable',{ title:'编辑对外显示转盘梯度',currentData:e.value,sureText:'修改',style:false },(val) => {
                 this.props.foreign[e.num] = val;
+                this.props.flag1 = true;
                 this.paint();
             });
         } else {
             popNew('app-components-modalBox',{ content:`确认删除梯度"<span style="color:#1991EB">${e.value[0]}</span>"` }, () => {
                 this.props.foreign.splice(e.num,1);
                 this.props.foreignSum = this.props.foreign.length;
+                this.props.flag2 = true;
                 this.paint();
             },() => {
                 popNewMessage('你已经取消操作！');
@@ -89,6 +91,7 @@ export class BigTurntable extends Widget {
         popNew('app-components-addTurntable',{ title:'添加真实转盘梯度' },(val) => {
             this.props.real.push(val);
             this.props.realSum = this.props.real.length;
+            this.props.flag1 = true;
             this.paint();
         });
     }
@@ -97,6 +100,7 @@ export class BigTurntable extends Widget {
         popNew('app-components-addTurntable',{ title:'添加对外显示转盘梯度' },(val) => {
             this.props.foreign.push(val);
             this.props.foreignSum = this.props.foreign.length;
+            this.props.flag2 = true;
             this.paint();
         });
     }

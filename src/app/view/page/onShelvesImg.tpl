@@ -60,7 +60,7 @@
                 <div>缩略图</div>
                 <div w-class="img_info">
                     <div w-class="img_item" ev-input-file="updataImg">
-                        <app-components-inputImg>{path:{{it.path}},src:{{it.thumbnail.length!=0?it.thumbnail[0][0]:''}}}</app-components-inputImg>
+                        <app-components-inputImg>{path:{{it.path}},src:{{it.thumbnail.length!=0?it.thumbnail[0][0]:''}},disabled:{{it.disable}}}</app-components-inputImg>
                     </div>
                 </div>
             </div>
@@ -69,12 +69,12 @@
                 <div w-class="img_info">
                     {{for i,v of it.mainPicture}}
                         <div w-class="img_item" ev-input-file="updataImgMain({{i}},e)">
-                            <app-components-inputImg>{path:{{it.path}},src:{{it.mainPicture[i]?it.mainPicture[i][0]:""}} }</app-components-inputImg>
+                            <app-components-inputImg>{path:{{it.path}},src:{{it.mainPicture[i]?it.mainPicture[i][0]:""}},disabled:{{it.disable}}}</app-components-inputImg>
                         </div>
                     {{end}}
                     {{if it.mainPicture.length!=5}}
                     <div w-class="img_item" ev-input-file="addMainImg">
-                        <app-components-inputImg>{path:{{it.path}} }</app-components-inputImg>
+                        <app-components-inputImg>{path:{{it.path}},disabled:{{it.disable}}}</app-components-inputImg>
                     </div>
                     {{end}}
                 </div>
@@ -84,12 +84,12 @@
                 <div w-class="img_info">
                     {{for i,v of it.infoPicture}}
                         <div w-class="img_item" ev-input-file="updataImgInfo({{i}},e)">
-                            <app-components-inputImg>{path:{{it.path}},src:{{it.infoPicture[i]?it.infoPicture[i][2][0]:""}} }</app-components-inputImg>
+                            <app-components-inputImg>{path:{{it.path}},src:{{it.infoPicture[i]?it.infoPicture[i][2][0]:""}},disabled:{{it.disable}} }</app-components-inputImg>
                         </div>
                     {{end}}
                     {{if it.infoPicture.length!=20}}
                     <div w-class="img_item" ev-input-file="addInfoImg">
-                        <app-components-inputImg>{path:{{it.path}},src:"" }</app-components-inputImg>
+                        <app-components-inputImg>{path:{{it.path}},src:"",disabled:{{it.disable}}}</app-components-inputImg>
                     </div>
                     {{end}}
                 </div>
@@ -98,7 +98,7 @@
     </div>
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">已选产品</div>
-        <div w-class="searchItem" style="height:356px;overflow: auto;flex-direction: column;">
+        <div w-class="searchItem" style="max-height:356px;overflow: auto;flex-direction: column;">
             {{for i,v of it.selectData}}
             <div w-class="item">
                 <div w-class="bodyTitle">
@@ -111,14 +111,12 @@
                 </div>
                 <div w-class="itemBox">
                     <div w-class="productList">
-                         <div w-class="product_info">
                         {{for index,item of v}}
-                            <div w-class="infoItem">
-                                <div w-class="infoTitle">{{it.showDataTitle[index]}}：</div>
-                                <div>{{item}}</div>
-                            </div>
-                        {{end}}
+                        <div w-class="product_info">
+                            <div w-class="infoTitle">{{it.showDataTitle[index]}}：</div>
+                            <div>{{item}}</div>
                         </div>
+                        {{end}}
                         <div w-class="product_info" style="align-items: center;">
                             <div>差价：</div>
                             <div>
@@ -128,9 +126,11 @@
                             </div>
                         </div>
                     </div>
+                    {{if !it.style}}
                     <div w-class="btnGroup">
                         <div w-class="btn" on-tap="remove({{i}})">移除</div>
                     </div>
+                    {{end}}
                 </div>
             </div>
             {{end}}

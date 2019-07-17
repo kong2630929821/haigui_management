@@ -3,7 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { getAllProduct, getVipMember, login } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
 import { popNewMessage, unicode2ReadStr } from '../../utils/logic';
-import { addressFormat } from '../../utils/tools';
+import { addressFormat, timestampFormat } from '../../utils/tools';
 const UserLabel = ['','市代理','省代理'];
 /**
  * 登陆
@@ -47,7 +47,10 @@ export class Login extends Widget {
                                 item[2],           // 手机号
                                 addressFormat(item[3]),           // 地址信息
                                 `￥${item[4] / 100}`,            // ta的总收益
-                                UserLabel[item[5]]       // 标签
+                                timestampFormat(item[6]),// 注册时间
+                                item[7],// 邀请人ID
+                                unicode2ReadStr(item[8]),// 邀请人名字
+                                UserLabel[item[5]]     // 标签
                             ];
                         });
                     }
@@ -59,7 +62,10 @@ export class Login extends Widget {
                                 item[2],           // 手机号
                                 addressFormat(item[3]),           // 地址信息
                                 `￥${item[4] / 100}`,            // ta的总收益
-                                UserLabel[item[5]]       // 标签
+                                timestampFormat(item[6]),// 注册时间
+                                item[7],// 邀请人ID
+                                unicode2ReadStr(item[8]),// 邀请人名字
+                                UserLabel[item[5]]     // 标签
                             ];
                         });
                     }
@@ -71,7 +77,10 @@ export class Login extends Widget {
                                 item[2],           // 手机号
                                 addressFormat(item[3]),           // 地址信息
                                 `￥${item[4] / 100}`,            // ta的总收益
-                                UserLabel[item[5]]       // 标签
+                                timestampFormat(item[6]),// 注册时间
+                                item[7],// 邀请人ID
+                                unicode2ReadStr(item[8]),// 邀请人名字
+                                UserLabel[item[5]]     // 标签
                             ];
                         });
                     }
