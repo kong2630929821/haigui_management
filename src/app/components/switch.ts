@@ -27,7 +27,6 @@ export class Switch extends Widget {
         popNew('app-components-modalBox',{ content:`确认“<span style="color:#1991EB">${str}</span>”` },() => {
             const oldType = !!this.props.type;
             const newType = !oldType;
-            this.props.type = newType;
             notify(event.node, 'ev-switch-click', { value: newType });
             this.paint();
         });

@@ -1531,3 +1531,25 @@ export const setWithDrawal = (withdraw_config:any) => {
 
     return requestAsync(msg);
 };
+
+// 查看提现是否开启
+export const getWithdrawalStatus = () => {
+    const msg = {
+        type:'mall_mgr/members@console_get_withdraw_switch',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+// 设置提现开关
+export const setWithdrawalStatus = (state:number) => {
+    const msg = {
+        type:'mall_mgr/members@console_update_withdraw_switch',
+        param:{
+            state
+        }
+    };
+
+    return requestAsync(msg);
+};

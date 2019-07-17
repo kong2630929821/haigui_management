@@ -1,5 +1,5 @@
 import { Widget } from '../../../pi/widget/widget';
-import { getWithDrawalSetting, setWithDrawal } from '../../net/pull';
+import { getWithDrawalSetting, getWithdrawalStatus, setWithDrawal, setWithdrawalStatus } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
 
 interface Props {
@@ -29,6 +29,18 @@ export class WithDrwalSetting extends Widget {
 
     // 初始化数据
     public init() {
+        // 获取提现是否开启  0关闭 1开启
+        getWithdrawalStatus().then(r => {
+            if (r.state) {
+                this.props.status = true;
+                this.props.title = '开启提现';
+            } else {
+                this.props.status = false;
+                this.props.title = '关闭提现';
+            }
+            this.paint();
+        });
+        // 获取提现配置
         getWithDrawalSetting().then(r => {
             if (r.result === 1) {
                 this.props.showDataList = r.withdraw_config;
@@ -38,14 +50,23 @@ export class WithDrwalSetting extends Widget {
     }
     // 提现开启放回参数
     public switchChange(e:any) {
-        this.props.status = e.value;
-        if (e.value) {
-            this.props.title = '开启提现';
-        } else {
-            this.props.title = '关闭提现';
-        }
-        popNewMessage('功能暂定');
-        this.paint();
+        // 设置提现开关
+        setWithdrawalStatus(Number(e.value)).then(r => {
+            if (r.result === 1) {
+                this.props.status = e.value;
+                if (e.value) {
+                    this.props.title = '开启提现';
+                } else {
+                    this.props.title = '关闭提现';
+                }
+                popNewMessage('设置成功');
+                this.paint();
+            } else {
+                popNewMessage('设置失败');
+            }
+        }).catch(e => {
+            popNewMessage('设置失败');
+        });
     }
 
     // 点击修改

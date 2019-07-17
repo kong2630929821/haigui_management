@@ -3,7 +3,7 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { changeBindding, getAmountDetail, getUserLevelChange, getVipDetail, setHwangLabel, userLevelChange } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
-import { addressFormat } from '../../utils/tools';
+import { addressFormat, getUserType } from '../../utils/tools';
 interface Props {
     userData:any[];  // 个人数据
     showDataList:any[];  // 显示数据
@@ -76,13 +76,8 @@ export class VipDetail extends Widget {
             
             const v = r.userTotal;
             if (v) {
-                let user = userType[v[9]];
-                if (v[9] === 2) { // 海宝有标签 省代理 市代理 体验 （省代理市代理无效）
-                    user = UserLabelHaiBao[v[10]];
-                }
-                if (v[9] === 1) {  // 海王有标签 省代理 市代理 体验
-                    user = UserLabel[v[10]];
-                }
+                // 获取用户身份
+                const user = getUserType(v[9],v[10]);
                 this.props.userLabel = user;
                 this.props.userData = [
                     { th:'用户ID',td:v[0] },
