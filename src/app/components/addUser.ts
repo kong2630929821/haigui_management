@@ -14,6 +14,7 @@ interface Props {
     sureText:string;// 确定
     currentData:any;// 当前账户数据
     style:boolean;// 状态  true为添加 false 修改
+    uid:string;// 绑定的手机端ID
 }
 
 /**
@@ -38,7 +39,8 @@ export class AddUser extends Widget {
         cancelText:'取消',
         sureText:'确定',
         currentData:[],
-        style:true
+        style:true,
+        uid:''
     };
     public ok:() => void;
     public cancel:() => void;
@@ -52,10 +54,12 @@ export class AddUser extends Widget {
         // 获取所有账号类型
         getAllUserType().then(r => {
             const userType = [];
-            r.forEach((v,i) => {
-                userType.push({ status:i,text:v });
-            });
-            this.props.userTypes = userType;
+            if (r.length) {
+                r.forEach((v,i) => {
+                    userType.push({ status:i,text:v });
+                });
+                this.props.userTypes = userType;
+            }
             // 编辑状态时赋值默认初始值
             if (props.style === false) {
                 userType.forEach((item,index) => {
@@ -83,6 +87,10 @@ export class AddUser extends Widget {
         this.paint();
     }
 
+    // 绑定ID
+    public userId(e:any) {
+        this.props.uid = e.value;
+    }
     // 账户类型切换
     public filterUserTypes(e:any) {
         this.props.userTypesActiveIndex = e.activeIndex;
@@ -99,6 +107,7 @@ export class AddUser extends Widget {
         const name = this.props.account;
         const pass = this.props.password;
         const userType = this.props.userTypes[this.props.userTypesActiveIndex].text;
+        const uid = this.props.uid;
         if (this.props.style) {
             // 添加
             if (!name) {
@@ -113,7 +122,12 @@ export class AddUser extends Widget {
     
                 return;
             }
-            addAccount(name,pass).then(r => {
+            if (!uid) {
+                popNewMessage('请绑定C端ID');
+    
+                return;
+            }
+            addAccount(name,pass,Number(uid)).then(r => {
                 if (r.result === 1) {
                     addUserToUserType(name,userType).then(res => {
                         if (res.result === 1) {
