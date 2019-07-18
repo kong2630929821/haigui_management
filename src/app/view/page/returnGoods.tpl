@@ -26,7 +26,7 @@
         {{if it.returnStatus==0}}
             <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn1:"处理申请",inlineBtn3:"查看详情",auto:true}</widget>
         {{elseif it.returnStatus==1}}
-            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn1:"拒绝退货",inlineBtn2:"同意退货",inlineBtn3:"查看详情",color:true,auto:true}</widget>
+            <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn1:"退货失败",inlineBtn2:"退货成功",inlineBtn3:"查看详情",color:true,auto:true}</widget>
         {{else}}
             <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,color:true,inlineBtn3:"查看详情"}</widget>
         {{end}}
