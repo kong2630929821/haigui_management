@@ -24,7 +24,15 @@ export class AddUser extends Widget {
         title:'',
         account:'',
         password:'',
-        userTypes:[],
+        userTypes:[
+            {
+                status:0,
+                text:'普通'
+            },{
+                status:1,
+                text:'客服'
+            }
+        ],
         userTypesActiveIndex:0,
         expandIndex:-1,
         cancelText:'取消',
@@ -41,17 +49,6 @@ export class AddUser extends Widget {
             ...props
         };
         super.setProps(this.props);
-        // 状态筛选
-        const userType = [
-            {
-                status:0,
-                text:'普通'
-            },{
-                status:1,
-                text:'客服'
-            }
-        ];
-        this.props.userTypes = userType;
         // 获取所有账号类型
         getAllUserType().then(r => {
             const userType = [];

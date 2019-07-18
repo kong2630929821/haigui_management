@@ -6,7 +6,7 @@
         </div>
         {{end}}
         <div w-class="input" ev-input-change="messChange">
-            <widget w-tag="app-components-input">{plceHolder:{{it.placeHolder}} }</widget>        
+            <widget w-tag="app-components-input">{placeHolder:{{it.placeHolder}} }</widget>        
         </div>
 
         <div w-class="btns">

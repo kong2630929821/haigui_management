@@ -27,55 +27,15 @@
         <div>
             <div w-class="tableTitle">商品列表</div>
             <div w-class="tableData">
-                <div w-class="tableDataTitle">
+                <div w-class="title">
                     {{for i,v of it.showDateTitle}}
-                        <div w-class="item" style="flex:{{i==0 ? 2:1}}">{{v}}</div>
+                    <div w-class="titleItem">{{v}}</div>
                     {{end}}
                 </div>
                 <div w-class="dataBody">
                     {{for i,v of it.showDataList}}
-                        <div w-class="dataItme">
-                            <div w-class="bodyTitle">
-                                <div w-class="shopId">商品ID{{v.id}}</div>
-                                <div w-class="shopName">商品名称{{v.name}}</div>
-                                <div w-class="shopName">商品类型：{{v.shopType}}</div>
-                                <div w-class="shopName">品牌：{{v.brand}}</div>
-                                <div w-class="shopName">分类：{{v.typeName}}</div>
-                                <div w-class="shopName">税费：{{v.tax}}</div>
-                                <div w-class="shopName">是否有折扣：{{v.discount}}</div>
-                                {{if v.state==0}}
-                                <div w-class="shopType" style="color:red">已下架</div>
-                                {{elseif v.state==1}}
-                                <div w-class="shopType" style="color:#21811C;">已上架</div>
-                                {{else}}
-                                {{end}}
-                            </div>
-                            <div w-class="bodyContent">
-                                <div w-class="imgShow">
-                                    <img style="width: 100%;height: 100%;" src="{{it.mallImagPre}}{{v.img[0]?v.img[0][0]:''}}" alt=""/>
-                                </div>
-                                <div w-class="typeShow">
-                                    {{for j,t of v.type}}
-                                        <div w-class="row">
-                                            {{for index,item of t}}
-                                                <div w-class="typeShowItem {{index==0 ||index==1?'typeShowItem1':''}}">{{item}}</div>
-                                            {{end}}
-                                        </div>
-                                    {{end}}
-                                </div>
-                                <div w-class="status">
-                                    <div w-class="ctrollerStatus">
-                                            {{if v.state==0}}
-                                            <div w-class="btn" on-tap="shelf(1,{{v.id}})">上架</div>
-                                            <div w-class="btn" on-tap="change({{i}},e)">编辑</div> 
-                                            {{elseif v.state==1}}
-                                            <div w-class="btn" on-tap="shelf(0,{{v.id}})">下架</div>
-                                            {{else}}
-                                            {{end}}
-                                        <div w-class="btn" on-tap="lookInfo({{i}},e)">详情</div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div ev-shelf="shelfGoods" ev-change="change({{i}},e)" ev-detail="lookInfo({{i}},e)">
+                            <widget w-tag="app-components-goodsItem">{datas:{{v}}, inFlag:1 }</widget>
                         </div>
                     {{end}}
                 </div>
@@ -84,7 +44,7 @@
                 <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
                 <div w-class="onShelves" on-tap="onShelves">添加商品</div>
                 <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
-                    <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},currentIndex:{{it.currentIndex}},filterShow:true }</widget>
+                    <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true }</widget>
                 </div>
             </div>
         </div>

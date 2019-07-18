@@ -1,6 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { getAllProduct, getVipMember, login } from '../../net/pull';
+import { getAllProduct, getHbaoGoodsList, getVipMember, login } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
 import { popNewMessage, unicode2ReadStr } from '../../utils/logic';
 import { addressFormat, timestampFormat } from '../../utils/tools';
@@ -95,6 +95,8 @@ export class Login extends Widget {
                     skuTotal.skuData = r[1];
                     setStore('skuTotal',skuTotal);
                 });
+
+                getHbaoGoodsList(); // 获取所有399商品
 
             }).catch(() => {
                 popNewMessage('账号密码错误','error');

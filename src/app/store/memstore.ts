@@ -141,6 +141,21 @@ export interface Locate {
     location:number;    // location
     children:number[];   // 一级分组
 }
+
+// 商品详情
+export interface GoodsDetail {
+    id:number;  // 商品ID
+    name:string;  // 名称
+    shopType:string;  // 商品类型
+    brand:number;  // 品牌ID
+    typeName:string;  // 分组
+    img:[string,number,number][];  // 图片
+    discount:string;  // 折扣
+    tax:string;  // 税费
+    state:number;  // 上下架状态 1上架 0下架
+    skus:any[];  // SKU列表
+    area:number;  // 地区ID
+}
 /******************************store初始化**********************************/
 // 海龟一号store
 interface Store {
@@ -148,6 +163,8 @@ interface Store {
     vipTotal:VipTotal;
     skuTotal:SkuInfo;
     groupList:GroupInfo[];
+    hBaoGoods:[number,string][];   // 399商品列表 【商品ID，用户邀请码】
+    hBaoGoodsDetail:{user:string; goods:GoodsDetail}[];   // 399商品列表详情
 }
 // 全局内存数据库
 const store:Store = {
@@ -164,7 +181,9 @@ const store:Store = {
         skuNum:0,// 数量
         skuData:[]// 列表
     },
-    groupList:[]
+    groupList:[],
+    hBaoGoods:[],   // 399商品列表
+    hBaoGoodsDetail:[]
 };
 
 // SKU

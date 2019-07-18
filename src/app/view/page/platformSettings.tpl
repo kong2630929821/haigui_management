@@ -1,4 +1,4 @@
-<div class="new-page" w-class="page" ev-detail-back="detailBack" on-tap="close">
+<div w-class="page" ev-detail-back="detailBack" on-tap="close">
     {{if it.showAddSupplier==0}}
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>

@@ -1,4 +1,4 @@
-<div class="new-page" w-class="page" ev-detail-back="detailBack" on-tap="close">
+<div w-class="page" ev-detail-back="detailBack" on-tap="close">
     {{if it.selGoodsIndex === -1}}
     <div w-class="back" on-tap="goBack">返回</div>
     <div w-class="searchBox">
@@ -67,7 +67,7 @@
     </div>
     
     {{else}}
-    <div ev-selGoods="selectGoods" ev-goodsInfo-back="cancelSel">
+    <div ev-confirm="selectGoods" ev-goodsInfo-back="cancelSel">
         <widget w-tag="app-view-page-goodsInfo">{goodsId:{{it.goodsId}}}</widget>
     </div>
     {{end}}

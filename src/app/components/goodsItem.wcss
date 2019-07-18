@@ -1,0 +1,51 @@
+.goodsItem{
+    width: 100%;
+    border-bottom: 10px solid #F0F0F0;
+}
+.contentItem{
+    width: 200px;
+    flex: 1;
+    text-align: center;
+    border-left: 1px solid #CCCCCC;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 48px;
+    line-height: 48px;
+}
+.img{
+    width: 100px;
+    height: 100px;
+    margin: 10px 20px;
+}
+.base{
+    display: flex;
+    align-items: center;
+    background: #fff;
+}
+.baseItem{
+    width:200px;
+    font-size:14px;
+    color:rgba(0,0,0,1);
+    line-height:20px;
+    word-break: break-all;
+    text-align: center;
+}
+.content{
+    display: flex;
+    background: #FFFFFF;
+    height: 48px;
+    border-top: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+}
+.btn{
+    width: 120px;
+    height: 40px;
+    background: rgb(25, 145, 235);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 40px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    margin: 5px;
+}

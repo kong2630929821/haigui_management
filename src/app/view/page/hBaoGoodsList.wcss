@@ -4,10 +4,6 @@
     padding: 20px 60px;
     color:#354052;
 }
-.filterBox{
-    display: flex;
-    flex-wrap: wrap;
-}
 .searchBox{
     margin:20px 0;
     background: #fff;
@@ -36,17 +32,9 @@
     background:#1991EB;
     margin-top: 25px;
 }
-.filterTitle{
-    font-size:18px;
-    font-family:PingFangSC-Regular;
-    line-height:96px;
-    color:rgba(0,0,0,1);
-    margin-left: 28px;
-}
 .shopSum{
     height: 26px;
     font-size:14px;
-    font-family:PingFangSC-Semibold;
     font-weight:650;
     color:rgba(53,64,82,1);
     line-height:20px;
@@ -64,47 +52,14 @@
     border:1px solid rgba(204,204,204,1);
     box-sizing: border-box;
 }
-.ctroller{
-    height: 48px;
-    border:1px solid rgba(204,204,204,1);
-    display: flex;
-    position: relative;
-}
-.searchleft{
-    width:150px;
-    height:36px;
-    line-height: 36px;
-    text-align: center;
-    color: #fff;
-    font-size: 18px;
-    background:#1991EB;
-    cursor: pointer;
-    margin: 5px 20px;
-}
-.onShelves{
-    width:100px;
-    height:36px;
-    line-height: 36px;
-    text-align: center;
-    color: #fff;
-    font-size: 18px;
-    background:#1991EB;
-    cursor: pointer;
-    margin: 5px 20px;
+.dataBody{
+    height: 550px;
+    overflow: auto;
 }
 .pagination{
     position: absolute;
     top: -9px;
     right: 50px;
-}
-.dataBody{
-    height: 550px;
-    overflow: auto;
-}
-.page1{
-    background: #F0F2F5;
-    height: 100%;
-    color:#354052;
 }
 .title{
     display: flex;
