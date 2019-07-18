@@ -50,11 +50,6 @@
             </div>
         </div>
     </div>
-
-    <div style="margin-top:30px;">
-        <div w-class="tableTitle">身份变更信息</div>
-        <widget w-tag="app-components-tableDeal">{datas: {{it.userShowDataList}},title:{{it.userTitleList}},needCheckBox:false }</widget>
-    </div>
     <div w-class="tabRow" style="margin:20px 0 10px;">
         <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)">ta的海王</div>
         <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)">ta的海宝</div>

@@ -17,6 +17,14 @@
                 <widget w-tag="app-components-input">{input:{{it.password}},placeHolder:"请输入密码",itype:"password"}</widget>
             </div>
         </div>
+        {{if it.style}}
+        <div w-class="row">
+            <div w-class="title">C端用户ID</div>
+            <div w-class="input" ev-input-change="userId" style="width: 382px;margin-left: 8px;">
+                <widget w-tag="app-components-input">{input:"",placeHolder:"请输入密码",itype:"number"}</widget>
+            </div>
+        </div>
+        {{end}}
         <div w-class="row">
             <div w-class="title">账号类型：</div>
             <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="filterUserTypes">

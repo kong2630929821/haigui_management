@@ -958,7 +958,7 @@ export const processingBalanceLog = (r:any) => {
     }
     const data = [];
     r.forEach(v => {
-        data.push([timestampFormat(v[4]),v[1]?getCashLogName(v[1]):"", `${v[2] > 0 ? '+' :''}${priceFormat(v[2])}`]);
+        data.push([timestampFormat(v[4]),v[1] ? getCashLogName(v[1]) :'', `${v[2] > 0 ? '+' :''}${priceFormat(v[2])}`]);
     });
 
     return data;

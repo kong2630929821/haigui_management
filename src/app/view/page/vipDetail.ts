@@ -97,7 +97,8 @@ export class VipDetail extends Widget {
             }
             if (r.sub_tree) {
                 // 海王
-                r.sub_tree[0][2].forEach(v => {
+            
+                r.sub_tree[0][2].length && r.sub_tree[0][2].forEach(v => {
                     const data = [
                         v[0],  // UID
                         unicode2ReadStr(v[1][0]),  // 微信名
