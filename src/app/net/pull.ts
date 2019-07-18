@@ -1239,12 +1239,13 @@ export const getAllUserType = () => {
 };
 
 // 添加账号
-export const addAccount = (user:string,password:string) => {
+export const addAccount = (user:string,password:string,cuid:number) => {
     const msg = {
         type:'mgr_create_user',
         param:{
             user,
-            password
+            password,
+            cuid
         }
     };
 

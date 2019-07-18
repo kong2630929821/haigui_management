@@ -1,3 +1,14 @@
+.modal-mask{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 0 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .addBrand{
     width:564px;
     height:570px;
