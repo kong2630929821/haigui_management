@@ -27,7 +27,7 @@ interface Props {
 }
 const UserTypeLabel = ['白客','海宝','海宝（体验）','海王','市代理','省代理','海王（体验）'];
 const tableTitle = [
-    ['用户ID','微信名','手机号','注册时间','身份'],
+    ['用户ID','微信名','手机号','注册时间','身份','地址','ta的本月收益','ta的总收益'],
     ['时间','类型','金额']
 
 ];
@@ -94,17 +94,18 @@ export class VipDetail extends Widget {
                     { th:'身份证号',td:v[7][1] },
                     { th:'邀请码',td:v[11] }
                 ];
-            }
+            } 
             if (r.sub_tree) {
-                // 海王
-            
                 r.sub_tree[0][2].length && r.sub_tree[0][2].forEach(v => {
                     const data = [
                         v[0],  // UID
                         unicode2ReadStr(v[1][0]),  // 微信名
                         v[1][1],  // 手机
                         timestampFormat(v[1][2]),  // 注册时间
-                        getUserType(v[1][3],v[1][4])// 身份
+                        getUserType(v[1][3],v[1][4]),// 身份
+                        addressFormat(v[1][5]),// 地址
+                        `现金(￥${priceFormat(v[1][6][0])}) 海贝(${v[1][6][1]}) 积分(${v[1][6][2]})`,// 本月收益
+                        `现金(￥${priceFormat(v[1][7][0])}) 海贝(${v[1][7][1]}) 积分(${v[1][7][2]})`// 总收益
                     ];
                     if (v[1][3] === 1) {
                         // 海王
