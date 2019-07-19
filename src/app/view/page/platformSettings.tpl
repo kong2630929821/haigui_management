@@ -17,6 +17,9 @@
     <div w-class="ctroller">
         <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
         <div w-class="onShelves" on-tap="addSupplier">添加供应商</div>
+        <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true }</widget>
+        </div>
     </div>
     {{elseif it.showAddSupplier==1}}
     <div ev-change-showShop="showSupplier" ev-save-change="saveChange">

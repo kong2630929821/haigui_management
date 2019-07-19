@@ -1,5 +1,6 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { getAmountDetail } from '../../net/pull';
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
     activeTab:number;
     showDataList:any[];
     curPage:number;// 当前页数
+    perPage:number;// 每页多少条数据
 }
 /**
  * 模态框
@@ -36,7 +38,8 @@ export class SubordinateFundDetails extends Widget {
         integral:[],
         activeTab:0,
         showDataList:[],
-        curPage:0
+        curPage:0,
+        perPage:perPage[0]
 
     };
     public ok: () => void;
@@ -86,13 +89,19 @@ export class SubordinateFundDetails extends Widget {
       // 查看某一页数据
     public changePage(e:any) {
         this.props.curPage = e.value;
-        this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
+        this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
     }
     
     // 返回
     public goBack(e:any) {
         notify(e.node,'ev-userDetail-back',{});
+    }
+
+        // 每页展示多少数据
+    public perPage(e:any) {
+        this.props.perPage = e.value;
+        this.changePage({ value:0 });  
     }
     
 }

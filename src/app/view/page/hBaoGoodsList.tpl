@@ -27,4 +27,9 @@
                 </div>
             </div>
         </div>
+        <div w-class="ctroller">
+            <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
+                <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true }</widget>
+            </div>
+        </div>
     </div>

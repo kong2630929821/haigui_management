@@ -17,10 +17,10 @@
         <div w-class="tableTitle">{{typeList[it.activeTab]}}列表</div>
         <widget w-tag="app-components-table">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true }</widget>
     </div>
-    {{if Math.ceil(it.showDataList.length/5) > 0}}
+    {{if Math.ceil(it.showDataList.length/it.perPage) > 0}}
     <div w-class="ctroller">
-        <div ev-changeCurrent="changePage" w-class="pagination">
-            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/5)}} }</widget>
+        <div ev-changeCurrent="changePage" w-class="pagination" ev-perPage="perPage">
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true }</widget>
         </div>
     </div>
     {{end}}

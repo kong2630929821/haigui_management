@@ -737,7 +737,7 @@ export const analyzeGoods = (data: any) => {
             if (v[22] === '') {
                 time = '';
             } else {
-                time = `${timestampFormat(v[22][0])}~${timestampFormat(v[22][1])}`;
+                time = `${timestampFormat(v[22][0]).split(' ')[0]}~${timestampFormat(v[22][1]).split(' ')[0]}`;
             }
             typeList.push([v[3],v[2][0],`${priceFormat(v[12])}/${priceFormat(v[13])}/${priceFormat(v[14])}`,priceFormat(v[2][1]),v[11],v[4],v[24],v[25],time]);
         });

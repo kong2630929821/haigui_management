@@ -1,9 +1,10 @@
 // tslint:disable-next-line:missing-jsdoc
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { getAllProduct, searchProduct } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
-import { timeConvert, transitTimeStamp } from '../../utils/logic';
+import { dateToString, parseDate, timeConvert, transitTimeStamp } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
 interface Props {
@@ -23,6 +24,7 @@ interface Props {
     inputValue:string;// 搜索框
     showAddProduct:number;
     currentData:any;
+    searchDataList:any;// 搜索的全部数据
 }
 // 状态筛选
 export enum StatuType {
@@ -36,8 +38,6 @@ export enum ProductTypes {
     productTypese_2= 1,// 一般贸易
     productTypese_3= 2// 海外直购
 }
-// 每页多少数据
-const perPage = [20,50,100];
 /**
  * 产品库
  */
@@ -60,7 +60,8 @@ export class ProductLibrary extends Widget {
         btn2:'详情',
         inputValue:'',
         showAddProduct:0,
-        currentData:[]
+        currentData:[],
+        searchDataList:[]
     };
 
     public create() {
@@ -78,11 +79,11 @@ export class ProductLibrary extends Widget {
                 text:'隐藏'
             }
         ];
-        this.props.timeType = timeType;
         const oData = new Date();
         const time = oData.setHours(23, 59, 59, 999);
+        this.props.timeType = timeType;
         this.props.endTime =  timeConvert(time);
-        this.props.startTime = '2019-05-01 00:00:000';
+        this.props.startTime = parseDate(this.props.endTime,-7,1);
         const skuTotal = getStore('skuTotal',{});
         if (skuTotal.skuNum) {
             this.props.shopNum = skuTotal.skuNum;
@@ -111,11 +112,11 @@ export class ProductLibrary extends Widget {
     }
     // 每页展示多少数据
     public perPage(e:any) {
-        this.props.perPage = perPage[e.value];
+        this.props.perPage = e.value;
         if (this.props.inputValue) {
             this.search();
         } else {
-            this.init();
+            this.pageChange({ value:0 });
         }
         
     }
@@ -178,10 +179,17 @@ export class ProductLibrary extends Widget {
     // 搜索
     public search() {
         console.log(this.props.inputValue);
-        searchProduct(this.props.inputValue).then(r => {
-            this.props.dataList = r;
-            this.props.shopNum = this.props.dataList.length;
+        if (!this.props.inputValue) {
             this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
+            this.props.shopNum = this.props.dataList.length;
+            this.paint();
+
+            return;   
+        }
+        searchProduct(this.props.inputValue).then(r => {
+            this.props.searchDataList = r;
+            this.props.shopNum = this.props.searchDataList.length;
+            this.props.showDataList = this.props.searchDataList.slice(0,this.props.perPage);
             this.paint();
         });
     }

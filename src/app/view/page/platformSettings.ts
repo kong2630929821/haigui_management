@@ -1,6 +1,7 @@
 // tslint:disable-next-line:missing-jsdoc
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { getAllSuppliers } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
@@ -14,6 +15,10 @@ interface Props {
     searchValue:string;// 搜索框值
     currentValue:any;// 当前编辑的值
     dataList:any;// 原始数据
+    perPage:number;// 每页多少条数据
+    allDataList:any;// 全部数据
+    currentIndex:number;// 当前页数
+    
 }
 /**
  * 供应商设置
@@ -28,7 +33,10 @@ export class PlatformSettings extends Widget {
         showAddSupplier:0,
         searchValue:'',
         currentValue:[],
-        dataList:[]
+        dataList:[],
+        perPage:perPage[0],
+        allDataList:[],
+        currentIndex:0
     };
     public create() {
         super.create();
@@ -37,9 +45,10 @@ export class PlatformSettings extends Widget {
     public init() {
         // 获取所有供应商
         getAllSuppliers().then(r => {
-            this.props.showDataList = r[1];
             this.props.dataList = r[0];
             this.props.shopNum = r[1].length;
+            this.props.allDataList = r[1];
+            this.props.showDataList = this.props.allDataList.slice(0,this.props.perPage);
             this.paint();
             console.log(r);
         });
@@ -60,9 +69,9 @@ export class PlatformSettings extends Widget {
     }
     // 搜索指定的供应商
     public search() {
-        if (isNaN(parseInt(this.props.searchValue))) {
-            popNewMessage('请输入正确的供应商ID');
-            
+        if (this.props.searchValue === '') {
+            this.init();
+
             return;
         }
         getAllSuppliers([parseInt(this.props.searchValue)]).then(r => {
@@ -98,12 +107,32 @@ export class PlatformSettings extends Widget {
     public goDetail(e:any) {
         console.log(e);
         this.props.showAddSupplier = 2;
-        this.props.currentValue = deepCopy(this.props.dataList[e.num]);
+        const index = this.props.currentIndex * this.props.perPage + e.num;
+        this.props.currentValue = deepCopy(this.props.dataList[index]);
         this.paint();
     }
     // 保存编辑添加触发
     public saveChange() {
         this.props.showAddSupplier = 0;
         this.init();
+    }
+
+    // 分页变化
+    public pageChange(e:any) {
+        console.log(e.value);
+        this.props.currentIndex = e.value;
+        this.props.showDataList = this.props.allDataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+        this.paint();
+    }
+
+        // 每页展示多少数据
+    public perPage(e:any) {
+        this.props.perPage = e.value;
+        if (this.props.searchValue) {
+            this.search();
+        } else {
+            this.pageChange({ value:0 });
+        }
+            
     }
 }

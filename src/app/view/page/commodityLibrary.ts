@@ -1,4 +1,5 @@
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { mallImagPre } from '../../config';
 import { getAllGoods, getCurrentGood, getGoodsKey, shelf } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
@@ -36,9 +37,6 @@ export enum ProductTypes {
     productTypese_2= 1,// 一般贸易
     productTypese_3= 2// 海外直购
 }
-
-// 每页多少数据
-const perPage = [20,50,100];
 /**
  * 商品库
  */
@@ -124,7 +122,7 @@ export class CommodityLibrary extends Widget {
     }
     // 每页展示多少数据
     public perPage(e:any) {
-        this.props.perPage = perPage[e.value];
+        this.props.perPage = e.value;
         if (this.props.inputValue) {
             this.search();
         } else {

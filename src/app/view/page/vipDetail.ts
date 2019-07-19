@@ -1,6 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { changeBindding, getAmountDetail, getUserLevelChange, getVipDetail,  userLevelChange } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 import { addressFormat, getUserType } from '../../utils/tools';
@@ -23,6 +24,7 @@ interface Props {
     userTitleList:any[];// 用户等级变更信息标题
     currendUid:number;// 当前查看的用户ID
     status:boolean;// true显示详情 false显示下级资金明细
+    perPage:number;// 每页多少条数据
     
 }
 const UserTypeLabel = ['白客','海宝','海宝（体验）','海王','市代理','省代理','海王（体验）'];
@@ -36,6 +38,7 @@ const showData = [
     { title:'海贝',num:1 },
     { title:'积分',num:2 }
 ];
+
 /**
  * 会员详情查看
  */
@@ -60,7 +63,8 @@ export class VipDetail extends Widget {
         userShowDataList:[],
         userTitleList:['用户id','改动之前等级','改动之后等级','邀请人id','邀请人昵称','类型'],
         currendUid:0,
-        status:true
+        status:true,
+        perPage:perPage[0]
     };
 
     public setProps(props:any) {
@@ -74,6 +78,9 @@ export class VipDetail extends Widget {
     }
     // tslint:disable-next-line:max-func-body-length
     public init() {
+        this.props.hWangDatas = [];
+        this.props.hBaoDatas = [];
+        this.props.baikDatas = [];
         getVipDetail(this.props.uid).then(r => {
             const v = r.userTotal;
             if (v) {
@@ -219,7 +226,7 @@ export class VipDetail extends Widget {
      // 查看某一页数据
     public changePage(e:any) {
         this.props.curPage = e.value;
-        this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
+        this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
     }
 
@@ -273,5 +280,10 @@ export class VipDetail extends Widget {
     public getDatas() {
         this.props.status = true;
         this.paint();
+    }
+        // 每页展示多少数据
+    public perPage(e:any) {
+        this.props.perPage = e.value; 
+        this.changePage({ value:0 });   
     }
 }

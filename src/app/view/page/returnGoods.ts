@@ -1,5 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { getReturnGoods, getReturnGoodsId, setReturnStatus } from '../../net/pull';
 import { popNewMessage, priceFormat, timeConvert, transitTimeStamp, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 
@@ -21,7 +22,10 @@ export class GoodsInfo extends Widget {
         endTime:'', // 查询结束时间
         showDateBox:false,
         numberOfApplications:0,
-        typeTitle:'申请时间'
+        typeTitle:'申请时间',
+        perPage:perPage[0],
+        dataList:[],// 全部数据
+        sum:0// 总共多少条数据
     };
     public checkType(index:number) {
         this.props.returnStatus = index;
@@ -57,7 +61,9 @@ export class GoodsInfo extends Widget {
             if (returnGoods.length) {
                 returnGoods = this.dataProcessing(returnGoods);
             }
-            this.props.showDataList = returnGoods;
+            this.props.sum = returnGoods.length;
+            this.props.dataList = returnGoods;
+            this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
             if (status === 1) {
                 this.props.numberOfApplications = this.props.showDataList.length;
             }
@@ -155,8 +161,9 @@ export class GoodsInfo extends Widget {
                             this.props.showDataList = [];
                         }
                     }
+                   
                 });
-                
+                this.props.num = this.props.showDataList.length;
                 this.paint();
             }).catch(e => {
                 this.props.showDataList = [];
@@ -241,6 +248,21 @@ export class GoodsInfo extends Widget {
                 }); 
             }
         }
+    }
+
+    // 分页变化
+    public pageChange(e:any) {
+        this.props.currentIndex = e.value;
+        console.log(e.value);
+        this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+        console.log('当前页数据：',this.props.showDataList);
+        this.paint();
+    }
+
+    // 每页展示多少数据
+    public perPage(e:any) {
+        this.props.perPage = e.value;
+        this.pageChange({ value:0 });   
     }
    
 }

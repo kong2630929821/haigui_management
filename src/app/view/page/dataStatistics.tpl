@@ -7,12 +7,14 @@
                     <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)">会员统计</div>
                     <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)">商品统计</div>
                 </div>
+                {{if it.activeTab==1}}
                 <div w-class="filterTitle">
                     <span on-tap="open">商品销售排行</span> 
                     <div style="margin: 28px 0 28px 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
                         <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
                     </div>     
                 </div> 
+                {{end}}
             </div>
         </div>
         {{if it.activeTab==0}}
@@ -28,7 +30,9 @@
                     <div w-class="amount">{{it.vipCount[0]?it.vipCount[0][i]:''}}</div>
                     <div w-class="up">
                         <div w-class="number">{{it.vipCount[2]?it.vipCount[2][i]:''}}</div>
-                        <img src="../../res/images/{{it.vipCount[2][i]>=it.vipCount[1][i]?'up.png':'upDown.png'}}" w-class="tabUpImg"/>
+                        {{if it.vipCount[2][i]!=it.vipCount[1][i]}}
+                        <img src="../../res/images/{{it.vipCount[2][i]>it.vipCount[1][i]?'up.png':'upDown.png'}}" w-class="tabUpImg"/>
+                        {{end}}
                     </div>
                 </div>
             </div>

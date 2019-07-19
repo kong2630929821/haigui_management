@@ -1,6 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { getOperationLog } from '../../net/pull';
-import { timeConvert, transitTimeStamp } from '../../utils/logic';
+import { dateToString, parseDate, timeConvert, transitTimeStamp } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
@@ -14,8 +15,6 @@ interface Props {
     dataList:any;// 全部数据
     perPage:number;// 每页多少条数据
 }
-// 每页多少数据
-const perPage = [20,50,100];
 /**
  * 操作日志
  */
@@ -33,10 +32,8 @@ export class OperationLog extends Widget {
 
     public create() {
         super.create();
-        const oData = new Date();
-        const time = oData.setHours(23, 59, 59, 999);
-        this.props.endTime =  timeConvert(time);
-        this.props.startTime = '2019-05-01 00:00:000';
+        this.props.endTime = dateToString(Date.now(),1);
+        this.props.startTime = parseDate(this.props.endTime,-7,1);
         this.init();
     }
 
@@ -105,7 +102,7 @@ export class OperationLog extends Widget {
     }
     // 每页展示多少数据
     public perPage(e:any) {
-        this.props.perPage = perPage[e.value];
+        this.props.perPage = e.value;
         this.init();     
     }
 }
