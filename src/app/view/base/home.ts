@@ -51,7 +51,7 @@ export class Home extends Widget {
                     { name:'大转盘设置',page:PAGE.activitySettings },
                     { name:'邀请奖励设置',page:PAGE.invitationSettings },
                     { name:'返利设置',page:PAGE.rebateSetting }],
-                    show:false 
+                    show:true 
                 },
                 {name:'系统设置',page:PAGE.accountSettings,img:'chart.png',children:[
                     { name: '账号设置', page: PAGE.accountSettings, img:'chart.png' },
@@ -92,10 +92,11 @@ export class Home extends Widget {
     // 切换默认过滤器页面
     public changePage(num: number) {
         const res = this.props.pageList[num];
-        this.props.activePage = res;
         // 是否展开子页面
-        if (res.children) {
+        if (res.children && res.children.length > 0) {
             res.show = !res.show;
+        } else {
+            this.props.activePage = res;
         }
         this.paint();
     }
