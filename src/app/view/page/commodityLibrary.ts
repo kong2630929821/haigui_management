@@ -1,5 +1,3 @@
-// tslint:disable-next-line:missing-jsdoc
-import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
 import { getAllGoods, getCurrentGood, getGoodsKey, shelf } from '../../net/pull';
@@ -55,7 +53,7 @@ export class CommodityLibrary extends Widget {
         shopNum:123,
         currentIndex:0,
         perPage:perPage[0],
-        showDateTitle:['商品缩略图','规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商（ID）','供应商SKU','供应商商品ID','保质期','操作'],
+        showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商（ID）','供应商SKU','供应商商品ID','保质期'],
         // ['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']
         showDataList:[],
         showDateBox:false,
@@ -207,10 +205,9 @@ export class CommodityLibrary extends Widget {
         });
     }
 
-    // 上下架商品
-    public shelf(state:number,id:number) {
-
-        shelf(id,state).then(r => {
+    // 上下架商品 1上架 0下架
+    public shelfGoods(e:any) {
+        shelf(e.id, e.state).then(r => {
             if (r.result === 1) {
                 popNewMessage('操作成功');
                 this.init(1);
@@ -278,29 +275,5 @@ export class CommodityLibrary extends Widget {
             this.props.shopNum = r.length;
             this.paint();
         });
-    }
-
-    // =======================分类页面需要的方法=======================
-    
-    // 选择商品
-    public selectGoods(id:number) {
-        const ind = this.props.goodsId.findIndex(r => r === id);
-        if (ind === -1) {
-            this.props.goodsId.push(id);
-        } else {
-            this.props.goodsId.splice(ind,1);
-        }
-        this.paint();
-    }
-
-    // 确认
-    public confirmGoods(e:any) {
-        notify(e.node,'ev-selGoods',{ value:this.props.goodsId });
-        console.log('已选择的商品id：',this.props.goodsId);
-    }
-
-    // 返回上一页
-    public goBack(e:any) {
-        notify(e.node,'ev-goodsInfo-back',{});
     }
 }

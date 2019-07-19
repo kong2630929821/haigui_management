@@ -128,7 +128,7 @@ export class OnShelvesImg extends Widget {
             return;
         }
         // ['商品名称','品牌ID','成本价','普通售价','会员价','折扣价']
-        const price = arr.type[0][2].split('/');
+        const price = arr.skus[0][2].split('/');
         this.props.data = [arr.name,arr.brand,Math.floor(Number(price[0]) * 100),Math.floor(Number(price[1]) * 100),Math.floor(Number(price[2]) * 100),Math.floor(Number(arr.discount) * 100)];
         this.props.tax = Math.floor(Number(arr.tax) * 100);
         if (this.props.dataList.shopType === '保税商品') {
@@ -153,7 +153,7 @@ export class OnShelvesImg extends Widget {
             }
         });
         // SUK显示
-        arr.type.forEach(v => {
+        arr.skus.forEach(v => {
             searchProduct(v[1]).then(r => {
                 this.props.selectData.push(r[0]);
                 this.paint();

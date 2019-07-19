@@ -1,4 +1,4 @@
-<div class="new-page" w-class="page" on-tap="close">
+<div w-class="page" on-tap="close">
     {{if !it.showEdit}}
     <div style="background:#fff;">
         <div w-class="tableTitle">筛选位置</div>

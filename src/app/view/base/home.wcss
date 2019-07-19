@@ -12,7 +12,7 @@
     height: 100%;
 }
 .left{
-    width: 220px;
+    width: 250px;
     flex-shrink: 0;
     background:#273142;
     color: #fff;

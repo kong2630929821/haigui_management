@@ -1,4 +1,4 @@
-<div class="new-page" w-class="page" ev-detail-back="detailBack" on-tap="close">
+<div w-class="page" ev-detail-back="detailBack" on-tap="close">
     <div w-class="narBar">
         <div on-tap="cancel">供应商配置</div>
         <div>></div>

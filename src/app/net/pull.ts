@@ -1,4 +1,5 @@
 import { httpPort, sourceIp } from '../config';
+import { setStore } from '../store/memstore';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
 import { analyzeGoods, brandProcessing, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShoppingTop10, processingShopSetting, processingUser, processingUserLevelChange, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
@@ -1549,6 +1550,33 @@ export const setWithdrawalStatus = (state:number) => {
         type:'mall_mgr/members@console_update_withdraw_switch',
         param:{
             state
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 获取所有399商品列表
+export const getHbaoGoodsList = () => {
+    const msg = {
+        type:'show_bind_goods_special',
+        param:{}
+    };
+
+    return requestAsync(msg).then(r => {
+        setStore('hBaoGoods',r.value);        
+
+        return r.value;
+    });
+};
+
+// 399商品绑定商户
+export const bindVipUser = (goods_id:number,code:string) => {
+    const msg = {
+        type:'bind_goods_special',
+        param:{
+            goods_id,
+            code
         }
     };
 
