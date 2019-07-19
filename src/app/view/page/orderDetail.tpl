@@ -25,6 +25,7 @@
         {{end}}
     </div>
 
+    {{if it.rebateDataList.length > 0}}
     <div w-class="tableTitle">返利信息</div>
     <div style="background:#fff;margin-bottom:20px;">
         {{for i,v of it.rebateDataList}}
@@ -39,4 +40,5 @@
         <div w-class="dividLine"></div>
         {{end}}
     </div>
+    {{end}}
 </div>

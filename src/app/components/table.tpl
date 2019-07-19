@@ -36,7 +36,7 @@
                     </td>
                     {{end}}
 
-                    {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
+                    {{if it.inlineBtn1 || it.inlineBtn2 || it.inlineBtn3 || it.inputFile}}
                     <td w-class="td td1 {{it.auto?'autoTd':''}}">
                         {{if it.inputFile}}
                         <div w-class="exportFile">

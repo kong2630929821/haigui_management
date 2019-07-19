@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getReturnGoods, getReturnGoodsId, setReturnStatus } from '../../net/pull';
-import { popNewMessage, timeConvert, transitTimeStamp, unicode2ReadStr, unicode2Str } from '../../utils/logic';
+import { popNewMessage, priceFormat, timeConvert, transitTimeStamp, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 
 /**
  * 商品信息
@@ -71,8 +71,11 @@ export class GoodsInfo extends Widget {
     // 处理数据显示格式
     public dataProcessing(returnGoods:any) {
         returnGoods.forEach((element,index) => {
+            // tslint:disable-next-line:cyclomatic-complexity
             element.forEach((v,i) => {
-                if (i === 6) {  // 支付类型
+                if (i === 4) {  // 下单时单价 单位分
+                    returnGoods[index][i] = priceFormat(v);
+                } else if (i === 6) {  // 支付类型
                     if (v === 1) {
                         returnGoods[index][i] = '现金';
                     } else if (v === 2) {

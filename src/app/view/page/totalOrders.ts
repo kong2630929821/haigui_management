@@ -1,7 +1,8 @@
+import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { orderMaxCount } from '../../config';
-import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport } from '../../net/pull';
+import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport, quitOrder } from '../../net/pull';
 import { dateToString, popNewMessage } from '../../utils/logic';
 import { exportExcel, importRead } from '../../utils/tools';
 // [商品id,商品名称,购买时价格,数量,skuId,sku名,商品类型,成本价，售价，会员价，【一级分组，二级分组】，【退货地址，姓名，电话】，【供应商SKU，供应商商品ID，保质期，最近修改时间】]
@@ -402,6 +403,17 @@ export class TotalOrder extends Widget {
             });
         }
         
+    }
+
+    // 取消订单
+    public quitOrder(e:any) {
+        const orderId = this.props.contentShowList[e.value][0];
+        const currentPageId = this.props.contentShowList[0][0];
+        popNew('app-components-confirmQuitOrder',{},() => {
+            quitOrder(orderId).then(r => {
+                this.filterOrderQuery(currentPageId);
+            });
+        });
     }
 
     // 查看详情
