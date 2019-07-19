@@ -47,10 +47,10 @@
     cursor: pointer;
     margin-right: 50px;
 }
-.pagination-box{
-    position: fixed;
-    bottom: 50px;
-    right: 200px;
+.pagination{
+    position: absolute;
+    top: -9px;
+    right: 50px;
 }
 .changeMoney{
     width: 48px;
@@ -63,4 +63,10 @@
     text-decoration: underline;
     cursor: pointer;
     padding-right: 10px;
+}
+.ctroller{
+    height: 48px;
+    border:1px solid rgba(204,204,204,1);
+    display: flex;
+    position: relative;
 }
