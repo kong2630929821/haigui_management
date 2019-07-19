@@ -1,5 +1,6 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { getAmountDetail } from '../../net/pull';
 
 interface Props {
@@ -17,8 +18,6 @@ interface Props {
     curPage:number;// 当前页数
     perPage:number;// 每页多少条数据
 }
-// 每页多少数据
-const perPage = [20,50,100];
 /**
  * 模态框
  * {title:"提示",content:"温馨提示",sureText:"sure",cancelText:"cancel",itype:"text"}
@@ -101,9 +100,8 @@ export class SubordinateFundDetails extends Widget {
 
         // 每页展示多少数据
     public perPage(e:any) {
-        this.props.perPage = perPage[e.value];
-        this.props.curShowDataList = this.props.showDataList.slice(this.props.curPage * this.props.perPage,this.props.curPage * this.props.perPage + this.props.perPage);   
-        this.paint(); 
+        this.props.perPage = e.value;
+        this.changePage({ value:0 });  
     }
     
 }

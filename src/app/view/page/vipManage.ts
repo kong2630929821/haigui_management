@@ -1,5 +1,6 @@
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { getVipMember } from '../../net/pull';
 import { getStore, register, setStore } from '../../store/memstore';
 import { timestampFormat, unicode2ReadStr } from '../../utils/logic';
@@ -25,8 +26,6 @@ interface Props {
     perPage:number;// 每页多少条数据
 }
 const UserLabel = ['','市代理','省代理','体验号'];
-// 每页多少数据
-const perPage = [20,50,100];
 /**
  * 会员管理
  */
@@ -243,7 +242,7 @@ export class VipManage extends Widget {
 
         // 每页展示多少数据
     public perPage(e:any) {
-        this.props.perPage = perPage[e.value];
+        this.props.perPage = e.value;
         if (this.props.searUid) {
             this.search();
         } else {

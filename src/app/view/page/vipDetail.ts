@@ -1,6 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { changeBindding, getAmountDetail, getUserLevelChange, getVipDetail,  userLevelChange } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 import { addressFormat, getUserType } from '../../utils/tools';
@@ -38,8 +39,6 @@ const showData = [
     { title:'积分',num:2 }
 ];
 
-// 每页多少数据
-const perPage = [20,50,100];
 /**
  * 会员详情查看
  */
@@ -284,7 +283,7 @@ export class VipDetail extends Widget {
     }
         // 每页展示多少数据
     public perPage(e:any) {
-        this.props.perPage = perPage[e.value]; 
+        this.props.perPage = e.value; 
         this.changePage({ value:0 });   
     }
 }
