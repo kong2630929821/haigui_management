@@ -15,6 +15,7 @@ interface Props {
     brandList:any;// 原始数据
     perPage:number;// 每页多少条数据
     inputValue:string;// 搜索
+    currentIndex:number; // 当前页码
     dataList:any;// 总数据
 }
 /**
@@ -30,7 +31,8 @@ export class BrandSetting extends Widget {
         brandList:[],
         perPage:perPage[0],
         inputValue:'',
-        dataList:[]
+        dataList:[],
+        currentIndex:0
     };
     public create() {
         super.create();
@@ -46,17 +48,20 @@ export class BrandSetting extends Widget {
             this.paint();
         });
     }
+
     // 分页变化
     public pageChange(e:any) {
-        console.log(e.value);
+        this.props.currentIndex = e.value;
         this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         console.log('当前页数据：',this.props.showDataList);
         this.paint();
     }
-        // 输入框改变
+
+    // 输入框改变
     public inputChange(e:any) {
         this.props.inputValue = e.value;
     }
+
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;

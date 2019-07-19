@@ -1,7 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getOperationLog } from '../../net/pull';
-import { dateToString, parseDate, timeConvert, transitTimeStamp } from '../../utils/logic';
+import { dateToString, parseDate, transitTimeStamp } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
@@ -14,6 +14,7 @@ interface Props {
     sum:number;// 记录条数
     dataList:any;// 全部数据
     perPage:number;// 每页多少条数据
+    currentIndex:number; // 当前页码
 }
 /**
  * 操作日志
@@ -27,7 +28,8 @@ export class OperationLog extends Widget {
         endTime:'',
         sum:0,
         dataList:[],
-        perPage:perPage[0]
+        perPage:perPage[0],
+        currentIndex:0
     };
 
     public create() {
@@ -60,7 +62,8 @@ export class OperationLog extends Widget {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
     }
-        // 重置页面的展开状态
+
+    // 重置页面的展开状态
     public close() {
             // 判断时间选择框是否展开过
         if (this.props.showDateBox) {
@@ -70,6 +73,7 @@ export class OperationLog extends Widget {
         this.props.showDateBox = false;
         this.paint();
     }
+
     // 导出全部数据
     public exportShop() {
         const oData = new Date();
@@ -93,13 +97,15 @@ export class OperationLog extends Widget {
             console.log('contentList ===',jsonData);
         });
     }
+
     // 分页变化
     public pageChange(e:any) {
-        console.log(e.value);
+        this.props.currentIndex = e.value;
         this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         console.log('当前页数据：',this.props.showDataList);
         this.paint();
     }
+
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;

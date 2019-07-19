@@ -20,7 +20,7 @@
     {{if Math.ceil(it.showDataList.length/it.perPage) > 0}}
     <div w-class="ctroller">
         <div ev-changeCurrent="changePage" w-class="pagination" ev-perPage="perPage">
-            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true }</widget>
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}} }</widget>
         </div>
     </div>
     {{end}}

@@ -54,7 +54,7 @@
     {{end}}
     {{if Math.ceil(it.showDataList.length/it.perPage)}}
     <div ev-changeCurrent="changePage" w-class="pagination-box" ev-perPage="perPage"> 
-        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true }</widget>
+        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}} }</widget>
     </div>
     {{end}}
 </div>

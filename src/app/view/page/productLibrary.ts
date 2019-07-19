@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getAllProduct, searchProduct } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
-import { dateToString, parseDate, timeConvert, transitTimeStamp } from '../../utils/logic';
+import { parseDate, timeConvert, transitTimeStamp } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
 interface Props {
@@ -25,6 +25,7 @@ interface Props {
     showAddProduct:number;
     currentData:any;
     searchDataList:any;// 搜索的全部数据
+    currentIndex:number; // 当前页码
 }
 // 状态筛选
 export enum StatuType {
@@ -61,7 +62,8 @@ export class ProductLibrary extends Widget {
         inputValue:'',
         showAddProduct:0,
         currentData:[],
-        searchDataList:[]
+        searchDataList:[],
+        currentIndex:0
     };
 
     public create() {
@@ -135,19 +137,19 @@ export class ProductLibrary extends Widget {
     public inputChange(e:any) {
         this.props.inputValue = e.value;
     }
-         // 日期选择框显示
+    // 日期选择框显示
     public changeDateBox(e:any) {
         this.props.showDateBox = e.value;
         this.paint();
     }
-        // 改变时间
+    // 改变时间
     public  changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
     }
     // 分页变化
     public pageChange(e:any) {
-        console.log(e.value);
+        this.props.currentIndex = e.value;
         this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         console.log('当前页数据：',this.props.showDataList);
         this.paint();

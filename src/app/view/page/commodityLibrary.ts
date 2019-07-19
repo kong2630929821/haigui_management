@@ -148,7 +148,7 @@ export class CommodityLibrary extends Widget {
     }
     
         // 改变时间
-    public  changeDate(e:any) {
+    public changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
     }
@@ -164,7 +164,7 @@ export class CommodityLibrary extends Widget {
     }
     // 分页变化
     public pageChange(e:any) {
-        console.log(e.value);
+        this.props.currentIndex = e.value;
         console.log('当前页数据：',this.props.showDataList);
         const index = (e.value) * this.props.perPage;
         this.init(index === 0 ? 1 :index);

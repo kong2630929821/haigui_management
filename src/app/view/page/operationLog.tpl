@@ -18,7 +18,7 @@
     <div w-class="ctroller">
         <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
         <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
-            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.sum/ it.perPage)}},filterShow:true }</widget>
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.sum/ it.perPage)}},filterShow:true, currentIndex:{{it.currentIndex}} }</widget>
         </div>
     </div>
 </div>

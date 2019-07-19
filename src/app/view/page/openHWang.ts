@@ -218,6 +218,7 @@ export class OpenHWang extends Widget {
         this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
     }
+
      // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;

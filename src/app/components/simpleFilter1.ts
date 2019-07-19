@@ -33,7 +33,6 @@ export class SimpleFilter1 extends Widget {
             ...this.props,
             ...props
         };
-        this.props.expand = false;
         super.setProps(this.props);
         console.log('SimpleFilter1 ===',this.props);
     }

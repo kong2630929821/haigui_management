@@ -10,6 +10,7 @@ interface Props {
     perPage:number;
     showDateTitle:string[];
     inputValue:string;
+    currentIndex:number; // 当前页码
 }
 
 /**
@@ -22,7 +23,8 @@ export class HBaoGoodsSetting extends Widget {
         shopNum:0,
         perPage:perPage[0],
         showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商（ID）','供应商SKU','供应商商品ID','保质期'],
-        inputValue:''
+        inputValue:'',
+        currentIndex:0
     };
 
     public create() {
@@ -84,7 +86,7 @@ export class HBaoGoodsSetting extends Widget {
 
     // 分页变化
     public pageChange(e:any) {
-        console.log(e.value);
+        this.props.currentIndex = e.value;
         this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         console.log('当前页数据：',this.props.showDataList);
         this.paint();

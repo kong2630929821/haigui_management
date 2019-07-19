@@ -21,7 +21,7 @@ export class Pagination extends Widget {
     public props:Props = {
         currentIndex:0,
         pagesList:[0,1,2,3,4],
-        pages:-1,
+        pages:1,
         numberCheck:[],
         numberCheckActiveIndex:0,
         expandIndex:-1
@@ -34,16 +34,14 @@ export class Pagination extends Widget {
         };
         super.setProps(this.props);
         this.props.pagesList = [0,1,2,3,4];
-        this.props.currentIndex = 0;
         if (this.props.pages < 4) {
             this.props.pagesList.splice(this.props.pages);
+        } else if (this.props.currentIndex > 4) {
+            this.props.pagesList = [this.props.currentIndex];
+            for (let i = 1;i < 5;i++) {
+                this.props.pagesList.unshift(this.props.currentIndex - i);
+            }
         } 
-        // else if (this.props.currentIndex > 4) {
-        //     this.props.pagesList = [this.props.currentIndex];
-        //     for (let i = 1;i < 5;i++) {
-        //         this.props.pagesList.unshift(this.props.currentIndex - i);
-        //     }
-        // } 
         const timeType = [
             {
                 status:0,

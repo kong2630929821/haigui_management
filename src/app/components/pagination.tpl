@@ -1,4 +1,6 @@
 
+<div>
+    {{if it.pages > 0}}
     <div w-class="pagination">
         {{if it.filterShow}}
             <div w-class="filterBox">
@@ -25,4 +27,5 @@
             </li>
         </ul>
     </div>
-    
+    {{end}}
+</div>

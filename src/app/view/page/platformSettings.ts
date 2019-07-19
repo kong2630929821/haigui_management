@@ -3,7 +3,6 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getAllSuppliers } from '../../net/pull';
-import { popNewMessage } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
 interface Props {

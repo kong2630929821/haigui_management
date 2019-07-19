@@ -42,7 +42,7 @@
         {{:totalPage = Math.ceil(it.totalCount/ it.perPage)}}
         {{if totalPage>0}}
         <div  w-class="pagination-box" ev-changeCurrent="pageChange" ev-perPage="perPage">
-            <widget w-tag="app-components-pagination">{pages:{{totalPage}},forceUpdate:{{it.forceUpdate}},filterShow:true }</widget>
+            <widget w-tag="app-components-pagination">{pages:{{totalPage}},forceUpdate:{{it.forceUpdate}},filterShow:true, currentIndex:{{it.currentPageIndex}} }</widget>
         </div>
         {{end}}
     {{end}}

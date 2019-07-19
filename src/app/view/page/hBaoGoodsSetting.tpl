@@ -30,7 +30,7 @@
         </div>
         <div style="position:relative;">
             <div ev-changeCurrent="pageChange" ev-perPage="perPage" w-class="pagination">
-                <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true }</widget>
+                <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true, currentIndex:{{it.currentIndex}} }</widget>
             </div>
         </div>
         
