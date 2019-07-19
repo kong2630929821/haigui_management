@@ -30,7 +30,9 @@
                     <div w-class="amount">{{it.vipCount[0]?it.vipCount[0][i]:''}}</div>
                     <div w-class="up">
                         <div w-class="number">{{it.vipCount[2]?it.vipCount[2][i]:''}}</div>
-                        <img src="../../res/images/{{it.vipCount[2][i]>=it.vipCount[1][i]?'up.png':'upDown.png'}}" w-class="tabUpImg"/>
+                        {{if it.vipCount[2][i]!=it.vipCount[1][i]}}
+                        <img src="../../res/images/{{it.vipCount[2][i]>it.vipCount[1][i]?'up.png':'upDown.png'}}" w-class="tabUpImg"/>
+                        {{end}}
                     </div>
                 </div>
             </div>
