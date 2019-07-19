@@ -1,6 +1,6 @@
 import { Widget } from '../../../pi/widget/widget';
 import { getOperationLog } from '../../net/pull';
-import { timeConvert, transitTimeStamp } from '../../utils/logic';
+import { timeConvert, transitTimeStamp, dateToString, parseDate } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
@@ -33,10 +33,8 @@ export class OperationLog extends Widget {
 
     public create() {
         super.create();
-        const oData = new Date();
-        const time = oData.setHours(23, 59, 59, 999);
-        this.props.endTime =  timeConvert(time);
-        this.props.startTime = '2019-05-01 00:00:000';
+        this.props.endTime = dateToString(Date.now(),1);
+        this.props.startTime = parseDate(this.props.endTime,-7,1);
         this.init();
     }
 
