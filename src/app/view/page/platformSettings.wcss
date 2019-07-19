@@ -83,3 +83,8 @@
     cursor: pointer;
     margin: 5px 20px;
 }
+.pagination{
+    position: absolute;
+    top: -9px;
+    right: 50px;
+}

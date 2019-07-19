@@ -3,7 +3,7 @@ import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { addProduct, editInventory } from '../../net/pull';
-import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
+import { dateToString, parseDate, popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
 
 interface Props {
     showDateBox:boolean;// 时间选择
@@ -56,11 +56,9 @@ export class AddProduct extends Widget {
                 text:'否'
             }
         ];
-        const oData = new Date();
-        const time = oData.setHours(23, 59, 59, 999);
         this.props.shelfLife = shelfLife;
-        this.props.endTime =  timeConvert(time);
-        this.props.startTime = '2019-05-01 00:00:000';
+        this.props.endTime = dateToString(Date.now(),1).split(' ')[0];
+        this.props.startTime = parseDate(this.props.endTime,-7,1).split(' ')[0];
     }
     public setProps(props:any) {
         this.props = {
@@ -144,7 +142,7 @@ export class AddProduct extends Widget {
         const supplier_sku = this.props.data[9];
         const supplier_id = this.props.data[10];
         let time = null;
-        if (!sku || !supplier || !sku_name || !inventory || !supplier_price || !supplier_sku || !supplier_id) {
+        if (!sku || !supplier || !sku_name || !inventory || !supplier_price || supplier_sku === '' || supplier_id === '') {
             popNewMessage('请填写信息');
 
             return ;

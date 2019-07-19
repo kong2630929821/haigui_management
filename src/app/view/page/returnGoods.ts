@@ -1,5 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { getReturnGoods, getReturnGoodsId, setReturnStatus } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 
@@ -21,7 +22,9 @@ export class GoodsInfo extends Widget {
         endTime:'', // 查询结束时间
         showDateBox:false,
         numberOfApplications:0,
-        typeTitle:'申请时间'
+        typeTitle:'申请时间',
+        perPage:perPage[0],
+        dataList:[]// 全部数据
     };
     public checkType(index:number) {
         this.props.returnStatus = index;

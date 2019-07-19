@@ -1,4 +1,5 @@
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { getCurrentGood, getHbaoGoodsList } from '../../net/pull';
 import { getStore, GoodsDetail, setStore } from '../../store/memstore';
 
@@ -19,7 +20,7 @@ export class HBaoGoodsSetting extends Widget {
         dataList:[],
         showDataList:[],
         shopNum:0,
-        perPage:20,
+        perPage:perPage[0],
         showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商（ID）','供应商SKU','供应商商品ID','保质期'],
         inputValue:''
     };
@@ -68,6 +69,24 @@ export class HBaoGoodsSetting extends Widget {
         } else {
             this.props.showDataList = this.props.dataList;
         }
+        this.paint();
+    }
+    // 每页展示多少数据
+    public perPage(e:any) {
+        this.props.perPage = e.value;
+        if (this.props.inputValue) {
+            this.search();
+        } else {
+            this.pageChange({ value:0 });
+        }
+            
+    }
+
+    // 分页变化
+    public pageChange(e:any) {
+        console.log(e.value);
+        this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+        console.log('当前页数据：',this.props.showDataList);
         this.paint();
     }
 }

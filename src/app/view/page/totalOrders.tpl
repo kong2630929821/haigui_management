@@ -39,10 +39,10 @@
         <div w-class="order-table-box" ev-select-click="selectClick" ev-export-order="exportOrder" ev-import-order="importTransport" ev-import-allOrder='exportAllOrder' ev-table-quitOrder="quitOrder" on-tap="importTable" ev-table-detail="goDetail">
             <widget w-tag="app-components-orderTable">{datas: {{it.contentList}},showDatas:{{it.contentShowList}},title:{{it.showTitleList}},needCheckBox:true }</widget>
         </div>
-        {{:totalPage = Math.ceil(it.totalCount/ it.orderMaxCount)}}
+        {{:totalPage = Math.ceil(it.totalCount/ it.perPage)}}
         {{if totalPage>0}}
-        <div  w-class="pagination-box" ev-changeCurrent="pageChange">
-            <widget w-tag="app-components-pagination">{pages:{{totalPage}},forceUpdate:{{it.forceUpdate}} }</widget>
+        <div  w-class="pagination-box" ev-changeCurrent="pageChange" ev-perPage="perPage">
+            <widget w-tag="app-components-pagination">{pages:{{totalPage}},forceUpdate:{{it.forceUpdate}},filterShow:true }</widget>
         </div>
         {{end}}
     {{end}}

@@ -114,3 +114,14 @@
     width: 381px;
     margin-top: 26px;
 }
+.ctroller{
+    height: 48px;
+    border:1px solid rgba(204,204,204,1);
+    display: flex;
+    position: relative;
+}
+.pagination{
+    position: absolute;
+    top: -9px;
+    right: 50px;
+}

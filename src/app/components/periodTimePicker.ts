@@ -14,6 +14,7 @@ interface Props {
     endDate:string; // 结束日期
     showDateBox:boolean;  // 展示时间选择框
     position:string; // 时间选择框显示位置
+    needTime:boolean;// 是否显示秒
 }
 
 // tslint:disable-next-line:completed-docs
@@ -22,7 +23,8 @@ export class PeriodPicker extends Widget {
         startDate:'',
         endDate:'',
         showDateBox:false, 
-        position:''
+        position:'',
+        needTime:true
     };
     
     public setProps(props:any) {
@@ -51,7 +53,7 @@ export class PeriodPicker extends Widget {
     // 输入开始日期
     public changeStartDate(e:any) {
         if (isDate(e.value)) {
-            this.props.startDate = parseDate(e.value, 0, 1);
+            this.props.startDate = this.props.needTime ? parseDate(e.value, 0, 1) :parseDate(e.value, 0, 1).split(' ')[0];
             if (compareDate(this.props.startDate, this.props.endDate)) { // 开始时间大于结束时间
                 this.props.endDate = this.props.startDate;
             }
@@ -65,7 +67,7 @@ export class PeriodPicker extends Widget {
     // 输入结束日期
     public changeEndDate(e:any) {
         if (isDate(e.value)) {
-            this.props.endDate = parseDate(e.value, 0, 1);
+            this.props.endDate = this.props.needTime ? parseDate(e.value, 0, 1) :parseDate(e.value, 0, 1).split(' ')[0];
             if (compareDate(this.props.startDate, this.props.endDate)) {
                 this.props.startDate = this.props.endDate; 
             }

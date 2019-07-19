@@ -63,7 +63,7 @@
                 {{if !it.shelfLifeActiveIndex}}
                     <div w-class="title">保质期时间</div>
                     <div style="margin-left: 20px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
-                        <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
+                        <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}},needTime:false }</widget>
                     </div>
                 {{end}}
             </div>

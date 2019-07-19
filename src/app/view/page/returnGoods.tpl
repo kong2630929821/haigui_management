@@ -31,5 +31,9 @@
             <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,color:true,inlineBtn3:"查看详情"}</widget>
         {{end}}
     </div>
-   
+    <div w-class="ctroller">
+        <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.sum/ it.perPage)}},filterShow:true }</widget>
+        </div>
+    </div>
 </div>

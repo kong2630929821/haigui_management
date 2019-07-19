@@ -1,5 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { getAllUser, removeUser } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
@@ -11,9 +12,8 @@ interface Props {
     sum:number;// 数据条数
     dataList:any;// 全部数据
     perPage:number;// 每页显示多少个
+    currentIndex:number;
 }
-// 每页多少数据
-const perPage = [20,50,100];
 /**
  * 账号管理
  */
@@ -23,7 +23,8 @@ export class AccountSetting extends Widget {
         showTitleList:['账号','账号类型'],
         sum:0,
         dataList:[],
-        perPage:perPage[0]
+        perPage:perPage[0],
+        currentIndex:0
     };
 
     public create() {
@@ -42,6 +43,7 @@ export class AccountSetting extends Widget {
     }
     // 分页变化
     public pageChange(e:any) {
+        this.props.currentIndex = e.value;
         console.log(e.value);
         this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         console.log('当前页数据：',this.props.showDataList);
@@ -49,8 +51,8 @@ export class AccountSetting extends Widget {
     }
     // 每页展示多少数据
     public perPage(e:any) {
-        this.props.perPage = perPage[e.value];
-        this.init();     
+        this.props.perPage = e.value;
+        this.pageChange({ value:0 });   
     }
     // 导出全部数据
     public exportUser() {

@@ -250,6 +250,16 @@ export class OnShelvesImg extends Widget {
                 return ;
             }
         }
+        if (this.props.selectData.length !== this.props.spreadList.length) {
+            popNewMessage('请填写差价');
+    
+            return ;
+        }
+        if (this.props.selectData.length === 0) {
+            popNewMessage('请选择SKU');
+    
+            return ;
+        }
         const name = this.props.data[0];// 商品名称
         const brand = Number(this.props.data[1]);// 品牌ID
         const area = Number(this.props.areaId[this.props.areaIdActiveIndex].text);// 地址ID
@@ -269,6 +279,11 @@ export class OnShelvesImg extends Widget {
         const intro = [];// 商品介绍
         const spec = [];//
         const detail = this.props.infoPicture;// 详情图片
+        if (cost >= origin || cost >= discount || cost >= vip_price) {
+            popNewMessage('请填写正确的价格');
+    
+            return ;
+        }
         const arr = [name,brand,area,supplier,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
         if (this.props.style) {
             addShop(JSON.stringify(arr)).then(r => {

@@ -1,6 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
 import { dateToString, parseDate, popNewMessage, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 import { addressFormat, exportExcel } from '../../utils/tools';
@@ -21,6 +22,7 @@ interface Props {
     endTime:string;  // 结束时间
     curShowDataList:any[]; // 当前页显示数据
     curPage:number; // 当前页码
+    perPage:number;// 每页显示多少个
 }
 const Status = [
     '申请中',
@@ -50,7 +52,8 @@ export class OpenHWang extends Widget {
         startTime:'',
         endTime:'',
         curShowDataList:[],
-        curPage:0
+        curPage:0,
+        perPage:perPage[0]
     };
 
     public create() {
@@ -212,7 +215,12 @@ export class OpenHWang extends Widget {
     // 查看某一页数据
     public changePage(e:any) {
         this.props.curPage = e.value;
-        this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
+        this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
+    }
+     // 每页展示多少数据
+    public perPage(e:any) {
+        this.props.perPage = e.value;
+        this.changePage({ value:0 });   
     }
 }

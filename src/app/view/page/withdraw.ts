@@ -1,11 +1,11 @@
 import { popNew } from '../../../pi/ui/root';
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { changeWithdrawState, getWithdrawApply, getWithdrawTotal } from '../../net/pull';
 import { dateToString, parseDate, popNewMessage, priceFormat, timestampFormat, unicode2Str } from '../../utils/logic';
 import { exportExcel } from '../../utils/tools';
 
-const DEFAULT_NUM = 5;
 interface Props {
     datas:any[];  // 原始数据
     showDataList:any[];  // 显示数据
@@ -25,7 +25,8 @@ interface Props {
     curPage:number; // 当前页码
     timeType:any;
     timeTypeActiveIndex:number;
-    expandIndex:number;    
+    expandIndex:number;   
+    perPage:number;// 每页多少条数据 
 }
 const Status = [
     '申请中',
@@ -67,7 +68,8 @@ export class Withdraw extends Widget {
         curPage:0 ,
         timeType:[],
         timeTypeActiveIndex:0,
-        expandIndex:-1
+        expandIndex:-1,
+        perPage:perPage[0]
     };
 
     public create() {
@@ -158,8 +160,8 @@ export class Withdraw extends Widget {
   
     // 处理提现申请
     public async dealWith(e:any) {
-        const id = this.props.withdrawIdList[e.num + this.props.curPage  * DEFAULT_NUM];
-        const uid = this.props.showDataList[e.num + this.props.curPage  * DEFAULT_NUM][0];
+        const id = this.props.withdrawIdList[e.num + this.props.curPage  * this.props.perPage];
+        const uid = this.props.showDataList[e.num + this.props.curPage  * this.props.perPage][0];
         if (id && uid) {
             if (e.fg === 1) {
                 popNew('app-components-modalBoxInput',{ title:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的提现申请`,placeHolder:'请输入拒绝理由' },async (r) => {
@@ -214,8 +216,8 @@ export class Withdraw extends Widget {
 
     public async redealWith(e:any) {
         // TODO:
-        const id = this.props.withdrawIdList[e.num + this.props.curPage * DEFAULT_NUM];
-        const uid = this.props.showDataList[e.num + this.props.curPage * DEFAULT_NUM][0];
+        const id = this.props.withdrawIdList[e.num + this.props.curPage * this.props.perPage];
+        const uid = this.props.showDataList[e.num + this.props.curPage * this.props.perPage][0];
         popNew('app-components-modalBox',{ content:`确认重新处理用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
             await changeWithdrawState(id, uid, 1, '').then(r => {
                 if (r.result !== 1) {
@@ -285,7 +287,7 @@ export class Withdraw extends Widget {
     // 查看某一页数据
     public changePage(e:any) {
         this.props.curPage = e.value;
-        this.props.curShowDataList = this.props.showDataList.slice(e.value * DEFAULT_NUM,e.value * DEFAULT_NUM + DEFAULT_NUM);
+        this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
     }
 
@@ -295,5 +297,16 @@ export class Withdraw extends Widget {
         this.props.timeTypeActiveIndex = this.props.timeType[e.activeIndex].status;
         this.changeTab(this.props.activeTab);
 
+    }
+
+        // 每页展示多少数据
+    public perPage(e:any) {
+        this.props.perPage = e.value;
+        if (this.props.searUid) {
+            this.search();
+        } else {
+            this.changePage({ value:0 });   
+        }
+            
     }
 }

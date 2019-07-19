@@ -1,6 +1,7 @@
 // tslint:disable-next-line:missing-jsdoc
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { mallImagPre } from '../../config';
 import { getAllBrand, removeBrand } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
@@ -16,8 +17,6 @@ interface Props {
     inputValue:string;// 搜索
     dataList:any;// 总数据
 }
-// 每页多少数据
-const perPage = [20,50,100];
 /**
  * 品牌设置
  */
@@ -60,11 +59,11 @@ export class BrandSetting extends Widget {
     }
     // 每页展示多少数据
     public perPage(e:any) {
-        this.props.perPage = perPage[e.value];
+        this.props.perPage = e.value;
         if (this.props.inputValue) {
             this.search();
         } else {
-            this.init();
+            this.pageChange({ value:0 });
         }
             
     }

@@ -47,9 +47,9 @@
         <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},inlineBtn2:{{it.btn2}},inlineBtn1:{{it.btn1}},btn1:"导出列表" }</widget>
     </div>
     {{end}}
-    {{if Math.ceil(it.showDataList.length/4) > 0}}
-    <div ev-changeCurrent="changePage" w-class="pagination-box">
-        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/4)}} }</widget>
+    {{if Math.ceil(it.showDataList.length/it.perPage) > 0}}
+    <div ev-changeCurrent="changePage" w-class="pagination-box" ev-perPage="perPage">
+        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true }</widget>
     </div>
     {{end}}
 </div>

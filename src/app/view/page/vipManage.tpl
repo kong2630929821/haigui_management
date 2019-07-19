@@ -42,9 +42,9 @@
             <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn2:"查看详情" }</widget>
         </div>
         {{end}}
-    {{if Math.ceil(it.showDataList.length/5)}}
-    <div ev-changeCurrent="changePage" w-class="pagination-box">
-        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/5)}} }</widget>
+    {{if Math.ceil(it.showDataList.length/it.perPage)}}
+    <div ev-changeCurrent="changePage" w-class="pagination-box" ev-perPage="perPage">
+        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true }</widget>
     </div>
     {{end}}
     {{else}}

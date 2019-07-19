@@ -764,9 +764,9 @@ export const getAllProduct = (start_time:number,end_time:number) => {
                 arr[index].splice(0,1);
                 arr[index].unshift(...item);
                 arr[index][6] = `￥${priceFormat(arr[index][6])}`;
-                arr[index][8] = timestampFormat(arr[index][8]);
+                arr[index][8] = arr[index][8] === 0 ? '暂无' :timestampFormat(arr[index][8]);
                 if (arr[index][7].length) {
-                    arr[index][7] = `${timestampFormat(arr[index][7][0])}~${timestampFormat(arr[index][7][1])}`;
+                    arr[index][7] = `${timestampFormat(arr[index][7][0]).split(' ')[0]}~${timestampFormat(arr[index][7][1]).split(' ')[0]}`;
                 }
                 arr[index][12] = '';
                 arr[index][13] = '';
@@ -808,9 +808,9 @@ export const searchProduct = (keyValue:any) => {
                 arr[index].splice(0,1);
                 arr[index].unshift(...item);
                 arr[index][6] = `￥${priceFormat(arr[index][6])}`;
-                arr[index][8] = timestampFormat(arr[index][8]);
+                arr[index][8] = arr[index][8] === 0 ? '暂无' :timestampFormat(arr[index][8]);
                 if (arr[index][7].length) {
-                    arr[index][7] = `${timestampFormat(arr[index][7][0])}~${timestampFormat(arr[index][7][1])}`;
+                    arr[index][7] = `${timestampFormat(arr[index][7][0]).split(' ')[0]}~${timestampFormat(arr[index][7][1]).split(' ')[0]}`;
                 }
                 arr[index][12] = '';
                 arr[index][13] = '';

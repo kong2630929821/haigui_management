@@ -14,7 +14,8 @@ interface Props {
     numberCheckActiveIndex:number;// 状态筛选当前下标
     expandIndex:number; 
 }
-
+// 每页多少数据
+export const perPage = [20,50,100];
 // tslint:disable-next-line:completed-docs
 export class Pagination extends Widget {
     public props:Props = {
@@ -40,13 +41,13 @@ export class Pagination extends Widget {
         const timeType = [
             {
                 status:0,
-                text:'20'
+                text:perPage[0]
             },{
                 status:1,
-                text:'50'
+                text:perPage[1]
             },{
                 status:2,
-                text:'100'
+                text:perPage[2]
             }
         ];
         this.props.numberCheck = timeType;
@@ -120,7 +121,9 @@ export class Pagination extends Widget {
         }
         this.currentClick(e,index);
     }
+    
+    // 每页多少条数据
     public filterTimeType(e:any) {
-        notify(e.node,'ev-perPage',{ value:e.activeIndex });
+        notify(e.node,'ev-perPage',{ value:perPage[e.activeIndex] });
     }
 }

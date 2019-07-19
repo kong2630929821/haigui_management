@@ -22,8 +22,11 @@ interface Props {
     showFilterBox:boolean;  // 展开过滤器
     curShowDataList:any[]; // 当前页显示数据
     curPage:number; // 当前页码
+    perPage:number;// 每页多少条数据
 }
 const UserLabel = ['','市代理','省代理','体验号'];
+// 每页多少数据
+const perPage = [20,50,100];
 /**
  * 会员管理
  */
@@ -46,7 +49,8 @@ export class VipManage extends Widget {
         optionsList:['白客','海宝','海王','市代理','省代理','海王（体验）','海宝（体验）'],
         showFilterBox:false,
         curShowDataList:[],
-        curPage:0
+        curPage:0,
+        perPage:perPage[0]
     };
 
     public create() {
@@ -233,7 +237,18 @@ export class VipManage extends Widget {
     // 查看某一页数据
     public changePage(e:any) {
         this.props.curPage = e.value;
-        this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
+        this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
+    }
+
+        // 每页展示多少数据
+    public perPage(e:any) {
+        this.props.perPage = perPage[e.value];
+        if (this.props.searUid) {
+            this.search();
+        } else {
+            this.changePage({ value:0 });   
+        }
+            
     }
 }
