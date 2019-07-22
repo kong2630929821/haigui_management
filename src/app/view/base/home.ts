@@ -47,16 +47,17 @@ export class Home extends Widget {
         super();
         this.props = {
             pageList: [
-                { name: '活动设置', page: PAGE.activitySettings, img:'chart.png',children:[
-                    { name:'大转盘设置',page:PAGE.activitySettings },
-                    { name:'邀请奖励设置',page:PAGE.invitationSettings },
-                    { name:'返利设置',page:PAGE.rebateSetting }],
-                    show:true 
-                },
+                // { name: '活动设置', page: PAGE.activitySettings, img:'chart.png',children:[
+                //     { name:'大转盘设置',page:PAGE.activitySettings },
+                //     { name:'邀请奖励设置',page:PAGE.invitationSettings },
+                //     { name:'返利设置',page:PAGE.rebateSetting }],
+                //     show:true 
+                // },
                 {name:'系统设置',page:PAGE.accountSettings,img:'chart.png',children:[
-                    { name: '账号设置', page: PAGE.accountSettings, img:'chart.png' },
-                    { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' },
-                    { name: '操作日志', page: PAGE.operationLog, img:'chart.png' }],
+                    { name: '账号设置', page: PAGE.accountSettings, img:'chart.png' }
+                    // { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' },
+                    // { name: '操作日志', page: PAGE.operationLog, img:'chart.png' }
+                ],
                     show:false
                 },
                 { name: '平台设置', page: PAGE.platformSettings, img:'chart.png',children:[
@@ -64,7 +65,7 @@ export class Home extends Widget {
                     { name:'分类设置',page:PAGE.classSetting,img:'chart.png' },
                     { name:'品牌设置',page:PAGE.brandSetting,img:'chart.png' },
                     { name:'提现设置',page:PAGE.withdrawalSetting,img:'chart.png' }],
-                    show:false 
+                    show:true 
                 },
                 { name: '商品管理', page: PAGE.commodityLibrary, img:'chart.png',children:[
                     { name:'商品库',page:PAGE.commodityLibrary },
@@ -86,7 +87,7 @@ export class Home extends Widget {
             rightBox:true
         };
         
-        this.props.activePage = this.props.pageList[0];
+        this.props.activePage = this.props.pageList[1];
     }
 
     // 切换默认过滤器页面

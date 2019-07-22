@@ -68,7 +68,7 @@
     
     {{else}}
     <div ev-confirm="selectGoods" ev-goodsInfo-back="cancelSel">
-        <widget w-tag="app-view-page-goodsInfo">{goodsId:{{it.goodsId}}}</widget>
+        <widget w-tag="app-view-page-goodsInfo">{goodsId:{{it.goodsId}} }</widget>
     </div>
     {{end}}
 </div>
