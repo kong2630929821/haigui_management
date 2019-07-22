@@ -71,7 +71,7 @@ export class BigTurntable extends Widget {
                     // 编辑
             popNew('app-components-addTurntable',{ title:'编辑对外显示转盘梯度',currentData:e.value,sureText:'修改',style:false },(val) => {
                 this.props.foreign[e.num] = val;
-                this.props.flag1 = true;
+                this.props.flag2 = true;
                 this.paint();
             });
         } else {

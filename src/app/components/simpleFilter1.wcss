@@ -16,6 +16,9 @@
      overflow-x: hidden;
      overflow-y: auto;
  }
+ .userTypeList{
+    width:382px;
+ }
  .optionList_1{
     box-sizing: border-box;
     background: #fff;
@@ -60,12 +63,18 @@
     border-radius:4px;
     background: #fff;
 }
+.show2{
+    width:382px;
+}
  .showTesxt{
      text-overflow: ellipsis;
      word-break: break-all;
      white-space: nowrap;
      overflow: hidden;
      width: 120px;
+ }
+ .showText2{
+    width: 330px;
  }
  .arrow{
      width: 16px;

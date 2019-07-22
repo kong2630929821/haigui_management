@@ -30,7 +30,9 @@ interface Props {
 const UserTypeLabel = ['白客','海宝','海宝（体验）','海王','市代理','省代理','海王（体验）'];
 const tableTitle = [
     ['用户ID','微信名','手机号','注册时间','身份','地址','ta的本月收益','ta的总收益'],
-    ['时间','类型','金额']
+    ['时间','类型','金额'],
+    ['时间','类型','海贝'],
+    ['时间','类型','积分']
 
 ];
 const showData = [
@@ -167,11 +169,11 @@ export class VipDetail extends Widget {
                 break;
             case 4:// 海贝 
                 this.props.showDataList = this.props.seaShell;
-                this.props.showTitleList = tableTitle[1];
+                this.props.showTitleList = tableTitle[2];
                 break;
             case 5:// 积分 
                 this.props.showDataList = this.props.integral;
-                this.props.showTitleList = tableTitle[1];
+                this.props.showTitleList = tableTitle[3];
                 break;
             default:
         }

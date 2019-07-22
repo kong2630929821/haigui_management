@@ -12,6 +12,7 @@ interface Props {
     path:string;// 图片路径
     mallImagPre:string;
     disabled:boolean;
+    removeImg:boolean;
 }
 /**
  * 文件选择按钮
@@ -22,7 +23,8 @@ export class InputImg extends Widget {
         title:'上传图片',
         path:'',
         mallImagPre:mallImagPre,
-        disabled:false
+        disabled:false,
+        removeImg:false
     };
     public setProps(props:any) {
         this.props = {
@@ -64,5 +66,10 @@ export class InputImg extends Widget {
                 
             }
         });
+    }
+    
+    // 删除图片
+    public remove(e:any) {
+        notify(e.node,'ev-input-removeFile',{});
     }
 }

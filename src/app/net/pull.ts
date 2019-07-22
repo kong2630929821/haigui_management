@@ -767,6 +767,8 @@ export const getAllProduct = (start_time:number,end_time:number) => {
                 arr[index][8] = arr[index][8] === 0 ? '暂无' :timestampFormat(arr[index][8]);
                 if (arr[index][7].length) {
                     arr[index][7] = `${timestampFormat(arr[index][7][0]).split(' ')[0]}~${timestampFormat(arr[index][7][1]).split(' ')[0]}`;
+                } else {
+                    arr[index][7] = '无';
                 }
                 arr[index][12] = '';
                 arr[index][13] = '';
