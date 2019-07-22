@@ -25,9 +25,9 @@ export class RebateSetting extends Widget {
         haiWang:[],
         haiBao:[],
         shopping:[],
-        haiWangTitle:['积分','海王收益现金（分）','海王的海王收益海贝'],
-        haiBaoTitle:['积分','上级收益现金（分）','海王收益现金（分）','海王的海王收益海贝'],
-        shoppingTitle:['上级收益现金','海王收益现金','海王的海王收益海贝'],
+        haiBaoTitle:['新海宝（积分）','上级海宝（现金，分）','上级海王（现金，分）','平级海王（海贝）'],
+        haiWangTitle:['新海王（积分）','上级海王（现金，分）','平级海王（海贝）'],
+        shoppingTitle:['上级海宝（%）','上级海王（%）','平级海王（%）'],
         style:[true,true,true]
     };
 
@@ -53,7 +53,8 @@ export class RebateSetting extends Widget {
         this.props.style[index] = false;
         this.paint();
     }
-    // 0海王编辑,1海宝编辑,2购物收益编辑
+
+    // 0海宝编辑 1海王编辑 2购物收益编辑
     public haiWangChange(fg:number,index:number,e:any) {
         const value = e.value;
         if (fg === 0) {
@@ -66,7 +67,7 @@ export class RebateSetting extends Widget {
         this.paint();
     }
 
-    // 0海王保存,1海宝保存,2购物收益保存
+    // 0海宝保存 1海王保存 2购物收益保存
     public confirm(fg:number) {
         let data = this.props.haiWang;
         let str = '海王';
@@ -77,13 +78,13 @@ export class RebateSetting extends Widget {
             return; 
         }
         if (fg === 0) {
-            data = this.props.haiWang;
-            str = '海王';
-            cfgName = cfg.haiWang;
-        } else if (fg === 1) {
             data = this.props.haiBao;
             str = '海宝';
             cfgName = cfg.haiBao;
+        } else if (fg === 1) {
+            data = this.props.haiWang;
+            str = '海王';
+            cfgName = cfg.haiWang;
         } else {
             data = this.props.shopping;
             str = '购物';

@@ -95,6 +95,7 @@ export class Pagination extends Widget {
         notify(event.node,'ev-changeCurrent',{ value:this.props.currentIndex });
         this.paint();
     }
+
     // 首页尾页
     public goto(fg:number,e:any) {
         let index = 0;
@@ -128,6 +129,8 @@ export class Pagination extends Widget {
     
     // 每页多少条数据
     public filterTimeType(e:any) {
+        this.props.currentIndex = 0;
+        this.paint();
         notify(e.node,'ev-perPage',{ value:perPage[e.activeIndex] });
     }
 }

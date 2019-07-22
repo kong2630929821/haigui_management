@@ -25,7 +25,8 @@ export class GoodsInfo extends Widget {
         typeTitle:'申请时间',
         perPage:perPage[0],
         dataList:[],// 全部数据
-        sum:0// 总共多少条数据
+        sum:0,// 总共多少条数据
+        imgs:[]  // 退货详情图片
     };
     public checkType(index:number) {
         this.props.returnStatus = index;
@@ -119,6 +120,7 @@ export class GoodsInfo extends Widget {
 
                 } else if (i === 21) {  // 退货申请图片
                     returnGoods[index][i] = v.length || '';
+                    this.props.imgs[index] = v;
 
                 } else if (i === 22) {  // 拒绝退货原因
                     returnGoods[index][i] = unicode2Str(v);
@@ -215,7 +217,7 @@ export class GoodsInfo extends Widget {
         const id = e.value[0];
         const username = e.value[12];
         if (e.fg === 3) {  // 查看退货申请
-            popNew('app-view-page-returnGoodsDetail',{ content:e.value[8],username,imgs:e.value[21] });
+            popNew('app-view-page-returnGoodsDetail',{ content:e.value[8],username,imgs:this.props.imgs[e.num] });
             
             return;
         }
@@ -231,7 +233,7 @@ export class GoodsInfo extends Widget {
         } else if (this.props.returnStatus === 1) {
             // 退货中
             if (e.fg === 1) {
-                popNew('app-components-modalBoxInput',{ title:`确认拒绝“<span style="color:#1991EB">${username}</span>”退货申请`,placeHolder:'请输入拒绝理由' }, (r) => {
+                popNew('app-components-modalBoxInput',{ title:`确认拒绝“<span style="color:#1991EB">${username}</span>”的退货`,placeHolder:'请输入拒绝理由' }, (r) => {
                     if (r) {
                         this.changeReturnGoods(uid,id,-1,e.num,r);
                     } else {
@@ -241,7 +243,7 @@ export class GoodsInfo extends Widget {
                     popNewMessage('你已经取消操作！');
                 });
             } else {
-                popNew('app-components-modalBox',{ content:`确认同意“<span style="color:#1991EB">${username}</span>”退货申请` }, () => {
+                popNew('app-components-modalBox',{ content:`确认“<span style="color:#1991EB">${username}</span>”的退货已完成` }, () => {
                     this.changeReturnGoods(uid,id,1,e.num,'');
                 },() => {
                     popNewMessage('你已经取消操作！');

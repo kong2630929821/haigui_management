@@ -2,9 +2,10 @@
     background: #F0F2F5;
     padding: 20px 60px;
     color:#354052;
+    display: flex;
 }
 .searchBox{
-    margin:20px 0;
+    margin:20px;
     background: #fff;
     cursor: pointer;
 }
@@ -31,7 +32,7 @@
 .row{
     display: flex;
     align-items: center;
-    margin-left: 50px;
+    margin: 10px;
 }
 .input{
     width:180px;
@@ -52,5 +53,10 @@
     margin: 5px 20px;
 }
 .title{
-    max-width: 150px;
+    width: 160px;
+}
+.img{
+    height: 650px;
+    width: 500px;
+    margin: 20px;
 }

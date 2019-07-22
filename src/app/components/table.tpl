@@ -10,7 +10,7 @@
                         <th w-class="th {{it.auto?'autoTh':''}}">{{v}}</th>
                         {{end}}
     
-                        {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
+                        {{if it.inlineBtn1 || it.inlineBtn2 || it.inlineBtn3 || it.inputFile}}
                         <th w-class="th th1 {{it.auto?'autoTh':''}}">操作</th>
                         {{end}}
                     </tr>
