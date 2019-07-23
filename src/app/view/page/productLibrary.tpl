@@ -1,4 +1,4 @@
-<div w-class="page" ev-detail-back="detailBack" on-tap="close">
+<div w-class="page" ev-detail-back="detailBack" on-tap="close" style="height:100%;">
     {{if it.showAddProduct==0}}
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>
@@ -30,11 +30,11 @@
         </div>
     </div>
     {{elseif it.showAddProduct==1}}
-        <div ev-change-showProduct="showProduct" ev-change-save="saveProduct">
-            <widget w-tag="app-view-page-addProduct"></widget>
+        <div ev-change-showProduct="showProduct" ev-change-save="saveProduct" style="height:100%;">
+            <widget w-tag="app-view-page-addProduct">{status:3}</widget>
         </div>
     {{else}}
-        <div ev-change-showProduct="showProduct" ev-change-save="saveProduct">
+        <div ev-change-showProduct="showProduct" ev-change-save="saveProduct" style="height:100%;">
             <widget w-tag="app-view-page-addProduct">{data:{{it.currentData}},status:{{it.showAddProduct==3?1:2}} }</widget>
         </div>
     {{end}}

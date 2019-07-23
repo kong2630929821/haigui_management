@@ -2,7 +2,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { addProduct, editInventory } from '../../net/pull';
+import { addProduct, editInventory, getAllSuppliers } from '../../net/pull';
 import { dateToString, parseDate, popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
 
 interface Props {
@@ -15,13 +15,14 @@ interface Props {
     inventory:number;// 库存   
     supplier_price:number;// 供货价  
     shelf_life:any;// 保质期
-    data:any;// [供应商ID,SKU,产品名,已下单未支付数量,总销量,库存,供货价,保质期,修改时间]
-    status:number; // 1查看 2修改
+    data:any;// [SKU,产品名,已下单未支付数量,总销量,库存,供货价,保质期,修改时间]
+    status:number; // 1查看 2修改 3添加
     shelfLife:any;// 是否有保质期
     shelfLifeActiveIndex:number;// 下标
-    expandIndex:number;
+    expandIndex:any;
     title:string;// 标题
-
+    supplierType:any;// 供应商下拉
+    supplierId:any;// 供应商ID数组
 }
 /**
  * 添加产品
@@ -33,7 +34,7 @@ export class AddProduct extends Widget {
         startTime:'',  // 查询开始时间
         endTime:'', // 查询结束时间
         sku:'',
-        supplier:-1,
+        supplier:0,
         sku_name:'',
         inventory:0,
         supplier_price:0,
@@ -42,11 +43,17 @@ export class AddProduct extends Widget {
         status:-1,
         shelfLife:[],
         shelfLifeActiveIndex:0,
-        expandIndex:-1,
-        title:'添加SKU'
+        expandIndex:[false,false],
+        title:'添加SKU',
+        supplierType:[],
+        supplierId:[]
     };
-    public create() {
-        super.create();
+    public setProps(props:any) {
+        this.props = {
+            ...this.props,
+            ...props
+        };
+        super.setProps(this.props);
         const shelfLife = [
             {
                 status:0,
@@ -59,25 +66,40 @@ export class AddProduct extends Widget {
         this.props.shelfLife = shelfLife;
         this.props.endTime = dateToString(Date.now(),1).split(' ')[0];
         this.props.startTime = parseDate(this.props.endTime,-7,1).split(' ')[0];
-    }
-    public setProps(props:any) {
-        this.props = {
-            ...this.props,
-            ...props
-        };
-        super.setProps(this.props);
-        this.props.data[6] = Number(this.props.data[6].substring(1)) * 100;
-        if (this.props.data[7].length) {
+        // 获取所有供应商
+        getAllSuppliers().then(r => {
+            this.props.supplierType = r[2][1];
+            this.props.supplierId = r[2][0];
+            if (props.data) {
+                r[2][0].forEach((v,i) => {
+                    if (v === props.data[0]) {
+                        this.props.supplier = i;
+                    }
+                });
+            }
+            this.paint();
+        });
+        if (this.props.status === 3) {
+
+            return ;
+        }
+        this.props.data[6] = Number(this.props.data[6].substring(1));
+        if (this.props.data[7] === '无') {
+            this.props.shelfLifeActiveIndex = 1;
+        } else {
             const timeArr = this.props.data[7].split('~');
             this.props.startTime = timeArr[0];
             this.props.endTime = timeArr[1];
+            this.props.shelfLifeActiveIndex = 0;
         }
         if (this.props.status === 1) {
             this.props.title = '查看SKU';
-        }
-        if (this.props.status === 2) {
+        } else if (this.props.status === 2) {
             this.props.title = '修改SKU';
+        } else {
+            this.props.title = '添加SKU';
         }
+        this.props.data.shift();
         console.log(props);
     }
     // 是否有保质期变化
@@ -88,7 +110,7 @@ export class AddProduct extends Widget {
     // 重置页面的展开状态
     public close() {
         this.props.showDateBox = false;
-        this.props.expandIndex++;
+        this.props.expandIndex = [false,false];
         this.paint();
     }
     // 日期选择框显示
@@ -103,68 +125,66 @@ export class AddProduct extends Widget {
     }
     // 添加SKU
     public skuChange(e:any) {
-        this.props.data[1] = e.value;
-    }
-    public supplierChange(e:any) {
-        this.props.data[0] = Number(e.value);
+        this.props.data[0] = e.value;
     }
     public sku_nameChange(e:any) {
-        this.props.data[2] = e.value;
+        this.props.data[1] = e.value;
     }
     public inventoryChange(e:any) {
-        this.props.data[5] = Number(e.value);
+        this.props.data[4] = Number(e.value);
     }
     public supplier_priceChange(e:any) {
-        this.props.data[6] = Number(e.value);
+        this.props.data[5] = Number(e.value);
     }
     public supplierSkuChange(e:any) {
-        this.props.data[9] = Number(e.value);
+        this.props.data[8] = Number(e.value);
     }
     public supplierIdChange(e:any) {
-        this.props.data[10] = Number(e.value);
+        this.props.data[9] = Number(e.value);
     }
     public returnGoodsInfo(e:any) {
-        this.props.data[11] = e.value;
+        this.props.data[10] = e.value;
     }
     public recipient(e:any) {
-        this.props.data[12] = e.value;
+        this.props.data[11] = e.value;
     }
     public phoneChange(e:any) {
-        this.props.data[13] = e.value;
+        this.props.data[12] = e.value;
     }
     // 保存添加的产品
     public saveProduct(e:any) {
-        const sku = this.props.data[1];
-        const supplier = this.props.data[0];
-        const sku_name =  this.props.data[2];
-        const inventory = this.props.data[5];
-        const supplier_price = this.props.data[6];
-        const supplier_sku = this.props.data[9];
-        const supplier_id = this.props.data[10];
+        const sku = this.props.data[0];
+        const supplier = this.props.supplierId[this.props.supplier];
+        const sku_name =  this.props.data[1];
+        const inventory = this.props.data[4];
+        const supplier_price = Math.floor(this.props.data[5] * 100);
+        const supplier_sku = this.props.data[8];
+        const supplier_id = this.props.data[9];
         let time = null;
         if (!sku || !supplier || !sku_name || !inventory || !supplier_price || supplier_sku === '' || supplier_id === '') {
             popNewMessage('请填写信息');
 
             return ;
         }
-        if (!this.props.data[11] || !this.props.data[12] || !this.props.data[13]) {
+        if (!this.props.data[10] || !this.props.data[11] || !this.props.data[12]) {
             popNewMessage('请填写信息');
 
             return ;
         }
-        if (!/^1[3456789]\d{9}$/.test(this.props.data[13])) { 
+        if (!/^1[3456789]\d{9}$/.test(this.props.data[12])) { 
             popNewMessage('电话号码格式错误');
 
             return;
         } 
+        debugger;
         if (this.props.shelfLifeActiveIndex === 0) {
             time = [transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime)];
         } else {
             time = '';
         }
 
-        const returnInfo = [this.props.data[11],this.props.data[12],this.props.data[13]];
-        if (this.props.status === -1) {
+        const returnInfo = [this.props.data[10],this.props.data[11],this.props.data[12]];
+        if (this.props.status === 3) {
             // -1添加
             addProduct(sku,supplier,sku_name,inventory,supplier_price,time,supplier_sku,supplier_id,returnInfo).then(r => {
                 console.log(r);
@@ -199,5 +219,16 @@ export class AddProduct extends Widget {
     // 去产品库
     public gotoProduct(e:any) {
         notify(e.node,'ev-change-showProduct',null);
+    }
+
+    // 供应商选择
+    public supplierTypeChange(e:any) {
+        this.props.supplier = e.value;
+    }
+    
+    // 过滤器变化
+    public expand(index:number,e:any) {
+        this.props.expandIndex[index] = e.value;
+        this.paint();
     }
 }

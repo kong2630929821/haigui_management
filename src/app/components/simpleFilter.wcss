@@ -16,6 +16,9 @@
     overflow-x: hidden;
     overflow-y: auto;
 }
+.searchList{
+    width:321px;
+}
 .option{
     height: 37px;
     line-height: 37px;
@@ -47,4 +50,7 @@
 }
 .active{
     background:#f0f0f0;
+}
+.showTest2{
+    width: 273px;
 }

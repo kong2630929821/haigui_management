@@ -54,7 +54,7 @@
         </div>
     {{elseif it.shopDetail==2}}
         <div ev-change-showShop="showShop"  ev-change-cancel="lookCancel">
-            <widget w-tag="app-view-page-onShelves"></widget>
+            <widget w-tag="app-view-page-onShelvesImg">{style:true}</widget>
         </div>
     {{elseif it.shopDetail==3}}
     <div w-class="page1">
