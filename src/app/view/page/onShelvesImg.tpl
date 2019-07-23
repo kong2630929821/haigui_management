@@ -13,34 +13,40 @@
     </div>
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">基本信息</div>
-        <div w-class="searchItem" style="flex-wrap: wrap;padding-bottom: 20px;">
+        <div w-class="searchItem1">
             {{for i,v of it.inputTitle}}
                 <div w-class="item1">
                     <div w-class="title">{{v}}</div>
-                    <div w-class="input" ev-input-change="inputChange({{i}},e)" style="width: 300px;margin-left: 20px;">
+                    <div w-class="input" ev-input-change="inputChange({{i}},e)" style="width: 382px;margin-left: 20px;">
                         <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[i]}},disabled:{{it.disable}},itype:{{i==0?'text':'number'}} }</widget>
                     </div>
                 </div>
             {{end}}
             <div w-class="item1">
                 <div w-class="title">国家</div>
-                <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="areaIdChange">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.areaId}},activeIndex:{{it.areaIdActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
+                <div style="display:inline-block;height: 50px;margin-left: 2px;" ev-selected="areaIdChange" ev-expand="expand({{0}},e)">
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.areaId}},activeIndex:{{it.areaIdActiveIndex}},expand:{{it.expandIndex[0]}} }</widget>
                 </div>
             </div>
-            {{if !it.style||it.disable}}
+            {{if it.disable}}
                 <div w-class="item1">分类：{{it.dataList.typeName}}</div>
             {{end}}
             <div w-class="item1">
                 <div w-class="title">商品类型</div>
-                <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="bondedChange">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.bonded}},activeIndex:{{it.bondedActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
+                <div style="display:inline-block;height: 50px;margin-left: 2px;" ev-selected="bondedChange" ev-expand="expand({{1}},e)">
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.bonded}},activeIndex:{{it.bondedActiveIndex}},expand:{{it.expandIndex[1]}} }</widget>
+                </div>
+            </div>
+            <div w-class="item1">
+                <div w-class="title">品牌</div>
+                <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="brandTypeChange" ev-expand="expand({{2}},e)">
+                    <widget w-tag="app-components-simpleFilter">{dataList:{{it.brandType}},active:{{it.brandTypeIndex}},expand:{{it.expandIndex[2]}},search:true,dataListId:{{it.brandId}} }</widget>
                 </div>
             </div>
             {{if it.bondedActiveIndex}}
             <div w-class="item1">
                 <div w-class="title">税费(元)</div>
-                <div w-class="input" ev-input-change="taxChange" style="width: 300px;margin-left: 20px;">
+                <div w-class="input" ev-input-change="taxChange" style="width: 382px;margin-left: 20px;">
                     <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.tax?  it.tax:JSON.stringify(it.tax)}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
@@ -96,6 +102,7 @@
             </div>
         </div>
     </div>
+    {{if it.selectData.length}}
     <div w-class="searchBox">
         <div w-class="onShelvesTitle">已选产品</div>
         <div w-class="searchItem" style="max-height:356px;overflow: auto;flex-direction: column;">
@@ -126,7 +133,7 @@
                             </div>
                         </div>
                     </div>
-                    {{if !it.style}}
+                    {{if !it.disable}}
                     <div w-class="btnGroup">
                         <div w-class="btn" on-tap="remove({{i}})">移除</div>
                     </div>
@@ -136,6 +143,7 @@
             {{end}}
         </div>
     </div>
+    {{end}}
     {{if it.disable}}
     <div w-class="saleBox" style="height:144px">
         <div w-class="tableTitle">销售信息</div>
@@ -153,7 +161,7 @@
         </div>
     </div>
     {{end}}
-    {{if !it.style}}
+    {{if !it.disable}}
     <div w-class="search">
             <div w-class="input" ev-input-change="inputProductChange" style="width: 724px;">
                 <widget w-tag="app-components-input">{placeHolder:"SKU/产品ID/产品名称" }</widget>

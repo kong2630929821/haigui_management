@@ -1043,11 +1043,11 @@ export const getAllBrand = (ids?:any) => {
         if (r.result === 1) {
             const data = r.brandInfo;
 
-            return [data, brandProcessing(data)];
+            return [data, ...brandProcessing(data)];
         }
     }).catch(e => {
         
-        return [[],[]];
+        return [[],[],[]];
     });
 };
 
