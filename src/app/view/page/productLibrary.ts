@@ -50,7 +50,7 @@ export class ProductLibrary extends Widget {
         expandIndex:-1,
         shopNum:123,
         perPage:perPage[0],
-        showTitleList:['供应商id','SKU','sku名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
+        showTitleList:['供应商id','SKU','sku名','已下单未支付数量','总销量','库存','供货价(元)','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
         // ['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']
         showDataList:[],
         showDateBox:false,

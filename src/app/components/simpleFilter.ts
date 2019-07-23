@@ -17,6 +17,7 @@ interface Props {
     dataList:any;// 原始数据
     dataListId:any;// 原始数据ID
     showBrandId:any;// 搜索展示的ID
+    disabled:boolean;// 是否禁用
 }
 
 // tslint:disable-next-line:completed-docs
@@ -29,7 +30,8 @@ export class SimpleFilter extends Widget {
         inputValue:'',
         dataList:[],
         dataListId:[],
-        showBrandId:[]
+        showBrandId:[],
+        disabled:false
     };
     
     public setProps(props:any) {
@@ -43,15 +45,16 @@ export class SimpleFilter extends Widget {
             this.props.dataListId.forEach((v,i) => {
                 this.props.showBrandId.push(i);
             });
-            
         }
     }
 
     // 切换展示隐藏
     public change(e:any) {
-        this.props.expand = !this.props.expand;
-        notify(e.node,'ev-expand',{ value:this.props.expand });
-        this.paint();
+        if (!this.props.disabled) {
+            this.props.expand = !this.props.expand;
+            notify(e.node,'ev-expand',{ value:this.props.expand });
+            this.paint();
+        } 
     }
 
     // 选择选项

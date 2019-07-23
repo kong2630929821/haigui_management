@@ -7,7 +7,7 @@
     {{if it.expand}}
     <div w-class="optionList {{it.search?'searchList':''}}">
         {{if it.search}}
-            <div w-class="input" ev-input-change="inputChange" style="width: 270px;margin:20px;">
+            <div w-class="input" ev-input-change="inputChange" style="width: 270px;margin:20px;" on-tap="inputBtn">
                 <widget w-tag="app-components-input">{placeHolder:"请输入关键字匹配" }</widget>
             </div>
         {{end}}

@@ -203,7 +203,7 @@ export const getAllSupplier = () => {
 
     return requestAsync(msg).then(r => {
         console.log('所有的供应商:',r.value);
-
+        
         return r.value;
     }).catch((e) => {
         console.log(e);
@@ -760,7 +760,6 @@ export const getAllProduct = (start_time:number,end_time:number) => {
             data[1].forEach((element,index) => {
                 arr.push(element);
                 const item = element[0];
-                const returnGoodsInfo = element[10];
                 arr[index].splice(0,1);
                 arr[index].unshift(...item);
                 arr[index][6] = `￥${priceFormat(arr[index][6])}`;
@@ -770,14 +769,6 @@ export const getAllProduct = (start_time:number,end_time:number) => {
                 } else {
                     arr[index][7] = '无';
                 }
-                arr[index][12] = '';
-                arr[index][13] = '';
-                if (returnGoodsInfo.length) {
-                    arr[index][11] = returnGoodsInfo[0];
-                    arr[index][12] = returnGoodsInfo[1];
-                    arr[index][13] = returnGoodsInfo[2];
-                }
-
             });
 
             return [num,arr];
@@ -806,20 +797,14 @@ export const searchProduct = (keyValue:any) => {
             data.forEach((element,index) => {
                 arr.push(element);
                 const item = element[0];
-                const returnGoodsInfo = element[10];
                 arr[index].splice(0,1);
                 arr[index].unshift(...item);
                 arr[index][6] = `￥${priceFormat(arr[index][6])}`;
                 arr[index][8] = arr[index][8] === 0 ? '暂无' :timestampFormat(arr[index][8]);
                 if (arr[index][7].length) {
                     arr[index][7] = `${timestampFormat(arr[index][7][0]).split(' ')[0]}~${timestampFormat(arr[index][7][1]).split(' ')[0]}`;
-                }
-                arr[index][12] = '';
-                arr[index][13] = '';
-                if (returnGoodsInfo.length) {
-                    arr[index][11] = returnGoodsInfo[0];
-                    arr[index][12] = returnGoodsInfo[1];
-                    arr[index][13] = returnGoodsInfo[2];
+                } else {
+                    arr[index][7] = '无';
                 }
             });
 
@@ -882,7 +867,7 @@ export const getAllSuppliers = (ids?:any) => {
         if (r.result === 1) {
             const data = r.supplierInfo;
             
-            return [data,supplierProcessing(data)];
+            return [data,...supplierProcessing(data)];
         }
     }).catch(e => {
         

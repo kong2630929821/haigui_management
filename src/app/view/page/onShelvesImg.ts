@@ -435,9 +435,9 @@ export class OnShelvesImg extends Widget {
         this.props.brandTypeIndex = e.value;
     }
 
-    // // 过滤器变化
-    // public expand(index:number;e:any) {
-    //     this.props.expandIndex[index] = e.value;
-    //     this.paint();
-    // }
+    // 过滤器变化
+    public expand(index:number,e:any) {
+        this.props.expandIndex[index] = e.value;
+        this.paint();
+    }
 }

@@ -811,14 +811,18 @@ export const parseGroups = (data: any, localId: number) => {
 // 处理所有供应商
 export const supplierProcessing = (r: any) => {
     if (!r.length) {
-        return [];
+        return [[],[]];
     }
-    const data = [];
+    const data = [];// 处理后的品牌数据
+    const dataList = [];// 品牌名字+ID
+    const dataId = [];// 品牌id
     r.forEach(v => {
+        dataList.push(`${unicode2Str(v[1][0])}（${v[0]}）`);
+        dataId.push(v[0]);
         data.push([v[0], unicode2Str(v[1][0]), unicode2Str(v[1][2]), v[2], timestampFormat(v[3])]);
     });
 
-    return data;
+    return [data,[dataId,dataList]];
 };
 
 // 处理品牌信息
