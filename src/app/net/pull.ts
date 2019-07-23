@@ -1425,7 +1425,7 @@ export const getAmountDetail = (uid:number,types:number) => {
 
     return requestAsync(msg).then(r => {
         if (r.result === 1) {
-            return processingBalanceLog(r.value);
+            return processingBalanceLog(r.value,types);
         } else {
             return [];
         }

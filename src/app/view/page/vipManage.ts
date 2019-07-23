@@ -170,10 +170,12 @@ export class VipManage extends Widget {
                 list = this.props.hWangDatas.filter(item => {
                     return item[8] === '体验号';
                 });
+                break;
             case 6:// 海宝体验
                 list = this.props.hBaoDatas.filter(item => {
                     return item[8] === '体验号';
                 });
+                break;
             default:
         }
         this.props.showDataList = list.map(t => {

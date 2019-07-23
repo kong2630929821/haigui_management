@@ -34,25 +34,25 @@ export class HBaoGoodsSetting extends Widget {
 
     public init() {
         getHbaoGoodsList().then(r => {
-            const list = getStore('hBaoGoodsDetail',[]);
+            // const list = getStore('hBaoGoodsDetail',[]);
+            const list = [];
             this.props.showDataList = this.props.dataList = list;
             this.props.shopNum = r.length;
             this.paint();            
 
             for (const v of r) {
-                if (list.findIndex(r => r.user === v[1]) === -1) {
-                    getCurrentGood(String(v[0])).then(res => {
-                        list.push({
-                            user: v[1],
-                            goods: res[0]
-                        });
-                    
-                        this.props.showDataList = list;
-                        this.paint();
-                        setStore('hBaoGoodsDetail',list);
-
+                // if (list.findIndex(r => r.user === v[1]) === -1) {
+                getCurrentGood(String(v[0])).then(res => {
+                    list.push({
+                        user: v[1],
+                        goods: res[0]
                     });
-                }
+                    
+                    this.props.showDataList = list;
+                    this.paint();
+                    setStore('hBaoGoodsDetail',list);
+                });
+                // }
             }
         });
     }

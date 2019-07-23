@@ -953,13 +953,13 @@ export const processingVip = (r:any) => {
 };
 
 // 处理资金流水明细
-export const processingBalanceLog = (r:any) => {
+export const processingBalanceLog = (r:any,ttype:number) => {
     if (!r.length) {
         return [];
     }
     const data = [];
     r.forEach(v => {
-        data.push([timestampFormat(v[4]),v[1] ? getCashLogName(v[1]) :'', `${v[2] > 0 ? '+' :''}${priceFormat(v[2])}`]);
+        data.push([timestampFormat(v[4]),v[1] ? getCashLogName(v[1]) :'', `${v[2] > 0 ? '+' :''}${ttype === 1 ? priceFormat(v[2]) :v[2]}`]);
     });
 
     return data;
