@@ -16,7 +16,7 @@
                 <div w-class="item">
                     <div w-class="title">手机号码</div>
                     <div w-class="input" ev-input-change="inputChange({{2}},e)" style="width: 464px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.style?it.currentData[2]:""}}}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.style?it.currentData[2]:""}},maxLength:11}</widget>
                     </div>
                 </div>
                 <div w-class="item">
