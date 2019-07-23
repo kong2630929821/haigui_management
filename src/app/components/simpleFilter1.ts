@@ -12,6 +12,7 @@ interface Props {
     expand:boolean;// 是否展开所有选项 
     activeIndex:number;   // 当前选择的数组下标
     search:boolean;// 带输入的下拉
+    userType:boolean;// 账号类型
 }
 
 interface Option {
@@ -25,7 +26,8 @@ export class SimpleFilter1 extends Widget {
         options:[],
         expand:false,
         activeIndex:0,
-        search:false
+        search:false,
+        userType:false
     };
     
     public setProps(props:any) {

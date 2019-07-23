@@ -16,7 +16,8 @@ interface Props {
     freightList:any;// 原始邮费数据
     isChange:boolean;// 修改数据时，是否修改运费
     pageTitle:string;// 页面标题
-    time:any;// 修改时间
+    time:string;// 修改时间
+    dataList:any;// 普通商品邮费 保税商品邮费 海外直购邮费
 }
 /**
  * 添加供应商
@@ -29,12 +30,13 @@ export class AddSupplier extends Widget {
         expandIndex:-1,
         showDataList:[],
         showTitleList:['ID','地区','支付类型','邮费'],
-        currentData:[],
+        currentData:[[],[]],
         style:true,
         freightList:[],
         isChange:false,
         pageTitle:'添加供应商',
-        time:''
+        time:'',
+        dataList:[[],[],[]]
     };
     public create() {
         super.create();
@@ -63,16 +65,26 @@ export class AddSupplier extends Widget {
             this.props.currentData[1][0] = unicode2Str(this.props.currentData[1][0]);
             this.props.currentData[1][2] = unicode2Str(this.props.currentData[1][2]);
         }
+        for (let i = 0;i < 3;i++) {
+            getFreightInfo(this.props.currentData[0],i).then(r => {
+                this.props.dataList[i] = r;
+                // 如果执行到第3次时
+                if (i === 2) {
+                    this.props.dataList.forEach((v,j) => {
+                        if (v.length) {
+                            this.props.statusTypeActiveIndex = j;
+                            this.props.showDataList = v[1];
+                            this.props.freightList = v[0];
+                            this.props.time = v[2];
+                            this.paint();
+
+                            return ;
+                        }
+                    });
+                }
+            });
+        }
         
-        getFreightInfo(this.props.currentData[0],this.props.statusTypeActiveIndex).then(r => {
-            if (r.length) {
-                this.props.showDataList = r[1];
-                this.props.freightList = r[0];
-                this.props.time = r[2];
-                this.paint();
-            }
-            
-        });
         this.props.pageTitle = '查看供应商';
     }
     // input框输入
@@ -81,7 +93,6 @@ export class AddSupplier extends Widget {
     }
     // 供应商名称变化
     public supplierChange(e:any) {
-        this.props.currentData[1] = [];
         this.props.currentData[1][0] = e.value;
     }
     // 描述变化
@@ -112,23 +123,17 @@ export class AddSupplier extends Widget {
         if (this.props.style) {
             // 编辑保存
             console.log(this.props.currentData);
-           
             changeSupplier(id,name,supplier_desc,'',supplier_phone).then(r => {
                 if (r.result === 1) {
                     // 是否修改运费
-                    if (this.props.isChange) {
-                        getFreight(id,this.props.statusTypeActiveIndex,JSON.stringify(this.props.freightList)).then(res => {
-                            if (res.result === 1) {
-                                popNewMessage('修改成功');
-                                notify(e.node,'ev-save-change',{});
-                            } else {
-                                popNewMessage('修改失败');
-                            }
-                        });
-                    } else {
-                        popNewMessage('修改成功');
-                        notify(e.node,'ev-save-change',{});
-                    }
+                    getFreight(id,this.props.statusTypeActiveIndex,JSON.stringify(this.props.freightList)).then(res => {
+                        if (res.result === 1) {
+                            popNewMessage('修改成功');
+                            notify(e.node,'ev-save-change',{});
+                        } else {
+                            popNewMessage('修改失败');
+                        }
+                    });
                     
                 } else {
                     popNewMessage('修改失败');
@@ -146,7 +151,7 @@ export class AddSupplier extends Widget {
                             popNewMessage('修改失败');
                         }
                     });
-                    
+                 
                 } else {
                     popNewMessage('添加失败');
                 }
@@ -161,18 +166,12 @@ export class AddSupplier extends Widget {
     }
     // 运费类型发生变化
     public filterTimeType(e:any) {
-        this.props.statusTypeActiveIndex = e.activeIndex;
-        getFreightInfo(this.props.currentData[0],this.props.statusTypeActiveIndex).then(r => {
-            if (r.length) {
-                this.props.showDataList = r[1];
-                this.props.freightList = r[0];
-                this.paint();
-            } else {
-                this.props.showDataList = [];
-                this.props.freightList = [];
-                this.paint();
-            }
-        });
+        const index = e.activeIndex;
+        this.props.statusTypeActiveIndex = index;
+        this.props.showDataList = this.props.dataList[index][1] ? this.props.dataList[index][1] :[];
+        this.props.freightList = this.props.dataList[index][0] ? this.props.dataList[index][0] :[];
+        this.props.time = this.props.dataList[index][2] ? this.props.dataList[index][2] :'';
+        this.paint();
     }
     // 导入运单号
     public importTransport(e:any) {
@@ -191,17 +190,6 @@ export class AddSupplier extends Widget {
             this.props.showDataList = data;
             this.paint();
         });
-    }
-    // 应用此表
-    public userForm() {
-        if (!this.props.freightList.length) {
-            popNewMessage('没有配置运费信息');
-
-            return;
-        }
-
-        this.props.isChange = true;
-        popNewMessage('应用表单成功');
     }
     // 导出表单
     public exportForm() {

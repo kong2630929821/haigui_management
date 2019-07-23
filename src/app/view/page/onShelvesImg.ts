@@ -2,12 +2,12 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { addShop, changeShop, getAllArea,  getShopSale, searchProduct } from '../../net/pull';
-import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
+import { popNewMessage, timeConvert, transitTimeStamp, unicode2Str } from '../../utils/logic';
 interface Props {
     selectData:any;// 选中的产品
     showDataTitle:any;// 标题
     style:boolean;// 显示状态 true 添加 false查看
-    areaId:any;// 地区ID选择
+    areaId:any;// 国家选择
     areaIdActiveIndex:number;// 地区ID下标
     expandIndex:number ;
     bonded:any;// 是否报税
@@ -32,6 +32,7 @@ interface Props {
     sale:any;// 销售量 【总销售量，时间段销售量】
     searchValue:string;// 搜索值
     searchData:any;// 搜索到的SKU
+    areaIdList:any;// 国家ID数组
 
 }
 /**
@@ -50,7 +51,7 @@ export class OnShelvesImg extends Widget {
         style:true,
         data:[],
         spreadList:[],
-        inputTitle:['商品名称','品牌ID','成本价','普通售价','会员价','折扣价'],
+        inputTitle:['商品名称','品牌ID','成本价(元)','普通售价(元)','会员价(元)','折扣价(元)'],
         path:'',
         thumbnail:[],
         mainPicture:[],
@@ -67,7 +68,8 @@ export class OnShelvesImg extends Widget {
         endTime:'', // 查询结束时间
         sale:[0,0],
         searchValue:'',
-        searchData:[]
+        searchData:[],
+        areaIdList:[]
     };
     public create() {
         super.create();
@@ -105,7 +107,8 @@ export class OnShelvesImg extends Widget {
             if (r.result === 1) {
                 const data = r.areaInfo;
                 data.forEach((v,i) => {
-                    typeList.push({ status:i,text:v[0].toString() });
+                    this.props.areaIdList.push(v[0]);
+                    typeList.push({ status:i,text:unicode2Str(v[1][0]) });
                 });
                 this.props.areaId = typeList;
 
@@ -129,8 +132,8 @@ export class OnShelvesImg extends Widget {
         }
         // ['商品名称','品牌ID','成本价','普通售价','会员价','折扣价']
         const price = arr.skus[0][2].split('/');
-        this.props.data = [arr.name,arr.brand,Math.floor(Number(price[0]) * 100),Math.floor(Number(price[1]) * 100),Math.floor(Number(price[2]) * 100),Math.floor(Number(arr.discount) * 100)];
-        this.props.tax = Math.floor(Number(arr.tax) * 100);
+        this.props.data = [arr.name,arr.brand,Number(price[0]),Number(price[1]),Number(price[2]),Number(arr.discount)];
+        this.props.tax = Number(arr.tax);
         if (this.props.dataList.shopType === '保税商品') {
             this.props.bondedActiveIndex = 1;
         } else if (this.props.dataList.shopType === '海外直购') {
@@ -158,7 +161,7 @@ export class OnShelvesImg extends Widget {
                 this.props.selectData.push(r[0]);
                 this.paint();
             });
-            this.props.spreadList.push([v[1],Math.floor(Number(v[3]) * 100)]);
+            this.props.spreadList.push([v[1],Number(v[3])]);
         });
         // 商品ID
         this.props.shopId = arr.id;
@@ -262,19 +265,22 @@ export class OnShelvesImg extends Widget {
         }
         const name = this.props.data[0];// 商品名称
         const brand = Number(this.props.data[1]);// 品牌ID
-        const area = Number(this.props.areaId[this.props.areaIdActiveIndex].text);// 地址ID
+        const area = Number(this.props.areaIdList[this.props.areaIdActiveIndex]);// 地址ID
         const supplier = this.props.selectData[0][0];// 供应商ID
         const pay_type = 1;// 支付方式
-        const cost = Number(this.props.data[2]);// 成本价
-        const origin = Number(this.props.data[3]);// 普通售价
-        const vip_price = Number(this.props.data[4]);// 会员价
+        const cost = Math.floor(Number(this.props.data[2]) * 100);// 成本价
+        const origin = Math.floor(Number(this.props.data[3]) * 100);// 普通售价
+        const vip_price = Math.floor(Number(this.props.data[4]) * 100);// 会员价
         const has_tax = this.props.bondedActiveIndex;// 是否报税
-        let tax = Number(this.props.tax);// 税费
+        let tax = Math.floor(Number(this.props.tax) * 100);// 税费
         if (has_tax === 0) {
             tax = 0;
         }
-        const discount = this.props.data[5] ? Number(this.props.data[5]) :0;// 折扣价
-        const labels = this.props.spreadList;// 规格
+        const discount = this.props.data[5] ? Math.floor(Number(this.props.data[5]) * 100) :0;// 折扣价
+        const labels = [];// 规格
+        this.props.spreadList.forEach(v => {
+            labels.push([v[0],Math.floor(v[1] * 100)]);
+        });
         const images = this.props.mainPicture;// 图片
         const intro = [];// 商品介绍
         const spec = [];//
@@ -391,6 +397,18 @@ export class OnShelvesImg extends Widget {
         }
         this.props.selectData.push(this.props.searchData[index]);
         this.props.searchData.splice(index,1);
+        this.paint();
+    }
+
+    // 删除主图图片
+    public removeMainImg(index:number) {
+        this.props.mainPicture.splice(index,1);
+        this.paint();
+    }
+
+    // 删除详细图片
+    public removeInfoImg(index:number) {
+        this.props.infoPicture.splice(index,1);
         this.paint();
     }
 }

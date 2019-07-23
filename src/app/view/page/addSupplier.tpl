@@ -38,9 +38,8 @@
                 </div>
             </div>
             <div w-class="productName">
-                <div style=";margin-left: 30px;" ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入表单"}</app-components-inputFileBtn></div>
+                <div style="margin-left: 30px;" ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入表单"}</app-components-inputFileBtn></div>
                 <div style="line-height: 31px;margin-left: 30px;">最新导入时间：{{it.time}}</div>
-                <div w-class="searchleft" on-tap="userForm">应用表单</div>
                 <div w-class="searchleft" on-tap="exportForm">导出表单</div>
             </div>
         </div>

@@ -15,7 +15,7 @@
 }
 .row{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;;
 }
 .input{
     width:400px;
@@ -24,10 +24,12 @@
     display: inline-block;
 }
 .title{
+    width: 120px;
     font-size:18px;
     font-family:PingFangSC-Regular;
     line-height:48px;
     color:rgba(0,0,0,1);
+    text-align: center;
 }
 .btns{
     text-align: center;

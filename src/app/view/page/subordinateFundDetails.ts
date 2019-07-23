@@ -18,6 +18,12 @@ interface Props {
     curPage:number;// 当前页数
     perPage:number;// 每页多少条数据
 }
+
+const dataTitle = [
+    ['时间','类型','金额'],
+    ['时间','类型','海贝'],
+    ['时间','类型','积分']
+];
 /**
  * 模态框
  * {title:"提示",content:"温馨提示",sureText:"sure",cancelText:"cancel",itype:"text"}
@@ -32,7 +38,7 @@ export class SubordinateFundDetails extends Widget {
         cancelText:'取消',
         uid:0,
         curShowDataList:[],
-        showTitleList:['时间','类型','金额'],
+        showTitleList:dataTitle[0],
         fundDetails:[],
         seaShell:[],
         integral:[],
@@ -73,12 +79,15 @@ export class SubordinateFundDetails extends Widget {
         switch (num) {
             case 0:// 资金 
                 this.props.showDataList = this.props.fundDetails;
+                this.props.showTitleList = dataTitle[num];
                 break;
             case 1:// 海贝 
                 this.props.showDataList = this.props.seaShell;
+                this.props.showTitleList = dataTitle[num];
                 break;
             case 2:// 积分 
                 this.props.showDataList = this.props.integral;
+                this.props.showTitleList = dataTitle[num];
                 break;
             default:
         }

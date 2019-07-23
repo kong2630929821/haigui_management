@@ -126,7 +126,11 @@ export class CommodityLibrary extends Widget {
         if (this.props.inputValue) {
             this.search();
         } else {
-            this.init(1);
+            if (this.props.statusTypeActiveIndex) {
+                this.changeType();
+            } else {
+                this.init(1);
+            }
         }
         
     }
@@ -136,7 +140,11 @@ export class CommodityLibrary extends Widget {
         // 判断时间选择框是否展开过
         if (this.props.showDateBox) {
             console.log('时间筛选',this.props.startTime,this.props.endTime);
-            this.init(1);
+            if (this.props.statusTypeActiveIndex) {
+                this.changeType();
+            } else {
+                this.init(1);
+            }
         }
         this.props.showDateBox = false;
         this.paint();
@@ -243,7 +251,7 @@ export class CommodityLibrary extends Widget {
             console.log('111111111',r1);
             const data = JSON.parse(r1.value);
             this.props.shopNum = data[1];
-            getAllGoods(data[0],500,status,star_time,end_time).then(r => {
+            getAllGoods(data[0],100,status,star_time,end_time).then(r => {
                 const jsonHead = this.props.showDateTitle;
                 const aoa = [jsonHead];
                 const jsonData = r;

@@ -89,10 +89,8 @@ export class DataStatistics extends Widget {
         const end = transitTimeStamp(this.props.endTime);
         // 获取商品销售排名
         getShopSaleTop(10,start,end).then(r => {
-            if (r.length) {
-                this.props.shopList = r;
-                this.paint();
-            }
+            this.props.shopList = r;
+            this.paint();
         });
     }
     // tab切换
