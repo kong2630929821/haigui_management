@@ -8,4 +8,7 @@
     </div>
     {{end}}
     <input type="file" disabled="{{it.disabled?it.disabled:''}}" on-change="importTransport" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" w-class="import-input"/>
+    {{if it.removeImg}}
+    <div w-class="remove" on-tap="remove">X</div>
+    {{end}}
 </div>

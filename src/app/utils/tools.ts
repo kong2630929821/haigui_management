@@ -735,7 +735,7 @@ export const analyzeGoods = (data: any) => {
         item.forEach(v => {
             let time = '';
             if (v[22] === '') {
-                time = '';
+                time = '无';
             } else {
                 time = `${timestampFormat(v[22][0]).split(' ')[0]}~${timestampFormat(v[22][1]).split(' ')[0]}`;
             }

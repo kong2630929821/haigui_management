@@ -1,6 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { changeGiftSetting, changeLevelGift, getGiftSetting } from '../../net/pull';
+import { deepCopy } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
 
 interface Props {
@@ -75,7 +76,7 @@ export class InvitationSetting extends Widget {
         const str = e.value[0];
         if (e.fg === 1) {
             // 编辑
-            popNew('app-components-addShopping',{ title:'编辑配置',currentData:e.value,sureText:'修改',style:index + 1 },(val) => {
+            popNew('app-components-addShopping',{ title:'编辑配置',currentData:deepCopy(e.value),sureText:'修改',style:index + 1 },(val) => {
                 popNewMessage('修改成功');
                 this.props.goodsConfig[e.num] = [str,...val];
                 this.props.dataList[e.num] = val;
