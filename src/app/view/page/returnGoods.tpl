@@ -32,8 +32,8 @@
         {{end}}
     </div>
     <div w-class="ctroller">
-        <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
-            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.sum/ it.perPage)}},filterShow:true, currentIndex:{{it.currentIndex}} }</widget>
+        <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage" ev-expand="expand">
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.sum/ it.perPage)}},filterShow:true, currentIndex:{{it.currentIndex}},expand:{{it.expandIndex}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
         </div>
     </div>
 </div>

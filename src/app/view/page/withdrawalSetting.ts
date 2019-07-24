@@ -16,7 +16,7 @@ export class WithDrwalSetting extends Widget {
     public props:Props = {
         status:true,
         title:'开启提现',
-        showDataTitle:['用户单次提现金额上限','手续费','每天提现次数上限(全局)','每周提现次数上限(全局)','每月提现次数上限(全局)','每天提现金额上限(全局)'],
+        showDataTitle:['用户单次提现金额上限(元)','手续费','每天提现次数上限(全局)','每周提现次数上限(全局)','每月提现次数上限(全局)','每天提现金额上限(全局/元)'],
         showDataList:[0,0,0,0,0,0],
         isChange:true
     };
@@ -42,10 +42,8 @@ export class WithDrwalSetting extends Widget {
         });
         // 获取提现配置
         getWithDrawalSetting().then(r => {
-            if (r.result === 1) {
-                this.props.showDataList = r.withdraw_config;
-                this.paint();
-            }
+            this.props.showDataList = r;
+            this.paint();
         });
     }
     // 提现开启放回参数
@@ -94,13 +92,15 @@ export class WithDrwalSetting extends Widget {
 
                 return; 
             }
-            data.push(JSON.parse(v));
+            data.push(Number(v));
         });
         if (flag) {
             popNewMessage('请完善信息');
 
             return;
         }
+        data[0] = Math.round(data[0] * 100);
+        data[5] = Math.round(data[5] * 100);
         setWithDrawal(data).then(r => {
             if (r.result === 1) {
                 popNewMessage('修改成功');

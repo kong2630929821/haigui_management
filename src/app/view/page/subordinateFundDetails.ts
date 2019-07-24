@@ -17,6 +17,8 @@ interface Props {
     showDataList:any[];
     curPage:number;// 当前页数
     perPage:number;// 每页多少条数据
+    perPageIndex:number;// 每页显示多少个的下标
+    expandIndex:boolean;// 分页下拉显示
 }
 
 const dataTitle = [
@@ -45,7 +47,9 @@ export class SubordinateFundDetails extends Widget {
         activeTab:0,
         showDataList:[],
         curPage:0,
-        perPage:perPage[0]
+        perPage:perPage[0],
+        perPageIndex:0,
+        expandIndex:false
 
     };
     public ok: () => void;
@@ -110,7 +114,21 @@ export class SubordinateFundDetails extends Widget {
         // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
+        this.props.expandIndex = false;
+        this.props.perPageIndex = e.index;
         this.changePage({ value:0 });  
+    }
+
+        // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
+    }
+    
+        // 页面点击
+    public close() {
+        this.props.expandIndex = false;
+        this.paint();
     }
     
 }

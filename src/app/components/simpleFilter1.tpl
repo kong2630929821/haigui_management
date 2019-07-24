@@ -1,4 +1,4 @@
-<div w-class="filter" >
+<div w-class="filter">
     {{if it.style}}
         {{if it.expand}}
         <div w-class="optionList_1">

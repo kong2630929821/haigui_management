@@ -12,7 +12,8 @@ interface Props {
     pages:number; // 总共页数
     numberCheck:any;// 每页展示多少条数据
     numberCheckActiveIndex:number;// 状态筛选当前下标
-    expandIndex:number; 
+    expand:boolean;
+    perPageIndex:number;// 每页多少个下标 
 }
 // 每页多少数据
 export const perPage = [20,50,100];
@@ -24,7 +25,8 @@ export class Pagination extends Widget {
         pages:1,
         numberCheck:[],
         numberCheckActiveIndex:0,
-        expandIndex:-1
+        expand:false,
+        perPageIndex:0
     };
     // 创建判断显示的页数
     public setProps(props:any) {
@@ -131,6 +133,12 @@ export class Pagination extends Widget {
     public filterTimeType(e:any) {
         this.props.currentIndex = 0;
         this.paint();
-        notify(e.node,'ev-perPage',{ value:perPage[e.activeIndex] });
+        notify(e.node,'ev-perPage',{ value:perPage[e.activeIndex],index:e.activeIndex });
+    }
+
+    // 过滤器
+    public expand(e:any) {
+        notify(e.node,'ev-expand',{ value:e.value });
+        this.paint();
     }
 }

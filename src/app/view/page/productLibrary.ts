@@ -10,7 +10,7 @@ import { exportExcel } from '../../utils/tools';
 interface Props {
     timeType:any;// 状态筛选
     timeTypeActiveIndex:number;// 状态筛选当前下标
-    expandIndex:number; 
+    expandIndex:boolean; // 下拉显示
     shopNum:number;// 商品個數
     perPage:number;// 每页多少条数据
     showTitleList:any;// 标题
@@ -26,6 +26,7 @@ interface Props {
     currentData:any;
     searchDataList:any;// 搜索的全部数据
     currentIndex:number; // 当前页码
+    perPageIndex:number;// 一页多少个下标
 }
 // 状态筛选
 export enum StatuType {
@@ -47,7 +48,7 @@ export class ProductLibrary extends Widget {
     public props:Props = {
         timeType:[],
         timeTypeActiveIndex:0,
-        expandIndex:-1,
+        expandIndex:false,
         shopNum:123,
         perPage:perPage[0],
         showTitleList:['供应商id','SKU','sku名','已下单未支付数量','总销量','库存','供货价(元)','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
@@ -63,7 +64,8 @@ export class ProductLibrary extends Widget {
         showAddProduct:0,
         currentData:[],
         searchDataList:[],
-        currentIndex:0
+        currentIndex:0,
+        perPageIndex:0
     };
 
     public create() {
@@ -115,6 +117,8 @@ export class ProductLibrary extends Widget {
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
+        this.props.perPageIndex = e.index;
+        this.props.expandIndex = false;
         if (this.props.inputValue) {
             this.search();
         } else {
@@ -124,7 +128,7 @@ export class ProductLibrary extends Widget {
     }
     // 重置页面的展开状态
     public close() {
-        this.props.expandIndex++;
+        this.props.expandIndex = false;
         // 判断时间选择框是否展开过
         if (this.props.showDateBox) {
             console.log('时间筛选',this.props.startTime,this.props.endTime);
@@ -150,7 +154,11 @@ export class ProductLibrary extends Widget {
     // 分页变化
     public pageChange(e:any) {
         this.props.currentIndex = e.value;
-        this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+        if (this.props.inputValue) {
+            this.props.showDataList = this.props.searchDataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+        } else {
+            this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+        }
         console.log('当前页数据：',this.props.showDataList);
         this.paint();
     }
@@ -195,16 +203,19 @@ export class ProductLibrary extends Widget {
             this.paint();
         });
     }
+
     // 添加产品
     public addProduct() {
         this.props.showAddProduct = 1;
         this.paint();
     }
+
     // 显示产品库页面
     public showProduct() {
         this.props.showAddProduct = 0;
         this.paint();
     }
+
     // 表格点击按钮
     public goDetail(e:any) {
         console.log(e);
@@ -218,9 +229,16 @@ export class ProductLibrary extends Widget {
         }
         this.paint();
     }
+
     // 添加产品成功
     public saveProduct() {
         this.props.showAddProduct = 0;
         this.init();
+    }
+
+    // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
     }
 }

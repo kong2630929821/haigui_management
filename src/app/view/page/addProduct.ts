@@ -23,6 +23,7 @@ interface Props {
     title:string;// 标题
     supplierType:any;// 供应商下拉
     supplierId:any;// 供应商ID数组
+    currendId:number;// 当前供应商ID
 }
 /**
  * 添加产品
@@ -46,7 +47,8 @@ export class AddProduct extends Widget {
         expandIndex:[false,false],
         title:'添加SKU',
         supplierType:[],
-        supplierId:[]
+        supplierId:[],
+        currendId:0
     };
     public setProps(props:any) {
         this.props = {
@@ -72,7 +74,7 @@ export class AddProduct extends Widget {
             this.props.supplierId = r[2][0];
             if (props.data) {
                 r[2][0].forEach((v,i) => {
-                    if (v === props.data[0]) {
+                    if (v === this.props.currendId) {
                         this.props.supplier = i;
                     }
                 });
@@ -99,6 +101,7 @@ export class AddProduct extends Widget {
         } else {
             this.props.title = '添加SKU';
         }
+        this.props.currendId = this.props.data[0];
         this.props.data.shift();
         console.log(props);
     }
@@ -157,7 +160,7 @@ export class AddProduct extends Widget {
         const supplier = this.props.supplierId[this.props.supplier];
         const sku_name =  this.props.data[1];
         const inventory = this.props.data[4];
-        const supplier_price = Math.floor(this.props.data[5] * 100);
+        const supplier_price = Math.round(this.props.data[5] * 100);
         const supplier_sku = this.props.data[8];
         const supplier_id = this.props.data[9];
         let time = null;
@@ -176,8 +179,17 @@ export class AddProduct extends Widget {
 
             return;
         } 
-        debugger;
+        if (this.props.startTime === '' || this.props.endTime === '') {
+            popNewMessage('请填写保质期');
+
+            return;
+        }
         if (this.props.shelfLifeActiveIndex === 0) {
+            if (this.props.startTime === '' || this.props.endTime === '') {
+                popNewMessage('请填写保质期');
+    
+                return;
+            }
             time = [transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime)];
         } else {
             time = '';

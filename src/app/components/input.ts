@@ -24,6 +24,7 @@ interface Props {
     style?:string;
     autofocus?:boolean;
     maxLength?:number;
+    decimalLength:number;   // 最大小数位数
 }
 interface State {
     currentValue:string;
@@ -44,6 +45,7 @@ export class Input extends Widget {
         if (props.input || Number(props.input) === 0) {
             currentValue = props.input;
         }
+        this.props.decimalLength = props.decimalLength || 2;
         this.state = {
             currentValue,
             focused: false,
@@ -183,8 +185,10 @@ export class Input extends Widget {
     public numberJudge(num:string) {
         const reg = /^(\-|\+)?\d+\.?\d*$/;
         const reg1 = /^0{2,}/;
-        
-        return reg.test(num) && !reg1.test(num);
+
+        const data = num.split('.')[1] ? num.split('.')[1] :'';
+    
+        return reg.test(num) && !reg1.test(num) && data.length <= this.props.decimalLength;
     }
 
 }

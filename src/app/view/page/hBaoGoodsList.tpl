@@ -1,4 +1,4 @@
-<div w-class="page">
+<div w-class="page" on-tap="close" style="height:100%">
         <div w-class="searchBox">
             <div w-class="tableTitle">筛选查询</div>
             <div w-class="btnBox" style="justify-content: flex-start;">
@@ -28,8 +28,8 @@
             </div>
         </div>
         <div w-class="ctroller">
-            <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
-                <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true, currentIndex:{{it.currentIndex}} }</widget>
+            <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage" ev-expand="expand">
+                <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true, currentIndex:{{it.currentIndex}},expand:{{it.expandIndex}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
             </div>
         </div>
     </div>

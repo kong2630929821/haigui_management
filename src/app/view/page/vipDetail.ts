@@ -25,6 +25,8 @@ interface Props {
     currendUid:number;// 当前查看的用户ID
     status:boolean;// true显示详情 false显示下级资金明细
     perPage:number;// 每页多少条数据
+    expandIndex:boolean;// 分页下拉显示
+    perPageIndex:number;// 一页显示多少个的下标
     
 }
 const UserTypeLabel = ['白客','海宝','海宝（体验）','海王','市代理','省代理','海王（体验）'];
@@ -66,7 +68,9 @@ export class VipDetail extends Widget {
         userTitleList:['用户id','改动之前等级','改动之后等级','邀请人id','邀请人昵称','类型'],
         currendUid:0,
         status:true,
-        perPage:perPage[0]
+        perPage:perPage[0],
+        expandIndex:false,
+        perPageIndex:0
     };
 
     public setProps(props:any) {
@@ -286,6 +290,20 @@ export class VipDetail extends Widget {
         // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value; 
+        this.props.expandIndex = false;
+        this.props.perPageIndex = e.index;
         this.changePage({ value:0 });   
+    }
+    
+    // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
+    }
+    
+    // 页面点击
+    public close() {
+        this.props.expandIndex = false;
+        this.paint();
     }
 }

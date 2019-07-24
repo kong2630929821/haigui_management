@@ -8,7 +8,7 @@ import { analysisFreightData, exportExcel, importRead } from '../../utils/tools'
 interface Props {
     statusType:any;// 状态筛选
     statusTypeActiveIndex:number;// 状态筛选当前下标
-    expandIndex:number; 
+    expandIndex:boolean; // 控制下拉显示
     showDataList:any;// 处理后的邮费数据
     showTitleList:any;// 表格标题运费
     currentData:any;// 当前编辑的数据
@@ -27,7 +27,7 @@ export class AddSupplier extends Widget {
     public props:Props = {
         statusType:[],
         statusTypeActiveIndex:0,
-        expandIndex:-1,
+        expandIndex:false,
         showDataList:[],
         showTitleList:['ID','地区','支付类型','邮费'],
         currentData:[[],[]],
@@ -159,13 +159,22 @@ export class AddSupplier extends Widget {
             
         }
     }
-    // 重置页面的展开状态
-    public close() {
-        this.props.expandIndex++;
+
+    // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
         this.paint();
     }
+
+    // 重置页面的展开状态
+    public close() {
+        this.props.expandIndex = false;
+        this.paint();
+    }
+
     // 运费类型发生变化
     public filterTimeType(e:any) {
+        this.props.expandIndex = false;
         const index = e.activeIndex;
         this.props.statusTypeActiveIndex = index;
         this.props.showDataList = this.props.dataList[index][1] ? this.props.dataList[index][1] :[];
@@ -173,6 +182,7 @@ export class AddSupplier extends Widget {
         this.props.time = this.props.dataList[index][2] ? this.props.dataList[index][2] :'';
         this.paint();
     }
+
     // 导入运单号
     public importTransport(e:any) {
          // 导入运单

@@ -15,6 +15,8 @@ interface Props {
     dataList:any;// 全部数据
     perPage:number;// 每页多少条数据
     currentIndex:number; // 当前页码
+    expandIndex:boolean;
+    perPageIndex:number;// 一页多少个数据的下标
 }
 /**
  * 操作日志
@@ -29,7 +31,9 @@ export class OperationLog extends Widget {
         sum:0,
         dataList:[],
         perPage:perPage[0],
-        currentIndex:0
+        currentIndex:0,
+        expandIndex:false,
+        perPageIndex:0
     };
 
     public create() {
@@ -66,6 +70,7 @@ export class OperationLog extends Widget {
     // 重置页面的展开状态
     public close() {
             // 判断时间选择框是否展开过
+        this.props.expandIndex = false;
         if (this.props.showDateBox) {
             console.log('时间筛选',this.props.startTime,this.props.endTime);
             this.init();
@@ -108,7 +113,15 @@ export class OperationLog extends Widget {
 
     // 每页展示多少数据
     public perPage(e:any) {
+        this.props.expandIndex = false;
+        this.props.perPageIndex = e.index;
         this.props.perPage = e.value;
-        this.init();     
+        this.pageChange({ value:0 });  
+    }
+
+        // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
     }
 }

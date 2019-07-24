@@ -45,7 +45,7 @@
     align-items: center;
 }
 .title{
-    width: 200px;
+    width: 226px;
     font-size:18px;
     font-family:PingFangSC-Regular;
     color:rgba(0,0,0,1);

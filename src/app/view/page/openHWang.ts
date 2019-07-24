@@ -23,6 +23,8 @@ interface Props {
     curShowDataList:any[]; // 当前页显示数据
     curPage:number; // 当前页码
     perPage:number;// 每页显示多少个
+    expandIndex:boolean;// 下拉显示
+    perPageIndex:number;// 一页显示多少个下标
 }
 const Status = [
     '申请中',
@@ -53,7 +55,9 @@ export class OpenHWang extends Widget {
         endTime:'',
         curShowDataList:[],
         curPage:0,
-        perPage:perPage[0]
+        perPage:perPage[0],
+        expandIndex:false,
+        perPageIndex:0
     };
 
     public create() {
@@ -209,6 +213,7 @@ export class OpenHWang extends Widget {
 
     public pageClick() {
         this.props.showDateBox = false;
+        this.props.expandIndex = false;
         this.paint();
     }
 
@@ -221,7 +226,14 @@ export class OpenHWang extends Widget {
 
      // 每页展示多少数据
     public perPage(e:any) {
+        this.props.perPageIndex = e.index;
         this.props.perPage = e.value;
         this.changePage({ value:0 });   
+    }
+
+    // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
     }
 }

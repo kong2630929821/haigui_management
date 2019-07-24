@@ -1,4 +1,4 @@
-<div w-class="page" on-tap="pageClick">
+<div w-class="page" on-tap="pageClick" style="height:100%">
     <div w-class="tabRow">
         <div w-class="tab">
             <img src="../../res/images/defultUser.png" w-class="tabImg"/>
@@ -53,8 +53,8 @@
     </div>
     {{end}}
     {{if Math.ceil(it.showDataList.length/it.perPage)}}
-    <div ev-changeCurrent="changePage" w-class="pagination-box" ev-perPage="perPage"> 
-        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}} }</widget>
+    <div ev-changeCurrent="changePage" w-class="pagination-box" ev-perPage="perPage" ev-expand="expand"> 
+        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}},expand:{{it.expandIndex}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
     </div>
     {{end}}
 </div>

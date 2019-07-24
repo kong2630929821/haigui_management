@@ -26,7 +26,9 @@ export class GoodsInfo extends Widget {
         perPage:perPage[0],
         dataList:[],// 全部数据
         sum:0,// 总共多少条数据
-        imgs:[]  // 退货详情图片
+        imgs:[],  // 退货详情图片
+        expandIndex:false,// 分页下拉显示
+        perPageIndex:0// 一页多少个的下标
     };
     public checkType(index:number) {
         this.props.returnStatus = index;
@@ -192,6 +194,7 @@ export class GoodsInfo extends Widget {
     // 页面点击
     public close() {
         this.props.showDateBox = false;
+        this.props.expandIndex = false;
         this.paint();
     }
     // 设置退货状态
@@ -264,7 +267,14 @@ export class GoodsInfo extends Widget {
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
+        this.props.expandIndex = false;
+        this.props.perPageIndex = e.index;
         this.pageChange({ value:0 });   
     }
-   
+    
+    // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
+    }
 }

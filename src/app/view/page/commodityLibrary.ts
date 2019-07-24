@@ -8,7 +8,7 @@ import { exportExcel } from '../../utils/tools';
 interface Props {
     statusType:any;// 状态筛选
     statusTypeActiveIndex:number;// 状态筛选当前下标
-    expandIndex:number; 
+    expandIndex:any; 
     productTypes:any;// 商品分类
     ProductTypesActiveIndex:number;// 商品分类下标
     shopNum:number;// 商品個數
@@ -24,6 +24,7 @@ interface Props {
     inputValue:string;// 输入框
     currentData:any;// 当前操作的值
     goodsId:number[];   // 选择的商品ID
+    perPageIndex:number;// 一页显示多少个下标
 }
 // 状态筛选
 export enum StatuType {
@@ -47,7 +48,7 @@ export class CommodityLibrary extends Widget {
         productTypes:[],
         statusTypeActiveIndex:0,
         ProductTypesActiveIndex:0,
-        expandIndex:-1,
+        expandIndex:[false,false],
         shopNum:123,
         currentIndex:0,
         perPage:perPage[0],
@@ -61,7 +62,8 @@ export class CommodityLibrary extends Widget {
         mallImagPre:mallImagPre,
         inputValue:'',
         currentData:[],
-        goodsId:[]
+        goodsId:[],
+        perPageIndex:0
     };
 
     public create() {
@@ -123,6 +125,8 @@ export class CommodityLibrary extends Widget {
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
+        this.props.perPageIndex = e.index;
+        this.props.expandIndex[1] = false;
         if (this.props.inputValue) {
             this.search();
         } else {
@@ -136,7 +140,7 @@ export class CommodityLibrary extends Widget {
     }
     // 重置页面的展开状态
     public close() {
-        this.props.expandIndex++;
+        this.props.expandIndex = [false,false];
         // 判断时间选择框是否展开过
         if (this.props.showDateBox) {
             console.log('时间筛选',this.props.startTime,this.props.endTime);
@@ -172,6 +176,10 @@ export class CommodityLibrary extends Widget {
     }
     // 分页变化
     public pageChange(e:any) {
+        if (this.props.inputValue) {
+
+            return ;
+        }
         this.props.currentIndex = e.value;
         console.log('当前页数据：',this.props.showDataList);
         const index = (e.value) * this.props.perPage;
@@ -198,6 +206,8 @@ export class CommodityLibrary extends Widget {
     public search() {
         console.log(this.props.inputValue);
         if (!this.props.inputValue) {
+            this.init(1);
+  
             return ;
         }
         getCurrentGood(this.props.inputValue).then(r => {
@@ -209,6 +219,8 @@ export class CommodityLibrary extends Widget {
             this.props.shopNum = 0;
             this.paint();
         });
+        this.props.currentIndex = 0;
+        this.paint();
     }
 
     // 上下架商品 1上架 0下架
@@ -281,5 +293,11 @@ export class CommodityLibrary extends Widget {
             this.props.shopNum = r.length;
             this.paint();
         });
+    }
+
+    // 过滤器
+    public expand(e:any,index:number) {
+        this.props.expandIndex[index] = e.value;
+        this.paint();
     }
 }
