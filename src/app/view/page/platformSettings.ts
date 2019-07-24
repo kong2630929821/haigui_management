@@ -19,6 +19,7 @@ interface Props {
     currentIndex:number;// 当前页数
     expand:boolean;// 控制分页下拉显示
     perPageIndex:number;// 分页的下标
+    searchDataList:any;// 搜索得到的数据
     
 }
 /**
@@ -39,7 +40,8 @@ export class PlatformSettings extends Widget {
         allDataList:[],
         currentIndex:0,
         expand:false,
-        perPageIndex:0
+        perPageIndex:0,
+        searchDataList:[]
     };
     public create() {
         super.create();
@@ -81,6 +83,7 @@ export class PlatformSettings extends Widget {
             this.props.showDataList = r[1];
             this.props.dataList = r[0];
             this.props.shopNum = r[1].length;
+            this.props.searchDataList = r[1];
             this.paint();
             console.log(r);
         });
@@ -124,7 +127,7 @@ export class PlatformSettings extends Widget {
     public pageChange(e:any) {
         this.props.currentIndex = e.value;
         if (this.props.searchValue) {
-            this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+            this.props.showDataList = this.props.searchDataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         } else {
             this.props.showDataList = this.props.allDataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         }
