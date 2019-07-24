@@ -33,6 +33,10 @@ export class PeriodPicker extends Widget {
             ...props
         };
         super.setProps(this.props);
+        if (this.props.needTime) {
+            this.props.startDate = isDate(this.props.startDate) ? parseDate(props.startDate, 0, 1) :'';
+            this.props.endDate = isDate(this.props.endDate) ? parseDate(props.endDate, 0, 1) :'';
+        }
     }
 
     public changeDateBox(e:any) {
@@ -57,8 +61,9 @@ export class PeriodPicker extends Widget {
             if (compareDate(this.props.startDate, this.props.endDate)) { // 开始时间大于结束时间
                 this.props.endDate = this.props.startDate;
             }
+
         } else {
-            this.props.startDate = '';
+            this.props.startDate = this.props.endDate;
         }
         this.paint();
         notify(e.node,'ev-period-change',{ value:[this.props.startDate,this.props.endDate] });
@@ -71,8 +76,9 @@ export class PeriodPicker extends Widget {
             if (compareDate(this.props.startDate, this.props.endDate)) {
                 this.props.startDate = this.props.endDate; 
             }
+
         } else {
-            this.props.endDate = '';
+            this.props.endDate = this.props.startDate;
         }
         this.paint();
         notify(e.node,'ev-period-change',{ value:[this.props.startDate,this.props.endDate] });
