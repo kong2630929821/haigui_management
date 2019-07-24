@@ -25,8 +25,9 @@ interface Props {
     curPage:number; // 当前页码
     timeType:any;
     timeTypeActiveIndex:number;
-    expandIndex:number;   
+    expandIndex:boolean;   
     perPage:number;// 每页多少条数据 
+    perPageIndex:number;// 一页显示多少个的下标
 }
 const Status = [
     '申请中',
@@ -68,8 +69,9 @@ export class Withdraw extends Widget {
         curPage:0 ,
         timeType:[],
         timeTypeActiveIndex:0,
-        expandIndex:-1,
-        perPage:perPage[0]
+        expandIndex:false,
+        perPage:perPage[0],
+        perPageIndex:0
     };
 
     public create() {
@@ -280,7 +282,7 @@ export class Withdraw extends Widget {
 
     public pageClick() {
         this.props.showDateBox = false;
-        this.props.expandIndex++;
+        this.props.expandIndex = false;
         this.paint();
     }
 
@@ -299,14 +301,22 @@ export class Withdraw extends Widget {
 
     }
 
-        // 每页展示多少数据
+    // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
+        this.props.perPageIndex = e.index;
+        this.props.expandIndex = false;
         if (this.props.searUid) {
             this.search();
         } else {
             this.changePage({ value:0 });   
         }
             
+    }
+
+    // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
     }
 }

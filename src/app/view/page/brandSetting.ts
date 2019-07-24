@@ -17,7 +17,10 @@ interface Props {
     inputValue:string;// 搜索
     currentIndex:number; // 当前页码
     dataList:any;// 总数据
+    expandIndex:boolean;// 下拉显示
+    perPageIndex:number;// 一页多少个下标
 }
+let currentDataIndex = 0;
 /**
  * 品牌设置
  */
@@ -32,7 +35,9 @@ export class BrandSetting extends Widget {
         perPage:perPage[0],
         inputValue:'',
         dataList:[],
-        currentIndex:0
+        currentIndex:0,
+        expandIndex:false,
+        perPageIndex:0
     };
     public create() {
         super.create();
@@ -44,14 +49,20 @@ export class BrandSetting extends Widget {
             this.props.brandList = r[0];
             this.props.shopNum = r[1].length;
             this.props.dataList = r[1];
-            this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
+            this.props.showDataList = this.props.dataList.slice(currentDataIndex * this.props.perPage,(currentDataIndex + 1) * this.props.perPage);
+            this.props.currentIndex = currentDataIndex;
             this.paint();
         });
     }
 
     // 分页变化
     public pageChange(e:any) {
+        if (this.props.inputValue) {
+
+            return;
+        }
         this.props.currentIndex = e.value;
+        currentDataIndex = e.value;
         this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         console.log('当前页数据：',this.props.showDataList);
         this.paint();
@@ -65,6 +76,8 @@ export class BrandSetting extends Widget {
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
+        this.props.perPageIndex = e.index;
+        this.props.expandIndex = false;
         if (this.props.inputValue) {
             this.search();
         } else {
@@ -94,6 +107,13 @@ export class BrandSetting extends Widget {
     }
     // 搜索
     public search() {
+        if (this.props.inputValue === '') {
+            this.pageChange({ value:0 });
+            this.props.shopNum = this.props.dataList.length;
+            this.paint();
+      
+            return;
+        }
         if (isNaN(parseInt(this.props.inputValue))) {
             popNewMessage('请输入正确的供应商ID');
             
@@ -145,5 +165,17 @@ export class BrandSetting extends Widget {
             popNewMessage('删除失败');
         });
         
+    }
+
+    // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
+    }
+    
+    // 页面点击
+    public close() {
+        this.props.expandIndex = false;
+        this.paint();
     }
 }

@@ -1,10 +1,10 @@
-<div w-class="page" on-tap="close">
+<div w-class="page" on-tap="close" style="height:100%">
     {{if !it.showEdit}}
     <div style="background:#fff;">
         <div w-class="tableTitle">筛选位置</div>
-        <div w-class="locationSel" ev-selected="changeLocation">
+        <div w-class="locationSel" ev-selected="changeLocation" ev-expand="expand">
             <span style="margin-right:20px;">选择展示位置</span>
-            <widget w-tag="app-components-simpleFilter">{options:["商城首页","分类汇总页"],active:{{it.active}} }</widget>
+            <widget w-tag="app-components-simpleFilter">{options:["商城首页","分类汇总页"],active:{{it.active}},expand:{{it.expandIndex}} }</widget>
         </div>
     </div>
 

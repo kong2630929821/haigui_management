@@ -54,7 +54,7 @@ export class Home extends Widget {
                 //     show:true 
                 // },
                 {name:'系统设置',page:PAGE.accountSettings,img:'chart.png',children:[
-                    { name: '账号设置', page: PAGE.accountSettings, img:'chart.png' }
+                    { name: '账号设置', page: PAGE.accountSettings, img:'chart.png' } // ,
                     // { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' },
                     // { name: '操作日志', page: PAGE.operationLog, img:'chart.png' }
                 ],

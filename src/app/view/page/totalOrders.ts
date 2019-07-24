@@ -88,7 +88,8 @@ export class TotalOrder extends Widget {
         forceUpdate:false,   // 强制刷新  通过不断改变其值来触发分页的setProps 分页组件目前不完美
         expandIndex:-1,        // 触发下拉列表 
         showDetail:-1,    // 查看详情数据下标
-        perPage:perPage[0]// 每页多少条数据
+        perPage:perPage[0],// 每页多少条数据
+        perPageIndex:0// 每页多少个的下标
     };
 
     public create() {
@@ -329,6 +330,7 @@ export class TotalOrder extends Widget {
     }
         // 根据供应商id筛选
     public filterSupplierId(e:any) {
+        this.props.expandIndex[1] = false;
         this.props.supplierActiveIndex = e.value;
         this.props.currentPageIndex = 0;
         this.props.forceUpdate = !this.props.forceUpdate;
@@ -339,6 +341,7 @@ export class TotalOrder extends Widget {
 
         // 根据订单类型筛选
     public filterOrderType(e:any) {
+        this.props.expandIndex[2] = false;
         this.props.orderTypeActiveIndex = e.activeIndex;
         this.props.currentPageIndex = 0;
         this.props.forceUpdate = !this.props.forceUpdate;
@@ -349,6 +352,7 @@ export class TotalOrder extends Widget {
 
         // 根据导出状态筛选,未导出，已导出
     public filterExportType(e:any) {
+        this.props.expandIndex = false;
         this.props.orderStateActiveIndex = e.activeIndex;
         this.props.currentPageIndex = 0;
         this.props.forceUpdate = !this.props.forceUpdate;
@@ -359,6 +363,7 @@ export class TotalOrder extends Widget {
 
         // 根据时间筛选
     public filterTimeType(e:any) {
+        this.props.expandIndex[0] = false;
         this.props.timeTypeActiveIndex = e.activeIndex;
         this.props.currentPageIndex = 0;
         this.props.forceUpdate = !this.props.forceUpdate;
@@ -381,7 +386,7 @@ export class TotalOrder extends Widget {
     public closeClick() {
         console.log('close',this.props.showDateBox);
         this.props.showDateBox = false;
-        this.props.expandIndex++;
+        this.props.expandIndex = [false,false,false,false,false];
         this.paint();
     }
 
@@ -431,11 +436,19 @@ export class TotalOrder extends Widget {
         // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
+        this.props.perPageIndex = e.index;
+        this.props.expandIndex[4] = false;
         if (this.props.inputOrderId) {
             this.searchById(e);
         } else {
             this.pageChange({ value:0 });
         }
             
+    }
+
+    // 过滤器
+    public expand(index:number,e:any) {
+        this.props.expandIndex[index] = e.value;
+        this.paint();
     }
 }

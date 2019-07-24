@@ -1,4 +1,4 @@
-<div w-class="page" ev-detail-back="detailBack" on-tap="pageClick">
+<div w-class="page" ev-detail-back="detailBack" on-tap="pageClick" style="height:100%;">
     {{if !it.showDetail}}
     <div w-class="tabRow">
         <div w-class="tab">
@@ -43,8 +43,8 @@
         </div>
         {{end}}
     {{if Math.ceil(it.showDataList.length/it.perPage)}}
-    <div ev-changeCurrent="changePage" w-class="pagination-box" ev-perPage="perPage">
-        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}} }</widget>
+    <div ev-changeCurrent="changePage" w-class="pagination-box" ev-perPage="perPage" ev-expand="expand">
+        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}},expand:{{it.expandIndex}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
     </div>
     {{end}}
     {{else}}

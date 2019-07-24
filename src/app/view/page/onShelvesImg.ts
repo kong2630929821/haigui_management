@@ -286,18 +286,18 @@ export class OnShelvesImg extends Widget {
         const area = Number(this.props.areaIdList[this.props.areaIdActiveIndex]);// 地址ID
         const supplier = this.props.selectData[0][0];// 供应商ID
         const pay_type = 1;// 支付方式
-        const cost = Math.floor(Number(this.props.data[1]) * 100);// 成本价
-        const origin = Math.floor(Number(this.props.data[2]) * 100);// 普通售价
-        const vip_price = Math.floor(Number(this.props.data[3]) * 100);// 会员价
+        const cost = Math.round(Number(this.props.data[1]) * 100);// 成本价
+        const origin = Math.round(Number(this.props.data[2]) * 100);// 普通售价
+        const vip_price = Math.round(Number(this.props.data[3]) * 100);// 会员价
         const has_tax = this.props.bondedActiveIndex;// 是否报税
-        let tax = Math.floor(Number(this.props.tax) * 100);// 税费
+        let tax = Math.round(Number(this.props.tax) * 100);// 税费
         if (has_tax === 0) {
             tax = 0;
         }
-        const discount = this.props.data[4] ? Math.floor(Number(this.props.data[4]) * 100) :0;// 折扣价
+        const discount = this.props.data[4] ? Math.round(Number(this.props.data[4]) * 100) :0;// 折扣价
         const labels = [];// 规格
         this.props.spreadList.forEach(v => {
-            labels.push([v[0],Math.floor(v[1] * 100)]);
+            labels.push([v[0],Math.round(v[1] * 100)]);
         });
         const images = img;// 图片
         const intro = [];// 商品介绍

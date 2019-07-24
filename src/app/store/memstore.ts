@@ -155,6 +155,7 @@ export interface GoodsDetail {
     state:number;  // 上下架状态 1上架 0下架
     skus:any[];  // SKU列表
     area:number;  // 地区ID
+    onSaleTime:string;// 上架时间
 }
 /******************************store初始化**********************************/
 // 海龟一号store

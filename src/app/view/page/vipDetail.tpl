@@ -1,4 +1,4 @@
-<div w-class="">
+<div w-class="" on-tap="close" style="height:100%">
     {{if it.status}}
     <div w-class="back" on-tap="goBack">返回</div>
     <div w-class="table">
@@ -71,8 +71,8 @@
     </div>
     {{if Math.ceil(it.showDataList.length/it.perPage) > 0}}
     <div w-class="ctroller">
-        <div ev-changeCurrent="changePage" w-class="pagination"  ev-perPage="perPage">
-            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}} }</widget>
+        <div ev-changeCurrent="changePage" w-class="pagination"  ev-perPage="perPage" ev-expand="expand">
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}},expand:{{it.expandIndex}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
         </div>
     </div>  
     {{end}}

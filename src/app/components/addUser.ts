@@ -9,7 +9,7 @@ interface Props {
     password:string;// 密码
     userTypes:any;// 账号类型
     userTypesActiveIndex:number;// 下标
-    expandIndex:number;
+    expandIndex:boolean;
     cancelText:string;// 取消
     sureText:string;// 确定
     currentData:any;// 当前账户数据
@@ -35,7 +35,7 @@ export class AddUser extends Widget {
             }
         ],
         userTypesActiveIndex:0,
-        expandIndex:-1,
+        expandIndex:false,
         cancelText:'取消',
         sureText:'确定',
         currentData:[],
@@ -93,6 +93,7 @@ export class AddUser extends Widget {
     }
     // 账户类型切换
     public filterUserTypes(e:any) {
+        this.props.expandIndex = false;
         this.props.userTypesActiveIndex = e.activeIndex;
         this.paint();
     }
@@ -172,5 +173,16 @@ export class AddUser extends Widget {
             }
 
         }
+    }
+
+    // 过滤器点击
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
+    }
+    // 页面点击
+    public close() {
+        this.props.expandIndex = false;
+        this.paint();
     }
 }

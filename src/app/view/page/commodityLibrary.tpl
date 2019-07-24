@@ -1,12 +1,12 @@
-<div w-class="page" ev-detail-back="detailBack" on-tap="close">
+<div w-class="page" ev-detail-back="detailBack" on-tap="close" style="height:100%;">
     {{if it.shopDetail==0}}
     <div w-class="searchBox">
             <div w-class="tableTitle">筛选查询</div>
             <div w-class="filterBox">
                 <div w-class="filterTitle">
                     <span>状态</span>
-                    <div style="display:inline-block;height: 50px;margin-left: 20px;margin-top: 26px" ev-selected="filterTimeType">
-                        <widget w-tag="app-components-simpleFilter1">{options:{{it.statusType}},activeIndex:{{it.statusTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
+                    <div style="display:inline-block;height: 50px;margin-left: 20px;margin-top: 26px" ev-selected="filterTimeType" ev-expand="expand(e,{{0}})">
+                        <widget w-tag="app-components-simpleFilter1">{options:{{it.statusType}},activeIndex:{{it.statusTypeActiveIndex}},expand:{{it.expandIndex[0]}} }</widget>
                     </div>
                 </div>
                 <div w-class="filterTitle">
@@ -43,8 +43,8 @@
             <div w-class="ctroller">
                 <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
                 <div w-class="onShelves" on-tap="onShelves">添加商品</div>
-                <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
-                    <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true,currentIndex:{{it.currentIndex}} }</widget>
+                <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage" ev-expand="expand(e,{{1}})">
+                    <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true,currentIndex:{{it.currentIndex}},expand:{{it.expandIndex[1]}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
                 </div>
             </div>
         </div>

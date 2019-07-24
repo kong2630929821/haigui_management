@@ -1,4 +1,4 @@
-<div w-class="modal-mask"> 
+<div w-class="modal-mask" on-tap="close"> 
     <div w-class="addUserBox">
         {{if it.title}}
         <div w-class="addTitle">
@@ -21,15 +21,15 @@
         <div w-class="row">
             <div w-class="title">C端用户ID</div>
             <div w-class="input" ev-input-change="userId" style="width: 382px;margin-left: 18px;">
-                <widget w-tag="app-components-input">{input:"",placeHolder:"请输入密码",itype:"number"}</widget>
+                <widget w-tag="app-components-input">{input:"",placeHolder:"请输入用户ID",itype:"number"}</widget>
             </div>
         </div>
         {{end}}
         <div style="display:flex;width: 100%;">
             <div w-class="row">
                 <div w-class="title" style="margin-left: 40px;">账号类型：</div>
-                <div style="display:inline-block;height: 50px;margin-left: 12px;" ev-selected="filterUserTypes">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.userTypes}},activeIndex:{{it.userTypesActiveIndex}},expandIndex:{{it.expandIndex}},userType:true }</widget>
+                <div style="display:inline-block;height: 50px;margin-left: 12px;" ev-selected="filterUserTypes" ev-expand="expand">
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.userTypes}},activeIndex:{{it.userTypesActiveIndex}},expand:{{it.expandIndex}},userType:true }</widget>
                 </div>
             </div>
         </div>

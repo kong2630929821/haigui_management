@@ -42,6 +42,7 @@ export class SimpleFilter1 extends Widget {
     // 切换展示隐藏
     public change(e:any) {
         this.props.expand = !this.props.expand;
+        notify(e.node,'ev-expand',{ value:this.props.expand });
         this.paint();
     }
 

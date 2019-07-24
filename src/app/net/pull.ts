@@ -1506,7 +1506,13 @@ export const getWithDrawalSetting = () => {
         }
     };
 
-    return requestAsync(msg);
+    return requestAsync(msg).then(r => {
+        const data = r.withdraw_config;
+        data[0] = priceFormat(data[0]);
+        data[5] = priceFormat(data[5]);
+        
+        return data;
+    });
 };
 
 // 设置提现配置

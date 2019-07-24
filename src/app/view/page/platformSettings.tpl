@@ -1,4 +1,4 @@
-<div w-class="page" ev-detail-back="detailBack" on-tap="close">
+<div w-class="page" ev-detail-back="detailBack" on-tap="close" style="height:100%">
     {{if it.showAddSupplier==0}}
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>
@@ -17,8 +17,8 @@
     <div w-class="ctroller">
         <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
         <div w-class="onShelves" on-tap="addSupplier">添加供应商</div>
-        <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage">
-            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true, currentIndex:{{it.currentIndex}} }</widget>
+        <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage" ev-expand="expand">
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true, currentIndex:{{it.currentIndex}},expand:{{it.expand}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
         </div>
     </div>
     {{elseif it.showAddSupplier==1}}

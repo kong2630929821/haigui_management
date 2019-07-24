@@ -17,6 +17,8 @@ interface Props {
     perPage:number;// 每页多少条数据
     allDataList:any;// 全部数据
     currentIndex:number;// 当前页数
+    expand:boolean;// 控制分页下拉显示
+    perPageIndex:number;// 分页的下标
     
 }
 /**
@@ -35,7 +37,9 @@ export class PlatformSettings extends Widget {
         dataList:[],
         perPage:perPage[0],
         allDataList:[],
-        currentIndex:0
+        currentIndex:0,
+        expand:false,
+        perPageIndex:0
     };
     public create() {
         super.create();
@@ -118,20 +122,37 @@ export class PlatformSettings extends Widget {
 
     // 分页变化
     public pageChange(e:any) {
-        console.log(e.value);
         this.props.currentIndex = e.value;
-        this.props.showDataList = this.props.allDataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+        if (this.props.searchValue) {
+            this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+        } else {
+            this.props.showDataList = this.props.allDataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
+        }
         this.paint();
     }
 
-        // 每页展示多少数据
+    // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
+        this.props.perPageIndex = e.index;
+        this.props.expand = false;
         if (this.props.searchValue) {
             this.search();
         } else {
             this.pageChange({ value:0 });
         }
             
+    }
+
+    // 过滤器
+    public expand(e:any) {
+        this.props.expand = e.value;
+        this.paint();
+    }
+
+    // 页面点击
+    public close() {
+        this.props.expand = false;
+        this.paint();
     }
 }

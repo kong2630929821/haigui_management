@@ -13,6 +13,8 @@ interface Props {
     dataList:any;// 全部数据
     perPage:number;// 每页显示多少个
     currentIndex:number;
+    expandIndex:boolean;
+    perPageIndex:number;// 分页的下标
 }
 /**
  * 账号管理
@@ -24,7 +26,9 @@ export class AccountSetting extends Widget {
         sum:0,
         dataList:[],
         perPage:perPage[0],
-        currentIndex:0
+        currentIndex:0,
+        expandIndex:false,
+        perPageIndex:0
     };
 
     public create() {
@@ -44,6 +48,7 @@ export class AccountSetting extends Widget {
     // 分页变化
     public pageChange(e:any) {
         this.props.currentIndex = e.value;
+        this.props.expandIndex = false;
         console.log(e.value);
         this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
         console.log('当前页数据：',this.props.showDataList);
@@ -52,6 +57,8 @@ export class AccountSetting extends Widget {
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
+        this.props.perPageIndex = e.index;
+        this.props.expandIndex = false;
         this.pageChange({ value:0 });   
     }
     // 导出全部数据
@@ -108,5 +115,17 @@ export class AccountSetting extends Widget {
         }).catch(e => {
             popNewMessage('删除失败');
         });
+    }
+
+    // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
+    }
+
+    // 页面点击
+    public close() {
+        this.props.expandIndex = false;
+        this.paint();
     }
 }

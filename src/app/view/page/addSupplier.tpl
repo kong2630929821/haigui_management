@@ -1,4 +1,4 @@
-<div w-class="page" ev-detail-back="detailBack" on-tap="close">
+<div w-class="page" ev-detail-back="detailBack" on-tap="close" style="height:100%">
     <div w-class="narBar">
         <div on-tap="cancel">供应商配置</div>
         <div>></div>
@@ -33,8 +33,8 @@
         <div w-class="filterBox">
             <div w-class="productName">
                 <div w-class="title">运费类型</div>
-                <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="filterTimeType">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.statusType}},activeIndex:{{it.statusTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
+                <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="filterTimeType" ev-expand="expand">
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.statusType}},activeIndex:{{it.statusTypeActiveIndex}},expand:{{it.expandIndex}} }</widget>
                 </div>
             </div>
             <div w-class="productName">

@@ -16,6 +16,7 @@ interface Props {
     active:number;  // 当前展示的分组位置  0 商城首页 1 分类汇总
     showEdit:boolean;  // 显示编辑页面
     addNewClass:boolean;  // 新增分组
+    expandIndex:boolean;// 下拉显示
 }
 /**
  * 分类设置
@@ -41,7 +42,8 @@ export class ClassSetting extends Widget {
         },
         active:1,
         showEdit:false,
-        addNewClass:false
+        addNewClass:false,
+        expandIndex:false
     };
 
     public create() {
@@ -116,7 +118,20 @@ export class ClassSetting extends Widget {
             }
         }
         this.props.num = [this.props.showDataList.length, second];
+        this.props.expandIndex = false;
         console.log(this.props.showDataList);
+        this.paint();
+    }
+
+    // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
+    }
+    
+    // 页面点击
+    public close() {
+        this.props.expandIndex = false;
         this.paint();
     }
 }

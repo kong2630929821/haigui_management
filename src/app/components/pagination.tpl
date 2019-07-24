@@ -5,8 +5,8 @@
         {{if it.filterShow}}
             <div w-class="filterBox">
                 <span>每页</span>
-                <div style="display:inline-block;height: 30px;margin-left: 10px" ev-selected="filterTimeType">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.numberCheck}},activeIndex:{{it.numberCheckActiveIndex}},expandIndex:{{it.expandIndex}},style:true}</widget>
+                <div style="display:inline-block;height: 30px;margin-left: 10px" ev-selected="filterTimeType" ex-expand="expand">
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.numberCheck}},activeIndex:{{it.numberCheckActiveIndex}},expand:{{it.expand}},style:true}</widget>
                 </div>
             </div>
         {{end}}

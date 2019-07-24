@@ -22,4 +22,5 @@ export class HBaoGoodsSetting extends CommodityLibrary {
             });
         });
     }
+
 }

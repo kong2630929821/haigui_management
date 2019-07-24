@@ -8,6 +8,7 @@
         <div w-class="baseItem" style="width:250px">【分类】{{it.datas.typeName}}</div>
         <div w-class="baseItem">【税费】{{it.datas.tax}}</div>
         <div w-class="baseItem">【折扣】{{it.datas.discount}}</div>
+        <div w-class="baseItem">【上架时间】{{it.datas.onSaleTime}}</div>
       
         {{if it.datas.state==0}}
         <div w-class="baseItem" style="color:red">已下架</div>
