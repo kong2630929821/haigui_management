@@ -26,19 +26,27 @@
     </div>
     {{if it.needTime}}
     <div w-class="bottom">
-        <div w-class="time">{{it.curTime[0]}}</div>
+        <div w-class="time" on-tap="changeHour(e)" ev-input-change="changeHour(e,2)">
+            <widget w-tag="app-components-input">{input:{{it.curTime[0]}},itype:"integer" }</widget>
+        </div>
         <div w-class="bottomBtn">
             <img src="../res/images/top.png" w-class="btn" on-tap="changeHour(e,1)"/>
             <img src="../res/images/down.png" w-class="btn1" on-tap="changeHour(e,0)"/>
         </div>
+
         <span style="margin-left:5px;">:</span>
-        <div w-class="time">{{it.curTime[1]}}</div>
+        <div w-class="time" on-tap="changeMinute(e)" ev-input-change="changeMinute(e,2)">
+            <widget w-tag="app-components-input">{input:{{it.curTime[1]}},itype:"integer" }</widget>
+        </div>
         <div w-class="bottomBtn">
             <img src="../res/images/top.png" w-class="btn" on-tap="changeMinute(e,1)"/>
             <img src="../res/images/down.png" w-class="btn1" on-tap="changeMinute(e,0)"/>
         </div>
+
         <span style="margin-left:5px;">:</span>
-        <div w-class="time">{{it.curTime[2]}}</div>
+        <div w-class="time" on-tap="changeSecond(e)" ev-input-change="changeSecond(e,2)">
+            <widget w-tag="app-components-input">{input:{{it.curTime[2]}},itype:"integer" }</widget>
+        </div>
         <div w-class="bottomBtn">
             <img src="../res/images/top.png" w-class="btn" on-tap="changeSecond(e,1)"/>
             <img src="../res/images/down.png" w-class="btn1" on-tap="changeSecond(e,0)"/>

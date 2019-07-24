@@ -96,7 +96,7 @@ export class OnShelvesImg extends Widget {
         const oData = new Date();
         const time = oData.setHours(23, 59, 59, 999);
         this.props.endTime =  timeConvert(time);
-        this.props.startTime = '2019-05-01 00:00:000';
+        this.props.startTime = '2019-05-01';
     }
 
     // tslint:disable-next-line:max-func-body-length
