@@ -24,7 +24,8 @@ interface Props {
     style?:string;
     autofocus?:boolean;
     maxLength?:number;
-    decimalLength:number;   // 最大小数位数
+    decimalLength?:number;   // 最多小数位数
+    maxNumber?:number;  // 最大数字（绝对值）
 }
 interface State {
     currentValue:string;
@@ -184,11 +185,14 @@ export class Input extends Widget {
      */
     public numberJudge(num:string) {
         const reg = /^(\-|\+)?\d+\.?\d*$/;
-        const reg1 = /^0{2,}/;
+        const reg1 = /^(\-|\+)?0{2,}/;
+
+        // 是否超过允许的最大数字
+        const fg = this.props.maxNumber && Math.abs(Number(num)) > this.props.maxNumber;
 
         const data = num.split('.')[1] ? num.split('.')[1] :'';
     
-        return reg.test(num) && !reg1.test(num) && data.length <= this.props.decimalLength;
+        return reg.test(num) && !reg1.test(num) && data.length <= this.props.decimalLength && !fg;
     }
 
 }
