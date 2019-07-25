@@ -1,10 +1,12 @@
 import { deepCopy } from '../../../pi/util/util';
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getVipMember } from '../../net/pull';
 import { getStore, register, setStore } from '../../store/memstore';
 import { timestampFormat, unicode2ReadStr } from '../../utils/logic';
-import { addressFormat } from '../../utils/tools';
+import { addressFormat, rippleShow } from '../../utils/tools';
+export const forelet = new Forelet();
 
 interface Props {
     showDataList:any[];  // 显示数据
@@ -264,5 +266,10 @@ export class VipManage extends Widget {
     public expand(e:any) {
         this.props.expandIndex = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

@@ -13,8 +13,8 @@
                 </div>
                 {{end}}
                 <div w-class="row">
-                    <div w-class="edit" on-tap="edit(0)">编辑</div>
-                    <div w-class="edit" on-tap="confirm(0)">应用</div>
+                    <div w-class="edit" on-tap="edit(0)" on-down="onShow">编辑</div>
+                    <div w-class="edit" on-tap="confirm(0)" on-down="onShow">应用</div>
                 </div>
             </div>
         </div>
@@ -33,8 +33,8 @@
             </div>
             {{end}}
             <div w-class="row">
-                <div w-class="edit" on-tap="edit(1)">编辑</div>
-                <div w-class="edit" on-tap="confirm(1)">应用</div>
+                <div w-class="edit" on-tap="edit(1)" on-down="onShow">编辑</div>
+                <div w-class="edit" on-tap="confirm(1)" on-down="onShow">应用</div>
             </div>
         </div>
     </div>
@@ -52,8 +52,8 @@
             </div>
             {{end}}
             <div w-class="row">
-                <div w-class="edit" on-tap="edit(2)">编辑</div>
-                <div w-class="edit" on-tap="confirm(2)">应用</div>
+                <div w-class="edit" on-tap="edit(2)" on-down="onShow">编辑</div>
+                <div w-class="edit" on-tap="confirm(2)" on-down="onShow">应用</div>
             </div>
         </div>
     </div>

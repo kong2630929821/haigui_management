@@ -2,6 +2,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getCurrentGood, getHbaoGoodsList } from '../../net/pull';
 import { getStore, GoodsDetail, setStore } from '../../store/memstore';
+import { rippleShow } from '../../utils/tools';
 
 interface Props {
     dataList:{user:number;goods:GoodsDetail}[];
@@ -24,7 +25,7 @@ export class HBaoGoodsSetting extends Widget {
         showDataList:[],
         shopNum:0,
         perPage:perPage[0],
-        showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商（ID）','供应商SKU','供应商商品ID','保质期'],
+        showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商（ID）','供应商SKU','供应商商品ID','绑定状态'],
         inputValue:'',
         currentIndex:0,
         expandIndex:false,
@@ -108,5 +109,10 @@ export class HBaoGoodsSetting extends Widget {
     public close() {
         this.props.expandIndex = false;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

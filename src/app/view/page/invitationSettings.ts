@@ -3,6 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { changeGiftSetting, changeLevelGift, getGiftSetting } from '../../net/pull';
 import { deepCopy } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
+import { rippleShow } from '../../utils/tools';
 
 interface Props {
     style:boolean;
@@ -124,6 +125,11 @@ export class InvitationSetting extends Widget {
                 popNewMessage('配置失败');
             });
         }
+    }
+    
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
         
 }

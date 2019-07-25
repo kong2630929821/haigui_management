@@ -2,6 +2,7 @@
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
 import { mallImagPre } from '../config';
+import { rippleShow } from '../utils/tools';
 
 interface Props {
     title:any[];// 表格标题
@@ -92,4 +93,8 @@ export class Table extends Widget {
         notify(e.node,'ev-table-redetail',{ value:this.props.datas[num], fg:fg,num:num }); 
     }    
 
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
+    }
 }

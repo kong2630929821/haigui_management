@@ -1,6 +1,6 @@
 <div w-class="page">
     {{if it.selGoodsIndex === -1}}
-    <div w-class="back" on-tap="goBack">返回</div>
+    <div w-class="back" on-tap="goBack" on-down="onShow">返回</div>
     {{%===========================聚合专区设置===========================}}
     <div w-class="bannerBox">
         <div w-class="tableTitle">聚合页专区设置</div>
@@ -33,7 +33,7 @@
     <div w-class="bannerBox" style="min-height:300px;">
         <div w-class="tableTitle">
             <div>专区分类</div>
-            <div w-class="btn" on-tap="addBtn">{{it.isSoloPart?"选择商品":"添加"}}</div>
+            <div w-class="btn" on-tap="addBtn" on-down="onShow">{{it.isSoloPart?"选择商品":"添加"}}</div>
         </div>
         <div w-class="itemContent">
             {{if it.currentData.groupType && !it.isSoloPart}}
@@ -41,9 +41,9 @@
                 <div w-class="guessTab" style="margin-right:50px;"  ev-input-change="secondNameChange(e,{{i}})">
                     <span style="margin-right:10px;">分类</span>
                     <widget w-tag="app-components-input">{placeHolder:"输入名称",input:{{v.name}},style:"border:1px solid #eee;"}</widget>
-                    <div w-class="btn1" on-tap="delSecondClass({{i}})">删除</div>
-                    <div w-class="btn1" on-tap="chooseGoods({{i}})">选择商品</div>
-                    <div w-class="btn1" on-tap="saveSecondClass({{i}})">保存</div>
+                    <div w-class="btn1" on-tap="delSecondClass({{i}})" on-down="onShow">删除</div>
+                    <div w-class="btn1" on-tap="chooseGoods({{i}})" on-down="onShow">选择商品</div>
+                    <div w-class="btn1" on-tap="saveSecondClass({{i}})" on-down="onShow">保存</div>
                 </div>
                 {{end}}
             {{end}}
@@ -52,17 +52,17 @@
             <div w-class="guessTab" ev-input-change="secondNameChange(e,-1)">
                 <span style="margin-right:10px;">新分类</span>
                 <widget w-tag="app-components-input">{placeHolder:"输入名称",input:{{it.secondName}},style:"border:1px solid #eee;"}</widget>
-                <div w-class="btn1" on-tap="delBtn">删除</div>
-                <div w-class="btn1" on-tap="addSecondClass">保存</div>
+                <div w-class="btn1" on-tap="delBtn" on-down="onShow">删除</div>
+                <div w-class="btn1" on-tap="addSecondClass" on-down="onShow">保存</div>
             </div>
             {{end}}
         </div>
     </div>
     <div w-class="btns">
         {{if it.currentData.name}}
-        <div w-class="btn" on-tap="delClass" style="margin-right:30px;">删除</div>
+        <div w-class="btn" on-tap="delClass" style="margin-right:30px;" on-down="onShow">删除</div>
         {{end}}
-        <div w-class="btn" on-tap="addClass">保存</div>
+        <div w-class="btn" on-tap="addClass" on-down="onShow">保存</div>
     </div>
 
     {{else}}

@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { changeBindding, getAmountDetail, getUserLevelChange, getVipDetail,  userLevelChange } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
-import { addressFormat, getUserType } from '../../utils/tools';
+import { addressFormat, getUserType, rippleShow } from '../../utils/tools';
 interface Props {
     userData:any[];  // 个人数据
     showDataList:any[];  // 显示数据
@@ -305,5 +305,10 @@ export class VipDetail extends Widget {
     public close() {
         this.props.expandIndex = false;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

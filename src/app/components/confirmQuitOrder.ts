@@ -1,4 +1,5 @@
 import { Widget } from '../../pi/widget/widget';
+import { rippleShow } from '../utils/tools';
 
 /**
  * 取消订单
@@ -21,5 +22,10 @@ export class ConfirmQuitOrder extends Widget {
     // 取消
     public close() {
         this.cancel && this.cancel();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

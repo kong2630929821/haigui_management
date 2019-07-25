@@ -1,6 +1,7 @@
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
 import { mallImagPre } from '../config';
+import { rippleShow } from '../utils/tools';
 
 interface Props {
     datas:any;
@@ -44,5 +45,10 @@ export class GoodsItem extends Widget {
     // 绑定邀请码
     public bindUser(e:any) {
         notify(e.node,'ev-bindUser',{ value:this.props.datas });
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

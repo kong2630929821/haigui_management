@@ -3,6 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getReturnGoods, getReturnGoodsId, setReturnStatus } from '../../net/pull';
 import { popNewMessage, priceFormat, timeConvert, transitTimeStamp, unicode2ReadStr, unicode2Str } from '../../utils/logic';
+import { rippleShow } from '../../utils/tools';
 
 /**
  * 商品信息
@@ -13,7 +14,7 @@ export class GoodsInfo extends Widget {
            
         ],
         returnList:[],// 存所有的商品
-        showTitleList:['售后单id','商品ID','商品SKU','用户ID','下单时单价','下单时数量','支付类型','状态','退货原因','申请退货的时间','回应退货申请的时间','完成退货的时间','用户姓名','用户电话','用户微信名','下单时间','支付时间','发货时间',' 收货时间','发货单号','退货运单号','退货申请图片','拒绝退货原因'],
+        showTitleList:['售后单id','商品ID','商品SKU','用户ID','下单时单价','下单时数量','支付类型','状态','退货原因','申请退货的时间','回应退货申请的时间','完成退货的时间','用户姓名','用户电话','用户微信名','下单时间','支付时间','发货时间',' 收货时间','发货单号','退货运单号','退货申请图片数量','拒绝退货原因'],
         page:1,// 上一个操作是第几页
         currentIndex:0,// 当前页数
         searchValue:'',// 输入的搜索值
@@ -227,11 +228,23 @@ export class GoodsInfo extends Widget {
 
         if (this.props.returnStatus === 0) {
             // 退货申请
-            popNew('app-components-modalBox',{ content:`确认开始处理“<span style="color:#1991EB">${username}</span>”的退货申请` }, () => {
-                this.changeReturnGoods(uid,id,0,e.num,'');
-            },() => {
-                popNewMessage('你已经取消操作！');
-            });
+            if (e.fg === 1) {
+                popNew('app-components-modalBoxInput',{ title:`确认拒绝“<span style="color:#1991EB">${username}</span>”的退货`,placeHolder:'请输入拒绝理由' }, (r) => {
+                    if (r) {
+                        this.changeReturnGoods(uid,id,-1,e.num,r);
+                    } else {
+                        popNewMessage('请输入拒绝理由！');
+                    }
+                },() => {
+                    popNewMessage('你已经取消操作！');
+                });
+            } else {
+                popNew('app-components-modalBox',{ content:`确认开始处理“<span style="color:#1991EB">${username}</span>”的退货申请` }, () => {
+                    this.changeReturnGoods(uid,id,0,e.num,'');
+                },() => {
+                    popNewMessage('你已经取消操作！');
+                });
+            }
             
         } else if (this.props.returnStatus === 1) {
             // 退货中
@@ -276,5 +289,10 @@ export class GoodsInfo extends Widget {
     public expand(e:any) {
         this.props.expandIndex = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

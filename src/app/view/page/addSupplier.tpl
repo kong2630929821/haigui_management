@@ -1,6 +1,6 @@
 <div w-class="page" ev-detail-back="detailBack" on-tap="close" style="height:100%">
     <div w-class="narBar">
-        <div on-tap="cancel">供应商配置</div>
+        <div on-tap="cancel" on-down="onShow">供应商配置</div>
         <div>></div>
         <div>{{it.pageTitle}}</div>
     </div>
@@ -40,7 +40,7 @@
             <div w-class="productName">
                 <div style="margin-left: 30px;" ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入表单"}</app-components-inputFileBtn></div>
                 <div style="line-height: 31px;margin-left: 30px;">最新导入时间：{{it.time}}</div>
-                <div w-class="searchleft" on-tap="exportForm">导出表单</div>
+                <div w-class="searchleft" on-tap="exportForm" on-down="onShow">导出表单</div>
             </div>
         </div>
         <div ev-table-detail="goDetail">
@@ -49,7 +49,7 @@
         </div>
     </div>
     <div w-class="ctr">
-        <div w-class="btn" on-tap="cancel">取消</div>
-        <div w-class="btn" on-tap="save">保存</div>
+        <div w-class="btn" on-tap="cancel" on-down="onShow">取消</div>
+        <div w-class="btn" on-tap="save" on-down="onShow">保存</div>
     </div>
 </div>

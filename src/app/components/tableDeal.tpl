@@ -31,14 +31,14 @@
                             
                                 {{if v[5]=="提现失败"}}
                                 
-                                <div w-class="dealBtn" style="color:#FA2929" on-tap="reDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                                <div w-class="dealBtn" style="color:#FA2929" on-tap="reDetail(e,{{i}},1)" on-down="onShow">{{it.inlineBtn1}}</div>
                                 {{else}}
-                                <div w-class="dealBtn" style="color:#FA2929" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                                <div w-class="dealBtn" style="color:#FA2929" on-tap="goDetail(e,{{i}},1)" on-down="onShow">{{it.inlineBtn1}}</div>
                                 {{end}}
                             {{end}}
 
                             {{if it.inlineBtn2}}
-                            <div w-class="dealBtn" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
+                            <div w-class="dealBtn" on-tap="goDetail(e,{{i}},2)" on-down="onShow">{{it.inlineBtn2}}</div>
                             {{end}}
                         </div>
                     </td>
@@ -54,7 +54,7 @@
     <div w-class="bottom">
         {{if it.btn1}}
         <div w-class="btns">
-            <div w-class="bottomBtn" on-tap="clickBtn(e,1)">导出列表</div>
+            <div w-class="bottomBtn" on-tap="clickBtn(e,1)" on-down="onShow">导出列表</div>
         </div>
         {{end}}
     </div>

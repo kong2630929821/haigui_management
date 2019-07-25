@@ -1,12 +1,12 @@
 <div on-tap="close">
     <div w-class="narBar">
         {{if !it.style}}
-        <div on-tap="gotoShop">商品库</div>
+        <div on-tap="gotoShop" on-down="onShow">商品库</div>
         <div>></div>
         <div>修改商品</div>
         {{end}}
         {{if it.disable}}
-        <div on-tap="gotoShop">商品库</div>
+        <div on-tap="gotoShop" on-down="onShow">商品库</div>
         <div>></div>
         <div>商品详情</div>
         {{end}}
@@ -25,7 +25,7 @@
             <div w-class="item1">
                 <div w-class="title">国家</div>
                 <div style="display:inline-block;height: 50px;margin-left: 2px;" ev-selected="areaIdChange" ev-expand="expand({{0}},e)">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.areaId}},activeIndex:{{it.areaIdActiveIndex}},expand:{{it.expandIndex[0]}} }</widget>
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.areaId}},activeIndex:{{it.areaIdActiveIndex}},expand:{{it.expandIndex[0]}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
             {{if it.disable}}
@@ -34,13 +34,13 @@
             <div w-class="item1">
                 <div w-class="title">商品类型</div>
                 <div style="display:inline-block;height: 50px;margin-left: 2px;" ev-selected="bondedChange" ev-expand="expand({{1}},e)">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.bonded}},activeIndex:{{it.bondedActiveIndex}},expand:{{it.expandIndex[1]}} }</widget>
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.bonded}},activeIndex:{{it.bondedActiveIndex}},expand:{{it.expandIndex[1]}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
             <div w-class="item1">
                 <div w-class="title">品牌</div>
                 <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="brandTypeChange" ev-expand="expand({{2}},e)">
-                    <widget w-tag="app-components-simpleFilter">{dataList:{{it.brandType}},active:{{it.brandTypeIndex}},expand:{{it.expandIndex[2]}},search:true,dataListId:{{it.brandId}} }</widget>
+                    <widget w-tag="app-components-simpleFilter">{dataList:{{it.brandType}},active:{{it.brandTypeIndex}},expand:{{it.expandIndex[2]}},search:true,dataListId:{{it.brandId}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
             {{if it.bondedActiveIndex}}
@@ -135,7 +135,7 @@
                     </div>
                     {{if !it.disable}}
                     <div w-class="btnGroup">
-                        <div w-class="btn" on-tap="remove({{i}})">移除</div>
+                        <div w-class="btn" on-tap="remove({{i}})" on-down="onShow">移除</div>
                     </div>
                     {{end}}
                 </div>
@@ -164,9 +164,9 @@
     {{if !it.disable}}
     <div w-class="search">
             <div w-class="input" ev-input-change="inputProductChange" style="width: 724px;">
-                <widget w-tag="app-components-input">{placeHolder:"SKU/产品ID/产品名称" }</widget>
+                <widget w-tag="app-components-input">{placeHolder:"供应商ID，SKU，sku名" }</widget>
             </div>
-            <div w-class="btn" on-tap="searchProduct">查询</div>
+            <div w-class="btn" on-tap="searchProduct" on-down="onShow">查询</div>
         </div>
         {{if it.searchData.length}}
         <div w-class="searchItem" style="background: white;">
@@ -190,7 +190,7 @@
                         {{end}}
                     </div>
                     <div w-class="btnGroup">
-                        <div w-class="btn" on-tap="check({{i}})">选择</div>
+                        <div w-class="btn" on-tap="check({{i}})" on-down="onShow">选择</div>
                     </div>
                 </div>
             </div>
@@ -199,9 +199,9 @@
         {{end}}
     {{end}}
     <div w-class="ctr">
-        <div w-class="btn" on-tap="gotoShop">取消</div>
+        <div w-class="btn" on-tap="gotoShop" on-down="onShow">取消</div>
         {{if !it.disable}}
-        <div w-class="btn" on-tap="next">{{it.btn}}</div>
+        <div w-class="btn" on-tap="next" on-down="onShow">{{it.btn}}</div>
         {{end}}
     </div>
 </div>

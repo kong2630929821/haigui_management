@@ -9,7 +9,7 @@
                     <div w-class="input" ev-input-change='inputValue'>
                         <widget w-tag="app-components-input">{placeHolder:"订单编号"}</widget>
                     </div>
-                    <div w-class="searchleft" on-tap="searchById">查询</div>
+                    <div w-class="searchleft" on-tap="searchById" on-down="onShow">查询</div>
                 </div>
                 <div w-class="item">
                     <div style="display:inline-block;height: 50px;" ev-selected="filterTimeType" ev-expand="expand({{0}},e)">

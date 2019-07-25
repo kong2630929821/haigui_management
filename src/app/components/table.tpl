@@ -41,20 +41,20 @@
                         {{if it.inputFile}}
                         <div w-class="exportFile">
                             <div w-class="exportFileBtn">导入表单</div>
-                            <input type="file" w-class="btn1" on-change="importExcel(e,{{i}})"/>
+                            <input type="file" w-class="btn1" on-change="importExcel(e,{{i}})" on-down="onShow"/>
                         </div>
                         {{end}}
                         
                         {{if it.inlineBtn1}}
-                        <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:10px;" on-tap="goDetail(e,{{i}},1)">{{it.inlineBtn1}}</div>
+                        <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:10px;" on-tap="goDetail(e,{{i}},1)" on-down="onShow">{{it.inlineBtn1}}</div>
                         {{end}}
 
                         {{if it.inlineBtn2}}
-                        <div w-class="btn" style="margin-left:10px;" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
+                        <div w-class="btn" style="margin-left:10px;" on-tap="goDetail(e,{{i}},2)" on-down="onShow">{{it.inlineBtn2}}</div>
                         {{end}}
 
                         {{if it.inlineBtn3}}
-                        <div w-class="btn" style="color:#222;padding: 0 10px;" on-tap="goDetail(e,{{i}},3)">{{it.inlineBtn3}}</div>
+                        <div w-class="btn" style="color:#222;padding: 0 10px;" on-tap="goDetail(e,{{i}},3)" on-down="onShow">{{it.inlineBtn3}}</div>
                         {{end}}
                        
                     </td>

@@ -3,7 +3,7 @@ import { perPage } from '../../components/pagination';
 import { mallImagPre } from '../../config';
 import { getAllGoods, getCurrentGood, getGoodsKey, shelf } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
-import { exportExcel } from '../../utils/tools';
+import { exportExcel, rippleShow } from '../../utils/tools';
 
 interface Props {
     statusType:any;// 状态筛选
@@ -299,5 +299,10 @@ export class CommodityLibrary extends Widget {
     public expand(e:any,index:number) {
         this.props.expandIndex[index] = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

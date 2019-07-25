@@ -1,4 +1,6 @@
+import { getRealNode } from '../../pi/widget/painter';
 import { GoodsDetail, setStore } from '../store/memstore';
+import { RightsGroups, RightsGroupsShow } from '../view/base/home';
 import { OrderDetailBase, OrderDetailGoods, OrderDetailRebate } from '../view/page/orderDetail';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
 import { getCashLogName, popNewMessage, priceFormat, timeConvert, unicode2ReadStr, unicode2Str } from './logic';
@@ -925,11 +927,19 @@ export const processingUserType = (r:any) => {
     }
 
     const data = [];
+    const rightsGroup = [];// 处理后的数据
+    const dataList = [];// 原始数据
     r.forEach(v => {
         data.push(unicode2Str(v[0]));
+        const str = [];
+        v[1].forEach(item => {
+            str.push(RightsGroupsShow[RightsGroups[item]]);
+        });
+        rightsGroup.push([unicode2Str(v[0]),str.join('、')]);
+        dataList.push([unicode2Str(v[0]),v[1]]);
     });
 
-    return data;
+    return [data,rightsGroup,dataList];
 };
 
 // 处理商品礼包配置
@@ -1030,4 +1040,13 @@ const UserTypeShow = {
 // 获取用户身份
 export const getUserType = (level:number,label:number) => {
     return UserTypeShow[UserType[Number(`${level === 4 ? 3 :level}${label > 0 ? label :''}`)]];
+};
+
+ // 水波纹动画效果展示
+export const rippleShow = (e:any) => {
+    getRealNode(e.node).classList.add('ripple');
+
+    setTimeout(() => {
+        getRealNode(e.node).classList.remove('ripple');
+    }, 500);
 };

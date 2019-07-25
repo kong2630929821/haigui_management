@@ -1,4 +1,5 @@
 import { notify } from '../../../pi/widget/event';
+import { rippleShow } from '../../utils/tools';
 import { CommodityLibrary } from './commodityLibrary';
 
 /**
@@ -35,5 +36,10 @@ export class GoodsInfo extends CommodityLibrary {
 
     public goBack(e:any) {
         notify(e.node,'ev-goodsInfo-back',{});
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

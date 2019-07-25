@@ -1,5 +1,6 @@
 import { Widget } from '../../pi/widget/widget';
 import { popNewMessage } from '../utils/logic';
+import { rippleShow } from '../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
 interface Props {
@@ -121,5 +122,10 @@ export class AddShopping extends Widget {
         }
         
         this.ok && this.ok(arr);
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

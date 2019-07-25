@@ -24,9 +24,9 @@
     </div>
 
     <div w-class="tabRow" style="margin:20px 0 10px;">
-        <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)">提现申请</div>
-        <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)">处理中</div>
-        <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)">处理完成</div>
+        <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)" on-down="onShow">提现申请</div>
+        <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)" on-down="onShow">处理中</div>
+        <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)" on-down="onShow">处理完成</div>
     </div>
 
     <div w-class="searchBox">
@@ -34,7 +34,7 @@
         <div w-class="input" ev-input-change="uidChange">
             <widget w-tag="app-components-input">{placeHolder:"用户ID"}</widget>
         </div>
-        <div w-class="search" on-tap="search">查询</div>
+        <div w-class="search" on-tap="search" on-down="onShow">查询</div>
         
         <div style="display:inline-block" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
             <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
