@@ -197,11 +197,13 @@ export class OnShelvesImg extends Widget {
     // 地区ID选择
     public areaIdChange(e:any) {
         this.props.areaIdActiveIndex = e.activeIndex;
+        this.props.expandIndex[0] = false;
         this.paint();
     }
     // 是否保税
     public bondedChange(e:any) {
         this.props.bondedActiveIndex = e.activeIndex;
+        this.props.expandIndex[1] = false;
         this.paint();
     }
     // 税费

@@ -25,7 +25,7 @@
             <div w-class="item1">
                 <div w-class="title">国家</div>
                 <div style="display:inline-block;height: 50px;margin-left: 2px;" ev-selected="areaIdChange" ev-expand="expand({{0}},e)">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.areaId}},activeIndex:{{it.areaIdActiveIndex}},expand:{{it.expandIndex[0]}} }</widget>
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.areaId}},activeIndex:{{it.areaIdActiveIndex}},expand:{{it.expandIndex[0]}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
             {{if it.disable}}
@@ -34,13 +34,13 @@
             <div w-class="item1">
                 <div w-class="title">商品类型</div>
                 <div style="display:inline-block;height: 50px;margin-left: 2px;" ev-selected="bondedChange" ev-expand="expand({{1}},e)">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.bonded}},activeIndex:{{it.bondedActiveIndex}},expand:{{it.expandIndex[1]}} }</widget>
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.bonded}},activeIndex:{{it.bondedActiveIndex}},expand:{{it.expandIndex[1]}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
             <div w-class="item1">
                 <div w-class="title">品牌</div>
                 <div style="display:inline-block;height: 50px;margin-left: 20px;" ev-selected="brandTypeChange" ev-expand="expand({{2}},e)">
-                    <widget w-tag="app-components-simpleFilter">{dataList:{{it.brandType}},active:{{it.brandTypeIndex}},expand:{{it.expandIndex[2]}},search:true,dataListId:{{it.brandId}} }</widget>
+                    <widget w-tag="app-components-simpleFilter">{dataList:{{it.brandType}},active:{{it.brandTypeIndex}},expand:{{it.expandIndex[2]}},search:true,dataListId:{{it.brandId}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
             {{if it.bondedActiveIndex}}

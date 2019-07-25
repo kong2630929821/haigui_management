@@ -13,6 +13,7 @@ interface Props {
     activeIndex:number;   // 当前选择的数组下标
     search:boolean;// 带输入的下拉
     userType:boolean;// 账号类型
+    disabled:boolean;// 是否禁用
 }
 
 interface Option {
@@ -27,7 +28,8 @@ export class SimpleFilter1 extends Widget {
         expand:false,
         activeIndex:0,
         search:false,
-        userType:false
+        userType:false,
+        disabled:false
     };
     
     public setProps(props:any) {
@@ -41,9 +43,11 @@ export class SimpleFilter1 extends Widget {
 
     // 切换展示隐藏
     public change(e:any) {
-        this.props.expand = !this.props.expand;
-        notify(e.node,'ev-expand',{ value:this.props.expand });
-        this.paint();
+        if (!this.props.disabled) {
+            this.props.expand = !this.props.expand;
+            notify(e.node,'ev-expand',{ value:this.props.expand });
+            this.paint();
+        } 
     }
 
     // 选择选项
