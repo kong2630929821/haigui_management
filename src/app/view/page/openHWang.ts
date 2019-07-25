@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
 import { dateToString, parseDate, popNewMessage, unicode2ReadStr, unicode2Str } from '../../utils/logic';
-import { addressFormat, exportExcel } from '../../utils/tools';
+import { addressFormat, exportExcel, rippleShow } from '../../utils/tools';
 interface Props {
     datas:any[];  // 原始数据
     showDataList:any[];  // 显示数据
@@ -235,5 +235,10 @@ export class OpenHWang extends Widget {
     public expand(e:any) {
         this.props.expandIndex = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

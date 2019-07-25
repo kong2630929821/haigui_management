@@ -4,8 +4,8 @@
             <div w-class="tableTitle">数据统计</div>
             <div w-class="filterBox">
                 <div w-class="tabRow" style="margin:20px 20px;">
-                    <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)">会员统计</div>
-                    <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)">商品统计</div>
+                    <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)" on-down="onShow">会员统计</div>
+                    <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)" on-down="onShow">商品统计</div>
                 </div>
                 {{if it.activeTab==1}}
                 <div w-class="filterTitle">

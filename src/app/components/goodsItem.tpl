@@ -19,12 +19,12 @@
         {{if it.inFlag==1}}
             <div w-class="btns">
                 {{if it.datas.state==0}}
-                <div w-class="btn" on-tap="shelf(e,1)">上架</div>
-                <div w-class="btn" on-tap="change">编辑</div> 
+                <div w-class="btn" on-tap="shelf(e,1)" on-down="onShow">上架</div>
+                <div w-class="btn" on-tap="change" on-down="onShow">编辑</div> 
                 {{elseif it.datas.state==1}}
-                <div w-class="btn" on-tap="shelf(e,0)">下架</div>
+                <div w-class="btn" on-tap="shelf(e,0)" on-down="onShow">下架</div>
                 {{end}}
-                <div w-class="btn" on-tap="goDetail">详情</div>
+                <div w-class="btn" on-tap="goDetail" on-down="onShow">详情</div>
             </div>
 
         {{elseif it.inFlag==2}}
@@ -36,9 +36,9 @@
 
         {{else}}
             {{if it.selected}}
-            <div w-class="btn" style="background:#ce2525" on-tap="selectGoods">取消</div>
+            <div w-class="btn" style="background:#ce2525" on-tap="selectGoods" on-down="onShow">取消</div>
             {{else}}
-            <div w-class="btn" on-tap="selectGoods">选择</div>
+            <div w-class="btn" on-tap="selectGoods" on-down="onShow">选择</div>
             {{end}}
         {{end}}
     </div>

@@ -10,7 +10,7 @@
 
     <div w-class="searchBoxType">
         <div w-class="classSum">共计：{{it.num[0]}}个一级分类 {{it.num[1]}}个二级分类</div>
-        <div w-class="tableTitle">商品分类<div w-class="btn" on-tap="goEdit(-1)">添加</div></div>
+        <div w-class="tableTitle">商品分类<div w-class="btn" on-tap="goEdit(-1)" on-down="onShow">添加</div></div>
         <div w-class="searchItem_1">
             <div w-class="tableDataTitle">
                 {{for i,v of it.showDataTitle}}
@@ -29,7 +29,7 @@
                 </div>
                 <div w-class="data_item">{{v.time}}</div>
                 <div w-class="data_item_1">
-                    <div w-class="btn" on-tap="goEdit({{i}})">编辑</div>
+                    <div w-class="btn" on-tap="goEdit({{i}})" on-down="onShow">编辑</div>
                 </div>
             </div>
             {{end}}

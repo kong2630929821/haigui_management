@@ -1,3 +1,4 @@
+import { getRealNode } from '../../pi/widget/painter';
 import { GoodsDetail, setStore } from '../store/memstore';
 import { OrderDetailBase, OrderDetailGoods, OrderDetailRebate } from '../view/page/orderDetail';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
@@ -1030,4 +1031,13 @@ const UserTypeShow = {
 // 获取用户身份
 export const getUserType = (level:number,label:number) => {
     return UserTypeShow[UserType[Number(`${level === 4 ? 3 :level}${label > 0 ? label :''}`)]];
+};
+
+ // 水波纹动画效果展示
+export const rippleShow = (e:any) => {
+    getRealNode(e.node).classList.add('ripple');
+
+    setTimeout(() => {
+        getRealNode(e.node).classList.remove('ripple');
+    }, 500);
 };

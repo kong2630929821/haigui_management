@@ -1,4 +1,5 @@
 import { Widget } from '../../pi/widget/widget';
+import { rippleShow } from '../utils/tools';
 interface Props {
     title:string;
     sureText:string;
@@ -50,4 +51,8 @@ export class ModalBox extends Widget {
         this.ok && this.ok(this.props.inputValue);
     }
     
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
+    }
 }

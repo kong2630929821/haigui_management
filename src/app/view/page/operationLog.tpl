@@ -16,8 +16,8 @@
         <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true}</widget>
     </div>
     <div w-class="ctroller">
-        <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
-        <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage" ev-expand="expand">
+        <div w-class="searchleft" on-tap="exportShop" on-down="onShow">导出全部信息</div>
+        <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage" ev-expand="expand" on-down="onShow">
             <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.sum/ it.perPage)}},filterShow:true, currentIndex:{{it.currentIndex}},expand:{{it.expandIndex}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
         </div>
     </div>

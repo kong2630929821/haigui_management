@@ -2,7 +2,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getOperationLog } from '../../net/pull';
 import { dateToString, parseDate, transitTimeStamp } from '../../utils/logic';
-import { exportExcel } from '../../utils/tools';
+import { exportExcel, rippleShow } from '../../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
 interface Props {
@@ -119,9 +119,14 @@ export class OperationLog extends Widget {
         this.pageChange({ value:0 });  
     }
 
-        // 过滤器
+    // 过滤器
     public expand(e:any) {
         this.props.expandIndex = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

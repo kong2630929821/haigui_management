@@ -2,6 +2,7 @@ import { popNew } from '../../pi/ui/root';
 import { Widget } from '../../pi/widget/widget';
 import { addBrand, changeBrand } from '../net/pull';
 import { popNewMessage } from '../utils/logic';
+import { rippleShow } from '../utils/tools';
 interface Props {
     title:string;
     sureText:string;
@@ -132,6 +133,11 @@ export class ModalBox extends Widget {
             });
         }
         
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
     
 }

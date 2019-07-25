@@ -4,6 +4,7 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { addProduct, editInventory, getAllSuppliers } from '../../net/pull';
 import { dateToString, parseDate, popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
+import { rippleShow } from '../../utils/tools';
 
 interface Props {
     showDateBox:boolean;// 时间选择
@@ -242,5 +243,9 @@ export class AddProduct extends Widget {
     public expand(index:number,e:any) {
         this.props.expandIndex[index] = e.value;
         this.paint();
+    }
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

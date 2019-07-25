@@ -4,6 +4,7 @@
 // ===========================导入=================
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
+import { rippleShow } from '../utils/tools';
 
 // =================================导出==============
 interface Props {
@@ -140,5 +141,10 @@ export class Pagination extends Widget {
     public expand(e:any) {
         notify(e.node,'ev-expand',{ value:e.value });
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

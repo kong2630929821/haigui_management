@@ -4,7 +4,7 @@ import { perPage } from '../../components/pagination';
 import { orderMaxCount } from '../../config';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport, quitOrder } from '../../net/pull';
 import { dateToString, popNewMessage } from '../../utils/logic';
-import { exportExcel, importRead } from '../../utils/tools';
+import { exportExcel, importRead, rippleShow } from '../../utils/tools';
 // [商品id,商品名称,购买时价格,数量,skuId,sku名,商品类型,成本价，售价，会员价，【一级分组，二级分组】，【退货地址，姓名，电话】，【供应商SKU，供应商商品ID，保质期，最近修改时间】]
 export type GoodsDetails = [number,string,number,number,string,string,number,number,number,number,
     [[number,string][],[number,string][]],   // 【一级分组，二级分组】
@@ -450,5 +450,10 @@ export class TotalOrder extends Widget {
     public expand(index:number,e:any) {
         this.props.expandIndex[index] = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

@@ -5,7 +5,7 @@
                 <div w-class="input" ev-input-change="inputChange">
                     <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
                 </div>
-                <div w-class="search" on-tap="search">查询</div>
+                <div w-class="search" on-tap="search" on-down="onShow">查询</div>
             </div>
         </div>
         

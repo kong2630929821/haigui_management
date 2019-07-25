@@ -1,12 +1,12 @@
 <div on-tap="close">
     <div w-class="narBar">
         {{if !it.style}}
-        <div on-tap="gotoShop">商品库</div>
+        <div on-tap="gotoShop" on-down="onShow">商品库</div>
         <div>></div>
         <div>修改商品</div>
         {{end}}
         {{if it.disable}}
-        <div on-tap="gotoShop">商品库</div>
+        <div on-tap="gotoShop" on-down="onShow">商品库</div>
         <div>></div>
         <div>商品详情</div>
         {{end}}
@@ -135,7 +135,7 @@
                     </div>
                     {{if !it.disable}}
                     <div w-class="btnGroup">
-                        <div w-class="btn" on-tap="remove({{i}})">移除</div>
+                        <div w-class="btn" on-tap="remove({{i}})" on-down="onShow">移除</div>
                     </div>
                     {{end}}
                 </div>
@@ -164,9 +164,9 @@
     {{if !it.disable}}
     <div w-class="search">
             <div w-class="input" ev-input-change="inputProductChange" style="width: 724px;">
-                <widget w-tag="app-components-input">{placeHolder:"SKU/产品ID/产品名称" }</widget>
+                <widget w-tag="app-components-input">{placeHolder:"供应商ID，SKU，sku名" }</widget>
             </div>
-            <div w-class="btn" on-tap="searchProduct">查询</div>
+            <div w-class="btn" on-tap="searchProduct" on-down="onShow">查询</div>
         </div>
         {{if it.searchData.length}}
         <div w-class="searchItem" style="background: white;">
@@ -190,7 +190,7 @@
                         {{end}}
                     </div>
                     <div w-class="btnGroup">
-                        <div w-class="btn" on-tap="check({{i}})">选择</div>
+                        <div w-class="btn" on-tap="check({{i}})" on-down="onShow">选择</div>
                     </div>
                 </div>
             </div>
@@ -199,9 +199,9 @@
         {{end}}
     {{end}}
     <div w-class="ctr">
-        <div w-class="btn" on-tap="gotoShop">取消</div>
+        <div w-class="btn" on-tap="gotoShop" on-down="onShow">取消</div>
         {{if !it.disable}}
-        <div w-class="btn" on-tap="next">{{it.btn}}</div>
+        <div w-class="btn" on-tap="next" on-down="onShow">{{it.btn}}</div>
         {{end}}
     </div>
 </div>

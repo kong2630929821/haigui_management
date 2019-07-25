@@ -1,6 +1,6 @@
 <div w-class="page" ev-detail-back="detailBack" on-tap="close" style="padding:0;">
         <div style="display: flex">
-            <div w-class="back" on-tap="goBack">返回</div>    
+            <div w-class="back" on-tap="goBack" on-down="onShow">返回</div>    
             <div style="flex:1 0 0;display:flex;align-items: center;min-height: 50px;background: #fff;margin-left: 20px;padding: 0 10px;">
                 <div style="font-weight: 600;flex-shrink: 0;">已选择的商品ID:</div>
                 <div style="margin:0 10px;">{{it.goodsId.join(", ")}}</div>
@@ -14,7 +14,7 @@
                     <div w-class="input" ev-input-change="inputChange">
                         <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
                     </div>
-                    <div w-class="search" on-tap="search">查询</div>
+                    <div w-class="search" on-tap="search" on-down="onShow">查询</div>
                 </div>
         </div>
 

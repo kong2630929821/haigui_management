@@ -4,7 +4,7 @@ import { perPage } from '../../components/pagination';
 import { getVipMember } from '../../net/pull';
 import { getStore, register, setStore } from '../../store/memstore';
 import { timestampFormat, unicode2ReadStr } from '../../utils/logic';
-import { addressFormat } from '../../utils/tools';
+import { addressFormat, rippleShow } from '../../utils/tools';
 
 interface Props {
     showDataList:any[];  // 显示数据
@@ -264,5 +264,10 @@ export class VipManage extends Widget {
     public expand(e:any) {
         this.props.expandIndex = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

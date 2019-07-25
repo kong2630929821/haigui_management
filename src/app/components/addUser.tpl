@@ -34,8 +34,8 @@
             </div>
         </div>
         <div w-class="btns">
-            <div w-class="btn-cancel" on-tap="cancelBtnClick">{{it.cancelText}}</div>
-            <div w-class="btn-ok" on-tap="okBtnClick">{{it.sureText}}</div>
+            <div w-class="btn-cancel" on-tap="cancelBtnClick" on-down="onShow">{{it.cancelText}}</div>
+            <div w-class="btn-ok" on-tap="okBtnClick" on-down="onShow">{{it.sureText}}</div>
         </div>
     </div>
 </div>   

@@ -1,6 +1,6 @@
 <div w-class="page" ev-detail-back="detailBack" on-tap="close" style="height:100%">
     <div w-class="narBar">
-        <div on-tap="gotoProduct">SKU库</div>
+        <div on-tap="gotoProduct" on-down="onShow">SKU库</div>
         <div>></div>
         <div>{{it.title}}</div>
     </div>
@@ -89,9 +89,9 @@
         </div>
     </div>
     <div w-class="ctr">
-        <div w-class="btn" on-tap="gotoProduct">取消</div>
+        <div w-class="btn" on-tap="gotoProduct" on-down="onShow">取消</div>
         {{if it.status!=1}}
-        <div w-class="btn" on-tap="saveProduct">保存</div>
+        <div w-class="btn" on-tap="saveProduct" on-down="onShow">保存</div>
         {{end}}
     </div>
 </div>

@@ -6,6 +6,7 @@ import { GroupsLocation } from '../../config';
 import { addGroup, updateGroup, updateLocation } from '../../net/pull';
 import { getStore, GroupInfo, ImageType } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
+import { rippleShow } from '../../utils/tools';
 
 interface Props {
     locations: any[]; // 展示位置
@@ -369,5 +370,10 @@ export class MallSettingEdit extends Widget {
         this.props.selGoodsIndex = -1;
         this.props.goodsId = [];
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

@@ -3,6 +3,7 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { addShop, changeShop, getAllArea,  getAllBrand, getShopSale, searchProduct } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp, unicode2Str } from '../../utils/logic';
+import { rippleShow } from '../../utils/tools';
 interface Props {
     selectData:any;// 选中的产品
     showDataTitle:any;// 标题
@@ -441,5 +442,10 @@ export class OnShelvesImg extends Widget {
     public expand(index:number,e:any) {
         this.props.expandIndex[index] = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

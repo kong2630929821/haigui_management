@@ -2,6 +2,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getCurrentGood, getHbaoGoodsList } from '../../net/pull';
 import { getStore, GoodsDetail, setStore } from '../../store/memstore';
+import { rippleShow } from '../../utils/tools';
 
 interface Props {
     dataList:{user:number;goods:GoodsDetail}[];
@@ -108,5 +109,10 @@ export class HBaoGoodsSetting extends Widget {
     public close() {
         this.props.expandIndex = false;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

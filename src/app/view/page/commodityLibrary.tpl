@@ -19,7 +19,7 @@
                     <div w-class="input" ev-input-change="inputChange">
                         <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
                     </div>
-                    <div w-class="search" on-tap="search">查询</div>
+                    <div w-class="search" on-tap="search" on-down="onShow">查询</div>
                 </div>
             </div>
         </div>
@@ -41,8 +41,8 @@
                 </div>
             </div>
             <div w-class="ctroller">
-                <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
-                <div w-class="onShelves" on-tap="onShelves">添加商品</div>
+                <div w-class="searchleft" on-tap="exportShop" on-down="onShow">导出全部信息</div>
+                <div w-class="onShelves" on-tap="onShelves" on-down="onShow">添加商品</div>
                 <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage" ev-expand="expand(e,{{1}})">
                     <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true,currentIndex:{{it.currentIndex}},expand:{{it.expandIndex[1]}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
                 </div>

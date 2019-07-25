@@ -5,7 +5,7 @@ import { perPage } from '../../components/pagination';
 import { mallImagPre } from '../../config';
 import { getAllBrand, removeBrand } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
-import { exportExcel } from '../../utils/tools';
+import { exportExcel, rippleShow } from '../../utils/tools';
 
 interface Props {
     showDataList:any;
@@ -177,5 +177,9 @@ export class BrandSetting extends Widget {
     public close() {
         this.props.expandIndex = false;
         this.paint();
+    }
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

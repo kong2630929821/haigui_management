@@ -3,7 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getAllUser, removeUser } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
-import { exportExcel } from '../../utils/tools';
+import { exportExcel, rippleShow } from '../../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
 interface Props {
@@ -127,5 +127,9 @@ export class AccountSetting extends Widget {
     public close() {
         this.props.expandIndex = false;
         this.paint();
+    }
+        // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

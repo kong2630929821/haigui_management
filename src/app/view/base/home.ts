@@ -5,6 +5,7 @@
 // ================================================ 导入
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
+import { rippleShow } from '../../utils/tools';
 
 // ================================================ 导出
 export const forelet = new Forelet();
@@ -106,5 +107,9 @@ export class Home extends Widget {
     public changeChildrenPage(num:number,index:number) {
         this.props.activePage = this.props.pageList[num].children[index];
         this.paint();
+    }
+        // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

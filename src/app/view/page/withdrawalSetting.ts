@@ -1,6 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { getWithDrawalSetting, getWithdrawalStatus, setWithDrawal, setWithdrawalStatus } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
+import { rippleShow } from '../../utils/tools';
 
 interface Props {
     status:boolean;// 是否开启提现
@@ -112,5 +113,10 @@ export class WithDrwalSetting extends Widget {
         }).catch(e => {
             popNewMessage('修改失败');
         });
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

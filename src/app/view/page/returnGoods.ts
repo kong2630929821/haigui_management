@@ -3,6 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getReturnGoods, getReturnGoodsId, setReturnStatus } from '../../net/pull';
 import { popNewMessage, priceFormat, timeConvert, transitTimeStamp, unicode2ReadStr, unicode2Str } from '../../utils/logic';
+import { rippleShow } from '../../utils/tools';
 
 /**
  * 商品信息
@@ -276,5 +277,10 @@ export class GoodsInfo extends Widget {
     public expand(e:any) {
         this.props.expandIndex = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }
