@@ -22,7 +22,7 @@
         </div>
     </div>
     <div w-class="btns">
-        <div w-class="btn-cancel" on-tap="changeBtnClick">修改</div>
-        <div w-class="btn-ok" on-tap="okBtnClick">保存</div>
+        <div w-class="btn-cancel" on-tap="changeBtnClick" on-down="onShow">修改</div>
+        <div w-class="btn-ok" on-tap="okBtnClick" on-down="onShow">保存</div>
     </div>
 </div>

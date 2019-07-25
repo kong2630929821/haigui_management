@@ -1577,3 +1577,41 @@ export const bindVipUser = (goods_id:number,code:string) => {
 
     return requestAsync(msg);
 };
+
+// 添加一个权限
+export const addRightsGroups = (auth_list:any,name:string) => {
+    const msg = {
+        type:'mgr_add_group_auth',
+        param:{
+            auth_list,
+            name
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 修改一个权限
+export const changeRightsGroups = (auth_list:any,name:string) => {
+    const msg = {
+        type:'mgr_modify_group_auth',
+        param:{
+            auth_list,
+            name
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+// 删除一个权限
+export const removeRightsGroup = (name:string) => {
+    const msg = {
+        type:'mgr_del_group_auth',
+        param:{
+            name
+        }
+    };
+
+    return requestAsync(msg);
+};

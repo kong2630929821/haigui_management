@@ -3,8 +3,9 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
+import { setStore } from '../../store/memstore';
 import { dateToString, parseDate, popNewMessage, unicode2ReadStr, unicode2Str } from '../../utils/logic';
-import { addressFormat, exportExcel } from '../../utils/tools';
+import { addressFormat, exportExcel, rippleShow } from '../../utils/tools';
 interface Props {
     datas:any[];  // 原始数据
     showDataList:any[];  // 显示数据
@@ -157,6 +158,7 @@ export class OpenHWang extends Widget {
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
                         await changeHWangState(id, uid, 2, '');  // 同意
                         popNewMessage('处理完成');
+                        setStore('flags/vipChange',true);
                         this.getData();
                     });
                 }
@@ -235,5 +237,10 @@ export class OpenHWang extends Widget {
     public expand(e:any) {
         this.props.expandIndex = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

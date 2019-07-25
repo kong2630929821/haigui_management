@@ -1,13 +1,13 @@
 <div style="" on-tap="close" style="height:100%">
-    <div w-class="back" on-tap="goBack">返回</div>
+    <div w-class="back" on-tap="goBack" on-down="onShow">返回</div>
     
     <div w-class="searchBox">
         <div w-class="tableTitle">下级详细明细</div>
         <div w-class="filterBox">
             <div w-class="tabRow" style="margin:20px 0 10px;">
-                <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)" style="margin-left: 30px;">资金</div>
-                <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)">海贝</div>
-                <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)">积分</div>
+                <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)" style="margin-left: 30px;" on-down="onShow">资金</div>
+                <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)" on-down="onShow">海贝</div>
+                <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)" on-down="onShow">积分</div>
             </div>
         </div>
     </div>

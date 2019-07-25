@@ -85,6 +85,6 @@
 }
 .pagination-box{
     position: fixed;
-    bottom: 50px;
+    bottom: 73px;
     right: 200px;
 }

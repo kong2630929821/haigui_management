@@ -29,7 +29,7 @@
         <div w-class="input" ev-input-change="uidChange">
             <widget w-tag="app-components-input">{placeHolder:"查询用户ID"}</widget>
         </div>
-        <div w-class="search" on-tap="search">查询</div>
+        <div w-class="search" on-tap="search" on-down="onShow">查询</div>
 
         <div style="display:inline-block" ev-selected="filterUser" ev-expand="changeFilterBox">
             <widget w-tag="app-components-simpleFilter">{options:{{it.optionsList}},active:{{it.active}},expand:{{it.showFilterBox}} }</widget>

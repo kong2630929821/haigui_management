@@ -2,6 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import {  getBigTurntable, settingTruntable } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
+import { rippleShow } from '../../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
 interface Props {
@@ -135,5 +136,9 @@ export class BigTurntable extends Widget {
         }).catch(e => {
             popNewMessage('设置失败');
         });
+    }
+        // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

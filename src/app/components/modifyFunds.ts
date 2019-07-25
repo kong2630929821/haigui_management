@@ -2,6 +2,7 @@
 import { Widget } from '../../pi/widget/widget';
 import { changeMoney } from '../net/pull';
 import { popNewMessage } from '../utils/logic';
+import { rippleShow } from '../utils/tools';
 
 interface Props {
     showData:any;
@@ -58,5 +59,10 @@ export class Modify extends Widget {
             ];
             this.paint();
         });
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

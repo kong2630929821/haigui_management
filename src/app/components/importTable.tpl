@@ -39,7 +39,7 @@
                         <td w-class="td td1 {{it.auto?'autoTd':''}}">
                             <div w-class="btns">
                                 <div ev-input-file="importFile(e,{{i}})" style="position:relative;"><app-components-inputFileBtn>{text:"导入表单"}</app-components-inputFileBtn></div>
-                                <div on-tap="doImportClick(e,{{i}})" w-class="btn3 {{it.files[i] ? '' : 'no-click'}}">应用新表</div>
+                                <div on-tap="doImportClick(e,{{i}})" w-class="btn3 {{it.files[i] ? '' : 'no-click'}}" on-down="onShow">应用新表</div>
                             </div>
                         </td>
                     </tr>
@@ -52,7 +52,7 @@
         {{if it.auto==0}}
             <div w-class="bottom">
                 {{if it.needCheckBox}}
-                <div w-class="allCheck" on-tap="allChecked">
+                <div w-class="allCheck" on-tap="allChecked" on-down="onShow">
                     <img src="../res/images/{{it.allChecked?'selectBox_active.png':'selectBox.png'}}"/>
                     <span style="margin-left:10px;">全选</span>
                 </div>
@@ -60,11 +60,11 @@
     
                 <div w-class="btns">
                     {{if it.btn1}}
-                    <div w-class="bottomBtn" on-tap="clickBtn(e,1)">{{it.btn1}}</div>
+                    <div w-class="bottomBtn" on-tap="clickBtn(e,1)" on-down="onShow">{{it.btn1}}</div>
                     {{end}}
     
                     {{if it.btn2}}
-                    <div w-class="bottomBtn" on-tap="clickBtn(e,2)">{{it.btn2}}</div>
+                    <div w-class="bottomBtn" on-tap="clickBtn(e,2)" on-down="onShow">{{it.btn2}}</div>
                     {{end}}
                 </div>
             </div>

@@ -1,7 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
-import { getAllUser, removeUser } from '../../net/pull';
+import { getAllUserType, removeRightsGroup, removeUser } from '../../net/pull';
+import { deepCopy } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
 import { exportExcel, rippleShow } from '../../utils/tools';
 
@@ -15,20 +16,22 @@ interface Props {
     currentIndex:number;
     expandIndex:boolean;
     perPageIndex:number;// 分页的下标
+    oldDataList:any;// 原始数据
 }
 /**
  * 账号管理
  */
-export class AccountSetting extends Widget {
+export class CreateRightsGroups extends Widget {
     public props:Props = {
         showDataList:[],
-        showTitleList:['账号','账号类型'],
+        showTitleList:['账号类型','权限'],
         sum:0,
         dataList:[],
         perPage:perPage[0],
         currentIndex:0,
         expandIndex:false,
-        perPageIndex:0
+        perPageIndex:0,
+        oldDataList:[]
     };
 
     public create() {
@@ -38,9 +41,10 @@ export class AccountSetting extends Widget {
 
     // 初始化
     public init() {
-        getAllUser().then(r => {
-            this.props.dataList = r;
-            this.props.sum = r.length;
+        getAllUserType().then(r => {
+            this.props.dataList = r[1];
+            this.props.sum = r[1].length;
+            this.props.oldDataList = r[2];
             this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
             this.paint();
         });
@@ -64,31 +68,30 @@ export class AccountSetting extends Widget {
     // 导出全部数据
     public exportUser() {
         
-        getAllUser().then(r => {
-            const jsonHead = this.props.showTitleList;
-            const aoa = [jsonHead];
-            const jsonData = r;
-            for (const v of jsonData) {
-                for (let i = 0;i < v.length;i++) {
-                    if (v[i]) {
-                        v[i] = v[i].toString();
-                    }  
-                }
-                aoa.push(v);
+        const jsonHead = this.props.showTitleList;
+        const aoa = [jsonHead];
+        const jsonData = this.props.dataList;
+        for (const v of jsonData) {
+            for (let i = 0;i < v.length;i++) {
+                if (v[i]) {
+                    v[i] = v[i].toString();
+                }  
             }
-            console.log(aoa);
-            exportExcel(aoa,`账号管理.xlsx`);
-        });
+            aoa.push(v);
+        }
+        console.log(aoa);
+        exportExcel(aoa,`所有账号类型.xlsx`);
+    
     }
         // 表格操作按钮
     public goDetail(e:any) {
         if (e.fg === 1) {
             // 编辑
-            popNew('app-components-addUser',{ title:'编辑账号',currentData:e.value,sureText:'修改',style:false },() => {
+            popNew('app-components-addRightsGroup',{ title:'编辑账号类型',currentData:deepCopy(this.props.oldDataList[e.num]),sureText:'修改',status:false },() => {
                 this.init();
             });
         } else {
-            popNew('app-components-modalBox',{ content:`确认删除账号“<span style="color:#1991EB">${e.value[0]}</span>”` }, () => {
+            popNew('app-components-modalBox',{ content:`确认删除账号类型“<span style="color:#1991EB">${e.value[0]}</span>”` }, () => {
                 this.remove(e.value[0]);
             },() => {
                 popNewMessage('你已经取消操作！');
@@ -98,14 +101,14 @@ export class AccountSetting extends Widget {
     }
     // 添加账号
     public addUser() {
-        popNew('app-components-addUser',{ title:'添加账号' },() => {
+        popNew('app-components-addRightsGroup',{ title:'添加账号类型' },() => {
             this.init();
         });
     }
 
     // 删除账号
     public remove(user:string) {
-        removeUser(user).then(r => {
+        removeRightsGroup(user).then(r => {
             if (r.result === 1) {
                 popNewMessage('删除成功');
                 this.init();

@@ -1,6 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { getAllShopSaleInfo, getShopSaleTop, getVipTurnover } from '../../net/pull';
 import { dateToString, parseDate, priceFormat, transitTimeStamp } from '../../utils/logic';
+import { rippleShow } from '../../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
 interface Props {
@@ -124,7 +125,8 @@ export class DataStatistics extends Widget {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
     }
-        // 重置页面的展开状态
+    
+    // 重置页面的展开状态
     public close() {
             // 判断时间选择框是否展开过
         if (this.props.showDateBox) {
@@ -133,5 +135,10 @@ export class DataStatistics extends Widget {
         }
         this.props.showDateBox = false;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

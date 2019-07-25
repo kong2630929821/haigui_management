@@ -1,6 +1,7 @@
 import { Widget } from '../../pi/widget/widget';
 import { addAccount, addUserToUserType, changeUser, getAllUserType } from '../net/pull';
 import { popNewMessage } from '../utils/logic';
+import { rippleShow } from '../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
 interface Props {
@@ -53,9 +54,10 @@ export class AddUser extends Widget {
         super.setProps(this.props);
         // 获取所有账号类型
         getAllUserType().then(r => {
+            const res = r[0];
             const userType = [];
-            if (r.length) {
-                r.forEach((v,i) => {
+            if (res.length) {
+                res.forEach((v,i) => {
                     userType.push({ status:i,text:v });
                 });
                 this.props.userTypes = userType;
@@ -180,9 +182,15 @@ export class AddUser extends Widget {
         this.props.expandIndex = e.value;
         this.paint();
     }
+
     // 页面点击
     public close() {
         this.props.expandIndex = false;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

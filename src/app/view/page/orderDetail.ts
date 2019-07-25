@@ -1,6 +1,6 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { parseOrderDetailShow } from '../../utils/tools';
+import { parseOrderDetailShow, rippleShow } from '../../utils/tools';
 import { Order, OrderStatus } from './totalOrders';
 
 // ['订单编号','供应商ID','用户ID','下单时间','状态','运单号','支付时间','微信支付单号','税费','邮费','总金额','姓名','身份证','微信名','身份','收货人','收货电话','收货地址']
@@ -51,5 +51,10 @@ export class OrderDetail extends Widget {
 
     public goBack(e:any) {
         notify(e.node,'ev-detail-back',null);
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

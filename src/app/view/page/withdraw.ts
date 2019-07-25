@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { changeWithdrawState, getWithdrawApply, getWithdrawTotal } from '../../net/pull';
 import { dateToString, parseDate, popNewMessage, priceFormat, timestampFormat, unicode2Str } from '../../utils/logic';
-import { exportExcel } from '../../utils/tools';
+import { exportExcel, rippleShow } from '../../utils/tools';
 
 interface Props {
     datas:any[];  // 原始数据
@@ -318,5 +318,10 @@ export class Withdraw extends Widget {
     public expand(e:any) {
         this.props.expandIndex = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

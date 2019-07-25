@@ -10,6 +10,6 @@
             <img src="../../res/images/password.png"/>
             <widget w-tag="app-components-input" style="flex:1 0 0;">{placeHolder:"密码",style:"padding-left:20px",itype:"password"}</widget>
         </div>
-        <div w-class="btn" on-tap="loginUser">登录</div>
+        <div w-class="btn" on-tap="loginUser" on-down="onShow">登录</div>
     </div>
 </div>

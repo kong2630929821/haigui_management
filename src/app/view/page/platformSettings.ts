@@ -3,7 +3,7 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getAllSuppliers } from '../../net/pull';
-import { exportExcel } from '../../utils/tools';
+import { exportExcel, rippleShow } from '../../utils/tools';
 
 interface Props {
     shopNum:number;// 数据条数
@@ -157,5 +157,10 @@ export class PlatformSettings extends Widget {
     public close() {
         this.props.expand = false;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

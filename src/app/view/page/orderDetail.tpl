@@ -1,5 +1,5 @@
 <div w-class="page">
-    <div w-class="back" on-tap="goBack">返回</div>
+    <div w-class="back" on-tap="goBack" on-down="onShow">返回</div>
     <div w-class="tableTitle">基础信息</div>
     <div w-class="tableContent">
         {{for i,v of it.baseDataList}}

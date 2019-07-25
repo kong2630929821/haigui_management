@@ -3,7 +3,7 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { addSupplier, changeSupplier, getFreight, getFreightInfo } from '../../net/pull';
 import { popNewMessage, priceFormat, unicode2Str } from '../../utils/logic';
-import { analysisFreightData, exportExcel, importRead } from '../../utils/tools';
+import { analysisFreightData, exportExcel, importRead, rippleShow } from '../../utils/tools';
 
 interface Props {
     statusType:any;// 状态筛选
@@ -223,5 +223,9 @@ export class AddSupplier extends Widget {
     // 取消
     public cancel(e:any) {
         notify(e.node,'ev-change-showShop',null);
+    }
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

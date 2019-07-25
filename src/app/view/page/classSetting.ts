@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { GroupsLocation, mallImagPre } from '../../config';
 import { getGroupsByLocation } from '../../net/pull';
 import { getStore, GroupInfo } from '../../store/memstore';
-import { parseAllGroups } from '../../utils/tools';
+import { parseAllGroups, rippleShow } from '../../utils/tools';
 
 interface Props {
     datas:any;  // 原始数据
@@ -133,5 +133,10 @@ export class ClassSetting extends Widget {
     public close() {
         this.props.expandIndex = false;
         this.paint();
+    }
+    
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

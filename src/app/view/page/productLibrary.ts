@@ -5,7 +5,7 @@ import { perPage } from '../../components/pagination';
 import { getAllProduct, searchProduct } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
 import { parseDate, timeConvert, transitTimeStamp } from '../../utils/logic';
-import { exportExcel } from '../../utils/tools';
+import { exportExcel, rippleShow } from '../../utils/tools';
 
 interface Props {
     timeType:any;// 状态筛选
@@ -240,5 +240,10 @@ export class ProductLibrary extends Widget {
     public expand(e:any) {
         this.props.expandIndex = e.value;
         this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

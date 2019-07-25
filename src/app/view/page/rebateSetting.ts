@@ -1,6 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { getIncome, haiWangSetting } from '../../net/pull';
 import { popNewMessage } from '../../utils/logic';
+import { rippleShow } from '../../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
 interface Props {
@@ -106,4 +107,9 @@ export class RebateSetting extends Widget {
             popNewMessage(`修改${str}收益失败`);
         });
     } 
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
+    }
 }

@@ -3,7 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { getAllProduct, getHbaoGoodsList, getVipMember, login } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
 import { popNewMessage, unicode2ReadStr } from '../../utils/logic';
-import { addressFormat, timestampFormat } from '../../utils/tools';
+import { addressFormat, rippleShow, timestampFormat } from '../../utils/tools';
 const UserLabel = ['','市代理','省代理'];
 /**
  * 登陆
@@ -104,5 +104,10 @@ export class Login extends Widget {
         } else {
             popNewMessage('请输入账号密码','warn');
         }
+    }
+    
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }
