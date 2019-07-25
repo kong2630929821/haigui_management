@@ -228,11 +228,23 @@ export class GoodsInfo extends Widget {
 
         if (this.props.returnStatus === 0) {
             // 退货申请
-            popNew('app-components-modalBox',{ content:`确认开始处理“<span style="color:#1991EB">${username}</span>”的退货申请` }, () => {
-                this.changeReturnGoods(uid,id,0,e.num,'');
-            },() => {
-                popNewMessage('你已经取消操作！');
-            });
+            if (e.fg === 1) {
+                popNew('app-components-modalBoxInput',{ title:`确认拒绝“<span style="color:#1991EB">${username}</span>”的退货`,placeHolder:'请输入拒绝理由' }, (r) => {
+                    if (r) {
+                        this.changeReturnGoods(uid,id,-1,e.num,r);
+                    } else {
+                        popNewMessage('请输入拒绝理由！');
+                    }
+                },() => {
+                    popNewMessage('你已经取消操作！');
+                });
+            } else {
+                popNew('app-components-modalBox',{ content:`确认开始处理“<span style="color:#1991EB">${username}</span>”的退货申请` }, () => {
+                    this.changeReturnGoods(uid,id,0,e.num,'');
+                },() => {
+                    popNewMessage('你已经取消操作！');
+                });
+            }
             
         } else if (this.props.returnStatus === 1) {
             // 退货中

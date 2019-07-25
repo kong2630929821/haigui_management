@@ -1,10 +1,12 @@
 import { deepCopy } from '../../../pi/util/util';
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getVipMember } from '../../net/pull';
 import { getStore, register, setStore } from '../../store/memstore';
 import { timestampFormat, unicode2ReadStr } from '../../utils/logic';
 import { addressFormat, rippleShow } from '../../utils/tools';
+export const forelet = new Forelet();
 
 interface Props {
     showDataList:any[];  // 显示数据

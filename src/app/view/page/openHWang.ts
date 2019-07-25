@@ -3,6 +3,7 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
+import { setStore } from '../../store/memstore';
 import { dateToString, parseDate, popNewMessage, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 import { addressFormat, exportExcel, rippleShow } from '../../utils/tools';
 interface Props {
@@ -157,6 +158,7 @@ export class OpenHWang extends Widget {
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
                         await changeHWangState(id, uid, 2, '');  // 同意
                         popNewMessage('处理完成');
+                        setStore('flags/vipChange',true);
                         this.getData();
                     });
                 }
