@@ -317,7 +317,7 @@ export class TotalOrder extends Widget {
             this.paint();
             console.log(orders);
 
-            return orders[0][0];
+            // return orders[0][0];
         });
     }
 
