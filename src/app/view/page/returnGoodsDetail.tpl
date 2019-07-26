@@ -7,7 +7,7 @@
             <span style="margin-left:20px;">退货理由：</span>
             <span>{{it.content}}</span>
         </div>
-        <div style="color: #888;">详情图片：</div>
+        <div style="color: #888;margin: 10px 0;">详情图片：</div>
         {{for i,v of it.imgs}}
         <widget w-tag="app-components-img" style="margin-right:10px">{imgURL:{{v}},width:"300px"}</widget>
         {{end}}
