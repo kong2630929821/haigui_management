@@ -75,13 +75,14 @@
 .search{
     width:150px;
     height:48px;
-    line-height: 48px;
+    background:rgba(25,145,235,1);
+    font-size:18px;
+    font-family:Source Sans Pro;
+    font-weight:600;
+    line-height:48px;
     text-align: center;
-    margin-right: 25px;
-    color: #fff;
-    font-size: 18px;
-    background:#1991EB;
-    display:inline-block;
+    color:rgba(255,255,255,1);
+    cursor: pointer;
 }
 .pagination-box{
     position: fixed;

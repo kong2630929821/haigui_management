@@ -30,13 +30,15 @@
 
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>
-        <div w-class="input" ev-input-change="phoneChange">
-            <widget w-tag="app-components-input">{placeHolder:"手机号"}</widget>
-        </div>
-        <div w-class="search" on-tap="search" on-down="onShow">查询</div>
-
-        <div style="display:inline-block" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
-            <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
+        <div style="display:flex;align-items: center;">
+            <div w-class="input" ev-input-change="phoneChange">
+                <widget w-tag="app-components-input">{placeHolder:"手机号"}</widget>
+            </div>
+            <div w-class="search" on-tap="search" on-down="onShow">查询</div>
+    
+            <div style="display:inline-block;margin-left: 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
+                <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
+            </div>
         </div>
     </div>
 
