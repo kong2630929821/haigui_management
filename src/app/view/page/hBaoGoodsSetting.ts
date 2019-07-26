@@ -22,6 +22,8 @@ export class HBaoGoodsSetting extends CommodityLibrary {
                     this.state = res;
                     this.paint();
                 }); 
+            }).catch(e => {
+                popNewMessage('绑定用户失败');
             });
         });
     }
