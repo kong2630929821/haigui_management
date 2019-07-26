@@ -288,11 +288,11 @@
 			winit.startImpl = function () {
 				if (winit.debug) {
 					winit.loadJS(winit.getLoadDomain("hotfix.js"),
-						"/dst/app/boot/hotfix.js", "utf8", winit.initFail, "load hotupdate error");
+						"/management/app/boot/hotfix.js", "utf8", winit.initFail, "load hotupdate error");
 				}
 
 				winit.loadJS(winit.getLoadDomain("index.js"),
-					"/dst/app/boot/index.js?" + Math.random(), "utf8", winit.initFail, "load index error");
+					"/management/app/boot/index.js?" + Math.random(), "utf8", winit.initFail, "load index error");
 			}
 
 			if (document.hidden === true)
