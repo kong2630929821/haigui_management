@@ -54,3 +54,6 @@ export const PendingPaymentDuration = 15 * 60 * 1000;
 
 // 获取图片路径
 export const serverFilePath = `http://${sourceIp}:${sourcePort}/service/get_file?sid=`;
+
+// 管理员账号
+export const admain = '管理员';

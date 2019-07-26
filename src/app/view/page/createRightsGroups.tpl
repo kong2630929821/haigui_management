@@ -2,7 +2,7 @@
     <div w-class="shopSum">共{{it.sum}}条记录</div> 
     <div ev-table-detail="goDetail">
         <div w-class="tableTitle">权限列表</div>
-        <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,inlineBtn1:"编辑",inlineBtn2:"删除"}</widget>
+        <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,inlineBtn1:"编辑",inlineBtn2:"删除",disabled:true}</widget>
     </div>
     <div w-class="ctroller">
         <div w-class="searchleft" on-tap="exportUser" on-down="onShow">导出全部信息</div>

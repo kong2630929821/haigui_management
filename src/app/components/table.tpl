@@ -44,13 +44,12 @@
                             <input type="file" w-class="btn1" on-change="importExcel(e,{{i}})" on-down="onShow"/>
                         </div>
                         {{end}}
-                        
                         {{if it.inlineBtn1}}
-                        <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:10px;" on-tap="goDetail(e,{{i}},1)" on-down="onShow">{{it.inlineBtn1}}</div>
+                        <div w-class="btn {{it.color?'btnColor':''}} {{it.disabled && it.datas[i][0] ==it.admin  ? 'disable':''}}" style="margin-left:10px;" on-tap="goDetail(e,{{i}},1)" on-down="onShow">{{it.inlineBtn1}}</div>
                         {{end}}
 
                         {{if it.inlineBtn2}}
-                        <div w-class="btn" style="margin-left:10px;" on-tap="goDetail(e,{{i}},2)" on-down="onShow">{{it.inlineBtn2}}</div>
+                        <div w-class="btn {{it.disabled && it.datas[i][0] ==it.admin?'disable':''}}" style="margin-left:10px;" on-tap="goDetail(e,{{i}},2)" on-down="onShow">{{it.inlineBtn2}}</div>
                         {{end}}
 
                         {{if it.inlineBtn3}}
