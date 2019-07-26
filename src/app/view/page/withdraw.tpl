@@ -31,19 +31,21 @@
 
     <div w-class="searchBox">
         <div w-class="tableTitle">筛选查询</div>
-        <div w-class="input" ev-input-change="uidChange">
-            <widget w-tag="app-components-input">{placeHolder:"用户ID"}</widget>
+        <div style="display:flex;align-items: center;">
+            <div w-class="input" ev-input-change="uidChange">
+                <widget w-tag="app-components-input">{placeHolder:"用户ID"}</widget>
+            </div>
+            <div w-class="search" on-tap="search" on-down="onShow">查询</div>
+            
+            <div style="display:inline-block;margin-left: 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
+                <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
+            </div>
+            {{if it.activeTab==2}}
+            <div style="display:inline-block;height: 50px;margin-left: 40px;" ev-selected="filterTimeType">
+                <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
+            </div>
+            {{end}}
         </div>
-        <div w-class="search" on-tap="search" on-down="onShow">查询</div>
-        
-        <div style="display:inline-block" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
-            <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
-        </div>
-        {{if it.activeTab==2}}
-        <div style="display:inline-block;height: 50px;margin-left: 40px;" ev-selected="filterTimeType">
-            <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
-        </div>
-        {{end}}
     </div>
 
     {{if it.showDataList}}

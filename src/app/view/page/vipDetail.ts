@@ -261,6 +261,8 @@ export class VipDetail extends Widget {
                 } else {
                     popNewMessage('修改失败');
                 }
+            }).catch(e => {
+                popNewMessage('修改失败');
             });
         });
     }

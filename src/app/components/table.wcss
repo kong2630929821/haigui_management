@@ -36,11 +36,6 @@
 .th1{
     padding: 0;
 }
-.td1{
-   padding: 0;
-   display: flex;
-   justify-content: space-around;
-}
 .bottom{
     height:48px;
     background:rgba(240,240,240,1);
@@ -69,7 +64,6 @@
 }
 .btnColor{
     color: red;
-    padding: 0 10px;
 }
 .input{
     appearance:none;
@@ -108,8 +102,24 @@
     border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
 }
+.autoTd1{
+    white-space: nowrap;
+    padding: 10px;
+    line-height: 25px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
 .autoTh{
     white-space: nowrap;
+    padding: 10px;
+    line-height: 25px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+.nowrap{
+    min-width: 246px;
     padding: 10px;
     line-height: 25px;
     text-align: center;

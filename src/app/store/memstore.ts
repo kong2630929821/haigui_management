@@ -166,6 +166,7 @@ interface Store {
     groupList:GroupInfo[];
     hBaoGoods:[number,string][];   // 399商品列表 【商品ID，用户邀请码】
     hBaoGoodsDetail:{user:string; goods:GoodsDetail}[];   // 399商品列表详情
+    flags:any;
 }
 // 全局内存数据库
 const store:Store = {
@@ -184,7 +185,8 @@ const store:Store = {
     },
     groupList:[],
     hBaoGoods:[],   // 399商品列表
-    hBaoGoodsDetail:[]
+    hBaoGoodsDetail:[],
+    flags:{}
 };
 
 // SKU

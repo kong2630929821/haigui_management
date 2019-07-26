@@ -7,11 +7,11 @@
                         <th w-class="th {{it.auto?'autoTh':''}}" style="width:80px;">选择</th>
                         {{end}}
                         {{for i,v of it.title}}
-                        <th w-class="th {{it.auto?'autoTh':''}}">{{v}}</th>
+                        <th w-class="th {{it.auto ?'autoTh':'nowrap'}}">{{v}}</th>
                         {{end}}
     
                         {{if it.inlineBtn1 || it.inlineBtn2 || it.inlineBtn3 || it.inputFile}}
-                        <th w-class="th th1 {{it.auto?'autoTh':''}}">操作</th>
+                        <th w-class="th autoTh">操作</th>
                         {{end}}
                     </tr>
             </thead>
@@ -25,7 +25,7 @@
                     {{end}}
                     
                     {{for j,r of v}}
-                    <td w-class="td {{it.auto?'autoTd':''}}">
+                    <td w-class="td {{it.auto ?'autoTd':'nowrap'}}">
                         {{if it.color==1&&r=='退货成功'}}
                             <span style="word-break: break-all;color:rgba(33,129,28,1)">{{typeof(r)=="string" ? r :JSON.stringify(r)}}</span>
                         {{elseif it.color==1&&r=='退货失败'}}
@@ -37,7 +37,7 @@
                     {{end}}
 
                     {{if it.inlineBtn1 || it.inlineBtn2 || it.inlineBtn3 || it.inputFile}}
-                    <td w-class="td td1 {{it.auto?'autoTd':''}}">
+                    <td w-class="td td1 autoTd1">
                         {{if it.inputFile}}
                         <div w-class="exportFile">
                             <div w-class="exportFileBtn">导入表单</div>
@@ -49,11 +49,11 @@
                         {{end}}
 
                         {{if it.inlineBtn2}}
-                        <div w-class="btn {{it.disabled && it.datas[i][0] ==it.admin?'disable':''}}" style="margin-left:10px;" on-tap="goDetail(e,{{i}},2)" on-down="onShow">{{it.inlineBtn2}}</div>
+                        <div w-class="btn {{it.disabled && it.datas[i][0] ==it.admin?'disable':''}}" style="margin-left:20px;" on-tap="goDetail(e,{{i}},2)" on-down="onShow">{{it.inlineBtn2}}</div>
                         {{end}}
 
                         {{if it.inlineBtn3}}
-                        <div w-class="btn" style="color:#222;padding: 0 10px;" on-tap="goDetail(e,{{i}},3)" on-down="onShow">{{it.inlineBtn3}}</div>
+                        <div w-class="btn" style="color:#222;padding: 0 20px;" on-tap="goDetail(e,{{i}},3)" on-down="onShow">{{it.inlineBtn3}}</div>
                         {{end}}
                        
                     </td>
@@ -65,7 +65,7 @@
 
     </div>
 
-    {{if it.auto==0}}
+    {{if it.auto==3}}
         <div w-class="bottom">
             {{if it.needCheckBox}}
             <div w-class="allCheck" on-tap="allChecked">

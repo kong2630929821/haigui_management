@@ -60,7 +60,8 @@ export class VipManage extends Widget {
 
     public create() {
         super.create();
-        this.getDatas(false);
+        this.state = STATE;
+        this.getDatas(this.state);
     }
 
     // 获取数据  fg为true则强制执行请求getVipMember
@@ -273,3 +274,10 @@ export class VipManage extends Widget {
         rippleShow(e);
     }
 }
+
+let STATE = false;
+register('flags/vipChange',r => {
+    debugger;
+    STATE = r;
+    forelet.paint(STATE);
+});

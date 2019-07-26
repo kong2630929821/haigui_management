@@ -1,4 +1,5 @@
 import { Widget } from '../../pi/widget/widget';
+import { popNewMessage } from '../utils/logic';
 import { rippleShow } from '../utils/tools';
 interface Props {
     title:string;
@@ -41,6 +42,11 @@ export class ModalBox extends Widget {
 
     // 点击确认按钮
     public okBtnClick() {
+        if (!this.props.message) {
+            popNewMessage('请输入邀请码');
+            
+            return; 
+        }
         this.ok && this.ok(this.props.message);
     }
 
