@@ -196,7 +196,7 @@ export class CommodityLibrary extends Widget {
             const data = JSON.parse(r1.value);
             this.props.shopNum = data[1];
             getAllGoods(index === 1 ? 0 :data[0],this.props.perPage,status,star_time,end_time).then(r => {
-                const shop = r;
+                const shop = r[1];
                 this.props.showDataList = shop;
                 this.paint();
             });
@@ -263,22 +263,19 @@ export class CommodityLibrary extends Widget {
             console.log('111111111',r1);
             const data = JSON.parse(r1.value);
             this.props.shopNum = data[1];
-            getAllGoods(data[0],500,status,star_time,end_time).then(r => {
-                const jsonHead = this.props.showDateTitle;
-                const aoa = [jsonHead];
-                const jsonData = r;
-                for (const v of jsonData) {
-                    for (let i = 0;i < v.length;i++) {
-                        if (v[i]) {
-                            v[i] = v[i].toString();
-                        }  
+            getAllGoods(data[0],100,status,star_time,end_time).then(r => {
+                const aoa = [
+                    ['商品ID','商品名称','商品规格(SKU/规格/差价)','商品类型','供应商id','供应商名称','品牌id','地区id','库存数量','供货价','成本价','原价','会员价','折后价','税费','分组列表','上架状态','上架时间','保质期','供应商sku','供应商商品id']
+                ];
+                for (const v of r[0]) {
+                    for (const i in v) {
+                        v[i] = typeof(v[i]) !== 'string' ? JSON.stringify(v[i]) :v[i];
                     }
                     aoa.push(v);
                 }
-                console.log(aoa);
                 exportExcel(aoa,`商品信息表.xlsx`);
         
-                console.log('contentList ===',jsonData);
+                console.log('contentList ===', r, aoa);
             });
         });
     }
@@ -289,8 +286,8 @@ export class CommodityLibrary extends Widget {
         const end_time = transitTimeStamp(this.props.endTime);
         const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
         getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
-            this.props.showDataList = r;
-            this.props.shopNum = r.length;
+            this.props.showDataList = r[1];
+            this.props.shopNum = r[1].length;
             this.paint();
         });
     }

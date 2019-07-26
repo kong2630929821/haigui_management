@@ -145,10 +145,10 @@ export interface Locate {
 // 商品详情
 export interface GoodsDetail {
     id:number;  // 商品ID
-    name:string;  // 名称
+    name:string;  // 商品名称
     shopType:string;  // 商品类型
     brand:number;  // 品牌ID
-    typeName:string;  // 分组
+    typeName:string;  // 分组信息
     img:[string,number,number][];  // 图片
     discount:string;  // 折扣
     tax:string;  // 税费

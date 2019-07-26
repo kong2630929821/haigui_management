@@ -1,7 +1,7 @@
 import { httpPort, sourceIp } from '../config';
 import { setStore } from '../store/memstore';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { analyzeGoods, brandProcessing, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShoppingTop10, processingShopSetting, processingUser, processingUserLevelChange, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
+import { analyzeGoods, brandProcessing, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShoppingTop10, processingShopSetting, processingUser, processingUserLevelChange, processingUserType, processingVip, supplierProcessing, parseGoodsList } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -597,7 +597,7 @@ export const getAllGoods = (star:number,num:number,state:number,start_time:numbe
         return res.json().then(r => {
             const data = JSON.parse(r.value);
             
-            return analyzeGoods(data);
+            return [parseGoodsList(data), analyzeGoods(data)];
         });
     });
 };
