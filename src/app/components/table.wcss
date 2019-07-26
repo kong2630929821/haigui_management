@@ -140,3 +140,6 @@
     color:white;
     background: rgb(25, 145, 235);
 }
+.disable{
+    color: #7a869a;
+}
