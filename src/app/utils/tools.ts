@@ -770,6 +770,46 @@ export const analyzeGoods = (data: any) => {
     return arr;
 };
 
+// 解析商品为数组
+export const parseGoodsList=(data:any)=>{
+    if (!data) {
+        return [];
+    }
+    const arr:any[] = [];
+    data.forEach(item => {
+        const typeList = [];
+        item.forEach(v => {
+            // ['SKU','规格','差价']
+            typeList.push(`${v[2][0]}/${v[3]}/${priceFormat(v[2][1])}`);
+        });
+        let goodsType = '';// 是否报税
+        if (item[0][16] === 1) {
+            goodsType = '保税商品';
+        } else if (item[0][16] === 0) {
+            goodsType = '普通商品';
+        } else {
+            goodsType = '海外直购';
+        }
+        const imgType2 = [...item[0][18][0]];
+        const img = item[0][18];
+        img.splice(0,1);
+        img.forEach(v => {
+            imgType2.push(v[2]);
+        });
+        const group = [];
+        for (const r of item[0][19]) {
+            // 一级分组/二级分组
+            group.push(`${r[1]}/${r[3] ? r[3] :''}`);
+        }
+        const state = item[0][20]==1 ? "已上架":'已下架';
+        const validTime = item[22]?`${timestampFormat(item[22][0]).split(' ')[0]}~${timestampFormat(item[22][1]).split(' ')[0]}`:'无';
+        // ['商品ID','商品名称','商品规格(SKU/规格/差价)','商品类型','供应商id','供应商名称','品牌id','地区id','库存数量','供货价','成本价','原价','会员价','折后价','税费','分组列表','上架状态','上架时间','保质期','供应商sku','供应商商品id']
+        arr.push([item[0][0],item[0][1],typeList,goodsType,item[0][4],item[0][5],item[0][6],item[0][7],item[0][10],priceFormat(item[0][11]),priceFormat(item[0][12]),priceFormat(item[0][13]),priceFormat(item[0][14]),priceFormat(item[0][15]),priceFormat(item[0][17]),group.join(','),state,timestampFormat(item[0][21]),validTime,item[0][24],item[0][25]]);
+    });
+    
+    return arr;
+}
+
 // 解析所有分组
 export const parseAllGroups = (data: any) => {
     const ans = [];
