@@ -157,9 +157,4 @@ export class OrderTable extends Widget {
     public exportAllOrder(e:any) {
         notify(e.node,'ev-import-allOrder',undefined);
     }
-
-    // 动画效果执行
-    public onShow(e:any) {
-        rippleShow(e);
-    }
 }

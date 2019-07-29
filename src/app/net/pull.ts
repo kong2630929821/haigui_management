@@ -1,3 +1,4 @@
+import { deepCopy } from '../../pi/util/util';
 import { httpPort, sourceIp } from '../config';
 import { deepCopy, setStore } from '../store/memstore';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
@@ -596,7 +597,7 @@ export const getAllGoods = (star:number,num:number,state:number,start_time:numbe
         // return res.json();
         return res.json().then(r => {
             const data = JSON.parse(r.value);
-           
+    
             return [parseGoodsList(deepCopy(data)), analyzeGoods(deepCopy(data))];
         });
     });

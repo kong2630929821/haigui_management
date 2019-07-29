@@ -1,3 +1,4 @@
+import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { mallImagPre } from '../../config';
@@ -65,6 +66,10 @@ export class CommodityLibrary extends Widget {
         goodsId:[],
         perPageIndex:0
     };
+    private exportAllDatas:any = [
+        ['商品ID','商品名称','商品规格(SKU/规格/差价)','商品类型','供应商id','供应商名称','品牌id','地区id','库存数量','供货价','成本价','原价','会员价','折后价','税费','分组列表','上架状态','上架时间','保质期','供应商sku','供应商商品id']
+    ];  
+    private loadding:any;
 
     public create() {
         super.create();
@@ -255,29 +260,43 @@ export class CommodityLibrary extends Widget {
     }
 
     // 导出全部数据
-    public exportShop() {
+    public exportAllGoods() {
+        this.loadding = popNew('app-components-loading',{ text:'商品导出中……' });
+        this.exportShop(0);
+    }
+
+    // 递归获取所有数据
+    public exportShop(num:number) {
         const star_time = transitTimeStamp(this.props.startTime);
         const end_time = transitTimeStamp(this.props.endTime);
-        const status = this.props.statusTypeActiveIndex === 0 ? 1 :(this.props.statusTypeActiveIndex === 1 ? 0 :-1);// 0已下架 1已上架 -1已删除
-        getGoodsKey(1).then(r1 => {
-            console.log('111111111',r1);
-            const data = JSON.parse(r1.value);
-            this.props.shopNum = data[1];
-            getAllGoods(data[0],100,status,star_time,end_time).then(r => {
-                const aoa = [
-                    ['商品ID','商品名称','商品规格(SKU/规格/差价)','商品类型','供应商id','供应商名称','品牌id','地区id','库存数量','供货价','成本价','原价','会员价','折后价','税费','分组列表','上架状态','上架时间','保质期','供应商sku','供应商商品id']
-                ];
-                for (const v of r[0]) {
-                    for (const i in v) {
-                        v[i] = typeof(v[i]) !== 'string' ? JSON.stringify(v[i]) :v[i];
+        const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
+        if (num <= this.props.shopNum) {
+            getGoodsKey(num > 0 ? num :1).then(r1 => {
+                console.log('111111111',r1);
+                const data = JSON.parse(r1.value);
+                this.props.shopNum = data[1];
+                
+                getAllGoods(num === 1 ? 0 :data[0], 200,status,star_time,end_time).then(r => {
+                    for (const v of r[0]) {
+                        for (const i in v) {
+                            v[i] = typeof(v[i]) !== 'string' ? JSON.stringify(v[i]) :v[i];
+                        }
+                        this.exportAllDatas.push(v);
                     }
-                    aoa.push(v);
-                }
-                exportExcel(aoa,`商品信息表.xlsx`);
-        
-                console.log('contentList ===', r, aoa);
+                    num += 200;
+                    if (num >= this.props.shopNum) {
+                        exportExcel(this.exportAllDatas,`商品信息表.xlsx`);
+                        this.loadding && this.loadding.callback(this.loadding.widget);
+                        console.log('exportAllDatas ===', this.exportAllDatas);
+
+                    } else {
+                        this.exportShop(num);
+                    }
+            
+                });
             });
-        });
+        }
+        
     }
     
     // 筛选上下架变化数据

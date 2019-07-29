@@ -436,6 +436,8 @@ export class OnShelvesImg extends Widget {
     // 品牌选择
     public brandTypeChange(e:any) {
         this.props.brandTypeIndex = e.value;
+        this.props.expandIndex[2] = false;
+        this.paint();
     }
 
     // 过滤器变化
