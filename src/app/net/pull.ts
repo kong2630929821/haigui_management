@@ -1,5 +1,5 @@
 import { httpPort, sourceIp } from '../config';
-import { setStore } from '../store/memstore';
+import { deepCopy, setStore } from '../store/memstore';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
 import { analyzeGoods, brandProcessing, parseGoodsList, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShoppingTop10, processingShopSetting, processingUser, processingUserLevelChange, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
@@ -597,8 +597,7 @@ export const getAllGoods = (star:number,num:number,state:number,start_time:numbe
         return res.json().then(r => {
             const data = JSON.parse(r.value);
            
-            
-            return [parseGoodsList(data), analyzeGoods(data)];
+            return [parseGoodsList(deepCopy(data)), analyzeGoods(deepCopy(data))];
         });
     });
 };

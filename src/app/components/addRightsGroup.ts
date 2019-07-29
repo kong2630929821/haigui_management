@@ -70,7 +70,7 @@ export class AddRightsGroup extends Widget {
 
         // 已有的权限组
         getAllUserType().then(r => {
-            this.props.rightGroups = r[0];
+            this.props.rightGroups = r[0] || [];
             this.paint();
         });
     }

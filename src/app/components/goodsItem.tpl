@@ -29,7 +29,7 @@
 
         {{elseif it.inFlag==2}}
             {{if it.bindUser}}
-            <div w-class="baseItem">【已绑定】{{it.bindUser}}</div>
+            <div w-class="baseItem">【已绑定ID】{{it.bindUser}}</div>
             {{else}}
             <div w-class="btn" on-tap="bindUser" style="width:150px;">绑定邀请码</div>
             {{end}}
