@@ -1,6 +1,8 @@
 // tslint:disable-next-line:missing-jsdoc
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
+import { admain, mallImagPre } from '../config';
+import { rippleShow } from '../utils/tools';
 
 interface Props {
     title:any[];// 表格标题
@@ -12,9 +14,14 @@ interface Props {
     btn2:string;
     inlineBtn1:string;
     inlineBtn2:string;
+    inlineBtn3:string;
     inputFile:string;
     color:boolean;
     auto:boolean;
+    mallImagPre:string;
+    img:boolean;
+    disabled:boolean;// 禁用某行
+    admin:string;// 管理员账号
 }
 // tslint:disable-next-line:completed-docs
 export class Table extends Widget {
@@ -28,9 +35,14 @@ export class Table extends Widget {
         btn2:'',
         inlineBtn1:'',
         inlineBtn2:'',
+        inlineBtn3:'',
         inputFile:'',
         color:false,
-        auto:false
+        auto:false,
+        mallImagPre:mallImagPre,
+        img:false,
+        disabled:false,
+        admin:admain
     };
     
     public setProps(props:any) {
@@ -72,6 +84,11 @@ export class Table extends Widget {
 
     // 查看详情
     public goDetail(e:any,num:number,fg:number) {
+        const str = this.props.datas[num][0];
+        // 禁用管理员的的不响应
+        if (this.props.disabled && str === this.props.admin) {
+            return ;
+        }
         notify(e.node,'ev-table-detail',{ value:this.props.datas[num], fg:fg,num:num });
     }
 
@@ -80,9 +97,13 @@ export class Table extends Widget {
         console.log('123123');
         notify(e.node,'ev-table-detail',{ value:num });
     }
-
+    // 表格操作按钮
     public reDetail(e:any,num:number,fg:number) {
         notify(e.node,'ev-table-redetail',{ value:this.props.datas[num], fg:fg,num:num }); 
     }    
 
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
+    }
 }

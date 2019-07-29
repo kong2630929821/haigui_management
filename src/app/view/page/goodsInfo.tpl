@@ -1,29 +1,45 @@
-<div w-class="page" ev-detail-back="detailBack">
-    {{if !it.showDetail}}
-    <div w-class="searchBox">
-        <div w-class="tableTitle">筛选查询</div>
-        <div w-class="btnBox">
-            <div w-class="input" ev-input-change="inputChange">
-                <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
+<div w-class="page" ev-detail-back="detailBack" on-tap="close" style="padding:0;">
+        <div style="display: flex">
+            <div w-class="back" on-tap="goBack" on-down="onShow">返回</div>    
+            <div style="flex:1 0 0;display:flex;align-items: center;min-height: 50px;background: #fff;margin-left: 20px;padding: 0 10px;">
+                <div style="font-weight: 600;flex-shrink: 0;">已选择的商品ID:</div>
+                <div style="margin:0 10px;">{{it.goodsId.join(", ")}}</div>
+                <div w-class="btn" style="margin:0;width: 60px;flex-shrink: 0;" on-tap="confirmGoods">确认</div>
             </div>
-            <div w-class="search" on-tap="search">查询</div>
+        </div>
+    
+        <div w-class="searchBox">
+                <div w-class="tableTitle">筛选查询</div>
+                <div w-class="btnBox" style="justify-content: flex-start;">
+                    <div w-class="input" ev-input-change="inputChange">
+                        <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
+                    </div>
+                    <div w-class="search" on-tap="search" on-down="onShow">查询</div>
+                </div>
         </div>
 
-    </div>
-    <div w-class="shopSum">共{{it.shopNum}}件商品</div> 
-    <div ev-table-detail="goDetail">
-        <div w-class="tableTitle">商品列表</div>
-        <widget w-tag="app-components-table">{datas: {{it.showDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true}</widget>
-    </div>
-    
-    {{else}}
-    <widget w-tag="app-view-page-vipDetail"></widget>
-    {{end}}
-    <div w-class="searchleft" on-tap="exportShop">导出全部信息</div>
-    {{% ==================================分页=====================}}
-        {{if it.showDataList.length>0}}
-            <div ev-changeCurrent="pageChange" w-class="pagination">
-                <widget w-tag="app-components-pagination">{pages:{{Math.floor(it.shopNum/ 12) + 1}},currentIndex:{{it.currentIndex}} }</widget>
+        <div w-class="shopSum">共{{it.shopNum}}件商品</div> 
+        <div>
+            <div w-class="tableTitle">商品列表</div>
+            <div w-class="tableData">
+                <div w-class="title">
+                    {{for i,v of it.showDateTitle}}
+                    <div w-class="titleItem">{{v}}</div>
+                    {{end}}
+                </div>
+                <div w-class="dataBody">
+                    {{for i,v of it.showDataList}}
+                        <div ev-selGoods="selectGoods">
+                            <widget w-tag="app-components-goodsItem">{datas:{{v}}, inFlag:3,selected:{{it.goodsId.findIndex(r=>r==v.id) > -1}} }</widget>
+                        </div>
+                    {{end}}
+                </div>
             </div>
-        {{end}}
-</div>
+        </div>
+        <div style="position:relative;">
+            <div ev-changeCurrent="pageChange" ev-perPage="perPage" w-class="pagination">
+                <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true,currentIndex:{{it.currentIndex}} }</widget>
+            </div>
+        </div>
+        
+    </div>

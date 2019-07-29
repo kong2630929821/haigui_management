@@ -4,12 +4,12 @@
     <div w-class="money">
         <p w-class="title">{{v.title}} ￥{{v.num}}</p>
         <div w-class="input" ev-input-change="inputChange(e,{{i}})">
-            <widget w-tag="app-components-input">{placeHolder:{{v.num}},maxLength:10,itype:"number"}</widget>
-            <div w-class="btn2" on-tap="okBtnClick({{i}})">修改</div>
+            <widget w-tag="app-components-input">{placeHolder:{{v.num}},itype:"number",maxNumber:1000000 }</widget>
+            <div w-class="btn2" on-tap="okBtnClick({{i}})" on-down="onShow">修改</div>
         </div>
     </div>
     {{end}}
     <div w-class="btnGroup">
-        <div w-class="btn1" on-tap="cancelBtnClick">关闭窗口</div>
+        <div w-class="btn1" on-tap="cancelBtnClick" on-down="onShow">关闭窗口</div>
     </div>
 </div>

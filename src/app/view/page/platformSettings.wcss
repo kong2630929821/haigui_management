@@ -1,0 +1,90 @@
+.page{
+    background: #F0F2F5;
+    padding: 20px 60px;
+    color:#354052;
+}
+.searchBox{
+    margin:20px 0;
+    height: 150px;
+    background: #fff;
+    cursor: pointer;
+}
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
+}
+.searchItem{
+    display: flex;
+    align-items: center;
+}
+.input{
+    width:200px;
+    height:48px;
+    border:1px solid rgba(0,0,0,0.1);
+    display: inline-block;
+    margin-left: 49px;
+}
+.btn{
+    width:150px;
+    height:48px;
+    background:rgba(25,145,235,1);
+    font-size:18px;
+    font-family:Source Sans Pro;
+    font-weight:600;
+    line-height:48px;
+    text-align: center;
+    color:rgba(255,255,255,1);
+}
+.shopSum{
+    height: 26px;
+    font-size:14px;
+    font-family:PingFangSC-Semibold;
+    font-weight:650;
+    color:rgba(53,64,82,1);
+    line-height:20px;
+}
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
+}
+.ctroller{
+    height: 48px;
+    border:1px solid rgba(204,204,204,1);
+    display: flex;
+    position: relative;
+}
+.searchleft{
+    width:150px;
+    height:36px;
+    line-height: 36px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    background:#1991EB;
+    cursor: pointer;
+    margin: 5px 20px;
+}
+.onShelves{
+    width:100px;
+    height:36px;
+    line-height: 36px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    background:#1991EB;
+    cursor: pointer;
+    margin: 5px 20px;
+}
+.pagination{
+    position: absolute;
+    top: -9px;
+    right: 50px;
+}

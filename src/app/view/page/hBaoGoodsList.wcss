@@ -1,0 +1,91 @@
+
+.page{
+    background: #F0F2F5;
+    padding: 20px 60px;
+    color:#354052;
+}
+.searchBox{
+    margin:20px 0;
+    background: #fff;
+    cursor: pointer;
+}
+.btnBox{
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    margin-right: 28px;
+}
+.input{
+    width:200px;
+    height:48px;
+    margin: 25px 0 25px 25px;
+    border:1px solid rgba(0,0,0,0.1);
+    display: inline-block;
+}
+.search{
+    width:150px;
+    height:48px;
+    line-height: 48px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    background:#1991EB;
+    margin-top: 25px;
+}
+.shopSum{
+    height: 26px;
+    font-size:14px;
+    font-weight:650;
+    color:rgba(53,64,82,1);
+    line-height:20px;
+}
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
+}
+.tableData{
+    height: 600px;
+    border:1px solid rgba(204,204,204,1);
+    box-sizing: border-box;
+}
+.dataBody{
+    height: 550px;
+    overflow: auto;
+}
+.pagination{
+    position: absolute;
+    top: -9px;
+    right: 50px;
+}
+.title{
+    display: flex;
+    background: #F0F0F0;
+    align-items: center;
+}
+.titleItem{
+    width: 200px;
+    flex: 1;
+    text-align: center;
+    border-left: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 48px;
+    line-height: 48px;
+}
+.pagination{
+    position: absolute;
+    top: -9px;
+    right: 50px;
+}
+.ctroller{
+    height: 48px;
+    border:1px solid rgba(204,204,204,1);
+    display: flex;
+    position: relative;
+}

@@ -1,9 +1,11 @@
 import { popNew } from '../../../pi/ui/root';
 import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
+import { perPage } from '../../components/pagination';
 import { changeHWangState, getHWangApply, getHwangTotal } from '../../net/pull';
+import { setStore } from '../../store/memstore';
 import { dateToString, parseDate, popNewMessage, unicode2ReadStr, unicode2Str } from '../../utils/logic';
-import { addressFormat, exportExcel } from '../../utils/tools';
+import { addressFormat, exportExcel, rippleShow } from '../../utils/tools';
 interface Props {
     datas:any[];  // 原始数据
     showDataList:any[];  // 显示数据
@@ -21,6 +23,9 @@ interface Props {
     endTime:string;  // 结束时间
     curShowDataList:any[]; // 当前页显示数据
     curPage:number; // 当前页码
+    perPage:number;// 每页显示多少个
+    expandIndex:boolean;// 下拉显示
+    perPageIndex:number;// 一页显示多少个下标
 }
 const Status = [
     '申请中',
@@ -36,7 +41,7 @@ export class OpenHWang extends Widget {
         showDataList:[
             // ['123456','张三','15534429570','四川省成都市金牛区XX街道XX小区XX','申请中']
         ],
-        showTitleList:['用户ID','姓名','手机号','地址信息','微信名','邀请人id','申请时间','受理状态'],
+        showTitleList:['用户ID','姓名','手机号','地址信息','微信名','邀请人id','申请时间','受理状态','拒绝理由'],
         activeTab:0,
         datas:[],
         btn1:'',
@@ -50,7 +55,10 @@ export class OpenHWang extends Widget {
         startTime:'',
         endTime:'',
         curShowDataList:[],
-        curPage:0
+        curPage:0,
+        perPage:perPage[0],
+        expandIndex:false,
+        perPageIndex:0
     };
 
     public create() {
@@ -108,7 +116,8 @@ export class OpenHWang extends Widget {
                         unicode2ReadStr(item[3]),   // 微信名
                         item[7],    // 邀请人id
                         dateToString(item[6],1), // 申请时间
-                        Status[item[5]]  // 状态
+                        Status[item[5]],  // 状态
+                        unicode2Str(item[9])  // 拒绝理由
                     ];
                 });
                 this.changeTab(this.props.activeTab);
@@ -128,21 +137,28 @@ export class OpenHWang extends Widget {
         const uid = this.props.curShowDataList[e.num][0];
         if (id && uid) {
             if (e.fg === 1) {
-                popNew('app-components-modalBox',{ content:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
-                    await changeHWangState(id, uid, 3);  // 拒绝
-                    popNewMessage('处理完成');
-                    this.getData();
+               
+                popNew('app-components-modalBoxInput',{ title:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请`,placeHolder:'请输入拒绝理由' },async (r) => {
+                    if (!r) {
+                        popNewMessage('请输入拒绝理由！');
+                    } else {
+                        await changeHWangState(id, uid, 3, r);  // 拒绝
+                        popNewMessage('处理完成');
+                        this.getData();
+                    }
+                    
                 });
                 
             } else {
                 if (this.props.activeTab === 0) {
-                    await changeHWangState(id, uid, 1);  // 开始处理
+                    await changeHWangState(id, uid, 1, '');  // 开始处理
                     popNewMessage('处理完成');
                     this.getData();
                 } else {
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请` },async () => {
-                        await changeHWangState(id, uid, 2);  // 同意
+                        await changeHWangState(id, uid, 2, '');  // 同意
                         popNewMessage('处理完成');
+                        setStore('flags/vipChange',true);
                         this.getData();
                     });
                 }
@@ -199,13 +215,32 @@ export class OpenHWang extends Widget {
 
     public pageClick() {
         this.props.showDateBox = false;
+        this.props.expandIndex = false;
         this.paint();
     }
 
     // 查看某一页数据
     public changePage(e:any) {
         this.props.curPage = e.value;
-        this.props.curShowDataList = this.props.showDataList.slice(e.value * 5,e.value * 5 + 5);
+        this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
+    }
+
+     // 每页展示多少数据
+    public perPage(e:any) {
+        this.props.perPageIndex = e.index;
+        this.props.perPage = e.value;
+        this.changePage({ value:0 });   
+    }
+
+    // 过滤器
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

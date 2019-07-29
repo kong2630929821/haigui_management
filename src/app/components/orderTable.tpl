@@ -39,26 +39,20 @@
                     </td>
                     {{end}}
 
-                    {{if it.inlineBtn1 || it.inlineBtn2 || it.inputFile}}
                     <td w-class="td td1">
-                        {{if it.inputFile}}
-                        <div style="margin-left:0;">
-                            <input type="file" on-change="importExcel(e,{{i}})"/>
-                        </div>
+                        {{if (i > 0 ? v[0] !== it.showDatas[i - 1][0] : true)}}
+                            {{if (v[12] === it.PENDINGPAYMENT ||  v[12] === it.PENDINGDELIVERED)}}
+                            <div w-class="btn btnColor" on-tap="quitOrder(e,{{i}})" on-down="onShow">取消订单</div>
+                            {{elseif (v[12] === it.FAILED)}}
+                            <div w-class="btn" style="color: #222;" on-down="onShow">手动取消</div>
+                            
+                            {{end}}
+                            <div w-class="btn" on-tap="goDetail(e,{{i}})" on-down="onShow">查看详情</div>
                         {{end}}
-                        {{if v[12] === it.PENDINGPAYMENT ||  v[12] === it.PENDINGDELIVERED}}
-                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;" on-tap="quitOrder(e,{{i}})">取消订单</div>
-                        {{elseif v[12] === it.FAILED}}
-                            <div w-class="btn {{it.color?'btnColor':''}}" style="margin-left:0;">手动取消</div>
-                        {{end}}
-                        {{if it.inlineBtn2}}
-                        <div w-class="btn" style="margin-left:0;" on-tap="goDetail(e,{{i}},2)">{{it.inlineBtn2}}</div>
-                        {{end}}
-                        
                     </td>
-                    {{end}}
                 </tr>
                 {{end}}
+
             </tbody>
         </table>
 
@@ -66,16 +60,16 @@
     
     <div w-class="bottom">
         {{if it.needCheckBox}}
-        <div w-class="allCheck" on-tap="allChecked">
+        <div w-class="allCheck" on-tap="allChecked" on-down="onShow">
             <img src="../res/images/{{it.allChecked?'selectBox_active.png':'selectBox.png'}}"/>
             <span style="margin-left:10px;">全选</span>
         </div>
         {{end}}
 
-        <div w-class="searchleft" on-tap="exportOrder">导出订单</div>
+        <div w-class="searchleft" on-tap="exportOrder" on-down="onShow">导出订单</div>
 
         <div ev-input-file="importTransport"><app-components-inputFileBtn>{text:"导入运单"}</app-components-inputFileBtn></div>
-        <div w-class="searchleft" style="width:120px" on-tap="exportAllOrder">导出全部订单</div>
+        <div w-class="searchleft" style="width:120px" on-tap="exportAllOrder" on-down="onShow">导出全部订单</div>
     </div>
 </div>
     

@@ -1,0 +1,62 @@
+.page{
+    background: #F0F2F5;
+    padding: 20px 60px;
+    color:#354052;
+    display: flex;
+}
+.searchBox{
+    margin:20px;
+    background: #fff;
+    cursor: pointer;
+}
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
+}
+.filterBox{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 0;
+}
+.filterTitle{
+    font-size:18px;
+    font-family:PingFangSC-Regular;
+    line-height:96px;
+    color:rgba(0,0,0,1);
+    margin-left: 28px;
+}
+.row{
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+.input{
+    width:180px;
+    height:48px;
+    border:1px solid rgba(0,0,0,0.1);
+    display: inline-block;
+    margin-left: 20px;
+}
+.edit{
+    width:100px;
+    height:36px;
+    line-height: 36px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    background:#1991EB;
+    cursor: pointer;
+    margin: 5px 20px;
+}
+.title{
+    width: 160px;
+}
+.img{
+    height: 650px;
+    max-width: 550px;
+    margin: 20px;
+}

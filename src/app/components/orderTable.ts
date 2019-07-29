@@ -1,6 +1,7 @@
 // tslint:disable-next-line:missing-jsdoc
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
+import { rippleShow } from '../utils/tools';
 import { Order, OrderShow } from '../view/page/totalOrders';
 
 // 订单类型
@@ -135,13 +136,8 @@ export class OrderTable extends Widget {
     }
 
     // 查看详情
-    public goDetail(e:any,num:number,fg:number) {
-        notify(e.node,'ev-table-details',{ value:this.props.showDatas[num], fg:fg,num:num });
-    }
-
-    // 导入excel
-    public importExcel(e:any,num:number) {
-        notify(e.node,'ev-table-detail',{ value:num });
+    public goDetail(e:any,num:number) {
+        notify(e.node,'ev-table-detail',{ value:this.props.showDatas[num], num:num });
     }
 
     public exportOrder(e:any) {
@@ -152,11 +148,18 @@ export class OrderTable extends Widget {
         const file = e.file;
         notify(e.node,'ev-import-order',{ file });
     }
+    
     // 判断操作列显示什么
     public quitOrder(e:any,num:number) {
         notify(e.node,'ev-table-quitOrder',{ value:num });
     }
+
     public exportAllOrder(e:any) {
         notify(e.node,'ev-import-allOrder',undefined);
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

@@ -13,7 +13,7 @@
 	<!--定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值，通常有如下几种取值：none,noindex,nofollow,all,index和follow-->
 	<meta name="robots" content="index">
 	<!--favicon 图标-->
-	<link rel="icon" sizes="64x64" href="icon/64.png" type="image/png" />
+	<link rel="icon" href="data:image/ico;base64,aWNv">
 
 	<!--Google Android原生浏览器-->
 	<!-- 定义你的网页为 Web 应用，添加到主屏  -->
@@ -57,7 +57,6 @@
 	<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 	<!-- <link href="./swiper.min.css" rel="stylesheet" type="text/css"> -->
-	
 
 	<style>
 		body {
@@ -85,7 +84,7 @@
 			align-items: center;
 			position: absolute;
 			z-index: 9998;
-			background-image: url(../res/image1/bg_open.jpg);
+			/* background-image: url(../res/image1/bg_open.jpg); */
 			background-position: center;
 			background-repeat: no-repeat;
 			background-size: cover;
@@ -197,14 +196,18 @@
 			var remote = (document.domain != main || /^\w+\.\w+$/.test(document.domain)) ? name + "." : "";
 			winit.store = name;
 			winit.debug = true; 
-			var needCDN = true; 
-			 
-			winit.severIp = window.location.host;
-			winit.severPort = window.location.port;		
-
-
+			var needCDN = false; // 外网正式需要置true 
+			
+			if(!needCDN){ 
+				winit.severIp = window.location.host;
+			}else{// 本地包需要配置服务器ip和port
+				winit.severIp = "cshop.baomtx.com";
+			}
+			
+			window.localStorage.severIp = winit.severIp;
+			
 			var defaultDomains;
-			var remoteDomains = ["http://" + winit.severIp + ":" + winit.severPort];
+			var remoteDomains = ["http://" + winit.severIp];
 			
 			defaultDomains = winit.domains = remoteDomains;
 
@@ -309,11 +312,9 @@
 
 		})();
 	</script>
-	
 </head>
 
 <body style="-webkit-text-size-adjust:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);background-color:#fff;margin:0px;padding:0px;list-style:none;overflow:hidden;">
-			
 	<div id="rcmj_loading_log" style="background-color:#fff">
 		<div class="inner" id="logo_inner">
 			<div class="logo animated  animated-hinge fadeIn">

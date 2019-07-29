@@ -1,0 +1,101 @@
+.page{
+    background: #F0F2F5;
+    color:#354052;
+}
+.searchBox{
+    margin:20px 0;
+    background: #fff;
+    cursor: pointer;
+    border: 1px solid #eee;
+}
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
+    display: flex;
+    justify-content: space-between;
+}
+.btn{
+    width:130px;
+    height:48px;
+    background:rgba(25,145,235,1);
+    font-size:18px;
+    font-weight:600;
+    line-height:48px;
+    text-align: center;
+    color:rgba(255,255,255,1);
+}
+.btn1{
+    width:100px;
+    height:36px;
+    background:rgba(25,145,235,1);
+    font-size:18px;
+    font-weight:600;
+    line-height:36px;
+    text-align: center;
+    color:rgba(255,255,255,1);
+    margin: 10px;
+}
+.typeItem{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+.updataImg{
+    width:120px;
+    height:120px;
+    border:1px solid rgba(112,112,112,1);
+    opacity:1;
+}
+.filterBoxItem{
+    display: flex;
+    flex-direction: column;
+    max-height: 550px;
+    overflow: auto;
+    padding-bottom: 20px;
+}
+.updataTitle{
+    margin-left: 30px;
+}
+.btns{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+.tab{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    margin: 20px 10px;
+}
+.inputBox{
+    border: 1px solid #888;
+    height: 100px;
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    margin: 0 10px;
+}
+.imgIcon{
+    width: 50px;
+    height: 50px;
+    margin-left: 20px;
+    display: inline-block;
+}
+.back{
+    width:120px;
+    height:48px;
+    border:1px solid rgba(0,0,0,0.1);
+    background:rgba(255,255,255,1);
+    text-align: center;
+    line-height: 48px;
+    font-size: 18px;
+    margin-bottom: 20px;
+}

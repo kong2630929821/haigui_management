@@ -2,6 +2,7 @@
 import { Widget } from '../../pi/widget/widget';
 import { changeMoney } from '../net/pull';
 import { popNewMessage } from '../utils/logic';
+import { rippleShow } from '../utils/tools';
 
 interface Props {
     showData:any;
@@ -57,6 +58,11 @@ export class Modify extends Widget {
         if (index === 0) {  // 现金 单位为分
             money = money * 100;
         }
+        if (money === 0) {
+            popNewMessage('请输入金额');
+
+            return; 
+        }
         changeMoney(index + 1,Number(this.props.uid),money).then(r => {
             console.log('11111111111111',r);
             popNewMessage('修改成功');
@@ -68,5 +74,10 @@ export class Modify extends Widget {
             ];
             this.paint();
         });
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

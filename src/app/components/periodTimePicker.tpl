@@ -12,10 +12,10 @@
     {{if it.showDateBox}}
     <div w-class="dateBox" style="{{it.position}}">
         <div ev-dateSelect-change="changeStartDate" style="margin-right:1px;">
-            <widget w-tag="app-components-dateSelection">{showDate:{{it.startDate}},needTime:true }</widget>
+            <widget w-tag="app-components-dateSelection">{showDate:{{it.startDate}},needTime:{{it.needTime}} }</widget>
         </div>
         <div ev-dateSelect-change="changeEndDate">
-            <widget w-tag="app-components-dateSelection">{showDate:{{it.endDate}},needTime:true }</widget>
+            <widget w-tag="app-components-dateSelection">{showDate:{{it.endDate}},needTime:{{it.needTime}} }</widget>
         </div>
     </div>
     {{end}}

@@ -1,0 +1,60 @@
+.page{
+    background: #F0F2F5;
+    padding: 20px 60px;
+    color:#354052;
+}
+.filterBox{
+    display: flex;
+}
+.searchBox{
+    margin:20px 0;
+    height: 150px;
+    background: #fff;
+    cursor: pointer;
+}
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
+}
+.tabRow{
+    display: flex;
+}
+.tabBar{
+    width:120px;
+    height:48px;
+    border:1px solid rgba(0,0,0,0.1);
+    font-size: 18px;
+    line-height: 48px;
+    text-align: center;
+    margin-right: 20px;
+    background: #fff;
+}
+.activeTab{
+    background: #273142;
+    color:#fff;
+}
+.tableTitle{
+    height:48px;
+    font-size: 18px;
+    color: #fff;
+    line-height: 48px;
+    padding-left: 20px;
+    background:rgba(140,159,183,1);
+}
+.pagination{
+    position: absolute;
+    top: -9px;
+    right: 50px;
+}
+.ctroller{
+    height: 48px;
+    border-bottom:1px solid rgba(204,204,204,1);
+    border-left:1px solid rgba(204,204,204,1);
+    border-right:1px solid rgba(204,204,204,1);
+    display: flex;
+    position: relative;
+}

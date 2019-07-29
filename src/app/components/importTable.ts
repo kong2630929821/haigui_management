@@ -1,6 +1,7 @@
 // tslint:disable-next-line:missing-jsdoc
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
+import { rippleShow } from '../utils/tools';
 
 interface Props {
     title:any[];// 表格标题
@@ -91,5 +92,10 @@ export class ImportTable extends Widget {
     public doImportClick(e:any,index:number) {
         if (!this.props.files[index]) return;
         notify(e.node,'ev-import-file',{ file:this.props.files[index],index });
+    }
+
+    // 动画效果执行
+    public onShow(e:any) {
+        rippleShow(e);
     }
 }

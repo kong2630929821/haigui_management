@@ -1,0 +1,74 @@
+.modal-mask{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 0 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.addUserBox{
+    width:564px;
+    height:470px;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 10px 0px rgba(0,0,0,0.2);
+    border-radius:4px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.row{
+    display: flex;
+}
+.input{
+    width:400px;
+    height:48px;
+    border:1px solid rgba(0,0,0,0.1);
+    display: inline-block;
+    margin-left: 49px;
+}
+.title{
+    font-size:18px;
+    font-family:PingFangSC-Regular;
+    line-height:48px;
+    color:rgba(0,0,0,1);
+}
+.btns{
+    text-align: center;
+    font-size: 14px;
+    line-height: 40px;
+    height:40px;
+    justify-content: center;
+    display: flex;
+    margin: 40px 0;
+}
+.btn-cancel{
+    width:86px;
+    border-radius:4px;
+    border:1px solid rgba(0,0,0,0.1);
+    text-align: center;
+    margin-right: 20px;
+}
+.btn-ok{
+    width:86px;
+    border-radius:4px;
+    border:1px solid rgba(0,0,0,0.1);
+    background:#3294e6;
+    color: #fff;
+    margin-left: 20px;    
+    text-align: center;    
+}
+.addTitle{
+    line-height: 56px;
+    font-size: 18px;
+    color: #222;
+    word-break: break-all;
+    text-align: center;
+}

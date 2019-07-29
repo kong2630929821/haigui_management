@@ -1,0 +1,59 @@
+.pi-input-box{
+    position: relative;
+    color: #222;
+    font-size: 32px;
+    max-height: 240px;
+    width:100%;
+    height:96px;
+    border-radius:4px;
+}
+.pi-input__inner{
+    appearance:none;
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari 和 Chrome */
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: none;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    font-size: inherit;
+    outline: 0;
+    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+    height:96px;
+    font-size:14px;
+    font-family:SourceSansPro-Regular;
+    font-weight:400;
+    resize:none;
+    padding-right:29px;
+    color:rgba(53,64,82,1);
+    line-height:23px;
+    position: absolute;
+    top: 12px;
+    left:0px;
+    word-break: break-all;
+}
+.hideMsg{
+    display:block;
+    visibility:hidden;
+    white-space: pre-wrap;
+    word-break: break-all;
+    padding: 20px 0;
+    font-family: monospace;
+    line-height: 40px;
+}
+.surplus{
+    width:29px;
+    height:21px;
+    font-size:14px;
+    font-family:SourceSansPro-Regular;
+    font-weight:400;
+    color:rgba(197,208,222,1);
+    line-height:21px;
+    position:absolute;
+    bottom:-6px;
+    right:4px;
+}
