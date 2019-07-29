@@ -101,9 +101,4 @@ export class Table extends Widget {
     public reDetail(e:any,num:number,fg:number) {
         notify(e.node,'ev-table-redetail',{ value:this.props.datas[num], fg:fg,num:num }); 
     }    
-
-    // 动画效果执行
-    public onShow(e:any) {
-        rippleShow(e);
-    }
 }
