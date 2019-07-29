@@ -792,7 +792,7 @@ export const parseGoodsList = (data:any) => {
         } else {
             goodsType = '海外直购';
         }
-        const imgType2 = [...item[0][18][0]];
+        const imgType2 = [...(item[0][18][0] ? item[0][18][0] :[])];
         const img = item[0][18];
         img.splice(0,1);
         img.forEach(v => {
