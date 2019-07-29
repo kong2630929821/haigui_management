@@ -88,11 +88,6 @@ export class AddRightsGroup extends Widget {
                 group.push(this.props.dataList[i]);
             }
         });
-        if (this.props.rightGroups.indexOf(name) !== -1) {
-            popNewMessage('该名字已存在');
-
-            return;
-        }
         if (!name) {
             popNewMessage('请输入名字');
 
@@ -105,6 +100,11 @@ export class AddRightsGroup extends Widget {
         }
         if (this.props.status) {
             // 新增
+            if (this.props.rightGroups.indexOf(name) !== -1) {
+                popNewMessage('该名字已存在');
+    
+                return;
+            }
             addRightsGroups(JSON.stringify(group),name).then(r => {
                 if (r.result === 1) {
                     popNewMessage('添加成功');
