@@ -56,12 +56,17 @@
     </div>
 
     <div w-class="tabRow" style="margin:20px 0 10px;">
-        <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)" on-down="onShow">ta的海王</div>
-        <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)" on-down="onShow">ta的海宝</div>
-        <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)" on-down="onShow">ta的白客</div>
-        <div w-class="tabBar {{it.activeTab==3?'activeTab':''}}" on-tap="changeTab(3)" on-down="onShow">资金</div>
-        <div w-class="tabBar {{it.activeTab==4?'activeTab':''}}" on-tap="changeTab(4)" on-down="onShow">海贝</div>
-        <div w-class="tabBar {{it.activeTab==5?'activeTab':''}}" on-tap="changeTab(5)" on-down="onShow">积分</div>
+        <div style="flex:1;display:flex;">
+            <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)" on-down="onShow">ta的海王</div>
+            <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)" on-down="onShow">ta的海宝</div>
+            <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)" on-down="onShow">ta的白客</div>
+            <div w-class="tabBar {{it.activeTab==3?'activeTab':''}}" on-tap="changeTab(3)" on-down="onShow">资金</div>
+            <div w-class="tabBar {{it.activeTab==4?'activeTab':''}}" on-tap="changeTab(4)" on-down="onShow">海贝</div>
+            <div w-class="tabBar {{it.activeTab==5?'activeTab':''}}" on-tap="changeTab(5)" on-down="onShow">积分</div>
+        </div>
+        <div style="flex:1;display:flex;justify-content: flex-end;align-items: center;">
+            <div style="margin-right: 30px;">间推人数共{{it.indirectPeople}}人</div>
+        </div>
     </div>
 
     <div ev-table-detail="goDetail">

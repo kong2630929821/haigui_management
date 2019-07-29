@@ -1,5 +1,5 @@
 import { Widget } from '../../pi/widget/widget';
-import { addRightsGroups, changeRightsGroups } from '../net/pull';
+import { addRightsGroups, changeRightsGroups, getAllUserType } from '../net/pull';
 import { popNewMessage } from '../utils/logic';
 import { rippleShow } from '../utils/tools';
 import { RightsGroups, RightsGroupsShow } from '../view/base/home';
@@ -14,6 +14,7 @@ interface Props {
     name:string;// 名字
     status:boolean;// true为添加 false修改
     currentData:any;// 当前传来的值
+    rightGroups:any;// 已有的权限组
 }
 
 /**
@@ -30,7 +31,8 @@ export class AddRightsGroup extends Widget {
         checkedList:[],
         name:'',
         status:true,
-        currentData:[]
+        currentData:[],
+        rightGroups:[]
     };
 
     public ok:() => void;
@@ -65,6 +67,12 @@ export class AddRightsGroup extends Widget {
                 });
             });
         }
+
+        // 已有的权限组
+        getAllUserType().then(r => {
+            this.props.rightGroups = r[0];
+            this.paint();
+        });
     }
     // 取消
     public cancelBtnClick() {
@@ -80,6 +88,11 @@ export class AddRightsGroup extends Widget {
                 group.push(this.props.dataList[i]);
             }
         });
+        if (this.props.rightGroups.indexOf(name) !== -1) {
+            popNewMessage('该名字已存在');
+
+            return;
+        }
         if (!name) {
             popNewMessage('请输入名字');
 
