@@ -330,14 +330,14 @@ export class MallSettingEdit extends Widget {
             return;
         }
         updateGroup(res.id, res.name, res.imgs, this.props.goodsId, 'false').then(r => {
+            this.props.currentData.children[ind].children = this.props.goodsId;
             this.props.secondName = '';
             this.props.secondImg = '';
-            this.paint();
+            this.cancelSel();
             popNewMessage('保存成功');
         }).catch(r => {
             popNewMessage('保存失败');
         });
-        this.cancelSel();
     }
 
     // 删除二级分类
