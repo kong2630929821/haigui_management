@@ -247,6 +247,7 @@ export class OnShelvesImg extends Widget {
     }
     // 下一步
     public next(e:any) {
+        this.close();
         const img = [this.props.thumbnail[0],...this.props.mainPicture];
         // '商品名称','品牌ID','成本价','普通售价','会员价','折扣价'
         let flag = false;// 判断输入的是否有空值
@@ -310,6 +311,11 @@ export class OnShelvesImg extends Widget {
             popNewMessage('请填写正确的价格');
     
             return ;
+        }
+        if (tax < 0) {
+            popNewMessage('税费不能为负数');
+
+            return;
         }
         const arr = [name,brand,area,supplier,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
         if (this.props.style) {
@@ -382,6 +388,7 @@ export class OnShelvesImg extends Widget {
     }
     // 搜索产品
     public searchProduct() {
+        this.close();
         if (!this.props.searchValue) {
 
             return ;
@@ -442,6 +449,7 @@ export class OnShelvesImg extends Widget {
 
     // 过滤器变化
     public expand(index:number,e:any) {
+        this.close();
         this.props.expandIndex[index] = e.value;
         this.paint();
     }

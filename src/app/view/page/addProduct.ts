@@ -157,6 +157,7 @@ export class AddProduct extends Widget {
     }
     // 保存添加的产品
     public saveProduct(e:any) {
+        this.close();
         const sku = this.props.data[0];
         const supplier = this.props.supplierId[this.props.supplier];
         const sku_name =  this.props.data[1];
@@ -241,6 +242,7 @@ export class AddProduct extends Widget {
     
     // 过滤器变化
     public expand(index:number,e:any) {
+        this.close();
         this.props.expandIndex[index] = e.value;
         this.paint();
     }
