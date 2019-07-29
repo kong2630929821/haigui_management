@@ -25,9 +25,11 @@ interface Props {
     curPage:number; // 当前页码
     timeType:any;
     timeTypeActiveIndex:number;
-    expandIndex:boolean;   
+    expandIndex:any;   
     perPage:number;// 每页多少条数据 
     perPageIndex:number;// 一页显示多少个的下标
+    allData:any;// 过滤后的全部数据
+    allDataWithdrawIdList:any;// 过滤后的未处理的提现单号列表
 }
 const Status = [
     '申请中',
@@ -39,9 +41,10 @@ const Status = [
 ];
 // 订单时间类型
 export enum TimeType {
-    PAYTIME = 0,       // 成功
-    PAYTIME_2 = 1, // 拒绝
-    PAYTIME_1= 2 // 失败
+    PAYTIME = 0,       // 全部
+    PAYTIME_2 = 1, // 成功
+    PAYTIME_1= 2, // 拒绝
+    PAYTIME_3= 3 // 失败
     
 }
 /**
@@ -69,9 +72,11 @@ export class Withdraw extends Widget {
         curPage:0 ,
         timeType:[],
         timeTypeActiveIndex:0,
-        expandIndex:false,
+        expandIndex:[false,false],
         perPage:perPage[0],
-        perPageIndex:0
+        perPageIndex:0,
+        allData:[],
+        allDataWithdrawIdList:[]
     };
 
     public create() {
@@ -80,12 +85,15 @@ export class Withdraw extends Widget {
         this.props.startTime = parseDate(this.props.endTime,-7,1);
         const timeType = [{
             status:TimeType.PAYTIME,
-            text:'提现成功'
+            text:'全部'
         },{
             status:TimeType.PAYTIME_2,
-            text:'提现拒绝'
+            text:'提现成功'
         },{
             status:TimeType.PAYTIME_1,
+            text:'提现拒绝'
+        },{
+            status:TimeType.PAYTIME_3,
             text:'提现失败'
         }];
         this.props.timeType = timeType;
@@ -108,19 +116,27 @@ export class Withdraw extends Widget {
         }
         this.props.showDataList = [];
         this.props.withdrawIdList = [];
+        this.props.allData = [];
         for (const t of this.props.datas) {
             const v = deepCopy(t);
-            if ((t[6] === Status[num] && num !== 2) || 
-                (num === 2 && t[6] === Status[2] && t[6] === Status[this.props.timeTypeActiveIndex + 2]) || 
-                (num === 2 && t[6] === Status[3] && t[6] === Status[this.props.timeTypeActiveIndex + 2]) || 
-                (num === 2 && t[6] === Status[4] && t[6] === Status[this.props.timeTypeActiveIndex + 2])) {
+            // if ((t[6] === Status[num] && num !== 2) || 
+            //     (num === 2 && t[6] === Status[2] && t[6] === Status[this.props.timeTypeActiveIndex + 2]) || 
+            //     (num === 2 && t[6] === Status[3] && t[6] === Status[this.props.timeTypeActiveIndex + 2]) || 
+            //     (num === 2 && t[6] === Status[4] && t[6] === Status[this.props.timeTypeActiveIndex + 2])) {
+            //     this.props.withdrawIdList.push(v.shift());
+            //     this.props.showDataList.push(v);
+            // }
+            if (t[6] === Status[num] || (num === 2 && (t[6] === Status[2] || t[6] === Status[3] || t[6] === Status[4]))) {
+                this.props.allData.push(deepCopy(v));
                 this.props.withdrawIdList.push(v.shift());
                 this.props.showDataList.push(v);
+                
             }
-            if (num === 2 && t[6] === Status[4] && t[6] === Status[this.props.timeTypeActiveIndex + 2]) {
-                this.props.btn1 = '重新处理';
-            }
-        }
+            // if (num === 2 && t[6] === Status[4] && t[6] === Status[this.props.timeTypeActiveIndex + 2]) {
+            //     this.props.btn1 = '重新处理';
+            // }
+        } 
+        this.props.allDataWithdrawIdList = this.props.withdrawIdList;
         this.changePage({ value:0 });
     }
 
@@ -238,18 +254,20 @@ export class Withdraw extends Widget {
         if (this.props.searUid) {
             this.props.showDataList = [];
             this.props.withdrawIdList = [];
+            this.props.allData = [];
             const num = this.props.activeTab;
             const searUid = Number(this.props.searUid);
-
             for (const t of this.props.datas) {
                 const v = deepCopy(t);
-                if (t[1] === searUid && (t[6] === Status[num] || (num === 2 && t[6] === Status[3]))) {
+                if (t[1] === searUid && (t[6] === Status[num] || (num === 2 && (t[6] === Status[2] || t[6] === Status[3] || t[6] === Status[4])))) {
+                    this.props.allData.push(deepCopy(v));
                     this.props.withdrawIdList.push(v.shift());
                     this.props.showDataList.push(v);
                 }
             }
-            this.changePage({ value:0 });
-
+            this.props.allData = this.props.showDataList;
+            this.props.allDataWithdrawIdList = this.props.withdrawIdList;
+            this.filterTimeType({ activeIndex:0 });
         } else {
             this.getData();
         }
@@ -282,7 +300,7 @@ export class Withdraw extends Widget {
 
     public pageClick() {
         this.props.showDateBox = false;
-        this.props.expandIndex = false;
+        this.props.expandIndex = [false,false];
         this.paint();
     }
 
@@ -295,17 +313,37 @@ export class Withdraw extends Widget {
 
     // 成功失败切换
     public filterTimeType(e:any) {
-        // TODO:
         this.props.timeTypeActiveIndex = this.props.timeType[e.activeIndex].status;
-        this.changeTab(this.props.activeTab);
-
+        this.props.expandIndex[0] = false;
+        const num = this.props.timeTypeActiveIndex;
+        const data = deepCopy(this.props.allData);
+        if (num === 0) {
+            this.props.showDataList = deepCopy(this.props.allData);
+            this.props.withdrawIdList = deepCopy(this.props.allDataWithdrawIdList);
+            
+            return; 
+        }
+        this.props.showDataList = [];
+        this.props.withdrawIdList = [];
+        // this.changeTab(this.props.activeTab);
+        for (const t of data) {
+            const v = deepCopy(t);
+            if (t[6] === Status[this.props.timeTypeActiveIndex + 1]) {
+                this.props.withdrawIdList.push(v.shift());
+                this.props.showDataList.push(v);
+            }
+            if (t[6] === Status[4] && t[5] === Status[this.props.timeTypeActiveIndex + 1]) {
+                this.props.btn1 = '重新处理';
+            }
+        }
+        this.changePage({ value:0 });
     }
 
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
         this.props.perPageIndex = e.index;
-        this.props.expandIndex = false;
+        this.props.expandIndex[1] = false;
         if (this.props.searUid) {
             this.search();
         } else {
@@ -315,8 +353,8 @@ export class Withdraw extends Widget {
     }
 
     // 过滤器
-    public expand(e:any) {
-        this.props.expandIndex = e.value;
+    public expand(e:any,index:number) {
+        this.props.expandIndex[index] = e.value;
         this.paint();
     }
 

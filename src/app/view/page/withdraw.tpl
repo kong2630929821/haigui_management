@@ -41,8 +41,8 @@
                 <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
             </div>
             {{if it.activeTab==2}}
-            <div style="display:inline-block;height: 50px;margin-left: 40px;" ev-selected="filterTimeType">
-                <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expandIndex:{{it.expandIndex}} }</widget>
+            <div style="display:inline-block;height: 50px;margin-left: 40px;" ev-selected="filterTimeType" ev-expand="expand(e,0)">
+                <widget w-tag="app-components-simpleFilter1">{options:{{it.timeType}},activeIndex:{{it.timeTypeActiveIndex}},expand:{{it.expandIndex[0]}} }</widget>
             </div>
             {{end}}
         </div>
@@ -55,8 +55,8 @@
     </div>
     {{end}}
     {{if Math.ceil(it.showDataList.length/it.perPage)}}
-    <div ev-changeCurrent="changePage" w-class="pagination-box" ev-perPage="perPage" ev-expand="expand"> 
-        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}},expand:{{it.expandIndex}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
+    <div ev-changeCurrent="changePage" w-class="pagination-box" ev-perPage="perPage" ev-expand="expand(e,1)"> 
+        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}},expand:{{it.expandIndex[1]}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
     </div>
     {{end}}
 </div>

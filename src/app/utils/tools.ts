@@ -728,6 +728,7 @@ const Tip = (temparr, row) => {
 
 // 解析商品信息
 export const analyzeGoods = (data: any) => {
+   
     if (!data) {
         return [];
     }
@@ -752,9 +753,10 @@ export const analyzeGoods = (data: any) => {
         } else {
             str = '海外直购';
         }
-        const imgType2 = [...item[0][18][0]];
+        const imgType2 = [...(item[0][18][0] ? item[0][18][0] :[])];
         const img = item[0][18];
         img.splice(0,1);
+     
         img.forEach(v => {
             imgType2.push(v[2]);
         });
@@ -766,12 +768,12 @@ export const analyzeGoods = (data: any) => {
         const onSaleTime = timestampFormat(item[0][21]);
         arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:item[0][6],typeName:group.join(','),img:imgType2,discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],skus:typeList,area:item[0][7],onSaleTime:onSaleTime });
     });
-    
+
     return arr;
 };
 
 // 解析商品为数组
-export const parseGoodsList=(data:any)=>{
+export const parseGoodsList = (data:any) => {
     if (!data) {
         return [];
     }
@@ -801,14 +803,14 @@ export const parseGoodsList=(data:any)=>{
             // 一级分组/二级分组
             group.push(`${r[1]}/${r[3] ? r[3] :''}`);
         }
-        const state = item[0][20]==1 ? "已上架":'已下架';
-        const validTime = item[22]?`${timestampFormat(item[22][0]).split(' ')[0]}~${timestampFormat(item[22][1]).split(' ')[0]}`:'无';
+        const state = item[0][20] === 1 ? '已上架' :'已下架';
+        const validTime = item[22] ? `${timestampFormat(item[22][0]).split(' ')[0]}~${timestampFormat(item[22][1]).split(' ')[0]}` :'无';
         // ['商品ID','商品名称','商品规格(SKU/规格/差价)','商品类型','供应商id','供应商名称','品牌id','地区id','库存数量','供货价','成本价','原价','会员价','折后价','税费','分组列表','上架状态','上架时间','保质期','供应商sku','供应商商品id']
         arr.push([item[0][0],item[0][1],typeList,goodsType,item[0][4],item[0][5],item[0][6],item[0][7],item[0][10],priceFormat(item[0][11]),priceFormat(item[0][12]),priceFormat(item[0][13]),priceFormat(item[0][14]),priceFormat(item[0][15]),priceFormat(item[0][17]),group.join(','),state,timestampFormat(item[0][21]),validTime,item[0][24],item[0][25]]);
     });
-    
+   
     return arr;
-}
+};
 
 // 解析所有分组
 export const parseAllGroups = (data: any) => {

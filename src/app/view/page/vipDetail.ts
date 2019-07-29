@@ -27,6 +27,7 @@ interface Props {
     perPage:number;// 每页多少条数据
     expandIndex:boolean;// 分页下拉显示
     perPageIndex:number;// 一页显示多少个的下标
+    indirectPeople:number;// 间推人数    
     
 }
 const UserTypeLabel = ['白客','海宝','海宝（体验）','海王','市代理','省代理','海王（体验）'];
@@ -70,7 +71,8 @@ export class VipDetail extends Widget {
         status:true,
         perPage:perPage[0],
         expandIndex:false,
-        perPageIndex:0
+        perPageIndex:0,
+        indirectPeople:0
     };
 
     public setProps(props:any) {
@@ -89,6 +91,7 @@ export class VipDetail extends Widget {
         this.props.baikDatas = [];
         getVipDetail(this.props.uid).then(r => {
             const v = r.userTotal;
+            this.props.indirectPeople = r.inderect_invite;
             if (v) {
                 // 获取用户身份
                 const user = getUserType(v[9],v[10]);
