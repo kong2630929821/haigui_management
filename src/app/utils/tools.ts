@@ -167,6 +167,7 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
     // 商品信息
     for (const v of info[3]) {  
         let goodsType = '';
+        let time = '';
         if (v[6] === 1) {
             goodsType = '保税商品';
         } else if (v[6] === 0) {
@@ -180,13 +181,22 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
             // 一级分组/二级分组
             group.push(`${r[1]}/${r[3] ? r[3] :''}`);
         }
-        const goods: OrderDetailGoods = [v[0], v[1], v[4], v[5], v[12][1],goodsType, group.join(','),v[3],v[12][2],priceFormat(v[7]),priceFormat(v[8]),priceFormat(v[9]),v[11][0],v[11][1],v[11][2]];
+        if (!v[12][2]) {
+            time = '';
+        } else {
+            time = `${timestampFormat(v[12][2][0]).split(' ')[0]}~${timestampFormat(v[12][2][1]).split(' ')[0]}`;
+        }
+        const goods: OrderDetailGoods = [v[0], v[1], v[4], v[5], v[12][1],goodsType, group.join(','),v[3],time,priceFormat(v[7]),priceFormat(v[8]),priceFormat(v[9]),v[11][0],v[11][1],v[11][2]];
         orderGoods.push(goods);
     }
     
     // 返利信息
     for (const v of info[25]) {
-        const rebate:OrderDetailRebate = [v[0],unicode2ReadStr(v[1]),RebateType[v[2]],priceFormat(v[3]),timestampFormat(v[4])];
+        let moeny = priceFormat(v[3]);
+        if (v[2] === 2) {
+            moeny = JSON.stringify(v[3]);
+        }
+        const rebate:OrderDetailRebate = [v[0],unicode2ReadStr(v[1]),RebateType[v[2]],moeny,timestampFormat(v[4])];
         orderRebate.push(rebate);
     }
 
