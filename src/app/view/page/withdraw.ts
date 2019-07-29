@@ -246,6 +246,8 @@ export class Withdraw extends Widget {
             });  // 开始处理
             popNewMessage('处理完成');
             this.getData();
+            this.props.timeTypeActiveIndex = 0;
+            this.paint();
         });
     }
 
@@ -265,9 +267,9 @@ export class Withdraw extends Widget {
                     this.props.showDataList.push(v);
                 }
             }
-            this.props.allData = this.props.showDataList;
             this.props.allDataWithdrawIdList = this.props.withdrawIdList;
             this.filterTimeType({ activeIndex:0 });
+            this.paint();
         } else {
             this.getData();
         }
@@ -317,25 +319,30 @@ export class Withdraw extends Widget {
         this.props.expandIndex[0] = false;
         const num = this.props.timeTypeActiveIndex;
         const data = deepCopy(this.props.allData);
-        if (num === 0) {
-            this.props.showDataList = deepCopy(this.props.allData);
-            this.props.withdrawIdList = deepCopy(this.props.allDataWithdrawIdList);
-            
-            return; 
-        }
         this.props.showDataList = [];
         this.props.withdrawIdList = [];
         // this.changeTab(this.props.activeTab);
         for (const t of data) {
             const v = deepCopy(t);
-            if (t[6] === Status[this.props.timeTypeActiveIndex + 1]) {
-                this.props.withdrawIdList.push(v.shift());
-                this.props.showDataList.push(v);
+            if (num === 0) {
+                if ((t[6] === Status[num] || ((t[6] === Status[2] || t[6] === Status[3] || t[6] === Status[4])))) {
+                    this.props.withdrawIdList.push(v.shift());
+                    this.props.showDataList.push(v);
+                }
+            } else {
+                if (t[6] === Status[this.props.timeTypeActiveIndex + 1]) {
+                    this.props.withdrawIdList.push(v.shift());
+                    this.props.showDataList.push(v);
+                }
             }
-            if (t[6] === Status[4] && t[5] === Status[this.props.timeTypeActiveIndex + 1]) {
-                this.props.btn1 = '重新处理';
-            }
+            
         }
+        if (num === 3) {
+            this.props.btn1 = '重新处理';
+        } else {
+            this.props.btn1 = '';
+        }
+        this.paint();
         this.changePage({ value:0 });
     }
 
