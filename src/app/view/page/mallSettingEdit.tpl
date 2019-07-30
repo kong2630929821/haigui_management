@@ -1,4 +1,4 @@
-<div w-class="page">
+<div w-class="page" on-tap="close">
     {{if it.selGoodsIndex === -1}}
     <div w-class="back" on-tap="goBack" on-down="onShow">返回</div>
     {{%===========================聚合专区设置===========================}}
@@ -22,9 +22,9 @@
                 <span style="margin-right:10px;">专区名称</span>
                 <widget w-tag="app-components-input">{placeHolder:"输入名称",input:{{it.currentData.name}},style:"border:1px solid #eee;"}</widget>
             </div>
-            <div w-class="guessTab" style="flex:1 0 0;" ev-selected="selLocation">
+            <div w-class="guessTab" style="flex:1 0 0;" ev-selected="selLocation" ev-expand="expand">
                 <span style="margin-right:10px;">展示位置</span>
-                <widget w-tag="app-components-simpleFilter1">{options:{{it.locations}},activeIndex:{{it.activeLoc}} }</widget>
+                <widget w-tag="app-components-simpleFilter1">{options:{{it.locations}},activeIndex:{{it.activeLoc}},expand:{{it.expandIndex}} }</widget>
             </div>
         </div>
     </div>

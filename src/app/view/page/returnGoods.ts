@@ -32,6 +32,7 @@ export class GoodsInfo extends Widget {
         perPageIndex:0// 一页多少个的下标
     };
     public checkType(index:number) {
+        this.close();
         this.props.returnStatus = index;
         if (index === 0) {
             this.props.typeTitle = '申请时间';
@@ -140,6 +141,7 @@ export class GoodsInfo extends Widget {
     }
     // 搜索指定ID
     public search() {
+        this.close();
         let num = this.props.searchValue;
         console.log(num);
         if (num) {
@@ -183,6 +185,7 @@ export class GoodsInfo extends Widget {
     }
      // 日期选择框显示
     public changeDateBox(e:any) {
+        this.close();
         this.props.showDateBox = e.value;
         this.paint();
     }
@@ -270,6 +273,7 @@ export class GoodsInfo extends Widget {
 
     // 分页变化
     public pageChange(e:any) {
+        this.close();
         this.props.currentIndex = e.value;
         console.log(e.value);
         this.props.showDataList = this.props.dataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
@@ -279,6 +283,7 @@ export class GoodsInfo extends Widget {
 
     // 每页展示多少数据
     public perPage(e:any) {
+        this.close();
         this.props.perPage = e.value;
         this.props.expandIndex = false;
         this.props.perPageIndex = e.index;
@@ -287,6 +292,7 @@ export class GoodsInfo extends Widget {
     
     // 过滤器
     public expand(e:any) {
+        this.close();
         this.props.expandIndex = e.value;
         this.paint();
     }

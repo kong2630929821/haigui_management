@@ -70,6 +70,7 @@ export class OpenHWang extends Widget {
 
     // 切换tab
     public changeTab(num:number) {
+        this.pageClick();
         this.props.activeTab = num;
         if (num === 2) {
             this.props.btn1 = '';
@@ -170,6 +171,7 @@ export class OpenHWang extends Widget {
 
     // 查询
     public search() {
+        this.pageClick();
         if (this.props.searPhone) {
             this.props.showDataList = [];
             this.props.applyIdList = [];
@@ -190,6 +192,7 @@ export class OpenHWang extends Widget {
 
     // 导出列表
     public exportData() {
+        this.pageClick();
         if (this.props.showDataList.length > 0) {
             this.props.showDataList.unshift(this.props.showTitleList);
             let name = '海王申请列表.xls';
@@ -203,6 +206,7 @@ export class OpenHWang extends Widget {
 
     // 日期选择框显示
     public changeDateBox(e:any) {
+        this.pageClick();
         this.props.showDateBox = e.value;
         this.paint();
     }
@@ -221,6 +225,7 @@ export class OpenHWang extends Widget {
 
     // 查看某一页数据
     public changePage(e:any) {
+        this.pageClick();
         this.props.curPage = e.value;
         this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
@@ -228,6 +233,7 @@ export class OpenHWang extends Widget {
 
      // 每页展示多少数据
     public perPage(e:any) {
+        this.pageClick();
         this.props.perPageIndex = e.index;
         this.props.perPage = e.value;
         this.changePage({ value:0 });   
@@ -235,6 +241,7 @@ export class OpenHWang extends Widget {
 
     // 过滤器
     public expand(e:any) {
+        this.pageClick();
         this.props.expandIndex = e.value;
         this.paint();
     }

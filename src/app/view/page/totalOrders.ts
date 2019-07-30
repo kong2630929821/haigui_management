@@ -211,6 +211,7 @@ export class TotalOrder extends Widget {
         
     }
     public async exportAllOrder(e:any) {
+        this.closeClick();
         const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
         const start = this.props.startTime;     // 启始时间，单位毫秒
         const tail = this.props.endTime;         // 结束时间，单位毫秒
@@ -254,6 +255,7 @@ export class TotalOrder extends Widget {
     }
 
     public importTransport(e:any) {
+        this.closeClick();
         // 导入运单
         const file = e.file;
         importRead(file,(res) => {
@@ -262,6 +264,7 @@ export class TotalOrder extends Widget {
     }
     // 按订单id查询
     public searchById(e:any) {
+        this.closeClick();
         const orderId = Number(this.props.inputOrderId);
         if (!orderId) {
             this.filterOrderQuery();
@@ -391,12 +394,14 @@ export class TotalOrder extends Widget {
     }
 
     public changeDateBox(e:any) {
+        this.closeClick();
         this.props.showDateBox = e.value;
         console.log(this.props.showDateBox);
         this.paint();
     }
 
     public pageChange(e:any) {
+        this.closeClick();
         this.props.currentPageIndex = e.value;
         console.log('当前页数 ===',e);
         if (this.props.currentPageIndex === 0) {
@@ -412,6 +417,7 @@ export class TotalOrder extends Widget {
 
     // 取消订单
     public quitOrder(e:any) {
+        this.closeClick();
         const orderId = this.props.contentShowList[e.value][0];
         const currentPageId = this.props.contentShowList[0][0];
         popNew('app-components-confirmQuitOrder',{},() => {
@@ -423,6 +429,7 @@ export class TotalOrder extends Widget {
 
     // 查看详情
     public goDetail(e:any) {
+        this.closeClick();
         this.props.showDetail = e.num;
         this.paint();
     }
@@ -435,6 +442,7 @@ export class TotalOrder extends Widget {
 
         // 每页展示多少数据
     public perPage(e:any) {
+        this.closeClick();
         this.props.perPage = e.value;
         this.props.perPageIndex = e.index;
         this.props.expandIndex[4] = false;
@@ -448,6 +456,7 @@ export class TotalOrder extends Widget {
 
     // 过滤器
     public expand(index:number,e:any) {
+        this.closeClick();
         this.props.expandIndex[index] = e.value;
         this.paint();
     }
