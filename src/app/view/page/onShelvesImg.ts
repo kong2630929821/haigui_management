@@ -52,7 +52,7 @@ export class OnShelvesImg extends Widget {
         selectData:[],
         showDataTitle : ['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
         style:true,
-        data:[],
+        data:['','','','',''],
         spreadList:[],
         inputTitle:['商品名称','成本价(元)','普通售价(元)','会员价(元)','折扣价(元)'],
         path:'',
@@ -251,7 +251,9 @@ export class OnShelvesImg extends Widget {
         const img = [this.props.thumbnail[0],...this.props.mainPicture];
         // '商品名称','品牌ID','成本价','普通售价','会员价','折扣价'
         let flag = false;// 判断输入的是否有空值
+        debugger;
         this.props.data.forEach(v => {
+            debugger;
             if (v === '') {
                 flag = true;
 
@@ -307,7 +309,7 @@ export class OnShelvesImg extends Widget {
         const intro = [];// 商品介绍
         const spec = [];//
         const detail = this.props.infoPicture;// 详情图片
-        if (cost >= origin || cost >= discount || cost >= vip_price) {
+        if (cost > origin || cost > discount || cost > vip_price) {
             popNewMessage('请填写正确的价格');
     
             return ;

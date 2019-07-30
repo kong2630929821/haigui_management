@@ -18,6 +18,8 @@ interface Props {
     pageTitle:string;// 页面标题
     time:string;// 修改时间
     dataList:any;// 普通商品邮费 保税商品邮费 海外直购邮费
+    oldData:any;// 新增时的邮费
+    oldFreightList:any;// 新增原始邮费数据
 }
 /**
  * 添加供应商
@@ -36,7 +38,9 @@ export class AddSupplier extends Widget {
         isChange:false,
         pageTitle:'添加供应商',
         time:'',
-        dataList:[[],[],[]]
+        dataList:[[],[],[]],
+        oldData:[],
+        oldFreightList:[]
     };
     public create() {
         super.create();
@@ -177,8 +181,8 @@ export class AddSupplier extends Widget {
         this.props.expandIndex = false;
         const index = e.activeIndex;
         this.props.statusTypeActiveIndex = index;
-        this.props.showDataList = this.props.dataList[index][1] ? this.props.dataList[index][1] :[];
-        this.props.freightList = this.props.dataList[index][0] ? this.props.dataList[index][0] :[];
+        this.props.showDataList = this.props.dataList[index][1] ? this.props.dataList[index][1] :this.props.oldData;
+        this.props.freightList = this.props.dataList[index][0] ? this.props.dataList[index][0] :this.props.oldFreightList;
         this.props.time = this.props.dataList[index][2] ? this.props.dataList[index][2] :'';
         this.paint();
     }
@@ -191,6 +195,7 @@ export class AddSupplier extends Widget {
             console.log(res);
             const data = analysisFreightData(res);
             this.props.freightList = analysisFreightData(res);
+            this.props.oldFreightList = analysisFreightData(res);
             data.forEach(item => {
                 if (item[2] === 1) {
                     item[2] = '微信';// 判断微信支付类型
@@ -198,6 +203,7 @@ export class AddSupplier extends Widget {
                 item[3] = `￥${priceFormat(item[3])}`;
             });
             this.props.showDataList = data;
+            this.props.oldData = data;
             this.paint();
         });
     }

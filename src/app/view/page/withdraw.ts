@@ -188,12 +188,12 @@ export class Withdraw extends Widget {
                     } else {
                         await changeWithdrawState(id, uid, 3, r).then(r => { // 拒绝
                             if (r.result !== 1) {
-                                popNewMessage(r.error_code);
+                                popNewMessage('处理失败');
                             } else {
                                 popNewMessage('处理完成');
                             }
                         }).catch(e => {
-                            popNewMessage(e.error_code);
+                            popNewMessage('处理失败');
                         });
                         this.getData();
                     }  
@@ -204,24 +204,24 @@ export class Withdraw extends Widget {
                     await changeWithdrawState(id, uid, 1,'').then(r => {
                         console.log(r);
                         if (r.result !== 1) {
-                            popNewMessage(r.error_code);
+                            popNewMessage('处理失败');
                         } else {
                             popNewMessage('处理完成');
                         }
                     }).catch(e => {
-                        popNewMessage(e.error_code);
+                        popNewMessage('处理失败');
                     });  // 开始处理
                     this.getData();
                 } else {
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
                         await changeWithdrawState(id, uid, 2,'').then(r => {
                             if (r.result !== 1) {
-                                popNewMessage(r.error_code);
+                                popNewMessage('处理失败');
                             } else {
                                 popNewMessage('处理完成');
                             }
                         }).catch(e => {
-                            popNewMessage(e.error_code);
+                            popNewMessage('处理失败');
                         });  // 同意
                         
                         this.getData();
