@@ -63,7 +63,7 @@ export class PeriodPicker extends Widget {
             }
 
         } else {
-            this.props.startDate = this.props.endDate;
+            this.props.startDate = '';
         }
         this.paint();
         notify(e.node,'ev-period-change',{ value:[this.props.startDate,this.props.endDate] });
@@ -78,7 +78,7 @@ export class PeriodPicker extends Widget {
             }
 
         } else {
-            this.props.endDate = this.props.startDate;
+            this.props.endDate = '';
         }
         this.paint();
         notify(e.node,'ev-period-change',{ value:[this.props.startDate,this.props.endDate] });
