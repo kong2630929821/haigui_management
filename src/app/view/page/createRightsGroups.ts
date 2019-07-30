@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
-import { getAllUserType, removeRightsGroup, removeUser } from '../../net/pull';
+import { getAllUser, getAllUserType, removeRightsGroup, removeUser } from '../../net/pull';
 import { deepCopy } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
 import { exportExcel, rippleShow } from '../../utils/tools';
@@ -91,11 +91,27 @@ export class CreateRightsGroups extends Widget {
                 this.init();
             });
         } else {
-            popNew('app-components-modalBox',{ content:`确认删除账号类型“<span style="color:#1991EB">${e.value[0]}</span>”` }, () => {
-                this.remove(e.value[0]);
-            },() => {
-                popNewMessage('你已经取消操作！');
+            let del = false;
+            getAllUser().then(r => {
+                r.forEach(v => {
+                    if (v[1] === e.value[0]) {
+                        del = true;
+
+                        return;
+                    }
+                });
+                if (del) {
+                    popNewMessage('该账户类型正被使用');
+                } else {
+                    popNew('app-components-modalBox',{ content:`确认删除账号类型“<span style="color:#1991EB">${e.value[0]}</span>”` }, () => {
+                        this.remove(e.value[0]);
+                    },() => {
+                        popNewMessage('你已经取消操作！');
+                    });
+                }
+                
             });
+            
         }
     
     }
