@@ -163,6 +163,7 @@ export class CommodityLibrary extends Widget {
     }
          // 日期选择框显示
     public changeDateBox(e:any) {
+        this.close();
         this.props.showDateBox = e.value;
         this.paint();
     }
@@ -174,6 +175,7 @@ export class CommodityLibrary extends Widget {
     }
     // 上架商品
     public onShelves() {
+        this.close();
         this.props.shopDetail = 2;
         this.paint();
     }
@@ -184,6 +186,7 @@ export class CommodityLibrary extends Widget {
     }
     // 分页变化
     public pageChange(e:any) {
+        this.close();
         if (this.props.inputValue) {
 
             return ;
@@ -212,6 +215,7 @@ export class CommodityLibrary extends Widget {
     }
     // 搜索指定ID
     public search() {
+        this.close();
         console.log(this.props.inputValue);
         if (!this.props.inputValue) {
             this.init(1);
@@ -233,6 +237,7 @@ export class CommodityLibrary extends Widget {
 
     // 上下架商品 1上架 0下架
     public shelfGoods(e:any) {
+        this.close();
         shelf(e.id, e.state).then(r => {
             if (r.result === 1) {
                 popNewMessage('操作成功');
@@ -245,6 +250,7 @@ export class CommodityLibrary extends Widget {
 
     // 编辑
     public change(index:number,e:any) {
+        this.close();
         this.props.currentData = this.props.showDataList[index];
         this.props.shopDetail = 3;
         this.paint();
@@ -252,18 +258,21 @@ export class CommodityLibrary extends Widget {
     // 详情
     public lookInfo(index:number,e:any) {
         this.props.currentData = this.props.showDataList[index];
+        this.close();
         this.props.shopDetail = 1;
         this.paint();
     }
 
     // 显示商品列表
     public lookCancel() {
+        this.close();
         this.props.shopDetail = 0;
         this.paint();
     }
 
     // 导出全部数据
     public exportAllGoods() {
+        this.close();
         this.loadding = popNew('app-components-loading',{ text:'商品导出中……' });
         this.exportShop(0);
     }
@@ -330,6 +339,7 @@ export class CommodityLibrary extends Widget {
 
     // 过滤器
     public expand(e:any,index:number) {
+        this.close();
         this.props.expandIndex[index] = e.value;
         this.paint();
     }

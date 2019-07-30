@@ -136,6 +136,7 @@ export class VipManage extends Widget {
 
     // 查看详情
     public goDetail(e:any) {
+        this.pageClick();
         this.props.showDetail = true;
         this.props.uid = e.value[0];
         this.paint();
@@ -233,6 +234,7 @@ export class VipManage extends Widget {
 
     // 过滤器展开
     public changeFilterBox(e:any) {
+        this.pageClick();
         this.props.showFilterBox = e.value;
         this.paint();
     }
@@ -245,6 +247,7 @@ export class VipManage extends Widget {
 
     // 查看某一页数据
     public changePage(e:any) {
+        this.pageClick();
         this.props.curPage = e.value;
         this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
@@ -252,6 +255,7 @@ export class VipManage extends Widget {
 
         // 每页展示多少数据
     public perPage(e:any) {
+        this.pageClick();
         this.props.perPage = e.value;
         this.props.perPageIndex = e.index;
         this.props.expandIndex = false;
@@ -265,6 +269,7 @@ export class VipManage extends Widget {
 
     // 过滤器
     public expand(e:any) {
+        this.pageClick();
         this.props.expandIndex = e.value;
         this.paint();
     }
@@ -277,7 +282,6 @@ export class VipManage extends Widget {
 
 let STATE = false;
 register('flags/vipChange',r => {
-    debugger;
     STATE = r;
     forelet.paint(STATE);
 });

@@ -102,6 +102,7 @@ export class Withdraw extends Widget {
 
     // 切换过滤
     public changeTab(num:number) {
+        this.pageClick();
         this.props.curPage = 0;
         this.props.activeTab = num;
         if (num === 2) {
@@ -173,6 +174,7 @@ export class Withdraw extends Widget {
 
     // 查询用户id输入
     public uidChange(e:any) {
+        this.pageClick();
         this.props.searUid = e.value;
     }
   
@@ -253,6 +255,7 @@ export class Withdraw extends Widget {
 
     // 查询
     public search() {
+        this.pageClick();
         if (this.props.searUid) {
             this.props.showDataList = [];
             this.props.withdrawIdList = [];
@@ -277,6 +280,7 @@ export class Withdraw extends Widget {
 
     // 导出列表
     public exportData() {
+        this.pageClick();
         if (this.props.showDataList.length > 0) {
             this.props.showDataList.unshift(this.props.showTitleList);
             let name = '提现申请列表.xls';
@@ -308,6 +312,7 @@ export class Withdraw extends Widget {
 
     // 查看某一页数据
     public changePage(e:any) {
+        this.pageClick();
         this.props.curPage = e.value;
         this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
@@ -348,6 +353,7 @@ export class Withdraw extends Widget {
 
     // 每页展示多少数据
     public perPage(e:any) {
+        this.pageClick();
         this.props.perPage = e.value;
         this.props.perPageIndex = e.index;
         this.props.expandIndex[1] = false;
@@ -361,6 +367,7 @@ export class Withdraw extends Widget {
 
     // 过滤器
     public expand(e:any,index:number) {
+        this.pageClick();
         this.props.expandIndex[index] = e.value;
         this.paint();
     }

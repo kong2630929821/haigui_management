@@ -250,10 +250,8 @@ export class OnShelvesImg extends Widget {
         this.close();
         const img = [this.props.thumbnail[0],...this.props.mainPicture];
         // '商品名称','品牌ID','成本价','普通售价','会员价','折扣价'
-        let flag = false;// 判断输入的是否有空值
-        debugger;
+        let flag = false;// 判断输入的是否有空
         this.props.data.forEach(v => {
-            debugger;
             if (v === '') {
                 flag = true;
 
