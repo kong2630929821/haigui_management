@@ -21,7 +21,7 @@ export class OnShelves extends Widget {
         onShelvesType:0 ,
         searchData:[],
         selectData:[],
-        showDataTitle : ['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
+        showDataTitle : ['供应商id','SKU','SKU名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
         selectIndex:[]
     };
     // 搜索框内容

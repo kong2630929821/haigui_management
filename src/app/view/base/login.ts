@@ -31,6 +31,7 @@ export class Login extends Widget {
     public loginUser() {
         if (this.props.name && this.props.pwd) {
             login(this.props.name,this.props.pwd).then(r => {
+
                 const auth = r.auth;
                 if (!auth.length) {
                     popNewMessage('该用户无权限');

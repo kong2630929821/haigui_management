@@ -11,7 +11,7 @@ export class HBaoGoodsSetting extends CommodityLibrary {
     public state:any = getStore('hBaoGoods',[]);
     public create() {
         super.create();
-        this.props.showDateTitle = ['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商（ID）','供应商SKU','供应商商品ID','保质期'];
+        this.props.showDateTitle = ['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商ID','供应商SKU','供应商商品ID','保质期'];
     }
     // 绑定用户
     public bindUser(e:any) {
