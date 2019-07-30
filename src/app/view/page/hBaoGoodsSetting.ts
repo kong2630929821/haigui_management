@@ -15,7 +15,7 @@ export class HBaoGoodsSetting extends CommodityLibrary {
     }
     // 绑定用户
     public bindUser(e:any) {
-        popNew('app-components-modalBoxInput',{ title:`将商品“<span style="color:#1991EB">${e.value.name}</span>”会员关系绑定到`,placeHolder:'输入邀请码' },(r) => {
+        popNew('app-components-modalBoxInput',{ title:`将商品“<span style="color:#1991EB">${e.value.name}</span>”会员关系绑定到`,placeHolder:'输入邀请码',errMessage:'请输入邀请码' },(r) => {
             bindVipUser(e.value.id, r).then(r => {
                 popNewMessage('绑定用户成功');
                 getHbaoGoodsList().then(res => {  // 重新获取所有399商品
