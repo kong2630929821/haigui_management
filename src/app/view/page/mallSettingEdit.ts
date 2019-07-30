@@ -20,6 +20,7 @@ interface Props {
     goodsId:number[];   // 已选择的商品ID
     isSoloPart:boolean;  // 是否当前选择的单链专区
     isMallHome:boolean;  // 是否商城首页分类设置
+    expandIndex:boolean;
 }
 
 /**
@@ -67,7 +68,8 @@ export class MallSettingEdit extends Widget {
         selGoodsIndex:-1,
         goodsId:[],
         isSoloPart:false,
-        isMallHome:true
+        isMallHome:true,
+        expandIndex:false
     };
 
     public setProps(props:any) {
@@ -92,6 +94,7 @@ export class MallSettingEdit extends Widget {
     // 选择展示位置
     public selLocation(e:any) {
         this.props.activeLoc = e.activeIndex;
+        this.props.expandIndex = false;
         if (this.props.activeLoc > 13) {
             this.props.addClass = false;
             this.props.isSoloPart = true;
@@ -375,5 +378,15 @@ export class MallSettingEdit extends Widget {
     // 动画效果执行
     public onShow(e:any) {
         rippleShow(e);
+    }
+
+    public expand(e:any) {
+        this.props.expandIndex = e.value;
+        this.paint();
+    }
+
+    public close() {
+        this.props.expandIndex = false;
+        this.paint();
     }
 }
