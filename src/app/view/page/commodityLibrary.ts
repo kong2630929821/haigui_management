@@ -120,6 +120,7 @@ export class CommodityLibrary extends Widget {
     }
     // 商品上架下架筛选
     public filterTimeType(e:any) {
+        this.props.expandIndex[0] = false;
         this.props.statusTypeActiveIndex = e.activeIndex;
         this.changeType();
     }
@@ -140,6 +141,8 @@ export class CommodityLibrary extends Widget {
             } else {
                 this.init(1);
             }
+            this.props.currentIndex = 0;
+            this.paint();
         }
         
     }
@@ -304,11 +307,25 @@ export class CommodityLibrary extends Widget {
         const star_time = transitTimeStamp(this.props.startTime);
         const end_time = transitTimeStamp(this.props.endTime);
         const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
-        getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
-            this.props.showDataList = r[1];
-            this.props.shopNum = r[1].length;
-            this.paint();
-        });
+        if (status) {
+            getGoodsKey(1).then(r1 => {
+                console.log('111111111',r1);
+                const data = JSON.parse(r1.value);
+                this.props.shopNum = data[1];
+                getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
+                    const shop = r[1];
+                    this.props.showDataList = shop;
+                    this.paint();
+                });
+            });
+        } else {
+            getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
+                this.props.showDataList = r[1];
+                this.props.shopNum = r[1].length;
+                this.paint();
+            });
+        }
+        
     }
 
     // 过滤器
