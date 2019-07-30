@@ -181,11 +181,12 @@ export class AddProduct extends Widget {
 
             return;
         } 
-        if (this.props.startTime === '' || this.props.endTime === '') {
-            popNewMessage('请填写保质期');
+        // if (this.props.startTime === '' || this.props.endTime === '') {
+        //     popNewMessage('请填写保质期');
 
-            return;
-        }
+        //     return;
+        // }
+        debugger;
         if (this.props.shelfLifeActiveIndex === 0) {
             if (this.props.startTime === '' || this.props.endTime === '') {
                 popNewMessage('请填写保质期');

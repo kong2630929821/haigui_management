@@ -7,6 +7,7 @@ interface Props {
     cancelText:string;
     placeHolder:string;
     message:string;   // 输入内容
+    errMessage:string;// 输入错误提示
 }
 /**
  * 模态框
@@ -23,7 +24,8 @@ export class ModalBox extends Widget {
         sureText:'确认',
         cancelText:'取消',
         placeHolder:'',
-        message:''
+        message:'',
+        errMessage:''
     };
     
     public setProps(props:any) {
@@ -43,7 +45,7 @@ export class ModalBox extends Widget {
     // 点击确认按钮
     public okBtnClick() {
         if (!this.props.message) {
-            popNewMessage('请输入邀请码');
+            popNewMessage(this.props.errMessage);
             
             return; 
         }

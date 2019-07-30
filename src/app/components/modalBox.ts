@@ -1,4 +1,6 @@
 import { Widget } from '../../pi/widget/widget';
+import { changeBindding } from '../net/pull';
+import { popNewMessage } from '../utils/logic';
 import { rippleShow } from '../utils/tools';
 interface Props {
     title:string;
