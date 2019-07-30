@@ -12,12 +12,14 @@
         <div w-class="tableTitle">提现设置</div>
         <div w-class="settingBox">
             {{for i,v of it.showDataTitle}}
+                {{if i==0||i==1||i== 5||i==6 }}
                 <div w-class="box">
                     <div w-class="title">{{v}}</div>
                     <div w-class="input" ev-input-change="inputChange({{i}},e)" style="width: 382px;">
                         <widget w-tag="app-components-input">{input:{{it.showDataList[i]}},placeHolder:"请输入",itype:"number",disabled:"{{it.isChange?it.isChange:''}}" }</widget>
                     </div>
                 </div>
+                {{end}}
             {{end}}
         </div>
     </div>

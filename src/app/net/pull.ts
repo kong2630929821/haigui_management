@@ -772,9 +772,8 @@ export const getAllProduct = (start_time:number,end_time:number) => {
                 } else {
                     arr[index][7] = '无';
                 }
-                arr[index].splice(3,1);
             });
-
+                
             return [num,arr];
             
         });
@@ -810,7 +809,6 @@ export const searchProduct = (keyValue:any) => {
                 } else {
                     arr[index][7] = '无';
                 }
-                arr[index].splice(3,1);
             });
 
             return arr;
