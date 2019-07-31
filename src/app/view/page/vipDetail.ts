@@ -255,8 +255,10 @@ export class VipDetail extends Widget {
     }
 
     // 更改绑定人
-    public changeBinding() {
-        popNew('app-components-modalBox',{ title:'将用户的邀请人更改为',style:true,uid:this.props.userData[0].td });
+    public changeBinding(e:any) {
+        popNew('app-components-modalBox',{ title:'将用户的邀请人更改为',style:true,uid:this.props.userData[0].td },() => {
+            notify(e.node,'ev-change-userType',{});
+        });
     }
 
     // 获取用户等级变动详细
