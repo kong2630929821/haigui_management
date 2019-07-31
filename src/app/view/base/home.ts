@@ -84,14 +84,14 @@ const pages = [
         // { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' },
         // { name: '操作日志', page: PAGE.operationLog, img:'chart.png' }
     ],
-        show:false
+        show:true
     },
     { name:RightsGroupsShow[RightsGroups[1003]] , page: PAGE.platformSettings, img:'chart.png',children:[
         { name:'供应商设置',page:PAGE.platformSettings,img:'chart.png' },
         { name:'分类设置',page:PAGE.classSetting,img:'chart.png' },
         { name:'品牌设置',page:PAGE.brandSetting,img:'chart.png' },
         { name:'提现设置',page:PAGE.withdrawalSetting,img:'chart.png' }],
-        show:true 
+        show:false 
     },
     { name:RightsGroupsShow[RightsGroups[1004]], page: PAGE.commodityLibrary, img:'chart.png',children:[
         { name:'商品库',page:PAGE.commodityLibrary },
