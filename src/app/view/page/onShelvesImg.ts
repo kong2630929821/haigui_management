@@ -307,7 +307,7 @@ export class OnShelvesImg extends Widget {
         const intro = [];// 商品介绍
         const spec = [];//
         const detail = this.props.infoPicture;// 详情图片
-        if (cost > origin || cost > discount || cost > vip_price) {
+        if (cost > origin || cost > discount || cost > vip_price || origin < vip_price || origin < discount) {
             popNewMessage('请填写正确的价格');
     
             return ;
