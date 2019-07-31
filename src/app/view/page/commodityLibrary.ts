@@ -152,19 +152,20 @@ export class CommodityLibrary extends Widget {
         // 判断时间选择框是否展开过
         if (this.props.showDateBox) {
             console.log('时间筛选',this.props.startTime,this.props.endTime);
-            if (this.props.statusTypeActiveIndex) {
-                this.changeType();
-            } else {
-                const star_time = transitTimeStamp(this.props.startTime);
-                const end_time = transitTimeStamp(this.props.endTime);
-                const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
-                getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
-                    const shop = r[1];
-                    this.props.showDataList = shop;
-                    this.props.shopNum = shop.length;
-                    this.paint();
-                });
-            }
+            this.changeType();
+            // if (this.props.statusTypeActiveIndex) {
+            //     this.changeType();
+            // } else {
+            //     const star_time = transitTimeStamp(this.props.startTime);
+            //     const end_time = transitTimeStamp(this.props.endTime);
+            //     const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
+            //     getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
+            //         const shop = r[1];
+            //         this.props.showDataList = shop;
+            //         this.props.shopNum = shop.length;
+            //         this.paint();
+            //     });
+            // }
         }
         this.props.showDateBox = false;
         this.paint();
