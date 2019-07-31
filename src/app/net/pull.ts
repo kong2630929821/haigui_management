@@ -572,12 +572,17 @@ export const setHwangLabel = (uid:number,label:number) => {
 
     return requestAsync(msg);
 };
-// select_goods_keys
-export const getGoodsKey = (count:number) => {
+
+// 获取商品ID及总数
+export const getGoodsKey = (count:number,start_time:number,end_time:number,state:number) => {
     const msg = {
         type:'select_goods_keys',
         param:{
-            count
+            id:0,
+            count,
+            start_time,
+            end_time,
+            state
         }
     };
 
