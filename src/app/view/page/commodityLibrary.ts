@@ -47,7 +47,7 @@ export class CommodityLibrary extends Widget {
     public props:Props = {
         statusType:[],
         productTypes:[],
-        statusTypeActiveIndex:0,
+        statusTypeActiveIndex:1,
         ProductTypesActiveIndex:0,
         expandIndex:[false,false],
         shopNum:123,
@@ -77,10 +77,10 @@ export class CommodityLibrary extends Widget {
         const timeType = [
             {
                 status:0,
-                text:'已上架'
+                text:'已下架'
             },{
                 status:1,
-                text:'已下架'
+                text:'已上架'
             }
         ];
         // 商品分类
@@ -118,16 +118,19 @@ export class CommodityLibrary extends Widget {
     public inputChange(e:any) {
         this.props.inputValue = e.value;
     }
+
     // 商品上架下架筛选
     public filterTimeType(e:any) {
         this.props.expandIndex[0] = false;
         this.props.statusTypeActiveIndex = e.activeIndex;
-        this.changeType();
+        this.init(1);
     }
+
     // 商品分类筛选
     public filterProductTypes(e:any) {
         this.props.ProductTypesActiveIndex = e.activeIndex;
     }
+
     // 每页展示多少数据
     public perPage(e:any) {
         this.props.perPage = e.value;
@@ -136,48 +139,32 @@ export class CommodityLibrary extends Widget {
         if (this.props.inputValue) {
             this.search();
         } else {
-            if (this.props.statusTypeActiveIndex) {
-                this.changeType();
-            } else {
-                this.init(1);
-            }
+            this.init(1);
             this.props.currentIndex = 0;
             this.paint();
         }
         
     }
+
     // 重置页面的展开状态
     public close() {
         this.props.expandIndex = [false,false];
         // 判断时间选择框是否展开过
         if (this.props.showDateBox) {
             console.log('时间筛选',this.props.startTime,this.props.endTime);
-            this.changeType();
-            // if (this.props.statusTypeActiveIndex) {
-            //     this.changeType();
-            // } else {
-            //     const star_time = transitTimeStamp(this.props.startTime);
-            //     const end_time = transitTimeStamp(this.props.endTime);
-            //     const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
-            //     getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
-            //         const shop = r[1];
-            //         this.props.showDataList = shop;
-            //         this.props.shopNum = shop.length;
-            //         this.paint();
-            //     });
-            // }
+            this.init(1);
         }
         this.props.showDateBox = false;
         this.paint();
     }
-         // 日期选择框显示
+    // 日期选择框显示
     public changeDateBox(e:any) {
         this.close();
         this.props.showDateBox = e.value;
         this.paint();
     }
     
-        // 改变时间
+    // 改变时间
     public changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
@@ -210,24 +197,25 @@ export class CommodityLibrary extends Widget {
     public init(index:number) {
         const star_time = transitTimeStamp(this.props.startTime);
         const end_time = transitTimeStamp(this.props.endTime);
-        const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
-        getGoodsKey(index).then(r1 => {
+        const status = this.props.statusTypeActiveIndex; // 0已下架 1已上架 -1已删除
+        getGoodsKey(index,star_time,end_time,status).then(r1 => {
             console.log('111111111',r1);
             const data = JSON.parse(r1.value);
-            this.props.shopNum = data[1];
+            this.props.shopNum = data[1];   // 商品总数
             getAllGoods(index === 1 ? 0 :data[0],this.props.perPage,status,star_time,end_time).then(r => {
                 const shop = r[1];
                 this.props.showDataList = shop;
                 this.paint();
             });
         });
+        
     }
     // 搜索指定ID
     public search() {
         this.close();
         console.log(this.props.inputValue);
         if (!this.props.inputValue) {
-            this.changeType();
+            this.init(1);
   
             return ;
         }
@@ -290,9 +278,9 @@ export class CommodityLibrary extends Widget {
     public exportShop(num:number) {
         const star_time = transitTimeStamp(this.props.startTime);
         const end_time = transitTimeStamp(this.props.endTime);
-        const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
+        const status = this.props.statusTypeActiveIndex;// 0已下架 1已上架 -1已删除
         if (num <= this.props.shopNum) {
-            getGoodsKey(num > 0 ? num :1).then(r1 => {
+            getGoodsKey(num,star_time,end_time,status).then(r1 => {
                 console.log('111111111',r1);
                 const data = JSON.parse(r1.value);
                 this.props.shopNum = data[1];
@@ -320,32 +308,6 @@ export class CommodityLibrary extends Widget {
         
     }
     
-    // 筛选上下架变化数据
-    public changeType() {
-        const star_time = transitTimeStamp(this.props.startTime);
-        const end_time = transitTimeStamp(this.props.endTime);
-        const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
-        if (status) {
-            getGoodsKey(1).then(r1 => {
-                console.log('111111111',r1);
-                const data = JSON.parse(r1.value);
-                this.props.shopNum = data[1];
-                getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
-                    const shop = r[1];
-                    this.props.showDataList = shop;
-                    this.paint();
-                });
-            });
-        } else {
-            getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
-                this.props.showDataList = r[1];
-                this.props.shopNum = r[1].length;
-                this.paint();
-            });
-        }
-        
-    }
-
     // 过滤器
     public expand(e:any,index:number) {
         this.close();
