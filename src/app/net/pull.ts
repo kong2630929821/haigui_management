@@ -782,7 +782,7 @@ export const getAllProduct = (start_time:number,end_time:number) => {
 export const searchProduct = (keyValue:any) => {
     let product_id = 0;
     let sku = '';
-    if (keyValue.indexOf('1011') === -1) {
+    if (keyValue.indexOf('1011') === -1 && keyValue.indexOf('3011') === -1) {
         sku = keyValue;
     } else {
         product_id = parseInt(keyValue);
