@@ -191,7 +191,6 @@ export class AddSupplier extends Widget {
         this.props.statusTypeActiveIndex = index;
         this.props.showDataList = this.props.dataList[index][1] ? this.props.dataList[index][1] :this.props.oldData[index];
         this.props.freightList[index] = this.props.dataList[index][0] ? this.props.dataList[index][0] :this.props.oldFreightList[index];
-        debugger;
         this.props.time = this.props.dataList[index][2] ? this.props.dataList[index][2] :'';
         this.paint();
     }
