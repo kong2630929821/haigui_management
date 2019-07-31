@@ -103,7 +103,9 @@ export class Withdraw extends Widget {
     // 切换过滤
     public changeTab(num:number) {
         this.pageClick();
-        this.props.curPage = 0;
+        if (this.props.activeTab !== num) {
+            this.props.curPage = 0;   // 切换了tab就显示第一页
+        }
         this.props.activeTab = num;
         if (num === 2) {
             this.props.btn1 = '';
@@ -138,7 +140,7 @@ export class Withdraw extends Widget {
             // }
         } 
         this.props.allDataWithdrawIdList = this.props.withdrawIdList;
-        this.changePage({ value:0 });
+        this.changePage({ value:this.props.curPage });
     }
 
     // 获取数据

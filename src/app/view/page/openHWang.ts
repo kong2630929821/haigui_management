@@ -71,6 +71,9 @@ export class OpenHWang extends Widget {
     // 切换tab
     public changeTab(num:number) {
         this.pageClick();
+        if (this.props.activeTab !== num) {
+            this.props.curPage = 0;
+        }
         this.props.activeTab = num;
         if (num === 2) {
             this.props.btn1 = '';
@@ -91,8 +94,8 @@ export class OpenHWang extends Widget {
                 this.props.showDataList.push(v);
             }
         });
-        this.props.curPage = 0;
-        this.changePage({ value:0 });
+        
+        this.changePage({ value:this.props.curPage });
     }
 
     // 获取数据
