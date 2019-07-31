@@ -11,7 +11,7 @@
                 </div>
             <div w-class="btnBox">
                 <div w-class="input" ev-input-change="inputChange">
-                    <widget w-tag="app-components-input">{placeHolder:"供应商ID，SKU，sku名"}</widget>
+                    <widget w-tag="app-components-input">{placeHolder:"供应商ID，SKU，sku名",input:{{it.inputValue}}}</widget>
                 </div>
                 <div w-class="search" on-tap="search" on-down="onShow">查询</div>
             </div>
