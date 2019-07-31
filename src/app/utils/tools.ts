@@ -890,9 +890,9 @@ export const brandProcessing = (r: any) => {
     const dataList = [];// 品牌名字+ID
     const dataId = [];// 品牌id
     r.forEach(v => {
-        dataList.push(`${unicode2Str(v[1][0])}（${v[0]}）`);
+        dataList.push(`${v[1][0]}（${v[0]}）`);
         dataId.push(v[0]);
-        data.push([v[0],unicode2Str(v[1][0]),v[1][1][1][0],unicode2Str(v[1][2]),v[1][3],timestampFormat(v[2])]);
+        data.push([v[0],v[1][0],v[1][1][1][0],v[1][2],v[1][3],timestampFormat(v[2])]);
     });
 
     return [data,[dataId,dataList]];

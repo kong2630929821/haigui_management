@@ -1017,25 +1017,42 @@ export const getFreight = (supplier:number,goods_type:number,input:any) => {
 
 // 获取所有品牌
 export const getAllBrand = (ids?:any) => {
-    const msg = { 
-        type: 'console_get_brand',
-        param: { 
-        } 
-    };
+    let url = `http://${sourceIp}:${httpPort}/console/console_get_brand`;
+
     if (ids) {
-        msg.param = { ids:ids };
-    }
-
-    return requestAsync(msg).then(r => {
-        if (r.result === 1) {
-            const data = r.brandInfo;
-
-            return [data, ...brandProcessing(data)];
-        }
-    }).catch(e => {
-        
-        return [[],[],[]];
+        url = `http://${sourceIp}:${httpPort}/console/console_get_brand?ids=${ids}`;
+    } 
+    
+    return fetch(url).then(res => {
+        return res.json().then(r => {
+            if (r.result === 1) {
+                const data = r.brandInfo;
+                
+                return [data, ...brandProcessing(data)];
+            }
+        }).catch(e => {
+            return [[],[],[]];
+        });
     });
+    // const msg = { 
+    //     type: 'console_get_brand',
+    //     param: { 
+    //     } 
+    // };
+    // if (ids) {
+    //     msg.param = { ids:ids };
+    // }
+
+    // return requestAsync(msg).then(r => {
+    //     if (r.result === 1) {
+    //         const data = r.brandInfo;
+
+    //         return [data, ...brandProcessing(data)];
+    //     }
+    // }).catch(e => {
+        
+    //     return [[],[],[]];
+    // });
 };
 
 // 上传图片
