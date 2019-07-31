@@ -2,6 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { getAllUser, removeUser } from '../../net/pull';
+import { getStore } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
 import { exportExcel, rippleShow } from '../../utils/tools';
 
@@ -89,7 +90,12 @@ export class AccountSetting extends Widget {
             });
         } else {
             popNew('app-components-modalBox',{ content:`确认删除账号“<span style="color:#1991EB">${e.value[0]}</span>”` }, () => {
-                this.remove(e.value[0]);
+                if (e.value[0] === getStore('account')) {
+                    popNewMessage('不能删除当前登录的账号');
+                } else {
+                    this.remove(e.value[0]);
+                }
+                
             },() => {
                 popNewMessage('你已经取消操作！');
             });

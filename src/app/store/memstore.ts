@@ -167,6 +167,7 @@ interface Store {
     hBaoGoods:[number,string][];   // 399商品列表 【商品ID，用户邀请码】
     hBaoGoodsDetail:{user:string; goods:GoodsDetail}[];   // 399商品列表详情
     flags:any;
+    account:string;// 当前账号
 }
 // 全局内存数据库
 const store:Store = {
@@ -186,7 +187,8 @@ const store:Store = {
     groupList:[],
     hBaoGoods:[],   // 399商品列表
     hBaoGoodsDetail:[],
-    flags:{}
+    flags:{},
+    account:''
 };
 
 // SKU
