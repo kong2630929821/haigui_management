@@ -38,6 +38,7 @@ export class Login extends Widget {
 
                     return;
                 }
+                setStore('account',this.props.name);
                 setStore('flags/auth',r.auth);
                 popNew('app-view-base-home');
                 // 登录成功获取会员信息
