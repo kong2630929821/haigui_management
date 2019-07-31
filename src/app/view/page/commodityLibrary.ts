@@ -218,7 +218,7 @@ export class CommodityLibrary extends Widget {
         this.close();
         console.log(this.props.inputValue);
         if (!this.props.inputValue) {
-            this.init(1);
+            this.changeType();
   
             return ;
         }

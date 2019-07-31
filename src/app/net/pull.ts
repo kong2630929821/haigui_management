@@ -1,4 +1,3 @@
-import { deepCopy } from '../../pi/util/util';
 import { httpPort, sourceIp } from '../config';
 import { deepCopy, setStore } from '../store/memstore';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
