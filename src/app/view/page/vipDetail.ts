@@ -256,18 +256,7 @@ export class VipDetail extends Widget {
 
     // 更改绑定人
     public changeBinding() {
-        popNew('app-components-modalBox',{ title:'将用户的邀请人更改为',style:true },(val) => {
-            const uid = this.props.userData[0].td;
-            changeBindding(uid,val).then(r => {
-                if (r.result === 1) {
-                    popNewMessage('修改成功');
-                } else {
-                    popNewMessage('修改失败');
-                }
-            }).catch(e => {
-                popNewMessage('修改失败');
-            });
-        });
+        popNew('app-components-modalBox',{ title:'将用户的邀请人更改为',style:true,uid:this.props.userData[0].td });
     }
 
     // 获取用户等级变动详细
