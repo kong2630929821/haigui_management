@@ -155,7 +155,15 @@ export class CommodityLibrary extends Widget {
             if (this.props.statusTypeActiveIndex) {
                 this.changeType();
             } else {
-                this.init(1);
+                const star_time = transitTimeStamp(this.props.startTime);
+                const end_time = transitTimeStamp(this.props.endTime);
+                const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
+                getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
+                    const shop = r[1];
+                    this.props.showDataList = shop;
+                    this.props.shopNum = shop.length;
+                    this.paint();
+                });
             }
         }
         this.props.showDateBox = false;
