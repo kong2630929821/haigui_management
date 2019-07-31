@@ -35,7 +35,6 @@
 .settingBox{
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
     padding: 25px 0;
     min-height: 300px;
 }

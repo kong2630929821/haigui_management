@@ -108,6 +108,7 @@ export class AddProduct extends Widget {
     }
     // 是否有保质期变化
     public shelfLifeChange(e:any) {
+        this.close();
         this.props.shelfLifeActiveIndex = e.activeIndex;
         this.paint();
     }
@@ -119,6 +120,7 @@ export class AddProduct extends Widget {
     }
     // 日期选择框显示
     public changeDateBox(e:any) {
+        this.close();
         this.props.showDateBox = e.value;
         this.paint();
     } 
@@ -186,7 +188,6 @@ export class AddProduct extends Widget {
 
         //     return;
         // }
-        debugger;
         if (this.props.shelfLifeActiveIndex === 0) {
             if (this.props.startTime === '' || this.props.endTime === '') {
                 popNewMessage('请填写保质期');
@@ -238,6 +239,7 @@ export class AddProduct extends Widget {
 
     // 供应商选择
     public supplierTypeChange(e:any) {
+        this.close();
         this.props.supplier = e.value;
     }
     

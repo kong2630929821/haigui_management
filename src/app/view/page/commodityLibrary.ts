@@ -53,7 +53,7 @@ export class CommodityLibrary extends Widget {
         shopNum:123,
         currentIndex:0,
         perPage:perPage[0],
-        showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商（ID）','供应商SKU','供应商商品ID','保质期'],
+        showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商ID','供应商SKU','供应商商品ID','保质期'],
         // ['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']
         showDataList:[],
         showDateBox:false,
@@ -152,11 +152,20 @@ export class CommodityLibrary extends Widget {
         // 判断时间选择框是否展开过
         if (this.props.showDateBox) {
             console.log('时间筛选',this.props.startTime,this.props.endTime);
-            if (this.props.statusTypeActiveIndex) {
-                this.changeType();
-            } else {
-                this.init(1);
-            }
+            this.changeType();
+            // if (this.props.statusTypeActiveIndex) {
+            //     this.changeType();
+            // } else {
+            //     const star_time = transitTimeStamp(this.props.startTime);
+            //     const end_time = transitTimeStamp(this.props.endTime);
+            //     const status = this.props.statusTypeActiveIndex === 0 ? 1 :0;// 0已下架 1已上架 -1已删除
+            //     getAllGoods(0,this.props.perPage,status,star_time,end_time).then(r => {
+            //         const shop = r[1];
+            //         this.props.showDataList = shop;
+            //         this.props.shopNum = shop.length;
+            //         this.paint();
+            //     });
+            // }
         }
         this.props.showDateBox = false;
         this.paint();
@@ -218,7 +227,7 @@ export class CommodityLibrary extends Widget {
         this.close();
         console.log(this.props.inputValue);
         if (!this.props.inputValue) {
-            this.init(1);
+            this.changeType();
   
             return ;
         }

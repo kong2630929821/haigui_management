@@ -34,13 +34,13 @@ export class AddSupplier extends Widget {
         showTitleList:['ID','地区','支付类型','邮费'],
         currentData:[[],[]],
         style:true,
-        freightList:[],
+        freightList:[[],[],[]],
         isChange:false,
         pageTitle:'添加供应商',
         time:'',
         dataList:[[],[],[]],
-        oldData:[],
-        oldFreightList:[]
+        oldData:[[],[],[]],
+        oldFreightList:[[],[],[]]
     };
     public create() {
         super.create();
@@ -78,7 +78,7 @@ export class AddSupplier extends Widget {
                         if (v.length) {
                             this.props.statusTypeActiveIndex = j;
                             this.props.showDataList = v[1];
-                            this.props.freightList = v[0];
+                            this.props.freightList[this.props.statusTypeActiveIndex] = v[0];
                             this.props.time = v[2];
                             this.paint();
 
@@ -130,12 +130,16 @@ export class AddSupplier extends Widget {
             changeSupplier(id,name,supplier_desc,'',supplier_phone).then(r => {
                 if (r.result === 1) {
                     // 是否修改运费
-                    getFreight(id,this.props.statusTypeActiveIndex,JSON.stringify(this.props.freightList)).then(res => {
-                        if (res.result === 1) {
-                            popNewMessage('修改成功');
-                            notify(e.node,'ev-save-change',{});
-                        } else {
-                            popNewMessage('修改失败');
+                    this.props.freightList.forEach((v,i) => {
+                        if (v.length) {
+                            getFreight(id,i,JSON.stringify(v)).then(res => {
+                                if (res.result === 1) {
+                                    popNewMessage('修改成功');
+                                    notify(e.node,'ev-save-change',{});
+                                } else {
+                                    popNewMessage('修改失败');
+                                }
+                            });
                         }
                     });
                     
@@ -147,15 +151,19 @@ export class AddSupplier extends Widget {
             // 添加
             addSupplier(name,supplier_desc,'',supplier_phone).then(r => {
                 if (r.result === 1) {
-                    getFreight(r.id,this.props.statusTypeActiveIndex,JSON.stringify(this.props.freightList)).then(res => {
-                        if (res.result === 1) {
-                            popNewMessage('添加成功');
-                            notify(e.node,'ev-save-change',{});
-                        } else {
-                            popNewMessage('修改失败');
+                    this.props.freightList.forEach((v,i) => {
+                        if (v.length) {
+                            getFreight(r.id,i,JSON.stringify(v)).then(res => {
+                                if (res.result === 1) {
+                                    popNewMessage('添加成功');
+                                    notify(e.node,'ev-save-change',{});
+                                } else {
+                                    popNewMessage('修改失败');
+                                }
+                            });
                         }
                     });
-                 
+                    
                 } else {
                     popNewMessage('添加失败');
                 }
@@ -181,8 +189,8 @@ export class AddSupplier extends Widget {
         this.props.expandIndex = false;
         const index = e.activeIndex;
         this.props.statusTypeActiveIndex = index;
-        this.props.showDataList = this.props.dataList[index][1] ? this.props.dataList[index][1] :this.props.oldData;
-        this.props.freightList = this.props.dataList[index][0] ? this.props.dataList[index][0] :this.props.oldFreightList;
+        this.props.showDataList = this.props.dataList[index][1] ? this.props.dataList[index][1] :this.props.oldData[index];
+        this.props.freightList[index] = this.props.dataList[index][0] ? this.props.dataList[index][0] :this.props.oldFreightList[index];
         this.props.time = this.props.dataList[index][2] ? this.props.dataList[index][2] :'';
         this.paint();
     }
@@ -194,8 +202,8 @@ export class AddSupplier extends Widget {
         importRead(file,(res) => {
             console.log(res);
             const data = analysisFreightData(res);
-            this.props.freightList = analysisFreightData(res);
-            this.props.oldFreightList = analysisFreightData(res);
+            this.props.freightList[this.props.statusTypeActiveIndex] = analysisFreightData(res);
+            this.props.oldFreightList[this.props.statusTypeActiveIndex] = analysisFreightData(res);
             data.forEach(item => {
                 if (item[2] === 1) {
                     item[2] = '微信';// 判断微信支付类型
@@ -203,7 +211,7 @@ export class AddSupplier extends Widget {
                 item[3] = `￥${priceFormat(item[3])}`;
             });
             this.props.showDataList = data;
-            this.props.oldData = data;
+            this.props.oldData[this.props.statusTypeActiveIndex] = data;
             this.paint();
         });
     }
@@ -216,7 +224,7 @@ export class AddSupplier extends Widget {
         }
         const jsonHead = this.props.showTitleList;
         const aoa = [jsonHead];
-        const jsonData = this.props.freightList;
+        const jsonData = this.props.freightList[this.props.statusTypeActiveIndex];
         for (const v of jsonData) {
             v[0] = v[0].toString();
             aoa.push(v);

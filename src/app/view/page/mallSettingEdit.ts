@@ -44,10 +44,15 @@ export class MallSettingEdit extends Widget {
             { text: '聚合区位置11', status: GroupsLocation.ELEVEN },
             { text: '聚合区位置12', status: GroupsLocation.TWLEVE },
             { text: '聚合区位置13', status: GroupsLocation.THIRTEEN },
-            { text: '单链专区位置14', status: GroupsLocation.FOURTEEN },
-            { text: '单链专区位置15', status: GroupsLocation.FIFTEEN },
-            { text: '单链专区位置16', status: GroupsLocation.SIXTEEN },
-            { text: '单链专区位置17', status: GroupsLocation.SEVENTEEN }
+            { text: '聚合区位置14', status: GroupsLocation.FOURTEEN },
+            { text: '聚合区位置15', status: GroupsLocation.FIFTEEN },
+            { text: '聚合区位置16', status: GroupsLocation.SIXTEEN },
+            { text: '聚合区位置17', status: GroupsLocation.SEVENTEEN }
+
+            // { text: '单链专区位置14', status: GroupsLocation.FOURTEEN },
+            // { text: '单链专区位置15', status: GroupsLocation.FIFTEEN },
+            // { text: '单链专区位置16', status: GroupsLocation.SIXTEEN },
+            // { text: '单链专区位置17', status: GroupsLocation.SEVENTEEN }
         ],
         addClass:false,
         activeLoc:0,
@@ -80,7 +85,7 @@ export class MallSettingEdit extends Widget {
         super.setProps(this.props);
         const index = this.props.locations.findIndex(r => r.status === this.props.currentData.localId);
         this.props.activeLoc = index > -1 ? index :0;
-        this.props.isSoloPart = index > 13;
+        // this.props.isSoloPart = index > 13;
 
         const locations = getStore('locations',[]);
         const num = locations.findIndex(r => r.location === this.props.currentData.localId); 
@@ -95,13 +100,13 @@ export class MallSettingEdit extends Widget {
     public selLocation(e:any) {
         this.props.activeLoc = e.activeIndex;
         this.props.expandIndex = false;
-        if (this.props.activeLoc > 13) {
-            this.props.addClass = false;
-            this.props.isSoloPart = true;
-            popNewMessage('单链专区不能添加二级分类');
-        } else {
-            this.props.isSoloPart = false;
-        }
+        // if (this.props.activeLoc > 13) {
+        //     this.props.addClass = false;
+        //     this.props.isSoloPart = true;
+        //     popNewMessage('单链专区不能添加二级分类');
+        // } else {
+        this.props.isSoloPart = false;
+        // }
         this.paint();
 
     }

@@ -186,7 +186,7 @@ export class ProductLibrary extends Widget {
                 aoa.push(v);
             }
             console.log(aoa);
-            exportExcel(aoa,`产品信息表.xlsx`);
+            exportExcel(aoa,`SKU信息表.xlsx`);
         
             console.log('contentList ===',jsonData);
         });

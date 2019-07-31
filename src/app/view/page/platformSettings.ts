@@ -30,7 +30,7 @@ export class PlatformSettings extends Widget {
     public props:Props = {
         shopNum:0,
         showDataList:[],
-        showTitleList:['供应商（ID）','供应商名','备注描述','手机号码','最后一次调整时间'],
+        showTitleList:['供应商ID','供应商名','备注描述','手机号码','最后一次调整时间'],
         btn1:'编辑',
         showAddSupplier:0,
         searchValue:'',
