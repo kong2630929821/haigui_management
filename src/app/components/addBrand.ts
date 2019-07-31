@@ -58,7 +58,7 @@ export class ModalBox extends Widget {
             this.props.inputValue = this.props.data[1];
             this.props.textArea = this.props.data[3];
             this.props.src = [this.props.data[2],1,1];
-            const imgList = this.props.data[2].split('/');
+            const imgList = this.props.data[2] ? this.props.data[2].split('/') :[];
             imgList.pop();
             this.props.path = imgList.join('/');
             this.props.img = this.props.data[2];
