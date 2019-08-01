@@ -290,11 +290,12 @@ export const getOrderKey = (count,time_type,start,tail,sid,orderType,state) => {
         if (!infos) {
             return [[],[]];
         }
+        
         // const ordersShow = parseOrderShow([infos[0]],orderType);
         // console.log('select_all_orders_keys',ordersShow);
         // console.log('select_all_orders_keys',infos[1]);
 
-        const ordersShow = [];
+        const ordersShow = [[infos[0]]];
 
         return [ordersShow,infos[1]];
     });
