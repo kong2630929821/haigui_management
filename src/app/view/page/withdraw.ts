@@ -307,6 +307,9 @@ export class Withdraw extends Widget {
     }
 
     public pageClick() {
+        if (this.props.showDateBox) {
+            this.getData();
+        }
         this.props.showDateBox = false;
         this.props.expandIndex = [false,false];
         this.paint();
