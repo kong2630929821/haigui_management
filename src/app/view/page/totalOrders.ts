@@ -296,6 +296,7 @@ export class TotalOrder extends Widget {
         const state = this.props.orderState[this.props.orderStateActiveIndex].status;    // 订单状态，0未导出，1已导出
 
         return getAllOrder(id,this.props.perPage,time_type,start,tail,sid,orderType,state).then(([orders,ordersShow]) => {
+        
             this.updateOrderTitle(orderType);
             this.props.contentShowList = ordersShow;
             this.props.contentList = orders;
@@ -319,8 +320,8 @@ export class TotalOrder extends Widget {
             this.props.totalCount = totalCount;
             this.paint();
             console.log(orders);
-
-            // return orders[0][0];
+           
+            return orders[0][0];
         });
     }
 
