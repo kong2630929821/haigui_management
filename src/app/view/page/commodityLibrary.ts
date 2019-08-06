@@ -271,7 +271,7 @@ export class CommodityLibrary extends Widget {
     public exportAllGoods() {
         this.close();
         this.loadding = popNew('app-components-loading',{ text:'商品导出中……' });
-        this.exportShop(0);
+        this.exportShop(1);
     }
 
     // 递归获取所有数据
