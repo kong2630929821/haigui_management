@@ -215,8 +215,8 @@ export class TotalOrder extends Widget {
     public async exportAllOrder(e:any) {
         this.closeClick();
         const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
-        const start = this.props.startTime;     // 启始时间，单位毫秒
-        const tail = this.props.endTime;         // 结束时间，单位毫秒
+        const start = transitTimeStamp(this.props.startTime);     // 启始时间，单位毫秒
+        const tail = transitTimeStamp(this.props.endTime);         // 结束时间，单位毫秒
         let sid = Number(this.props.supplierList[this.props.supplierActiveIndex]);        
         sid = isNaN(sid) ? 0 : sid;                   // 供应商id，等于0表示所有供应商，大于0表示指定供应商
         const orderType = this.props.orderType[this.props.orderTypeActiveIndex].status ;  // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
@@ -291,8 +291,8 @@ export class TotalOrder extends Widget {
     // 获取订单
     public filterOrderQuery(id:number = 0) {
         const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
-        const start = this.props.startTime;     // 启始时间，单位毫秒
-        const tail = this.props.endTime;         // 结束时间，单位毫秒
+        const start = transitTimeStamp(this.props.startTime);     // 启始时间，单位毫秒
+        const tail = transitTimeStamp(this.props.endTime);         // 结束时间，单位毫秒
         let sid = Number(this.props.supplierList[this.props.supplierActiveIndex]);        
         sid = isNaN(sid) ? 0 : sid;                   // 供应商id，等于0表示所有供应商，大于0表示指定供应商
         const orderType = this.props.orderType[this.props.orderTypeActiveIndex].status ;  // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
