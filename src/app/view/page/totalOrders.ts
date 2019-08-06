@@ -3,7 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { orderMaxCount } from '../../config';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport, quitOrder } from '../../net/pull';
-import { dateToString, popNewMessage } from '../../utils/logic';
+import { dateToString, popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
 import { exportExcel, importRead, rippleShow } from '../../utils/tools';
 // [商品id,商品名称,购买时价格,数量,skuId,sku名,商品类型,成本价，售价，会员价，【一级分组，二级分组】，【退货地址，姓名，电话】，【供应商SKU，供应商商品ID，保质期，最近修改时间】]
 export type GoodsDetails = [number,string,number,number,string,string,number,number,number,number,
@@ -151,6 +151,9 @@ export class TotalOrder extends Widget {
         this.props.orderType = orderType;
         this.props.orderState = orderState;
         this.props.timeType = timeType;
+        const oData = new Date();
+        const time = oData.setHours(23, 59, 59, 999);
+        this.props.endTime =  timeConvert(time);
         this.init();
     }
 
@@ -164,8 +167,7 @@ export class TotalOrder extends Widget {
             }
             this.props.supplierList = arr;
             this.paint();
-            this.filterOrderQuery();
-            this.pageChangeQuery();
+            this.pageChangeQuery(1);
         });
     }
 
@@ -267,8 +269,9 @@ export class TotalOrder extends Widget {
         this.closeClick();
         const orderId = Number(this.props.inputOrderId);
         if (!orderId) {
-            this.filterOrderQuery();
-            this.pageChangeQuery();
+            
+            this.pageChangeQuery(1);
+            // this.filterOrderQuery(1);
 
             return;
         }
@@ -305,23 +308,27 @@ export class TotalOrder extends Widget {
         
     }
 
-    // 分页变动
-    public pageChangeQuery() {
-        const count = this.props.currentPageIndex * this.props.perPage ? this.props.currentPageIndex * this.props.perPage :this.props.perPage;          // 需要获取的订单信息数量，即一页需要显示的数量
+    // 初始化数据
+    public pageChangeQuery(index:number) {
+        // const count = this.props.currentPageIndex * this.props.perPage ? this.props.currentPageIndex * this.props.perPage :1;          // 需要获取的订单信息数量，即一页需要显示的数量
         const time_type = this.props.timeType[this.props.timeTypeActiveIndex].status; // 时间类型，1下单，2支付，3发货， 4收货，5完成
-        const start = this.props.startTime;     // 启始时间，单位毫秒
-        const tail = this.props.endTime;         // 结束时间，单位毫秒
+        const start = transitTimeStamp(this.props.startTime);     // 启始时间，单位毫秒
+        const tail = transitTimeStamp(this.props.endTime);         // 结束时间，单位毫秒
         let sid = Number(this.props.supplierList[this.props.supplierActiveIndex]);        
         sid = isNaN(sid) ? 0 : sid;                   // 供应商id，等于0表示所有供应商，大于0表示指定供应商
         const orderType = this.props.orderType[this.props.orderTypeActiveIndex].status ;  // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
         const state = this.props.orderState[this.props.orderStateActiveIndex].status;    // 订单状态，0未导出，1已导出
-
-        return getOrderKey(count,time_type,start,tail,sid,orderType,state).then(([orders,totalCount]) => {
+        // 获取某页的第一条数据的ID
+        getOrderKey(index,time_type,start,tail,sid,orderType,state).then(([orders,totalCount]) => {
             this.props.totalCount = totalCount;
-            this.paint();
-            console.log(orders);
-           
-            return orders[0][0];
+            const data = orders[0];
+            //
+            getAllOrder(index === 1 ? 0 :data[0],this.props.perPage,time_type,start,tail,sid,orderType,state).then(([orders,ordersShow]) => {
+                this.updateOrderTitle(orderType);
+                this.props.contentShowList = ordersShow;
+                this.props.contentList = orders;
+                this.paint();
+            });
         });
     }
 
@@ -339,8 +346,7 @@ export class TotalOrder extends Widget {
         this.props.currentPageIndex = 0;
         this.props.forceUpdate = !this.props.forceUpdate;
         this.props.totalCount = 0;
-        this.filterOrderQuery();
-        this.pageChangeQuery();
+        this.pageChangeQuery(1);
     }
 
         // 根据订单类型筛选
@@ -350,8 +356,8 @@ export class TotalOrder extends Widget {
         this.props.currentPageIndex = 0;
         this.props.forceUpdate = !this.props.forceUpdate;
         this.props.totalCount = 0;
-        this.filterOrderQuery();
-        this.pageChangeQuery();
+        
+        this.pageChangeQuery(1);
     }
 
         // 根据导出状态筛选,未导出，已导出
@@ -361,8 +367,8 @@ export class TotalOrder extends Widget {
         this.props.currentPageIndex = 0;
         this.props.forceUpdate = !this.props.forceUpdate;
         this.props.totalCount = 0;
-        this.filterOrderQuery();
-        this.pageChangeQuery();
+        
+        this.pageChangeQuery(1);
     }
 
         // 根据时间筛选
@@ -372,8 +378,8 @@ export class TotalOrder extends Widget {
         this.props.currentPageIndex = 0;
         this.props.forceUpdate = !this.props.forceUpdate;
         this.props.totalCount = 0;
-        this.filterOrderQuery();
-        this.pageChangeQuery();
+      
+        this.pageChangeQuery(1);
     }
 
     public changeTime(e:any) {
@@ -404,15 +410,9 @@ export class TotalOrder extends Widget {
     public pageChange(e:any) {
         this.closeClick();
         this.props.currentPageIndex = e.value;
-        console.log('当前页数 ===',e);
-        if (this.props.currentPageIndex === 0) {
-            this.filterOrderQuery();
-            this.pageChangeQuery();
-        } else {
-            this.pageChangeQuery().then(id => {
-                this.filterOrderQuery(id);
-            });
-        }
+        const index = (e.value) * this.props.perPage;
+        this.pageChangeQuery(index === 0 ? 1 :index);
+        this.paint();
         
     }
 
