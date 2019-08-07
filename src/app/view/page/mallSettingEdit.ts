@@ -337,8 +337,8 @@ export class MallSettingEdit extends Widget {
             
             return;
         }
-        updateGroup(res.id, res.name, res.imgs, this.props.goodsId, 'false').then(r => {
-            this.props.currentData.children[ind].children = this.props.goodsId;
+        updateGroup(res.id, res.name, res.imgs, res.children, 'false').then(r => {
+            this.props.currentData.children[ind].children = this.props.goodsId.length ? this.props.goodsId :res.children;
             this.props.secondName = '';
             this.props.secondImg = '';
             this.cancelSel();
