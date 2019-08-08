@@ -235,30 +235,61 @@ export const selSupplier = () => {
 
 };
 // 按订单编号查询订单
-export const getOrderById  = (orderId) => {
-    const msg = { 
-        type: 'select_orders',
-        param: { 
-            id:orderId
-        } 
-    };
+export const getOrderById  = (orderId:any) => {
+    let src = '';
+    if (/^1[3456789]\d{9}$/.test(orderId)) { 
+        // 手机号码
+        src = `http://${sourceIp}:${httpPort}/console/select_orders?phone=${orderId}`;
+    } else if (orderId.indexOf('1051') !== -1) {
+        // 订单
+        src = `http://${sourceIp}:${httpPort}/console/select_orders?id=${Number(orderId)}`;
+    } else {
+        // 用户ID
+        src = `http://${sourceIp}:${httpPort}/console/select_orders?uid=${Number(orderId)}`;
+    } 
 
-    return requestAsync(msg).then(r => {
-        const infos = <Order>JSON.parse(r.value);
-        if (!infos) {
-            return [[],[]];
-        }
-        const ordersShow = parseOrderShow([infos],OrderStatus.ALL);
-        console.log('ordersShow =====',ordersShow);
-        console.log('orders =====',infos);
-
-        return [[infos],ordersShow];
-
-    }).catch((e) => {
-        console.log(e);
-        
-        return [];
+    return fetch(src).then(res => {
+        return res.json().then(r => {
+            
+            const infos = <Order[]>JSON.parse(r.value);
+            if (!infos) {
+                return [[],[]];
+            }
+            const ordersShow = parseOrderShow(infos,OrderStatus.ALL);
+            console.log('ordersShow =====',ordersShow);
+            console.log('orders =====',infos);
+    
+            return [[infos],ordersShow];
+        }). catch (e => {
+            return [];
+        });
+      
     });
+    // const msg = { 
+    //     type: 'select_orders',
+    //     param: { 
+    //         id:orderId,
+    //         uid,
+    //         phone
+    //     } 
+    // };
+
+    // return requestAsync(msg).then(r => {
+    //     const infos = <Order>JSON.parse(r.value);
+    //     if (!infos) {
+    //         return [[],[]];
+    //     }
+    //     const ordersShow = parseOrderShow([infos],OrderStatus.ALL);
+    //     console.log('ordersShow =====',ordersShow);
+    //     console.log('orders =====',infos);
+
+    //     return [[infos],ordersShow];
+
+    // }).catch((e) => {
+    //     console.log(e);
+        
+    //     return [];
+    // });
 };
 
 // 获取第count个订单的id

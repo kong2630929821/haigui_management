@@ -7,7 +7,7 @@
             <div w-class="btnBox">
                 <div w-class="item">
                     <div w-class="input" ev-input-change='inputValue'>
-                        <widget w-tag="app-components-input">{placeHolder:"订单编号"}</widget>
+                        <widget w-tag="app-components-input">{placeHolder:"订单编号",itype:"number"}</widget>
                     </div>
                     <div w-class="searchleft" on-tap="searchById" on-down="onShow">查询</div>
                 </div>

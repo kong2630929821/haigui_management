@@ -20,6 +20,7 @@
         {{if it.activeTab==0}}
         <div w-class="filterBox" style="padding-bottom:20px;">
             {{for i,v of it.statisticsList}}
+            {{if i==0||i==1|i==2}}
             <div w-class="tab">
                 <div>
                     <img src="../../res/images/defultUser.png" w-class="tabImg"/>
@@ -36,6 +37,7 @@
                     </div>
                 </div>
             </div>
+            {{end}}
             {{end}}
         </div>
         <div w-class="tableBox">

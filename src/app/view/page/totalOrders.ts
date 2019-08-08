@@ -267,7 +267,7 @@ export class TotalOrder extends Widget {
     // 按订单id查询
     public searchById(e:any) {
         this.closeClick();
-        const orderId = Number(this.props.inputOrderId);
+        const orderId = this.props.inputOrderId;
         if (!orderId) {
             
             this.pageChangeQuery(1);
