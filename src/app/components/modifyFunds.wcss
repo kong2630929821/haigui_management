@@ -1,14 +1,13 @@
 .modify{
-    width:450px;
-    height:400px;
+    width:750px;
+    height:300px;
     background:rgba(255,255,255,1);
     box-shadow:0px 0px 10px 0px rgba(0,0,0,0.2);
     border-radius:4px;
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-left: -225px;
-    margin-top: -200px;
+    transform: translate(-50%,-50%);
     display: flex;
     flex-direction: column;
 }
@@ -31,31 +30,33 @@
 }
 .btn2{
     width:86px;
-    height:36px;
+    height:40px;
     border:1px solid rgba(0,0,0,0.1);
     background:rgba(25,145,235,1);
     text-align: center;
-    line-height: 36px;
+    line-height: 40px;
     font-size:14px;
     font-family:SourceSansPro-Semibold;
     font-weight:600;
     color:rgba(255,255,255,1);
     cursor: pointer;
-    position: absolute;
-    top:6px;
-    right: 6px;
 }
 .money{
     margin-top: 15px;
+    display: flex;
 }
 .input{
-    width:350px;
-    height:48px;
-    margin-left: 66px;
+    width:150px;
+    height:40px;
+    margin-left: 30px;
     border:1px solid rgba(213,220,230,1);
     position: relative;
 }
 .title{
+    margin-left: 20px;
+}
+.title1{
+    width: 150px;
     margin-left: 20px;
 }
 .box{
@@ -68,4 +69,8 @@
     line-height:30px;
     text-align: right;
     padding-right: 30px;
+}
+.changeBox{
+    flex: 4 0 0 ;
+    display: flex;
 }

@@ -3,7 +3,7 @@ import { GoodsDetail, setStore } from '../store/memstore';
 import { RightsGroups, RightsGroupsShow } from '../view/base/home';
 import { OrderDetailBase, OrderDetailGoods, OrderDetailRebate } from '../view/page/orderDetail';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { getCashLogName, popNewMessage, priceFormat, timeConvert, unicode2ReadStr, unicode2Str } from './logic';
+import { CashLogType, getCashLogName, popNewMessage, priceFormat, timeConvert, unicode2ReadStr, unicode2Str } from './logic';
 
 /**
  * 常用工具
@@ -139,7 +139,7 @@ export const parseOrderShow = (infos: Order[], status: OrderStatus) => {
             } else {
                 goodsType = '海外直购';
             }
-            const orderShow: OrderShow = [info[1], v[0], v[1], v[3], v[4], v[5], info[0], timestampFormat(timestamp), info[2], info[8], info[9], addressFormat(info[11]), OrderStatusShow[localStatus], priceFormat(info[18]), info[19], info[20], info[21], priceFormat(v[2] * v[3]), goodsType];
+            const orderShow: OrderShow = [info[1], v[0], v[1], v[3], v[4], v[5], info[0], timestampFormat(timestamp), info[2], info[8], info[9], addressFormat(info[11]), OrderStatusShow[localStatus], priceFormat(info[18]), info[19], info[20], info[21], priceFormat(v[2] * v[3]),goodsType,priceFormat(info[6]), info[17],priceFormat(v[7])];
             ordersShow.push(orderShow);
         }
     }
@@ -1029,7 +1029,7 @@ export const processingBalanceLog = (r:any,ttype:number) => {
     }
     const data = [];
     r.forEach(v => {
-        data.push([timestampFormat(v[4]),v[1] ? getCashLogName(v[1]) :'', `${v[2] > 0 ? '+' :''}${ttype === 1 ? priceFormat(v[2]) :v[2]}`]);
+        data.push([timestampFormat(v[4]),v[1] ? getCashLogName(v[1]) :'', `${v[2] > 0 ? '+' :''}${ttype === 1 ? priceFormat(v[2]) :v[2]}`,CashLogType.manage === v[1] ? unicode2Str(v[3]) :'']);
     });
 
     return data;
@@ -1043,7 +1043,7 @@ export const processingShoppingTop10 = (r:any) => {
     }
     const data = [];
     r.forEach((v,i) => {
-        data.push([i + 1,v[1],unicode2Str(v[2]),v[0]]);
+        data.push([i + 1,v[1],unicode2Str(v[2]),v[0],priceFormat(v[3])]);
     });
 
     return data;

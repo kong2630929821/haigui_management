@@ -26,6 +26,9 @@ interface Props {
     perPage:number;// 每页显示多少个
     expandIndex:boolean;// 下拉显示
     perPageIndex:number;// 一页显示多少个下标
+    optionsList:string[]; // 下拉框
+    showFilterBox:boolean;  // 展开过滤器
+    active:number;
 }
 const Status = [
     '申请中',
@@ -58,7 +61,10 @@ export class OpenHWang extends Widget {
         curPage:0,
         perPage:perPage[0],
         expandIndex:false,
-        perPageIndex:0
+        perPageIndex:0,
+        optionsList:['申请时间','处理时间'],
+        showFilterBox:false,
+        active:0
     };
 
     public create() {
@@ -106,7 +112,7 @@ export class OpenHWang extends Widget {
             this.props.allCount = r.haiw_count;
             this.paint();
         });
-        getHWangApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
+        getHWangApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime),this.props.active).then(r => {
             this.props.datas = [];
             this.props.showDataList = [];
             if (r.value && r.value.length > 0) {
@@ -223,6 +229,7 @@ export class OpenHWang extends Widget {
     public pageClick() {
         this.props.showDateBox = false;
         this.props.expandIndex = false;
+        this.props.showFilterBox = false;
         this.paint();
     }
 
@@ -252,5 +259,18 @@ export class OpenHWang extends Widget {
     // 动画效果执行
     public onShow(e:any) {
         rippleShow(e);
+    }
+
+    public filterTime(e:any) {
+        this.props.active = e.value;
+        this.props.showFilterBox = false;
+        this.paint();
+    }
+
+        // 过滤器
+    public changeFilterBox(e:any) {
+        this.pageClick();
+        this.props.showFilterBox = e.value;
+        this.paint();
     }
 }

@@ -3,8 +3,10 @@ import { deepCopy } from '../../../pi/util/util';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { changeWithdrawState, getWithdrawApply, getWithdrawTotal } from '../../net/pull';
+import { getStore } from '../../store/memstore';
 import { dateToString, parseDate, popNewMessage, priceFormat, timestampFormat, unicode2Str } from '../../utils/logic';
-import { exportExcel, rippleShow } from '../../utils/tools';
+import { exportExcel, getUserType, rippleShow } from '../../utils/tools';
+import { RightsGroups } from '../base/home';
 
 interface Props {
     datas:any[];  // 原始数据
@@ -14,9 +16,6 @@ interface Props {
     withdrawIdList:number[]; // 未处理的提现单号列表
     btn1:string;  // 按钮
     btn2:string;  // 按钮
-    userNum:number; // 今日提现人数
-    dayMoney:string; // 今日提现金额
-    monthTotal:string; // 本月提现金额
     searUid:string;
     showDateBox:boolean;  // 日期选择框
     startTime:string;  // 开始时间
@@ -30,6 +29,8 @@ interface Props {
     perPageIndex:number;// 一页显示多少个的下标
     allData:any;// 过滤后的全部数据
     allDataWithdrawIdList:any;// 过滤后的未处理的提现单号列表
+    auth:any;// 权限值
+    pool:any;// 提现汇总数据
 }
 const Status = [
     '申请中',
@@ -61,9 +62,6 @@ export class Withdraw extends Widget {
         datas:[],
         btn1:'',
         btn2:'开始处理',
-        userNum:0,
-        dayMoney:'0',
-        monthTotal:'0',
         searUid:'',
         showDateBox:false,
         startTime:'',
@@ -76,7 +74,9 @@ export class Withdraw extends Widget {
         perPage:perPage[0],
         perPageIndex:0,
         allData:[],
-        allDataWithdrawIdList:[]
+        allDataWithdrawIdList:[],
+        auth:getStore('flags/auth'),
+        pool:[]
     };
 
     public create() {
@@ -145,10 +145,18 @@ export class Withdraw extends Widget {
 
     // 获取数据
     public getData() {
-        getWithdrawTotal().then(r => {
-            this.props.userNum = r.day_count;
-            this.props.dayMoney = priceFormat(r.day_money);
-            this.props.monthTotal = priceFormat(r.month_total);
+        // userNum:number; // 今日提现人数
+        // dayMoney:string; // 今日提现金额
+        // monthTotal:string; // 本月提现金额
+        getWithdrawTotal(Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
+            this.props.pool = [
+                { key:'申请提现人数',value:r.day_count,src:'../../res/images/defultUser.png' },
+                { key:'申请提现金额',value:priceFormat(r.day_money),src:'../../res/images/money.png' },
+                { key:'申请月提现金额',value:priceFormat(r.month_total),src:'../../res/images/money.png' },
+                { key:'实际提现人数',value:r.success_day_count,src:'../../res/images/defultUser.png' },
+                { key:'实际提现金额 ',value:priceFormat(r.success_day_money),src:'../../res/images/money.png' },
+                { key:'实际月提现金额',value:priceFormat(r.success_month_total),src:'../../res/images/money.png' }  
+            ];
         });
         getWithdrawApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
             this.props.datas = [];
@@ -165,7 +173,8 @@ export class Withdraw extends Widget {
                         Status[item[4]],       // 状态
                         unicode2Str(item[6]),   // note 拒绝理由
                         item[7], // 微信单号
-                        timestampFormat(item[8]) // 处理时间
+                        timestampFormat(item[8]), // 处理时间
+                        getUserType(item[9][0],item[9][1]) // 身份
                     ];
                 });
                 this.changeTab(this.props.activeTab);
@@ -191,10 +200,12 @@ export class Withdraw extends Widget {
                         popNewMessage('请输入拒绝理由！');
                     } else {
                         await changeWithdrawState(id, uid, 3, r).then(r => { // 拒绝
-                            if (r.result !== 1) {
-                                popNewMessage('处理失败');
-                            } else {
+                            if (r.result === 1) {
                                 popNewMessage('处理完成');
+                            } else if (r.result === 6008) {
+                                popNewMessage('当日提现金额到达微信上限');
+                            } else {
+                                popNewMessage('处理失败');
                             }
                         }).catch(e => {
                             popNewMessage('处理失败');
@@ -205,18 +216,30 @@ export class Withdraw extends Widget {
                 
             } else {
                 if (this.props.activeTab === 0) {
+                    if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.operation) === -1) {
+                        popNewMessage('暂无权限');
+    
+                        return;
+                    }
                     await changeWithdrawState(id, uid, 1,'').then(r => {
                         console.log(r);
-                        if (r.result !== 1) {
-                            popNewMessage('处理失败');
-                        } else {
+                        if (r.result === 1) {
                             popNewMessage('处理完成');
+                        } else if (r.result === 6008) {
+                            popNewMessage('当日提现金额到达微信上限');
+                        } else {
+                            popNewMessage('处理失败');
                         }
                     }).catch(e => {
                         popNewMessage('处理失败');
                     });  // 开始处理
                     this.getData();
                 } else {
+                    if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.finance) === -1) {
+                        popNewMessage('暂无权限');
+    
+                        return;
+                    }
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
                         await changeWithdrawState(id, uid, 2,'').then(r => {
                             if (r.result !== 1) {

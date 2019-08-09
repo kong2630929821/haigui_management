@@ -251,7 +251,10 @@ export const getOrderById  = (orderId:any) => {
     return fetch(src).then(res => {
         return res.json().then(r => {
             
-            const infos = <Order[]>JSON.parse(r.value);
+            let infos = JSON.parse(r.value);
+            if (!infos[0].length) {
+                infos = [infos];
+            }
             if (!infos) {
                 return [[],[]];
             }
@@ -261,7 +264,7 @@ export const getOrderById  = (orderId:any) => {
     
             return [[infos],ordersShow];
         }). catch (e => {
-            return [];
+            return [[],[]];
         });
       
     });
@@ -445,12 +448,13 @@ export const getHwangTotal = () => {
 /**
  * 获取海王申请列表
  */
-export const getHWangApply = (stTime?:number,edTime?:number) => {
+export const getHWangApply = (stTime?:number,edTime?:number,time_type:number) => {
     const msg = {
         type:'mall_mgr/members@get_haiwang_application',
         param:{
             start_time: stTime || 0,
-            end_time: edTime || Date.now()
+            end_time: edTime || Date.now(),
+            time_type
         }
     };
 
@@ -480,10 +484,13 @@ export const changeHWangState = (id:number,uid:number,state:number,reason:string
 /**
  * 获取提现统计
  */
-export const getWithdrawTotal = () => {
+export const getWithdrawTotal = (start_time:number,end_time:number) => {
     const msg = {
         type:'mall_mgr/members@get_withdraw_total',
-        param:{}
+        param:{
+            start_time,
+            end_time
+        }
     };
 
     return requestAsync(msg);
@@ -752,14 +759,14 @@ export const quitOrder = (orderId:number) => {
 
 // 修改资产
 // tslint:disable-next-line:no-reserved-keywords
-export const changeMoney = (type:number,uid:number,money:number) => {
+export const changeMoney = (type:number,uid:number,money:number,note:string) => {
     const msg = {
         type:'console_alter_balance',
         param:{
             type,
             uid,
             money,
-            note:''
+            note
         }
     };
 

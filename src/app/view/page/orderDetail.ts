@@ -1,6 +1,8 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
+import { getStore } from '../../store/memstore';
 import { parseOrderDetailShow, rippleShow } from '../../utils/tools';
+import { RightsGroups } from '../base/home';
 import { Order, OrderStatus } from './totalOrders';
 
 // ['订单编号','供应商ID','用户ID','下单时间','状态','运单号','支付时间','微信支付单号','税费','邮费','总金额','姓名','身份证','微信名','身份','收货人','收货电话','收货地址']
@@ -20,6 +22,7 @@ interface Props {
     goodsDataList:OrderDetailGoods[];
     rebateDataList:OrderDetailRebate[];
     dataList:Order;
+    auth:boolean;
 }
 
 /**
@@ -33,7 +36,8 @@ export class OrderDetail extends Widget {
         baseDataList:null,    // 基础信息
         goodsDataList:[],   // 商品信息
         rebateDataList:[],  // 返利信息
-        dataList:null
+        dataList:null,
+        auth:false
     };
 
     public setProps(props:any) {
@@ -42,7 +46,11 @@ export class OrderDetail extends Widget {
             ...props
         };
         super.setProps(this.props);
-        const orderShow = parseOrderDetailShow(props.dataList, OrderStatus.ALL);
+        const auths = getStore('flags/auth');
+        if (auths[0] === 0 || auths.indexOf(RightsGroups.finance) !== -1) {
+            this.props.auth = true;
+        }
+        const orderShow = parseOrderDetailShow(props.dataList[0].length ? props.dataList[0] :props.dataList, OrderStatus.ALL);
         this.props.baseDataList = orderShow.orderBase;
         this.props.goodsDataList = orderShow.orderGoods;
         this.props.rebateDataList = orderShow.orderRebate;

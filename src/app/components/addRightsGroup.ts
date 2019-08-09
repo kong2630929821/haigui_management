@@ -15,6 +15,7 @@ interface Props {
     status:boolean;// true为添加 false修改
     currentData:any;// 当前传来的值
     rightGroups:any;// 已有的权限组
+    showChild:boolean;// 是否显示子权限
 }
 
 /**
@@ -32,7 +33,8 @@ export class AddRightsGroup extends Widget {
         name:'',
         status:true,
         currentData:[],
-        rightGroups:[]
+        rightGroups:[],
+        showChild:false
     };
 
     public ok:() => void;
@@ -144,6 +146,21 @@ export class AddRightsGroup extends Widget {
     // 选中某个权限
     public check(index:number) {
         this.props.checkedList[index] = !this.props.checkedList[index];
+        // 点击提现默认给运营
+        if (index === 9) {
+            this.props.checkedList[10] = !this.props.checkedList[10];
+            this.props.checkedList[11] = false;
+        }
+        // 当运营和财务都没选则取消提现的选择
+        if (!this.props.checkedList[10] && !this.props.checkedList[11]) {
+            this.props.checkedList[9] = false;
+        }
+        if (index === 10) {
+            this.props.checkedList[11] = false;
+        }
+        if (index === 11) {
+            this.props.checkedList[10] = false;
+        }
         this.paint();
     }
 }

@@ -3,8 +3,10 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { orderMaxCount } from '../../config';
 import { getAllOrder, getAllSupplier, getOrder, getOrderById, getOrderKey, importTransport, quitOrder } from '../../net/pull';
+import { getStore } from '../../store/memstore';
 import { dateToString, popNewMessage, timeConvert, transitTimeStamp } from '../../utils/logic';
 import { exportExcel, importRead, rippleShow } from '../../utils/tools';
+import { RightsGroups } from '../base/home';
 // [商品id,商品名称,购买时价格,数量,skuId,sku名,商品类型,成本价，售价，会员价，【一级分组，二级分组】，【退货地址，姓名，电话】，【供应商SKU，供应商商品ID，保质期，最近修改时间】]
 export type GoodsDetails = [number,string,number,number,string,string,number,number,number,number,
     [[number,string][],[number,string][]],   // 【一级分组，二级分组】
@@ -18,8 +20,8 @@ export type RebateInfo = [number,string,number,number,number];
 // [供应商id,订单id,用户id,商品详细信息,商品原支付金额,商品税费,商品运费,其它费用,收件人姓名,收件人电话,收件人地区,收件人详细地址,下单时间,支付时间,发货时间,收货时间,完成时间,运单号,'订单总金额','微信支付单号','姓名','身份证号',微信名，用户等级，用户标签，返利信息]
 export type Order = [number,number,number,GoodsDetails[],number,number,number,number,string,string,number,string,number,number,number,number,number,string,number,string,string,string,string,number,number,RebateInfo[]];
 
-// ['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号','金额','商品类型']
-export type OrderShow = [number,number,string,number,string,string,number,string,number,string,string,string,string,string,string,string,string,string,string];
+// ['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','姓名','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号','金额','商品类型','运费','运单号','成本价']
+export type OrderShow = [number,number,string,number,string,string,number,string,number,string,string,string,string,string,string,string,string,string,string,string,string,string];
 
 // 订单类型
 export enum OrderStatus {
@@ -66,7 +68,7 @@ export const OrderStatusShow = {
  */
 export class TotalOrder extends Widget {
     public props:any = {
-        showTitleList:['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','收货人','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号','金额','商品类型'],
+        showTitleList:['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','收货人','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号','金额','商品类型','运费','运单号','成本价'],
         contentList:[],   // 展示的原始数据
         contentShowList:[], // 展示的数据
         supplierList:[],
@@ -89,7 +91,8 @@ export class TotalOrder extends Widget {
         expandIndex:[false,false,false,false,false],        // 触发下拉列表 
         showDetail:-1,    // 查看详情数据下标
         perPage:perPage[0],// 每页多少条数据
-        perPageIndex:0// 每页多少个的下标
+        perPageIndex:0,// 每页多少个的下标
+        auth:getStore('flags/auth')// 权限组
     };
 
     public create() {
@@ -169,6 +172,9 @@ export class TotalOrder extends Widget {
             this.paint();
             this.pageChangeQuery(1);
         });
+        if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.finance) === -1) {
+            this.props.showTitleList.pop();
+        }
     }
 
     public selectClick(e:any) {
@@ -228,6 +234,12 @@ export class TotalOrder extends Widget {
             // this.props.contentList = orders;
             // this.paint();
             exportList  = ordersShow;
+            if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.finance) === -1) {
+                exportList.forEach((v,i) => {
+                    v.pop();
+                });
+            }
+           
         });
         const supplierId = Number(this.props.supplierList[this.props.supplierActiveIndex]);
         const status = this.props.orderType[this.props.orderTypeActiveIndex].status;
@@ -284,6 +296,11 @@ export class TotalOrder extends Widget {
             }
             this.props.contentShowList = ordersShow;
             this.props.contentList = orders;
+            if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.finance) === -1) {
+                this.props.contentShowList.forEach((v,i) => {
+                    v.pop();
+                });
+            }
             this.paint();
         });
     }
@@ -303,6 +320,11 @@ export class TotalOrder extends Widget {
             this.updateOrderTitle(orderType);
             this.props.contentShowList = ordersShow;
             this.props.contentList = orders;
+            if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.finance) === -1) {
+                this.props.contentShowList.forEach((v,i) => {
+                    v.pop();
+                });
+            }
             this.paint();
         });
         
@@ -327,6 +349,11 @@ export class TotalOrder extends Widget {
                 this.updateOrderTitle(orderType);
                 this.props.contentShowList = ordersShow;
                 this.props.contentList = orders;
+                if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.finance) === -1) {
+                    this.props.contentShowList.forEach((v,i) => {
+                        v.pop();
+                    });
+                }
                 this.paint();
             });
         });

@@ -53,8 +53,10 @@ export enum RightsGroups {
     totalOrders= 1006,
     openHWang= 1007,
     returnGoods= 1008,
+    vipManage= 1010,
     withdraw= 1009,
-    vipManage= 1010
+    operation = 1011,
+    finance= 1012
 }
 // 权限组展示
 export const RightsGroupsShow = {
@@ -66,8 +68,10 @@ export const RightsGroupsShow = {
     totalOrders:'所有订单',
     openHWang:'开通海王',
     returnGoods:'退货',
+    vipManage:'会员',
     withdraw:'提现',
-    vipManage:'会员'
+    operation:'提现(运营)',
+    finance:'提现(财务)'
 };
 
 // 所有页面
@@ -84,7 +88,7 @@ const pages = [
         { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' },
         { name: '操作日志', page: PAGE.operationLog, img:'chart.png' }
     ],
-        show:true
+        show:false
     },
     { name:RightsGroupsShow[RightsGroups[1003]] , page: PAGE.platformSettings, img:'chart.png',children:[
         { name:'供应商设置',page:PAGE.platformSettings,img:'chart.png' },

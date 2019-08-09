@@ -15,10 +15,17 @@
         {{for i,v of it.goodsDataList}}
         <div w-class="itemBox">
             {{for j,r of v}}
+            {{if j!=9}}
             <div w-class="item">
                 <div w-class="itemTitle">{{it.goodsTitleList[j]}}</div>
                 <div w-class="itemMess">{{r?r:"暂无"}}</div>
             </div>
+            {{elseif it.auth}}
+            <div w-class="item">
+                <div w-class="itemTitle">{{it.goodsTitleList[j]}}</div>
+                <div w-class="itemMess">{{r?r:"暂无"}}</div>
+            </div>
+            {{end}}
             {{end}}
         </div>
         <div w-class="dividLine"></div>

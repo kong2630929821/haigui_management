@@ -1,26 +1,14 @@
 <div w-class="page" on-tap="pageClick" style="height:100%">
     <div w-class="tabRow">
+        {{for i,v of it.pool}}
         <div w-class="tab">
-            <img src="../../res/images/defultUser.png" w-class="tabImg"/>
+            <img src="{{v.src}}" w-class="tabImg"/>
             <div>
-                <div w-class="tabTitle">今日申请人数</div>
-                <div w-class="amount">{{it.userNum}}</div>
+                <div w-class="tabTitle">{{v.key}}</div>
+                <div w-class="amount">{{v.value}}</div>
             </div>
         </div>
-        <div w-class="tab">
-            <img src="../../res/images/money.png" w-class="tabImg"/>
-            <div>
-                <div w-class="tabTitle">今天提现</div>
-                <div w-class="amount">{{it.dayMoney}}</div>
-            </div>
-        </div>
-        <div w-class="tab">
-            <img src="../../res/images/money.png" w-class="tabImg"/>
-            <div>
-                <div w-class="tabTitle">本月提现</div>
-                <div w-class="amount">{{it.monthTotal}}</div>
-            </div>
-        </div>
+        {{end}}
     </div>
 
     <div w-class="tabRow" style="margin:20px 0 10px;">

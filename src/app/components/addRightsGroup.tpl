@@ -7,10 +7,12 @@
         {{end}}
         <div w-class="group">
             {{for i,v of it.showDataList}}
+                {{if (i!=10&&i!=11)||it.checkedList[9]}}
                 <div w-class="row1" on-tap="check({{i}})" on-down="onShow">
                     <img src="../res/images/{{it.checkedList[i]?'selectBox_active.png':'selectBox.png'}}" w-class="rowImg"/>
                     <div w-class="rowItem">{{v}}</div>
                 </div>
+                {{end}}
             {{end}}
         </div>
         <div w-class="row">
