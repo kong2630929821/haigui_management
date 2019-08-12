@@ -792,9 +792,11 @@ export const parseGoodsList = (data:any) => {
     const arr:any[] = [];
     data.forEach(item => {
         const typeList = [];
+        const typePrice = [];
         item.forEach(v => {
             // ['SKU','规格','差价']
             typeList.push(`${v[2][0]}/${v[3]}/${priceFormat(v[2][1])}`);
+            typePrice.push(priceFormat(v[11]));
         });
         let goodsType = '';// 是否报税
         if (item[0][16] === 1) {
@@ -818,7 +820,7 @@ export const parseGoodsList = (data:any) => {
         const state = item[0][20] === 1 ? '已上架' :'已下架';
         const validTime = item[22] ? `${timestampFormat(item[22][0]).split(' ')[0]}~${timestampFormat(item[22][1]).split(' ')[0]}` :'无';
         // ['商品ID','商品名称','商品规格(SKU/规格/差价)','商品类型','供应商id','供应商名称','品牌id','地区id','库存数量','供货价','成本价','原价','会员价','折后价','税费','分组列表','上架状态','上架时间','保质期','供应商sku','供应商商品id']
-        arr.push([item[0][0],item[0][1],typeList,goodsType,item[0][4],item[0][5],item[0][6],item[0][7],item[0][10],priceFormat(item[0][11]),priceFormat(item[0][12]),priceFormat(item[0][13]),priceFormat(item[0][14]),priceFormat(item[0][15]),priceFormat(item[0][17]),group.join(','),state,timestampFormat(item[0][21]),validTime,item[0][24],item[0][25]]);
+        arr.push([item[0][0],item[0][1],typeList,goodsType,item[0][4],item[0][5],item[0][6],item[0][7],item[0][10],typePrice,priceFormat(item[0][12]),priceFormat(item[0][13]),priceFormat(item[0][14]),priceFormat(item[0][15]),priceFormat(item[0][17]),group.join(','),state,timestampFormat(item[0][21]),validTime,item[0][24],item[0][25]]);
     });
    
     return arr;
