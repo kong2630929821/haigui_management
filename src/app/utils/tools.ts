@@ -139,7 +139,7 @@ export const parseOrderShow = (infos: Order[], status: OrderStatus) => {
             } else {
                 goodsType = '海外直购';
             }
-            const orderShow: OrderShow = [info[1], v[0], v[1], v[3], v[4], v[5], info[0], timestampFormat(timestamp), info[2], info[8], info[9], addressFormat(info[11]), OrderStatusShow[localStatus], priceFormat(info[18]), info[19], info[20], info[21], priceFormat(v[2] * v[3]),goodsType,priceFormat(info[6]), info[17],priceFormat(v[7])];
+            const orderShow: OrderShow = [info[1], v[0], v[1], v[3], v[4], v[5], info[0], timestampFormat(timestamp), info[2], info[8], info[9], addressFormat(info[11]), OrderStatusShow[localStatus], priceFormat(info[18]), info[19], info[20], info[21], priceFormat(v[2] * v[3]),goodsType,priceFormat(info[6]), info[17],priceFormat(v[13]),priceFormat(v[7])];
             ordersShow.push(orderShow);
         }
     }
@@ -162,7 +162,7 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
     }
 
     // 订单基础信息
-    const orderBase: OrderDetailBase = [info[1],info[0],info[2],timestampFormat(info[12]), OrderStatusShow[localStatus],info[17],timestampFormat(info[13]),info[19],priceFormat(info[5]),priceFormat(info[6]),priceFormat(info[18]),info[20],info[21],unicode2ReadStr(info[22]),usertype,info[8],info[9],addressFormat(info[11])];
+    const orderBase: OrderDetailBase = [info[1],info[0],info[2],timestampFormat(info[12]), OrderStatusShow[localStatus],info[17],timestampFormat(info[13]),info[19],priceFormat(info[5]),priceFormat(info[6]),priceFormat(info[18]),info[20],info[21],unicode2ReadStr(info[22]),usertype,info[8],info[9],addressFormat(info[11]),''];
     
     // 商品信息
     for (const v of info[3]) {  
@@ -186,7 +186,7 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
         } else {
             time = `${timestampFormat(v[12][2][0]).split(' ')[0]}~${timestampFormat(v[12][2][1]).split(' ')[0]}`;
         }
-        const goods: OrderDetailGoods = [v[0], v[1], v[4], v[5], v[12][1],goodsType, group.join(','),v[3],time,priceFormat(v[7]),priceFormat(v[8]),priceFormat(v[9]),v[11][0],v[11][1],v[11][2]];
+        const goods: OrderDetailGoods = [v[0], v[1], v[4], v[5], v[12][1],goodsType, group.join(','),v[3],time,priceFormat(v[7]),priceFormat(v[8]),priceFormat(v[9]),v[11][0],v[11][1],v[11][2],priceFormat(v[13])];
         orderGoods.push(goods);
     }
     
