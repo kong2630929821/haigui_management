@@ -201,6 +201,11 @@ export class Withdraw extends Widget {
         const uid = this.props.showDataList[e.num + this.props.curPage  * this.props.perPage][0];
         if (id && uid) {
             if (e.fg === 1) {
+                if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.finance) === -1) {
+                    popNewMessage('暂无权限');
+
+                    return;
+                }
                 popNew('app-components-modalBoxInput',{ title:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的提现申请`,placeHolder:'请输入拒绝理由', errMessage:'请输入拒绝理由' },async (r) => {
                     if (!r) {
                         popNewMessage('请输入拒绝理由！');
@@ -208,8 +213,10 @@ export class Withdraw extends Widget {
                         await changeWithdrawState(id, uid, 3, r).then(r => { // 拒绝
                             if (r.result === 1) {
                                 popNewMessage('处理完成');
-                            } else if (r.result === 6008) {
+                            } else if (r.type === 6008) {
                                 popNewMessage('当日提现金额到达微信上限');
+                            } else if (r.type === 6002) {
+                                popNewMessage('当日提现金额到达配置上限');
                             } else {
                                 popNewMessage('处理失败');
                             }
@@ -231,8 +238,10 @@ export class Withdraw extends Widget {
                         console.log(r);
                         if (r.result === 1) {
                             popNewMessage('处理完成');
-                        } else if (r.result === 6008) {
+                        } else if (r.type === 6008) {
                             popNewMessage('当日提现金额到达微信上限');
+                        } else if (r.type  === 6002) {
+                            popNewMessage('当日提现金额到达配置上限');
                         } else {
                             popNewMessage('处理失败');
                         }
@@ -248,10 +257,14 @@ export class Withdraw extends Widget {
                     }
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
                         await changeWithdrawState(id, uid, 2,'').then(r => {
-                            if (r.result !== 1) {
-                                popNewMessage('处理失败');
-                            } else {
+                            if (r.result === 1) {
                                 popNewMessage('处理完成');
+                            } else if (r.type === 6008) {
+                                popNewMessage('当日提现金额到达微信上限');
+                            } else if (r.type === 6002) {
+                                popNewMessage('当日提现金额到达配置上限');
+                            } else {
+                                popNewMessage('处理失败');
                             }
                         }).catch(e => {
                             popNewMessage('处理失败');
@@ -269,10 +282,21 @@ export class Withdraw extends Widget {
         // TODO:
         const id = this.props.withdrawIdList[e.num + this.props.curPage * this.props.perPage];
         const uid = this.props.showDataList[e.num + this.props.curPage * this.props.perPage][0];
+        if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.operation) === -1) {
+            popNewMessage('暂无权限');
+
+            return;
+        }
         popNew('app-components-modalBox',{ content:`确认重新处理用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
             await changeWithdrawState(id, uid, 1, '').then(r => {
-                if (r.result !== 1) {
-                    popNewMessage(r.error_code);
+                if (r.result === 1) {
+                    popNewMessage('处理完成');
+                } else if (r.type === 6008) {
+                    popNewMessage('当日提现金额到达微信上限');
+                } else if (r.type === 6002) {
+                    popNewMessage('当日提现金额到达配置上限');
+                } else {
+                    popNewMessage('处理失败');
                 }
             }).catch(e => {
                 popNewMessage(e.error_code);
