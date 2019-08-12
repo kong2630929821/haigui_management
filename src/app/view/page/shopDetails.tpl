@@ -58,7 +58,7 @@
                     <div w-class="shopId" style="flex:1;margin-left: 93px;">商品名称（ID）</div>
                     <div w-class="shopName" style="flex:1;">2018款怀集系列见覅拉尔金属怀旧连衣裙-红色（1515）</div>
                     <div w-class="shopType" style="flex:1;">
-                        <span w-class="discount">供应商（ID）</span>
+                        <span w-class="discount">供应商ID</span>
                         <span style="margin-left:12px;">附加类水果（15511）</span>
                     </div>
                     <div w-class="shopType" style="flex:1;">

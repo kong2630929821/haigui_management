@@ -26,6 +26,9 @@ interface Props {
     perPage:number;// 每页显示多少个
     expandIndex:boolean;// 下拉显示
     perPageIndex:number;// 一页显示多少个下标
+    optionsList:string[]; // 下拉框
+    showFilterBox:boolean;  // 展开过滤器
+    active:number;
 }
 const Status = [
     '申请中',
@@ -58,7 +61,10 @@ export class OpenHWang extends Widget {
         curPage:0,
         perPage:perPage[0],
         expandIndex:false,
-        perPageIndex:0
+        perPageIndex:0,
+        optionsList:['申请时间','处理时间'],
+        showFilterBox:false,
+        active:0
     };
 
     public create() {
@@ -70,6 +76,10 @@ export class OpenHWang extends Widget {
 
     // 切换tab
     public changeTab(num:number) {
+        this.pageClick();
+        if (this.props.activeTab !== num) {
+            this.props.curPage = 0;
+        }
         this.props.activeTab = num;
         if (num === 2) {
             this.props.btn1 = '';
@@ -90,8 +100,8 @@ export class OpenHWang extends Widget {
                 this.props.showDataList.push(v);
             }
         });
-        this.props.curPage = 0;
-        this.changePage({ value:0 });
+        
+        this.changePage({ value:this.props.curPage });
     }
 
     // 获取数据
@@ -102,7 +112,7 @@ export class OpenHWang extends Widget {
             this.props.allCount = r.haiw_count;
             this.paint();
         });
-        getHWangApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
+        getHWangApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime),this.props.active).then(r => {
             this.props.datas = [];
             this.props.showDataList = [];
             if (r.value && r.value.length > 0) {
@@ -138,7 +148,7 @@ export class OpenHWang extends Widget {
         if (id && uid) {
             if (e.fg === 1) {
                
-                popNew('app-components-modalBoxInput',{ title:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请`,placeHolder:'请输入拒绝理由' },async (r) => {
+                popNew('app-components-modalBoxInput',{ title:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的开通海王申请`,placeHolder:'请输入拒绝理由',errMessage:'请输入拒绝理由' },async (r) => {
                     if (!r) {
                         popNewMessage('请输入拒绝理由！');
                     } else {
@@ -170,6 +180,7 @@ export class OpenHWang extends Widget {
 
     // 查询
     public search() {
+        this.pageClick();
         if (this.props.searPhone) {
             this.props.showDataList = [];
             this.props.applyIdList = [];
@@ -190,6 +201,7 @@ export class OpenHWang extends Widget {
 
     // 导出列表
     public exportData() {
+        this.pageClick();
         if (this.props.showDataList.length > 0) {
             this.props.showDataList.unshift(this.props.showTitleList);
             let name = '海王申请列表.xls';
@@ -203,6 +215,7 @@ export class OpenHWang extends Widget {
 
     // 日期选择框显示
     public changeDateBox(e:any) {
+        this.pageClick();
         this.props.showDateBox = e.value;
         this.paint();
     }
@@ -216,11 +229,13 @@ export class OpenHWang extends Widget {
     public pageClick() {
         this.props.showDateBox = false;
         this.props.expandIndex = false;
+        this.props.showFilterBox = false;
         this.paint();
     }
 
     // 查看某一页数据
     public changePage(e:any) {
+        this.pageClick();
         this.props.curPage = e.value;
         this.props.curShowDataList = this.props.showDataList.slice(e.value * this.props.perPage,e.value * this.props.perPage + this.props.perPage);
         this.paint();
@@ -228,6 +243,7 @@ export class OpenHWang extends Widget {
 
      // 每页展示多少数据
     public perPage(e:any) {
+        this.pageClick();
         this.props.perPageIndex = e.index;
         this.props.perPage = e.value;
         this.changePage({ value:0 });   
@@ -235,6 +251,7 @@ export class OpenHWang extends Widget {
 
     // 过滤器
     public expand(e:any) {
+        this.pageClick();
         this.props.expandIndex = e.value;
         this.paint();
     }
@@ -242,5 +259,18 @@ export class OpenHWang extends Widget {
     // 动画效果执行
     public onShow(e:any) {
         rippleShow(e);
+    }
+
+    public filterTime(e:any) {
+        this.props.active = e.value;
+        this.props.showFilterBox = false;
+        this.paint();
+    }
+
+        // 过滤器
+    public changeFilterBox(e:any) {
+        this.pageClick();
+        this.props.showFilterBox = e.value;
+        this.paint();
     }
 }

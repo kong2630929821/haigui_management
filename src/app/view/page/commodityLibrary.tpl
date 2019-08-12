@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div w-class="ctroller">
-                <div w-class="searchleft" on-tap="exportShop" on-down="onShow">导出全部信息</div>
+                <div w-class="searchleft" on-tap="exportAllGoods" on-down="onShow">导出全部信息</div>
                 <div w-class="onShelves" on-tap="onShelves" on-down="onShow">添加商品</div>
                 <div ev-changeCurrent="pageChange" w-class="pagination" ev-perPage="perPage" ev-expand="expand(e,{{1}})">
                     <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.shopNum/ it.perPage)}},filterShow:true,currentIndex:{{it.currentIndex}},expand:{{it.expandIndex[1]}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>

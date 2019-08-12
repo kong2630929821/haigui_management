@@ -113,9 +113,11 @@ export class ProductLibrary extends Widget {
     // 根据时间筛选
     public filterTimeType(e:any) {
         this.props.timeTypeActiveIndex = e.activeIndex;
+        this.close();
     }
     // 每页展示多少数据
     public perPage(e:any) {
+        this.close();
         this.props.perPage = e.value;
         this.props.perPageIndex = e.index;
         this.props.expandIndex = false;
@@ -143,6 +145,7 @@ export class ProductLibrary extends Widget {
     }
     // 日期选择框显示
     public changeDateBox(e:any) {
+        this.close();
         this.props.showDateBox = e.value;
         this.paint();
     }
@@ -153,6 +156,7 @@ export class ProductLibrary extends Widget {
     }
     // 分页变化
     public pageChange(e:any) {
+        this.close();
         this.props.currentIndex = e.value;
         if (this.props.inputValue) {
             this.props.showDataList = this.props.searchDataList.slice(e.value * this.props.perPage,(e.value + 1) * this.props.perPage);
@@ -164,6 +168,7 @@ export class ProductLibrary extends Widget {
     }
     // 导出全部数据
     public exportShop() {
+        this.close();
         const oData = new Date();
         const end_time = oData.setHours(23, 59, 59, 999);
         const start_time = 0;
@@ -181,13 +186,14 @@ export class ProductLibrary extends Widget {
                 aoa.push(v);
             }
             console.log(aoa);
-            exportExcel(aoa,`产品信息表.xlsx`);
+            exportExcel(aoa,`SKU信息表.xlsx`);
         
             console.log('contentList ===',jsonData);
         });
     }
     // 搜索
     public search() {
+        this.close();
         console.log(this.props.inputValue);
         if (!this.props.inputValue) {
             this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
@@ -206,18 +212,21 @@ export class ProductLibrary extends Widget {
 
     // 添加产品
     public addProduct() {
+        this.close();
         this.props.showAddProduct = 1;
         this.paint();
     }
 
     // 显示产品库页面
     public showProduct() {
+        this.close();
         this.props.showAddProduct = 0;
         this.paint();
     }
 
     // 表格点击按钮
     public goDetail(e:any) {
+        this.close();
         console.log(e);
         this.props.currentData = deepCopy(e.value);
         if (e.fg === 1) {
@@ -238,6 +247,7 @@ export class ProductLibrary extends Widget {
 
     // 过滤器
     public expand(e:any) {
+        this.close();
         this.props.expandIndex = e.value;
         this.paint();
     }

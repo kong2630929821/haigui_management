@@ -1,7 +1,7 @@
 import { httpPort, sourceIp } from '../config';
-import { setStore } from '../store/memstore';
+import { deepCopy, setStore } from '../store/memstore';
 import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
-import { analyzeGoods, brandProcessing, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShoppingTop10, processingShopSetting, processingUser, processingUserLevelChange, processingUserType, processingVip, supplierProcessing, parseGoodsList } from '../utils/tools';
+import { analyzeGoods, brandProcessing, parseGoodsList, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShoppingTop10, processingShopSetting, processingUser, processingUserLevelChange, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -235,50 +235,76 @@ export const selSupplier = () => {
 
 };
 // 按订单编号查询订单
-export const getOrderById  = (orderId) => {
-    const msg = { 
-        type: 'select_orders',
-        param: { 
-            id:orderId
-        } 
-    };
+export const getOrderById  = (orderId:any) => {
+    let src = '';
+    if (/^1[3456789]\d{9}$/.test(orderId)) { 
+        // 手机号码
+        src = `http://${sourceIp}:${httpPort}/console/select_orders?phone=${orderId}`;
+    } else if (orderId.indexOf('1051') !== -1) {
+        // 订单
+        src = `http://${sourceIp}:${httpPort}/console/select_orders?id=${Number(orderId)}`;
+    } else {
+        // 用户ID
+        src = `http://${sourceIp}:${httpPort}/console/select_orders?uid=${Number(orderId)}`;
+    } 
 
-    return requestAsync(msg).then(r => {
-        const infos = <Order>JSON.parse(r.value);
-        if (!infos) {
+    return fetch(src).then(res => {
+        return res.json().then(r => {
+            
+            let infos = JSON.parse(r.value);
+            if (!infos[0].length) {
+                infos = [infos];
+            }
+            if (!infos) {
+                return [[],[]];
+            }
+            const ordersShow = parseOrderShow(infos,OrderStatus.ALL);
+            console.log('ordersShow =====',ordersShow);
+            console.log('orders =====',infos);
+    
+            return [[infos],ordersShow];
+        }). catch (e => {
             return [[],[]];
-        }
-        const ordersShow = parseOrderShow([infos],OrderStatus.ALL);
-        console.log('ordersShow =====',ordersShow);
-        console.log('orders =====',infos);
-
-        return [[infos],ordersShow];
-
-    }).catch((e) => {
-        console.log(e);
-        
-        return [];
+        });
+      
     });
+    // const msg = { 
+    //     type: 'select_orders',
+    //     param: { 
+    //         id:orderId,
+    //         uid,
+    //         phone
+    //     } 
+    // };
+
+    // return requestAsync(msg).then(r => {
+    //     const infos = <Order>JSON.parse(r.value);
+    //     if (!infos) {
+    //         return [[],[]];
+    //     }
+    //     const ordersShow = parseOrderShow([infos],OrderStatus.ALL);
+    //     console.log('ordersShow =====',ordersShow);
+    //     console.log('orders =====',infos);
+
+    //     return [[infos],ordersShow];
+
+    // }).catch((e) => {
+    //     console.log(e);
+        
+    //     return [];
+    // });
 };
 
 // 获取第count个订单的id
 export const getOrderKey = (count,time_type,start,tail,sid,orderType,state) => {
-    let startTimestamp = 0; 
-    let endTimestamp = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).getTime();
-    if (start) {
-        startTimestamp = new Date(start).getTime();
-    }
-    if (tail) {
-        endTimestamp = new Date(tail).getTime();
-    }
     const msg = {
         type:'select_all_orders_keys',
         param:{
             id:0,       // 订单id,等于0表示从最大开始获取，大于0表示从指定订单id开始获取
             count:count,   // 需要获取的订单信息数量，即一页需要显示的数量
             time_type:time_type,    // 时间类型，1下单，2支付，3发货， 4收货，5完成
-            start:startTimestamp ,               // 启始时间，单位毫秒
-            tail:endTimestamp,                // 结束时间，单位毫秒
+            start:start ,               // 启始时间，单位毫秒
+            tail:tail,                // 结束时间，单位毫秒
             sid:sid,                    // 供应商id，等于0表示所有供应商，大于0表示指定供应商
             type:orderType,                // 订单类型，0失败，1待支付，2待发货，3待收货，4待完成
             state:state                // 订单状态，0未导出，1已导出
@@ -290,27 +316,20 @@ export const getOrderKey = (count,time_type,start,tail,sid,orderType,state) => {
         if (!infos) {
             return [[],[]];
         }
+        
         // const ordersShow = parseOrderShow([infos[0]],orderType);
         // console.log('select_all_orders_keys',ordersShow);
         // console.log('select_all_orders_keys',infos[1]);
 
-        const ordersShow = [];
+        const ordersShow = [[infos[0]]];
 
         return [ordersShow,infos[1]];
     });
 };
 // 获取所有订单
 export const getAllOrder  = (id,count,time_type,start,tail,sid,orderType,state) => {
-    let startTimestamp = 0; 
-    let endTimestamp = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).getTime();
-    if (start) {
-        startTimestamp = new Date(start).getTime();
-    }
-    if (tail) {
-        endTimestamp = new Date(tail).getTime();
-    }
-   
-    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_orders?id=${id}&count=${count}&time_type=${time_type}&start=${startTimestamp}&tail=${endTimestamp}&sid=${sid}&type=${orderType}&state=${state}`).then(res => {
+ 
+    return fetch(`http://${sourceIp}:${httpPort}/console/select_all_orders?id=${id}&count=${count}&time_type=${time_type}&start=${start}&tail=${tail}&sid=${sid}&type=${orderType}&state=${state}`).then(res => {
         return res.json().then(r => {
             
             console.log(r);
@@ -429,12 +448,13 @@ export const getHwangTotal = () => {
 /**
  * 获取海王申请列表
  */
-export const getHWangApply = (stTime?:number,edTime?:number) => {
+export const getHWangApply = (stTime?:number,edTime?:number,time_type:number) => {
     const msg = {
         type:'mall_mgr/members@get_haiwang_application',
         param:{
             start_time: stTime || 0,
-            end_time: edTime || Date.now()
+            end_time: edTime || Date.now(),
+            time_type
         }
     };
 
@@ -464,10 +484,13 @@ export const changeHWangState = (id:number,uid:number,state:number,reason:string
 /**
  * 获取提现统计
  */
-export const getWithdrawTotal = () => {
+export const getWithdrawTotal = (start_time:number,end_time:number) => {
     const msg = {
         type:'mall_mgr/members@get_withdraw_total',
-        param:{}
+        param:{
+            start_time,
+            end_time
+        }
     };
 
     return requestAsync(msg);
@@ -572,12 +595,17 @@ export const setHwangLabel = (uid:number,label:number) => {
 
     return requestAsync(msg);
 };
-// select_goods_keys
-export const getGoodsKey = (count:number) => {
+
+// 获取商品ID及总数
+export const getGoodsKey = (count:number,start_time:number,end_time:number,state:number) => {
     const msg = {
         type:'select_goods_keys',
         param:{
-            count
+            id:0,
+            count,
+            start_time,
+            end_time,
+            state
         }
     };
 
@@ -596,8 +624,8 @@ export const getAllGoods = (star:number,num:number,state:number,start_time:numbe
         // return res.json();
         return res.json().then(r => {
             const data = JSON.parse(r.value);
-            
-            return [parseGoodsList(data), analyzeGoods(data)];
+    
+            return [parseGoodsList(deepCopy(data)), analyzeGoods(deepCopy(data))];
         });
     });
 };
@@ -731,14 +759,14 @@ export const quitOrder = (orderId:number) => {
 
 // 修改资产
 // tslint:disable-next-line:no-reserved-keywords
-export const changeMoney = (type:number,uid:number,money:number) => {
+export const changeMoney = (type:number,uid:number,money:number,note:string) => {
     const msg = {
         type:'console_alter_balance',
         param:{
             type,
             uid,
             money,
-            note:''
+            note
         }
     };
 
@@ -772,7 +800,7 @@ export const getAllProduct = (start_time:number,end_time:number) => {
                     arr[index][7] = '无';
                 }
             });
-
+                
             return [num,arr];
             
         });
@@ -782,7 +810,7 @@ export const getAllProduct = (start_time:number,end_time:number) => {
 export const searchProduct = (keyValue:any) => {
     let product_id = 0;
     let sku = '';
-    if (keyValue.indexOf('1011') === -1) {
+    if (keyValue.indexOf('1011') === -1 && keyValue.indexOf('3011') === -1) {
         sku = keyValue;
     } else {
         product_id = parseInt(keyValue);
@@ -997,7 +1025,7 @@ export const changeBindding = (uid:number,code:string) => {
             code
         }
     };
-
+   
     return requestAsync(msg);
 };
 
@@ -1017,25 +1045,42 @@ export const getFreight = (supplier:number,goods_type:number,input:any) => {
 
 // 获取所有品牌
 export const getAllBrand = (ids?:any) => {
-    const msg = { 
-        type: 'console_get_brand',
-        param: { 
-        } 
-    };
+    let url = `http://${sourceIp}:${httpPort}/console/console_get_brand`;
+
     if (ids) {
-        msg.param = { ids:ids };
-    }
-
-    return requestAsync(msg).then(r => {
-        if (r.result === 1) {
-            const data = r.brandInfo;
-
-            return [data, ...brandProcessing(data)];
-        }
-    }).catch(e => {
-        
-        return [[],[],[]];
+        url = `http://${sourceIp}:${httpPort}/console/console_get_brand?ids=${ids}`;
+    } 
+    
+    return fetch(url).then(res => {
+        return res.json().then(r => {
+            if (r.result === 1) {
+                const data = r.brandInfo;
+                
+                return [data, ...brandProcessing(data)];
+            }
+        }).catch(e => {
+            return [[],[],[]];
+        });
     });
+    // const msg = { 
+    //     type: 'console_get_brand',
+    //     param: { 
+    //     } 
+    // };
+    // if (ids) {
+    //     msg.param = { ids:ids };
+    // }
+
+    // return requestAsync(msg).then(r => {
+    //     if (r.result === 1) {
+    //         const data = r.brandInfo;
+
+    //         return [data, ...brandProcessing(data)];
+    //     }
+    // }).catch(e => {
+        
+    //     return [[],[],[]];
+    // });
 };
 
 // 上传图片

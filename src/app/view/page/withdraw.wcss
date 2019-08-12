@@ -24,10 +24,11 @@
     font-weight:500;
     color:rgba(53,64,82,1);
     line-height:28px;
+    text-align: right;
 }
 .amount{
     height:50px;
-    font-size:36px;
+    font-size:26px;
     font-weight:500;
     color:rgba(25,145,235,1);
     line-height:50px;

@@ -27,20 +27,21 @@ interface Props {
     perPage:number;// 每页多少条数据
     expandIndex:boolean;// 分页下拉显示
     perPageIndex:number;// 一页显示多少个的下标
+    indirectPeople:number;// 间推人数    
     
 }
 const UserTypeLabel = ['白客','海宝','海宝（体验）','海王','市代理','省代理','海王（体验）'];
 const tableTitle = [
     ['用户ID','微信名','手机号','注册时间','身份','地址','ta的本月收益','ta的总收益'],
-    ['时间','类型','金额'],
-    ['时间','类型','海贝'],
-    ['时间','类型','积分']
+    ['时间','类型','金额','备注'],
+    ['时间','类型','海贝','备注'],
+    ['时间','类型','积分','备注']
 
 ];
 const showData = [
-    { title:'资金',num:0 },
-    { title:'海贝',num:1 },
-    { title:'积分',num:2 }
+    { title:'资金',num:0,note:'' },
+    { title:'海贝',num:1,note:'' },
+    { title:'积分',num:2,note:'' }
 ];
 
 /**
@@ -70,7 +71,8 @@ export class VipDetail extends Widget {
         status:true,
         perPage:perPage[0],
         expandIndex:false,
-        perPageIndex:0
+        perPageIndex:0,
+        indirectPeople:0
     };
 
     public setProps(props:any) {
@@ -89,6 +91,7 @@ export class VipDetail extends Widget {
         this.props.baikDatas = [];
         getVipDetail(this.props.uid).then(r => {
             const v = r.userTotal;
+            this.props.indirectPeople = r.inderect_invite;
             if (v) {
                 // 获取用户身份
                 const user = getUserType(v[9],v[10]);
@@ -252,18 +255,9 @@ export class VipDetail extends Widget {
     }
 
     // 更改绑定人
-    public changeBinding() {
-        popNew('app-components-modalBox',{ title:'将用户的邀请人更改为',style:true },(val) => {
-            const uid = this.props.userData[0].td;
-            changeBindding(uid,val).then(r => {
-                if (r.result === 1) {
-                    popNewMessage('修改成功');
-                } else {
-                    popNewMessage('修改失败');
-                }
-            }).catch(e => {
-                popNewMessage('修改失败');
-            });
+    public changeBinding(e:any) {
+        popNew('app-components-modalBox',{ title:'将用户的邀请人更改为',style:true,uid:this.props.userData[0].td },() => {
+            notify(e.node,'ev-change-userType',{});
         });
     }
 

@@ -7,16 +7,18 @@
         {{end}}
         <div w-class="group">
             {{for i,v of it.showDataList}}
+                {{if (i!=10&&i!=11)||it.checkedList[9]}}
                 <div w-class="row1" on-tap="check({{i}})" on-down="onShow">
                     <img src="../res/images/{{it.checkedList[i]?'selectBox_active.png':'selectBox.png'}}" w-class="rowImg"/>
                     <div w-class="rowItem">{{v}}</div>
                 </div>
+                {{end}}
             {{end}}
         </div>
         <div w-class="row">
             <div w-class="title">名字</div>
             <div w-class="input" ev-input-change="nameChange" style="width: 382px;">
-                <widget w-tag="app-components-input">{input:{{it.name}},placeHolder:"请输入名字"}</widget>
+                <widget w-tag="app-components-input">{input:{{it.name}},placeHolder:"请输入名字",disabled:{{it.status?false:true}}}</widget>
             </div>
         </div>
         <div w-class="btns">

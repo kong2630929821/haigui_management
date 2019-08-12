@@ -1,8 +1,6 @@
 .page{
     background: #F0F2F5;
     color:#354052;
-    overflow-x: hidden;
-    overflow-y: auto;
 }
 .bannerBox{
     margin:20px 0;

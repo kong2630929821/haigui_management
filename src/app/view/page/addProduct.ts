@@ -108,6 +108,7 @@ export class AddProduct extends Widget {
     }
     // 是否有保质期变化
     public shelfLifeChange(e:any) {
+        this.close();
         this.props.shelfLifeActiveIndex = e.activeIndex;
         this.paint();
     }
@@ -119,6 +120,7 @@ export class AddProduct extends Widget {
     }
     // 日期选择框显示
     public changeDateBox(e:any) {
+        this.close();
         this.props.showDateBox = e.value;
         this.paint();
     } 
@@ -135,16 +137,16 @@ export class AddProduct extends Widget {
         this.props.data[1] = e.value;
     }
     public inventoryChange(e:any) {
-        this.props.data[4] = Number(e.value);
+        this.props.data[4] = e.value;
     }
     public supplier_priceChange(e:any) {
-        this.props.data[5] = Number(e.value);
+        this.props.data[5] = e.value;
     }
     public supplierSkuChange(e:any) {
-        this.props.data[8] = Number(e.value);
+        this.props.data[8] = e.value;
     }
     public supplierIdChange(e:any) {
-        this.props.data[9] = Number(e.value);
+        this.props.data[9] = e.value;
     }
     public returnGoodsInfo(e:any) {
         this.props.data[10] = e.value;
@@ -157,15 +159,16 @@ export class AddProduct extends Widget {
     }
     // 保存添加的产品
     public saveProduct(e:any) {
+        this.close();
         const sku = this.props.data[0];
         const supplier = this.props.supplierId[this.props.supplier];
         const sku_name =  this.props.data[1];
-        const inventory = this.props.data[4];
-        const supplier_price = Math.round(this.props.data[5] * 100);
-        const supplier_sku = this.props.data[8];
+        const inventory = Number(this.props.data[4]);
+        const supplier_price = Math.round(Number(this.props.data[5]) * 100);
+        const supplier_sku =  this.props.data[8];
         const supplier_id = this.props.data[9];
         let time = null;
-        if (!sku || !supplier || !sku_name || !inventory || !supplier_price || supplier_sku === '' || supplier_id === '') {
+        if (sku === ''  || sku_name === '' || this.props.data[4] === '' || this.props.data[5] === '' || supplier_sku === '' || this.props.data[9] === '') {
             popNewMessage('请填写信息');
 
             return ;
@@ -180,11 +183,11 @@ export class AddProduct extends Widget {
 
             return;
         } 
-        if (this.props.startTime === '' || this.props.endTime === '') {
-            popNewMessage('请填写保质期');
+        // if (this.props.startTime === '' || this.props.endTime === '') {
+        //     popNewMessage('请填写保质期');
 
-            return;
-        }
+        //     return;
+        // }
         if (this.props.shelfLifeActiveIndex === 0) {
             if (this.props.startTime === '' || this.props.endTime === '') {
                 popNewMessage('请填写保质期');
@@ -236,11 +239,13 @@ export class AddProduct extends Widget {
 
     // 供应商选择
     public supplierTypeChange(e:any) {
+        this.close();
         this.props.supplier = e.value;
     }
     
     // 过滤器变化
     public expand(index:number,e:any) {
+        this.close();
         this.props.expandIndex[index] = e.value;
         this.paint();
     }

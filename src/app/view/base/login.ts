@@ -31,8 +31,16 @@ export class Login extends Widget {
     public loginUser() {
         if (this.props.name && this.props.pwd) {
             login(this.props.name,this.props.pwd).then(r => {
+
+                const auth = r.auth;
+                if (!auth.length) {
+                    popNewMessage('该用户无权限');
+
+                    return;
+                }
+                setStore('account',this.props.name);
+                setStore('flags/auth',r.auth);
                 popNew('app-view-base-home');
-                
                 // 登录成功获取会员信息
                 const vipTotal = getStore('vipTotal',{});
                 getVipMember().then(r => {

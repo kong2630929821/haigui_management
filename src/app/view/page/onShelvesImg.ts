@@ -50,9 +50,9 @@ export class OnShelvesImg extends Widget {
         bondedActiveIndex:0,
         expandIndex:[false,false,false],
         selectData:[],
-        showDataTitle : ['供应商id','SKU','产品名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
+        showDataTitle : ['供应商id','SKU','SKU名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
         style:true,
-        data:[],
+        data:['','','','',''],
         spreadList:[],
         inputTitle:['商品名称','成本价(元)','普通售价(元)','会员价(元)','折扣价(元)'],
         path:'',
@@ -218,7 +218,7 @@ export class OnShelvesImg extends Widget {
     // 差价输入变化
     public spread(e:any,index:number) {
         const sku_id = this.props.selectData[index][1];
-        this.props.spreadList[index] = [sku_id,Number(e.value)];
+        this.props.spreadList[index] = [sku_id,e.value];
     }
     // 缩略图替换/上传
     public updataImg(e:any) {
@@ -246,10 +246,12 @@ export class OnShelvesImg extends Widget {
         this.paint();
     }
     // 下一步
+    // tslint:disable-next-line:max-func-body-length
     public next(e:any) {
+        this.close();
         const img = [this.props.thumbnail[0],...this.props.mainPicture];
         // '商品名称','品牌ID','成本价','普通售价','会员价','折扣价'
-        let flag = false;// 判断输入的是否有空值
+        let flag = false;// 判断输入的是否有空
         this.props.data.forEach(v => {
             if (v === '') {
                 flag = true;
@@ -267,23 +269,32 @@ export class OnShelvesImg extends Widget {
 
             return ;
         }
-        if (this.props.style) {
-            if (this.props.spreadList.length === 0) {
-                popNewMessage('请填写差价');
-    
-                return ;
-            }
-        }
-        if (this.props.selectData.length !== this.props.spreadList.length) {
-            popNewMessage('请填写差价');
-    
-            return ;
-        }
         if (this.props.selectData.length === 0) {
             popNewMessage('请选择SKU');
     
             return ;
         }
+        if (this.props.spreadList.length === 0) {
+            popNewMessage('请填写差价');
+    
+            return ;
+        }
+        let fg = false;
+        this.props.spreadList.forEach(v => {
+            if (v[1] === '' || isNaN(Number(v[1]))) {
+                fg = true;
+            }
+        });
+        if (fg) {
+            popNewMessage('请填写差价');
+    
+            return ;
+        }
+        // if (this.props.selectData.length !== this.props.spreadList.length) {
+        //     popNewMessage('请填写差价');
+    
+        //     return ;
+        // }
         const name = this.props.data[0];// 商品名称
         const brand = this.props.brandId[this.props.brandTypeIndex];
         const area = Number(this.props.areaIdList[this.props.areaIdActiveIndex]);// 地址ID
@@ -300,16 +311,21 @@ export class OnShelvesImg extends Widget {
         const discount = this.props.data[4] ? Math.round(Number(this.props.data[4]) * 100) :0;// 折扣价
         const labels = [];// 规格
         this.props.spreadList.forEach(v => {
-            labels.push([v[0],Math.round(v[1] * 100)]);
+            labels.push([v[0],Math.round(Number(v[1]) * 100)]);
         });
         const images = img;// 图片
         const intro = [];// 商品介绍
         const spec = [];//
         const detail = this.props.infoPicture;// 详情图片
-        if (cost >= origin || cost >= discount || cost >= vip_price) {
+        if (cost > origin || cost > discount || cost > vip_price || origin < vip_price || origin < discount) {
             popNewMessage('请填写正确的价格');
     
             return ;
+        }
+        if (tax < 0) {
+            popNewMessage('税费不能为负数');
+
+            return;
         }
         const arr = [name,brand,area,supplier,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
         if (this.props.style) {
@@ -382,6 +398,7 @@ export class OnShelvesImg extends Widget {
     }
     // 搜索产品
     public searchProduct() {
+        this.close();
         if (!this.props.searchValue) {
 
             return ;
@@ -436,10 +453,13 @@ export class OnShelvesImg extends Widget {
     // 品牌选择
     public brandTypeChange(e:any) {
         this.props.brandTypeIndex = e.value;
+        this.props.expandIndex[2] = false;
+        this.paint();
     }
 
     // 过滤器变化
     public expand(index:number,e:any) {
+        this.close();
         this.props.expandIndex[index] = e.value;
         this.paint();
     }

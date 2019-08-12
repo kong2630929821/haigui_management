@@ -1,5 +1,5 @@
 import { Widget } from '../../pi/widget/widget';
-import { addRightsGroups, changeRightsGroups } from '../net/pull';
+import { addRightsGroups, changeRightsGroups, getAllUserType } from '../net/pull';
 import { popNewMessage } from '../utils/logic';
 import { rippleShow } from '../utils/tools';
 import { RightsGroups, RightsGroupsShow } from '../view/base/home';
@@ -14,6 +14,8 @@ interface Props {
     name:string;// 名字
     status:boolean;// true为添加 false修改
     currentData:any;// 当前传来的值
+    rightGroups:any;// 已有的权限组
+    showChild:boolean;// 是否显示子权限
 }
 
 /**
@@ -30,7 +32,9 @@ export class AddRightsGroup extends Widget {
         checkedList:[],
         name:'',
         status:true,
-        currentData:[]
+        currentData:[],
+        rightGroups:[],
+        showChild:false
     };
 
     public ok:() => void;
@@ -65,6 +69,12 @@ export class AddRightsGroup extends Widget {
                 });
             });
         }
+
+        // 已有的权限组
+        getAllUserType().then(r => {
+            this.props.rightGroups = r[0] || [];
+            this.paint();
+        });
     }
     // 取消
     public cancelBtnClick() {
@@ -92,6 +102,11 @@ export class AddRightsGroup extends Widget {
         }
         if (this.props.status) {
             // 新增
+            if (this.props.rightGroups.indexOf(name) !== -1) {
+                popNewMessage('该名字已存在');
+    
+                return;
+            }
             addRightsGroups(JSON.stringify(group),name).then(r => {
                 if (r.result === 1) {
                     popNewMessage('添加成功');
@@ -131,6 +146,21 @@ export class AddRightsGroup extends Widget {
     // 选中某个权限
     public check(index:number) {
         this.props.checkedList[index] = !this.props.checkedList[index];
+        // 点击提现默认给运营
+        if (index === 9) {
+            this.props.checkedList[10] = !this.props.checkedList[10];
+            this.props.checkedList[11] = false;
+        }
+        // 当运营和财务都没选则取消提现的选择
+        if (!this.props.checkedList[10] && !this.props.checkedList[11]) {
+            this.props.checkedList[9] = false;
+        }
+        if (index === 10) {
+            this.props.checkedList[11] = false;
+        }
+        if (index === 11) {
+            this.props.checkedList[10] = false;
+        }
         this.paint();
     }
 }

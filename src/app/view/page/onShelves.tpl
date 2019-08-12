@@ -15,7 +15,7 @@
                     <div w-class="shopId" style="margin-left: 93px;">商品名称（ID）</div>
                     <div w-class="shopName" style="flex:1;">{{v[2]}}</div>
                     <div w-class="shopType" style="flex:1;">
-                        <span w-class="discount">供应商（ID）</span>
+                        <span w-class="discount">供应商ID</span>
                         <span style="margin-left:12px;">{{v[0]}}</span>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                     <div w-class="shopId" style="margin-left: 93px;">产品名称（ID）</div>
                     <div w-class="shopName" style="flex:1;">{{v[2]}}</div>
                     <div w-class="shopType" style="flex:1;">
-                        <span w-class="discount">供应商（ID）</span>
+                        <span w-class="discount">供应商ID</span>
                         <span style="margin-left:12px;">{{v[0]}}</span>
                     </div>
                 </div>

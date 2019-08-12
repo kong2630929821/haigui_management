@@ -3,7 +3,7 @@ import { GoodsDetail, setStore } from '../store/memstore';
 import { RightsGroups, RightsGroupsShow } from '../view/base/home';
 import { OrderDetailBase, OrderDetailGoods, OrderDetailRebate } from '../view/page/orderDetail';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { getCashLogName, popNewMessage, priceFormat, timeConvert, unicode2ReadStr, unicode2Str } from './logic';
+import { CashLogType, getCashLogName, popNewMessage, priceFormat, timeConvert, unicode2ReadStr, unicode2Str } from './logic';
 
 /**
  * 常用工具
@@ -139,7 +139,7 @@ export const parseOrderShow = (infos: Order[], status: OrderStatus) => {
             } else {
                 goodsType = '海外直购';
             }
-            const orderShow: OrderShow = [info[1], v[0], v[1], v[3], v[4], v[5], info[0], timestampFormat(timestamp), info[2], info[8], info[9], addressFormat(info[11]), OrderStatusShow[localStatus], priceFormat(info[18]), info[19], info[20], info[21], priceFormat(v[2] * v[3]), goodsType];
+            const orderShow: OrderShow = [info[1], v[0], v[1], v[3], v[4], v[5], info[0], timestampFormat(timestamp), info[2], info[8], info[9], addressFormat(info[11]), OrderStatusShow[localStatus], priceFormat(info[18]), info[19], info[20], info[21], priceFormat(v[2] * v[3]),goodsType,priceFormat(info[6]), info[17],priceFormat(v[7])];
             ordersShow.push(orderShow);
         }
     }
@@ -167,6 +167,7 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
     // 商品信息
     for (const v of info[3]) {  
         let goodsType = '';
+        let time = '';
         if (v[6] === 1) {
             goodsType = '保税商品';
         } else if (v[6] === 0) {
@@ -180,13 +181,22 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
             // 一级分组/二级分组
             group.push(`${r[1]}/${r[3] ? r[3] :''}`);
         }
-        const goods: OrderDetailGoods = [v[0], v[1], v[4], v[5], v[12][1],goodsType, group.join(','),v[3],v[12][2],priceFormat(v[7]),priceFormat(v[8]),priceFormat(v[9]),v[11][0],v[11][1],v[11][2]];
+        if (!v[12][2]) {
+            time = '';
+        } else {
+            time = `${timestampFormat(v[12][2][0]).split(' ')[0]}~${timestampFormat(v[12][2][1]).split(' ')[0]}`;
+        }
+        const goods: OrderDetailGoods = [v[0], v[1], v[4], v[5], v[12][1],goodsType, group.join(','),v[3],time,priceFormat(v[7]),priceFormat(v[8]),priceFormat(v[9]),v[11][0],v[11][1],v[11][2]];
         orderGoods.push(goods);
     }
     
     // 返利信息
     for (const v of info[25]) {
-        const rebate:OrderDetailRebate = [v[0],unicode2ReadStr(v[1]),RebateType[v[2]],priceFormat(v[3]),timestampFormat(v[4])];
+        let moeny = priceFormat(v[3]);
+        if (v[2] === 2) {
+            moeny = JSON.stringify(v[3]);
+        }
+        const rebate:OrderDetailRebate = [v[0],unicode2ReadStr(v[1]),RebateType[v[2]],moeny,timestampFormat(v[4])];
         orderRebate.push(rebate);
     }
 
@@ -728,6 +738,7 @@ const Tip = (temparr, row) => {
 
 // 解析商品信息
 export const analyzeGoods = (data: any) => {
+   
     if (!data) {
         return [];
     }
@@ -741,7 +752,7 @@ export const analyzeGoods = (data: any) => {
             } else {
                 time = `${timestampFormat(v[22][0]).split(' ')[0]}~${timestampFormat(v[22][1]).split(' ')[0]}`;
             }
-            // ['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商（ID）','供应商SKU','供应商商品ID','保质期']
+            // ['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商ID','供应商SKU','供应商商品ID','保质期']
             typeList.push([v[3],v[2][0],`${priceFormat(v[12])}/${priceFormat(v[13])}/${priceFormat(v[14])}`,priceFormat(v[2][1]),v[10],v[4],v[24],v[25],time]);
         });
         let str = '';// 是否报税
@@ -752,9 +763,10 @@ export const analyzeGoods = (data: any) => {
         } else {
             str = '海外直购';
         }
-        const imgType2 = [...item[0][18][0]];
+        const imgType2 = [...(item[0][18][0] ? item[0][18][0] :[])];
         const img = item[0][18];
         img.splice(0,1);
+     
         img.forEach(v => {
             imgType2.push(v[2]);
         });
@@ -766,12 +778,12 @@ export const analyzeGoods = (data: any) => {
         const onSaleTime = timestampFormat(item[0][21]);
         arr.push({ id:item[0][0],name:item[0][1],shopType:str,brand:item[0][6],typeName:group.join(','),img:imgType2,discount:priceFormat(item[0][15]),tax:priceFormat(item[0][17]),state:item[0][20],skus:typeList,area:item[0][7],onSaleTime:onSaleTime });
     });
-    
+
     return arr;
 };
 
 // 解析商品为数组
-export const parseGoodsList=(data:any)=>{
+export const parseGoodsList = (data:any) => {
     if (!data) {
         return [];
     }
@@ -790,7 +802,7 @@ export const parseGoodsList=(data:any)=>{
         } else {
             goodsType = '海外直购';
         }
-        const imgType2 = [...item[0][18][0]];
+        const imgType2 = [...(item[0][18][0] ? item[0][18][0] :[])];
         const img = item[0][18];
         img.splice(0,1);
         img.forEach(v => {
@@ -801,14 +813,14 @@ export const parseGoodsList=(data:any)=>{
             // 一级分组/二级分组
             group.push(`${r[1]}/${r[3] ? r[3] :''}`);
         }
-        const state = item[0][20]==1 ? "已上架":'已下架';
-        const validTime = item[22]?`${timestampFormat(item[22][0]).split(' ')[0]}~${timestampFormat(item[22][1]).split(' ')[0]}`:'无';
+        const state = item[0][20] === 1 ? '已上架' :'已下架';
+        const validTime = item[22] ? `${timestampFormat(item[22][0]).split(' ')[0]}~${timestampFormat(item[22][1]).split(' ')[0]}` :'无';
         // ['商品ID','商品名称','商品规格(SKU/规格/差价)','商品类型','供应商id','供应商名称','品牌id','地区id','库存数量','供货价','成本价','原价','会员价','折后价','税费','分组列表','上架状态','上架时间','保质期','供应商sku','供应商商品id']
         arr.push([item[0][0],item[0][1],typeList,goodsType,item[0][4],item[0][5],item[0][6],item[0][7],item[0][10],priceFormat(item[0][11]),priceFormat(item[0][12]),priceFormat(item[0][13]),priceFormat(item[0][14]),priceFormat(item[0][15]),priceFormat(item[0][17]),group.join(','),state,timestampFormat(item[0][21]),validTime,item[0][24],item[0][25]]);
     });
-    
+   
     return arr;
-}
+};
 
 // 解析所有分组
 export const parseAllGroups = (data: any) => {
@@ -878,9 +890,9 @@ export const brandProcessing = (r: any) => {
     const dataList = [];// 品牌名字+ID
     const dataId = [];// 品牌id
     r.forEach(v => {
-        dataList.push(`${unicode2Str(v[1][0])}（${v[0]}）`);
+        dataList.push(`${v[1][0]}（${v[0]}）`);
         dataId.push(v[0]);
-        data.push([v[0],unicode2Str(v[1][0]),v[1][1][1][0],unicode2Str(v[1][2]),v[1][3],timestampFormat(v[2])]);
+        data.push([v[0],v[1][0],v[1][1][1][0],v[1][2],v[1][3],timestampFormat(v[2])]);
     });
 
     return [data,[dataId,dataList]];
@@ -1017,7 +1029,7 @@ export const processingBalanceLog = (r:any,ttype:number) => {
     }
     const data = [];
     r.forEach(v => {
-        data.push([timestampFormat(v[4]),v[1] ? getCashLogName(v[1]) :'', `${v[2] > 0 ? '+' :''}${ttype === 1 ? priceFormat(v[2]) :v[2]}`]);
+        data.push([timestampFormat(v[4]),v[1] ? getCashLogName(v[1]) :'', `${v[2] > 0 ? '+' :''}${ttype === 1 ? priceFormat(v[2]) :v[2]}`,CashLogType.manage === v[1] ? unicode2Str(v[3]) :'']);
     });
 
     return data;
@@ -1031,7 +1043,7 @@ export const processingShoppingTop10 = (r:any) => {
     }
     const data = [];
     r.forEach((v,i) => {
-        data.push([i + 1,v[1],unicode2Str(v[2]),v[0]]);
+        data.push([i + 1,v[1],unicode2Str(v[2]),v[0],priceFormat(v[3])]);
     });
 
     return data;
