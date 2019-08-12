@@ -755,13 +755,15 @@ export const analyzeGoods = (data: any) => {
             // ['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商ID','供应商SKU','供应商商品ID','保质期']
             typeList.push([v[3],v[2][0],`${priceFormat(v[12])}/${priceFormat(v[13])}/${priceFormat(v[14])}`,priceFormat(v[2][1]),v[10],v[4],v[24],v[25],time]);
         });
-        let str = '';// 是否报税
-        if (item[0][16] === 1) {
-            str = '保税商品';
-        } else if (item[0][16] === 0) {
+        let str = '';// 商品类型
+        if (item[0][16] === 0) {
             str = '普通商品';
-        } else {
+        } else if (item[0][16] === 1) {
+            str = '保税商品';
+        } else if (item[0][16] === 2) {
             str = '海外直购';
+        } else if (item[0][16] === 3) {
+            str = '一般贸易';
         }
         const imgType2 = [...(item[0][18][0] ? item[0][18][0] :[])];
         const img = item[0][18];

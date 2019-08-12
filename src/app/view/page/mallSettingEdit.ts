@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { deepCopy } from '../../../pi/util/util';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { GroupsLocation } from '../../config';
+import { GroupsLocation1 } from '../../config';
 import { addGroup, updateGroup, updateLocation } from '../../net/pull';
 import { getStore, GroupInfo, ImageType } from '../../store/memstore';
 import { popNewMessage } from '../../utils/logic';
@@ -31,28 +31,37 @@ export class MallSettingEdit extends Widget {
     public props: Props = {
         locations: [
             { text: '不可见', status: 0 },   // 不可见分类 不属于商城首页
-            { text: '头部banner1', status: GroupsLocation.FIRST },
-            { text: '小图标位置2', status: GroupsLocation.SECOND },
-            { text: '聚合区位置3', status: GroupsLocation.THIRD },
-            { text: '聚合区位置4', status: GroupsLocation.FOUR },
-            { text: '聚合区位置5', status: GroupsLocation.FIVE },
-            { text: '聚合区位置6', status: GroupsLocation.SIX },
-            { text: '聚合区位置7', status: GroupsLocation.SEVEN },
-            { text: '聚合区位置8', status: GroupsLocation.EIGHT },
-            { text: '聚合区位置9', status: GroupsLocation.NINE },
-            { text: '聚合区位置10', status: GroupsLocation.TEN },
-            { text: '聚合区位置11', status: GroupsLocation.ELEVEN },
-            { text: '聚合区位置12', status: GroupsLocation.TWLEVE },
-            { text: '聚合区位置13', status: GroupsLocation.THIRTEEN },
-            { text: '聚合区位置14', status: GroupsLocation.FOURTEEN },
-            { text: '聚合区位置15', status: GroupsLocation.FIFTEEN },
-            { text: '聚合区位置16', status: GroupsLocation.SIXTEEN },
-            { text: '聚合区位置17', status: GroupsLocation.SEVENTEEN }
+            { text: '头部banner', status: GroupsLocation1[1] },
+            { text: '小图标位置', status: GroupsLocation1[2] },
+            { text: '大图位置1', status: GroupsLocation1[3] },
+            { text: '二分位置左1', status: GroupsLocation1[4] },
+            { text: '二分位置右1', status: GroupsLocation1[5] },
+            { text: '三分位置左1', status: GroupsLocation1[6] },
+            { text: '三分位置中1', status: GroupsLocation1[7] },
+            { text: '三分位置右1', status: GroupsLocation1[8] },
+            { text: '大二分位置左1', status: GroupsLocation1[9] },
+            { text: '大二分位置右上1', status: GroupsLocation1[10] },
+            { text: '大二分位置右下1', status: GroupsLocation1[11] },
+            { text: '大二分位置左上1', status: GroupsLocation1[12] },
+            { text: '大二分位置左下1', status: GroupsLocation1[13] },
+            { text: '大二分位置右1', status: GroupsLocation1[14] },
+            { text: '大图位置2', status: GroupsLocation1[15] },
+            { text: '二分位置左2', status: GroupsLocation1[16] },
+            { text: '二分位置右2', status: GroupsLocation1[17] },
+            { text: '三分位置左2', status: GroupsLocation1[18] },
+            { text: '三分位置中2', status: GroupsLocation1[19] },
+            { text: '三分位置右2', status: GroupsLocation1[20] },
+            { text: '大二分位置左2', status: GroupsLocation1[21] },
+            { text: '大二分位置右上2', status: GroupsLocation1[22] },
+            { text: '大二分位置右下2', status: GroupsLocation1[23] },
+            { text: '大二分位置左上2', status: GroupsLocation1[24] },
+            { text: '大二分位置左下2', status: GroupsLocation1[25] },
+            { text: '大二分位置右2', status: GroupsLocation1[26] }
 
-            // { text: '单链专区位置14', status: GroupsLocation.FOURTEEN },
-            // { text: '单链专区位置15', status: GroupsLocation.FIFTEEN },
-            // { text: '单链专区位置16', status: GroupsLocation.SIXTEEN },
-            // { text: '单链专区位置17', status: GroupsLocation.SEVENTEEN }
+            // { text: '单链专区位置14', status: GroupsLocation1.FOURTEEN },
+            // { text: '单链专区位置15', status: GroupsLocation1.FIFTEEN },
+            // { text: '单链专区位置16', status: GroupsLocation1.SIXTEEN },
+            // { text: '单链专区位置17', status: GroupsLocation1.SEVENTEEN }
         ],
         addClass:false,
         activeLoc:0,
@@ -65,7 +74,7 @@ export class MallSettingEdit extends Widget {
             detail: '',
             children: [],    // 二级分组  商品ID
             time: '',   // 最后更新时间
-            localId: GroupsLocation.FIRST 
+            localId: GroupsLocation1[1] 
         },
         secondName:'',
         secondImg:'',
@@ -221,7 +230,7 @@ export class MallSettingEdit extends Widget {
             newId = this.props.locations[this.props.activeLoc].status;
         } else {
             // 分类汇总页
-            newId = GroupsLocation.CLASSIFICATION;
+            newId = GroupsLocation1[0];
         }
         const orgId = this.props.currentData.localId;  // 原位置
         const locations = getStore('locations',[]);
@@ -320,8 +329,8 @@ export class MallSettingEdit extends Widget {
         this.paint();
     }
 
-    // 修改二级分类 
-    public saveSecondClass(ind:number) {
+    // 修改二级分类  chooseFg选择或删除商品后保存
+    public saveSecondClass(ind:number, chooseFg:boolean = false) {
         const res = this.props.currentData.children[ind];
         // 未做改变未选择过商品不执行请求
         if (!res.isChange && this.props.selGoodsIndex === -1) { 
@@ -337,7 +346,7 @@ export class MallSettingEdit extends Widget {
             
             return;
         }
-        const data = this.props.goodsId.length ? this.props.goodsId :res.children;
+        const data = chooseFg ? this.props.goodsId :res.children;
         updateGroup(res.id, res.name, res.imgs, data, 'false').then(r => {
             this.props.currentData.children[ind].children = data;
             this.props.secondName = '';
@@ -357,7 +366,11 @@ export class MallSettingEdit extends Widget {
                 this.paint();
             });
         } else {
-            popNewMessage('该分组下还有商品，不能删除');
+            // popNewMessage('该分组下还有商品，不能删除');
+            popNew('app-components-modalBox',{ content:'该分组下还有商品，确认要从当前分类中移除该子分类，保存即生效' },() => {
+                this.props.currentData.children.splice(ind,1);
+                this.paint();
+            });
         }
     }
 
@@ -369,7 +382,7 @@ export class MallSettingEdit extends Widget {
             this.paint();
 
         } else {
-            this.saveSecondClass(this.props.selGoodsIndex);
+            this.saveSecondClass(this.props.selGoodsIndex,true);
         }
         
     }
