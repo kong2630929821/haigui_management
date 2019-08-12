@@ -448,10 +448,26 @@ export class TotalOrder extends Widget {
         this.closeClick();
         const orderId = this.props.contentShowList[e.value][0];
         const currentPageId = this.props.contentShowList[0][0];
-        popNew('app-components-confirmQuitOrder',{},() => {
-            quitOrder(orderId).then(r => {
+        // popNew('app-components-confirmQuitOrder',{},() => {
+        //     quitOrder(orderId).then(r => {
+        //         this.filterOrderQuery(currentPageId);
+        //     });
+        // });
+        popNew('app-components-modalBoxInput',{ title:`确认取消编号为“<span style="color:#1991EB">${orderId}</span>”的订单`,placeHolder:'请输入取消理由', errMessage:'请输入取消理由' },async (r) => {
+            if (!r) {
+                popNewMessage('请输入取消理由！');
+            } else {
+                await quitOrder(orderId, r).then(r => { // 拒绝
+                    if (r.result === 1) {
+                        popNewMessage('处理完成');
+                    } else {
+                        popNewMessage('处理失败');
+                    }
+                }).catch(e => {
+                    popNewMessage('处理失败');
+                });
                 this.filterOrderQuery(currentPageId);
-            });
+            }  
         });
     }
 
