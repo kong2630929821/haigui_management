@@ -34,12 +34,7 @@ export enum StatuType {
     statuType_2= 1,// 已下架
     statuType_3= 2// 隐藏
 }
-// 商品分类
-export enum ProductTypes {
-    productTypese_1= 0,// 报税
-    productTypese_2= 1,// 一般贸易
-    productTypese_3= 2// 海外直购
-}
+
 /**
  * 产品库
  */

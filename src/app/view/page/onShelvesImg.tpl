@@ -34,7 +34,7 @@
             <div w-class="item1">
                 <div w-class="title">商品类型</div>
                 <div style="display:inline-block;height: 50px;margin-left: 2px;" ev-selected="bondedChange" ev-expand="expand({{1}},e)">
-                    <widget w-tag="app-components-simpleFilter1">{options:{{it.bonded}},activeIndex:{{it.bondedActiveIndex}},expand:{{it.expandIndex[1]}},disabled:{{it.disable}} }</widget>
+                    <widget w-tag="app-components-simpleFilter1">{options:{{it.goodsType}},activeIndex:{{it.bondedActiveIndex}},expand:{{it.expandIndex[1]}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
             <div w-class="item1">

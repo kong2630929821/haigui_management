@@ -10,7 +10,6 @@ interface Props {
     statusType:any;// 状态筛选
     statusTypeActiveIndex:number;// 状态筛选当前下标
     expandIndex:any; 
-    productTypes:any;// 商品分类
     ProductTypesActiveIndex:number;// 商品分类下标
     shopNum:number;// 商品個數
     currentIndex:number;// 当前分页下标
@@ -27,18 +26,7 @@ interface Props {
     goodsId:number[];   // 选择的商品ID
     perPageIndex:number;// 一页显示多少个下标
 }
-// 状态筛选
-export enum StatuType {
-    statuType_1= 0,// 已上架
-    statuType_2= 1,// 已下架
-    statuType_3= 2// 隐藏
-}
-// 商品分类
-export enum ProductTypes {
-    productTypese_1= 0,// 报税
-    productTypese_2= 1,// 一般贸易
-    productTypese_3= 2// 海外直购
-}
+
 /**
  * 商品库
  */
@@ -46,7 +34,6 @@ export enum ProductTypes {
 export class CommodityLibrary extends Widget {
     public props:Props = {
         statusType:[],
-        productTypes:[],
         statusTypeActiveIndex:1,
         ProductTypesActiveIndex:0,
         expandIndex:[false,false],
@@ -83,21 +70,8 @@ export class CommodityLibrary extends Widget {
                 text:'已上架'
             }
         ];
-        // 商品分类
-        const productTypes = [
-            {
-                status:0,
-                text:'保税商品'
-            },{
-                status:1,
-                text:'一般贸易'
-            },{
-                status:2,
-                text:'海外直购'
-            }
-        ];
+       
         this.props.statusType = timeType;
-        this.props.productTypes = productTypes;
         const oData = new Date();
         const time = oData.setHours(23, 59, 59, 999);
         this.props.endTime =  timeConvert(time);

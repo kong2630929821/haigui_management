@@ -17,7 +17,7 @@ interface Props {
     isChange:boolean;// 修改数据时，是否修改运费
     pageTitle:string;// 页面标题
     time:string;// 修改时间
-    dataList:any;// 普通商品邮费 保税商品邮费 海外直购邮费
+    dataList:any;// 普通商品邮费 保税商品邮费 海外直购邮费 一般贸易邮费
     oldData:any;// 新增时的邮费
     oldFreightList:any;// 新增原始邮费数据
 }
@@ -34,13 +34,13 @@ export class AddSupplier extends Widget {
         showTitleList:['ID','地区','支付类型','邮费'],
         currentData:[[],[]],
         style:true,
-        freightList:[[],[],[]],
+        freightList:[[],[],[],[]],
         isChange:false,
         pageTitle:'添加供应商',
         time:'',
-        dataList:[[],[],[]],
-        oldData:[[],[],[]],
-        oldFreightList:[[],[],[]]
+        dataList:[[],[],[],[]],
+        oldData:[[],[],[],[]],
+        oldFreightList:[[],[],[],[]]
     };
     public create() {
         super.create();
@@ -55,6 +55,9 @@ export class AddSupplier extends Widget {
             },{
                 status:2,
                 text:'海外直购'
+            },{
+                status:3,
+                text:'一般贸易'
             }
         ];
         this.props.statusType = timeType;

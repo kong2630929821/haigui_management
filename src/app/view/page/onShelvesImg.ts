@@ -11,7 +11,7 @@ interface Props {
     areaId:any;// 国家选择
     areaIdActiveIndex:number;// 地区ID下标
     expandIndex:any ;
-    bonded:any;// 是否报税
+    goodsType:any;// 商品类型
     bondedActiveIndex:number;// 报税ID
     data:any;// 输入框数据
     spreadList:any;// 差价列表
@@ -46,7 +46,7 @@ export class OnShelvesImg extends Widget {
     public props:Props = {
         areaId:[],
         areaIdActiveIndex:0,
-        bonded:[],
+        goodsType:[],
         bondedActiveIndex:0,
         expandIndex:[false,false,false],
         selectData:[],
@@ -79,8 +79,8 @@ export class OnShelvesImg extends Widget {
     };
     public create() {
         super.create();
-        // 是否保税
-        const bonded = [
+        // 商品类型 goodsType
+        const goodsType = [
             {
                 status:0,
                 text:'普通商品'
@@ -90,10 +90,12 @@ export class OnShelvesImg extends Widget {
             },{
                 status:2,
                 text:'海外直购'
+            },{
+                status:3,
+                text:'一般贸易'
             }
         ];
-        this.props.bonded = bonded;
-        this.props.areaId = bonded;
+        this.props.goodsType = goodsType;
         const oData = new Date();
         const time = oData.setHours(23, 59, 59, 999);
         this.props.endTime =  timeConvert(time);
@@ -156,6 +158,8 @@ export class OnShelvesImg extends Widget {
             this.props.bondedActiveIndex = 1;
         } else if (this.props.dataList.shopType === '海外直购') {
             this.props.bondedActiveIndex = 2;
+        } else if (this.props.dataList.shopType === '一般贸易') {
+            this.props.bondedActiveIndex = 3;
         }
         // 图片展示
         arr.img.forEach(v => {
