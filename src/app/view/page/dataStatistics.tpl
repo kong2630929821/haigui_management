@@ -51,7 +51,7 @@
             <div w-class="table_1">
                 <div ev-table-detail="goDetail">
                     <div w-class="tableTitle">分享排名TOP10列表</div>
-                    <widget w-tag="app-components-table" style="height: 500px;">{datas: {{it.shareDataList}},title:{{it.showTitleList}},needCheckBox:false,auto:true,inlineBtn1:"详情"}</widget>
+                    <widget w-tag="app-components-table" style="height: 500px;">{datas: {{it.shareDataList}},title:{{it.titleShow}},needCheckBox:false,auto:true,inlineBtn1:"详情"}</widget>
                 </div>
             </div>
         </div>

@@ -19,6 +19,7 @@ interface Props {
     endTime:string;// 结束时间
     shopList:any[];// 商品排行
     shopTitleInfo:any;// 商品销售明细
+    titleShow:any;
 }
 
 const title = [
@@ -54,7 +55,8 @@ export class DataStatistics extends Widget {
             [['A',1,0],['A',1,0]],// 一级分组数量  二级分组数量
             [['',1,0]],// 订单数量
             [['',1,0]]// 订单总金额
-        ]
+        ],
+        titleShow:['排名','用户ID','名字','分享总数']
     };
 
     public create() {

@@ -24,7 +24,12 @@
                 <widget w-tag="app-components-input">{placeHolder:"用户ID"}</widget>
             </div>
             <div w-class="search" on-tap="search" on-down="onShow">查询</div>
-            
+            <div style="display:flex;align-items: center;">
+                <div w-class="title" style="margin-left: 40px;">时间类型：</div>
+                <div style="display:inline-block;margin-left: 25px;" ev-selected="filterTime" ev-expand="changeFilterBox">
+                    <widget w-tag="app-components-simpleFilter">{options:{{it.optionsList}},active:{{it.active}},expand:{{it.showFilterBox}} }</widget>
+                </div>
+            </div>
             <div style="display:inline-block;margin-left: 25px;" ev-dateBox-change="changeDateBox" ev-period-change="changeDate">
                 <widget w-tag="app-components-periodTimePicker">{showDateBox:{{it.showDateBox}},startDate:{{it.startTime}},endDate:{{it.endTime}} }</widget>
             </div>
