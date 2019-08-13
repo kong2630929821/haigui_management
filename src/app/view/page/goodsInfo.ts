@@ -14,6 +14,7 @@ export class GoodsInfo extends CommodityLibrary {
             ...props
         };
         super.setProps(this.props);
+        this.props.goodsIdShow = this.props.goodsId.join('，');
         console.log(this.props);
     }
 
@@ -25,6 +26,7 @@ export class GoodsInfo extends CommodityLibrary {
         } else {
             this.props.goodsId.splice(ind,1);
         }
+        this.props.goodsIdShow = this.props.goodsId.join('，');
         this.paint();
     }
 
@@ -44,8 +46,17 @@ export class GoodsInfo extends CommodityLibrary {
     }
 
     // 修改商品id列表
-    public goodsIdChange() {
-        this.props.editGoodsId = true;
+    public goodsIdChange(e:any) {
+        let val = e.value.replace(/,/g,'，');  // 替换错误的分隔符
+        val = val.replace(/[^0-9，]/g,'');  // 去除错误的内容
+
+        let list = val.split('，');
+        list = list.filter((v,i,arr) => {
+            return v && arr.indexOf(v, 0) === i;   // 去重
+        });
+        // tslint:disable-next-line:no-unnecessary-callback-wrapper
+        this.props.goodsId = list.map(r => Number(r));
+        this.props.goodsIdShow = list.join('，');
         this.paint();
     }
 }
