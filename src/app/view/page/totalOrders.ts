@@ -476,7 +476,7 @@ export class TotalOrder extends Widget {
     // 查看详情
     public goDetail(e:any) {
         this.closeClick();
-        this.props.showDetail = e.num;
+        this.props.showDetail = this.props.contentList.findIndex(r => r[1] === e.value[0]);
         this.paint();
     }
 
