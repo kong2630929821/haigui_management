@@ -1,6 +1,6 @@
 <div w-class="filter" >
     <div on-tap="change" w-class="show {{it.search?'searchList':''}}">
-        <span w-class="showTesxt {{it.search?'showTest2':''}}">{{it.options[it.active]}}</span>
+        <span w-class="showTesxt {{it.search?'showTest2':''}}">{{it.options.length>0 ? it.options[it.active]:""}}</span>
         <img src="../res/images/arrowDown.png" w-class="arrow"/>
     </div>
 

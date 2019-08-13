@@ -2,7 +2,6 @@
 import { notify } from '../../pi/widget/event';
 import { Widget } from '../../pi/widget/widget';
 import { admain, mallImagPre } from '../config';
-import { rippleShow } from '../utils/tools';
 
 interface Props {
     title:any[];// 表格标题

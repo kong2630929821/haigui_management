@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
-import { getReturnGoods, getReturnGoodsId, setReturnStatus } from '../../net/pull';
+import { getAllRefundOrder, getRefundOrder, getReturnGoods, getReturnGoodsId, setRefundStatus, setReturnStatus } from '../../net/pull';
 import { popNewMessage, priceFormat, timeConvert, transitTimeStamp, unicode2ReadStr, unicode2Str } from '../../utils/logic';
 import { rippleShow } from '../../utils/tools';
 
@@ -10,11 +10,9 @@ import { rippleShow } from '../../utils/tools';
  */
 export class GoodsInfo extends Widget {
     public props:any = {
-        showDataList:[
-           
-        ],
+        showDataList:[],
         returnList:[],// 存所有的商品
-        showTitleList:['售后单id','商品ID','商品SKU','用户ID','下单时单价','下单时数量','支付类型','状态','退货原因','申请退货的时间','回应退货申请的时间','完成退货的时间','用户姓名','用户电话','用户微信名','下单时间','支付时间','发货时间',' 收货时间','发货单号','退货运单号','退货申请图片数量','拒绝退货原因'],
+        showTitleList:['售后单id','商品ID','商品SKU','用户ID','下单时单价','下单时数量','支付类型','状态','退货原因','申请退货的时间','回应退货申请的时间','完成退货的时间','用户姓名','用户电话','用户微信名','下单时间','支付时间','发货时间',' 收货时间','发货单号','退货运单号','退货申请图片数量','拒绝退货原因','订单总金额','微信支付单号','订单ID'],
         page:1,// 上一个操作是第几页
         currentIndex:0,// 当前页数
         searchValue:'',// 输入的搜索值
@@ -22,19 +20,66 @@ export class GoodsInfo extends Widget {
         startTime:'',  // 查询开始时间
         endTime:'', // 查询结束时间
         showDateBox:false,
-        numberOfApplications:0,
+        returnApplyNum:0, // 退货申请数量
+        refundApplyNum:0,  // 退款申请数量
         typeTitle:'申请时间',
         perPage:perPage[0],
         dataList:[],// 全部数据
         sum:0,// 总共多少条数据
         imgs:[],  // 退货详情图片
         expandIndex:false,// 分页下拉显示
-        perPageIndex:0// 一页多少个的下标
+        perPageIndex:0,// 一页多少个的下标
+        showDetail:'' // 查看退款订单详情 oid
     };
+
+    public create() {
+        super.create();
+        const oData = new Date();
+        const time = oData.setHours(23, 59, 59, 999);
+        this.props.endTime =  timeConvert(time);
+        this.props.startTime = '2019-05-01';
+        console.log('3333333333333333333333333333333333333',this.props.startTime);
+        this.init(1,transitTimeStamp(this.props.startTime),time);
+    }
+    public init(status:number,startTime:number,time:number) {
+        if (status > 3) {
+            getAllRefundOrder(0,1,startTime,time,status - 3).then(r => {
+                let refundOrder = JSON.parse(r.value);
+                this.props.returnList = refundOrder;
+                if (refundOrder.length) {
+                    refundOrder = this.parseRefund(refundOrder);
+                }
+                this.props.sum = refundOrder.length;
+                this.props.dataList = refundOrder;
+                this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
+                if (status === 4) {
+                    this.props.refundApplyNum = this.props.showDataList.length;
+                }
+                this.paint();
+            });
+        } else {
+            getReturnGoods(0,1,startTime,time,status).then(r => {
+                let returnGoods = JSON.parse(r.value);
+                this.props.returnList = returnGoods;
+                if (returnGoods.length) {
+                    returnGoods = this.dataProcessing(returnGoods);
+                }
+                this.props.sum = returnGoods.length;
+                this.props.dataList = returnGoods;
+                this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
+                if (status === 1) {
+                    this.props.returnApplyNum = this.props.showDataList.length;
+                }
+                this.paint();
+            });
+        }
+    }
+
+    // 切换tab
     public checkType(index:number) {
         this.close();
         this.props.returnStatus = index;
-        if (index === 0) {
+        if (index === 0 || index === 3) {
             this.props.typeTitle = '申请时间';
         } else if (index === 1) {
             this.props.typeTitle = '处理时间';
@@ -48,36 +93,10 @@ export class GoodsInfo extends Widget {
         this.init(index + 1,transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime));
         this.paint();
     }
-    public create() {
-        super.create();
-        const oData = new Date();
-        const time = oData.setHours(23, 59, 59, 999);
-        this.props.endTime =  timeConvert(time);
-        this.props.startTime = '2019-05-01';
-        console.log('3333333333333333333333333333333333333',this.props.startTime);
-        this.init(1,transitTimeStamp(this.props.startTime),time);
-    }
-    public init(status:number,startTime:number,time:number) {
-       
-        getReturnGoods(0,1,startTime,time,status).then(r => {
-            let returnGoods;
-            returnGoods = JSON.parse(r.value);
-            this.props.returnList = returnGoods;
-            if (returnGoods.length) {
-                returnGoods = this.dataProcessing(returnGoods);
-            }
-            this.props.sum = returnGoods.length;
-            this.props.dataList = returnGoods;
-            this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
-            if (status === 1) {
-                this.props.numberOfApplications = this.props.showDataList.length;
-            }
-            this.paint();
-        });
-    }
 
     // 处理数据显示格式
     public dataProcessing(returnGoods:any) {
+        this.props.showTitleList = ['售后单id','商品ID','商品SKU','用户ID','下单时单价','下单时数量','支付类型','状态','退货原因','申请退货的时间','回应退货申请的时间','完成退货的时间','用户姓名','用户电话','用户微信名','下单时间','支付时间','发货时间',' 收货时间','发货单号','退货运单号','退货申请图片数量','拒绝退货原因','订单总金额','微信支付单号','订单ID'];
         returnGoods.forEach((element,index) => {
             // tslint:disable-next-line:cyclomatic-complexity
             element.forEach((v,i) => {
@@ -128,13 +147,38 @@ export class GoodsInfo extends Widget {
 
                 } else if (i === 22) {  // 拒绝退货原因
                     returnGoods[index][i] = unicode2Str(v);
+                } else if (i === 23) {
+                    returnGoods[index][i] = priceFormat(v);
                 }
+
             });
         });
         console.log('处理数据格式',returnGoods);
 
         return returnGoods;
     }
+
+    // 解析退款申请
+    public parseRefund(refundOrders:any) {
+        this.props.showTitleList = ['订单id','用户id','退款金额','状态','微信支付单号','备注','申请退款时间'];
+        refundOrders.forEach((v,i) => {
+            v.forEach((r,j) => {
+                if (j === 2) { // 退款金额
+                    refundOrders[i][j] = priceFormat(r);
+                }
+                if (j === 3) {  // 状态
+                    refundOrders[i][j] = r === 1 ? '申请退款' :'退款完成';
+                }
+                if (j === 6) {   // 申请退款时间
+                    refundOrders[i][j] = timeConvert(r);
+                }
+            });
+        });
+        console.log('处理数据格式',refundOrders);
+
+        return refundOrders;
+    }
+
     // input输入的值
     public inputChange(e:any) {
         this.props.searchValue = e.value;
@@ -149,33 +193,41 @@ export class GoodsInfo extends Widget {
             if (isNaN(num)) {
                 return ;
             }
-            getReturnGoodsId(num).then(r => {
-                const returnGoods = JSON.parse(r.value);
-                this.props.returnList = returnGoods;
-                returnGoods[0].forEach((v,i) => {
-                    if (i === 7) {
-                        // 判断退货完成查询
-                        if ((v === 1 || v === -1) && this.props.returnStatus === 2 && returnGoods[0][11] !== 0) {
-                            this.props.showDataList = this.dataProcessing(returnGoods);
-                        } else if (v === 1 && this.props.returnStatus === 1 && returnGoods[0][10] !== 0 && returnGoods[0][11] === 0) {
+            this.props.showDataList = [];
+            this.paint();
+            if (this.props.returnStatus < 3) {
+                getReturnGoodsId(num).then(r => {
+                    const returnGoods = JSON.parse(r.value);
+                    this.props.returnList = returnGoods;
+                    returnGoods[0].forEach((v,i) => {
+                        if (i === 7) {
+                            // 判断退货完成查询
+                            if ((v === 1 || v === -1) && this.props.returnStatus === 2 && returnGoods[0][11] !== 0) {
+                                this.props.showDataList = this.dataProcessing(returnGoods);
+                            } else if (v === 1 && this.props.returnStatus === 1 && returnGoods[0][10] !== 0 && returnGoods[0][11] === 0) {
                             // 判断退货中查询
-                            this.props.showDataList = this.dataProcessing(returnGoods);
-                        } else if (v === 1 && this.props.returnStatus === 0 && returnGoods[0][10] === 0) {
+                                this.props.showDataList = this.dataProcessing(returnGoods);
+                            } else if (v === 1 && this.props.returnStatus === 0 && returnGoods[0][10] === 0) {
                             // 判断申请查询
-                            this.props.showDataList = this.dataProcessing(returnGoods);
-                        } else {
+                                this.props.showDataList = this.dataProcessing(returnGoods);
+                            } else {
                             // 其他情况
-                            this.props.showDataList = [];
+                                this.props.showDataList = [];
+                            }
                         }
-                    }
                    
+                    });
+                    this.props.num = this.props.showDataList.length;
+                    this.paint();
                 });
-                this.props.num = this.props.showDataList.length;
-                this.paint();
-            }).catch(e => {
-                this.props.showDataList = [];
-                this.paint();
-            });
+            } else {
+                getRefundOrder(num).then(r => {
+                    const refundOrder = JSON.parse(r.value);
+                    this.props.showDataList = this.parseRefund(refundOrder);
+                    this.props.num = refundOrder.length;
+                    this.paint();
+                });
+            }
         } else {
             console.log('开始时间',this.props.startTime,this.props.endTime);
             console.log('开始时间戳',transitTimeStamp(this.props.startTime),transitTimeStamp(this.props.endTime));
@@ -208,7 +260,7 @@ export class GoodsInfo extends Widget {
                 this.props.showDataList.splice(num,1);
                 if (state === 0) {
                     popNewMessage('开始处理成功');
-                    this.props.numberOfApplications--;
+                    this.props.returnApplyNum--;
                 } else if (state === -1) {
                     popNewMessage('拒绝退货成功');
                 } else {
@@ -224,7 +276,12 @@ export class GoodsInfo extends Widget {
         const id = e.value[0];
         const username = e.value[12];
         if (e.fg === 3) {  // 查看退货申请
-            popNew('app-view-page-returnGoodsDetail',{ content:e.value[8],username,imgs:this.props.imgs[e.num] });
+            if (this.props.returnStatus < 3) {
+                popNew('app-view-page-returnGoodsDetail',{ content:e.value[8],username,imgs:this.props.imgs[e.num] });
+            } else {
+                this.props.showDetail = String(e.value[0]);
+                this.paint();
+            }
             
             return;
         }
@@ -268,6 +325,23 @@ export class GoodsInfo extends Widget {
                     popNewMessage('你已经取消操作！');
                 }); 
             }
+        } else if (this.props.returnStatus === 3) {
+            // 退款申请
+            if (e.fg === 1) {
+                popNew('app-components-modalBox',{ content:`确认同意“<span style="color:#1991EB">${e.value[1]}</span>”的退款申请` }, () => {
+                    setRefundStatus(id).then(r => {
+                        this.props.showDataList.splice(e.num, 1);
+                        this.props.refundApplyNum--;
+                        this.paint();
+                        popNewMessage('退款处理成功');
+                    }).catch(r => {
+                        popNewMessage('退款处理失败');
+                    });
+                    
+                },() => {
+                    popNewMessage('你已经取消操作！');
+                });
+            }
         }
     }
 
@@ -301,4 +375,11 @@ export class GoodsInfo extends Widget {
     public onShow(e:any) {
         rippleShow(e);
     }
+
+    // 从详情页返回
+    public detailBack() {
+        this.props.showDetail = '';
+        this.paint();
+    }
+
 }

@@ -16,7 +16,7 @@
             <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.options[it.activeIndex].text}} }</widget>
         </div>
         {{else}}
-        <span w-class="showTesxt {{it.userType?'showText2':''}}">{{it.options[it.activeIndex].text}}</span>
+        <span w-class="showTesxt {{it.userType?'showText2':''}}">{{it.options.length > 0 ? it.options[it.activeIndex].text :""}}</span>
         {{end}}
         <img src="../res/images/arrowDown.png" w-class="arrow"/>
     </div>

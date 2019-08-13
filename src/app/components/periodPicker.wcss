@@ -1,5 +1,5 @@
 .datePicker{
-    width: 100%;
+    width: 225px;
     max-width: 360px;
     position: relative;
 }
@@ -22,5 +22,5 @@
     padding: 0 10px;
 }
 .inputBox{
-    width: 325px;
+    width: 225px;
 }

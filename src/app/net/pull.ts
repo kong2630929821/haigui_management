@@ -1660,3 +1660,58 @@ export const removeRightsGroup = (name:string) => {
 
     return requestAsync(msg);
 };
+
+/**
+ * 获取所有退款订单
+ */
+export const getAllRefundOrder = (id:number,count:number,start:number,tail:number,state:number) => {
+    const msg = {
+        type:'select_all_return_refund',
+        param:{
+            id,
+            count,
+            start,
+            tail,
+            state
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 查询指定退款订单
+ * @param id id
+ */
+export const getRefundOrder = (id:number) => {
+    const msg = {
+        type:'select_return_refund',
+        param:{
+            id
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 同意退款
+ */
+export const setRefundStatus = (id:number) => {
+    const msg = {
+        type:'set_return_refund',
+        param:{
+            id
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 获取签到记录
+ */
+export const getCheckInLog = (time:number) => {
+    
+    return fetch(`http://${sourceIp}:${httpPort}/console/get_check_in_log?end=${time}`).then(r => r.json());
+};

@@ -40,7 +40,8 @@ const PAGE = {
     withdrawalSetting:'withdrawalSetting',// 提现设置
     hBaoGoodsSetting:'hBaoGoodsSetting', // 399（海宝）商品设置
     hBaoGoodsList:'hBaoGoodsList',   // 399（海宝）商品列表
-    createRightsGroups:'createRightsGroups'// 权限组
+    createRightsGroups:'createRightsGroups',// 权限组
+    checkInLog:'checkInLog'// 签到数据
 };
 
 // 权限组
@@ -79,7 +80,8 @@ const pages = [
     { name: RightsGroupsShow[RightsGroups[1001]], page: PAGE.activitySettings, img:'chart.png',children:[
         { name:'大转盘设置',page:PAGE.activitySettings },
         { name:'邀请奖励设置',page:PAGE.invitationSettings },
-        { name:'返利设置',page:PAGE.rebateSetting }],
+        { name:'返利设置',page:PAGE.rebateSetting },
+        { name:'签到记录',page:PAGE.checkInLog }],
         show:true 
     },
     {name:RightsGroupsShow[RightsGroups[1002]],page:PAGE.accountSettings,img:'chart.png',children:[
