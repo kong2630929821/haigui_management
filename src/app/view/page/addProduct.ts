@@ -239,8 +239,10 @@ export class AddProduct extends Widget {
 
     // 供应商选择
     public supplierTypeChange(e:any) {
-        this.close();
+        // this.close();
         this.props.supplier = e.value;
+        this.props.expandIndex[0] = false;
+        this.paint();
     }
     
     // 过滤器变化
