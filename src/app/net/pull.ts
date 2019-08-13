@@ -1,6 +1,6 @@
 import { httpPort, sourceIp } from '../config';
 import { deepCopy, setStore } from '../store/memstore';
-import { popNewMessage, priceFormat, timestampFormat } from '../utils/logic';
+import { popNewMessage, priceFormat, timestampFormat, unicode2Str } from '../utils/logic';
 import { analyzeGoods, brandProcessing, parseGoodsList, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShoppingTop10, processingShopSetting, processingUser, processingUserLevelChange, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
@@ -448,12 +448,12 @@ export const getHwangTotal = () => {
 /**
  * 获取海王申请列表
  */
-export const getHWangApply = (stTime?:number,edTime?:number,time_type:number) => {
+export const getHWangApply = (time_type:number,stTime:number,edTime:number) => {
     const msg = {
         type:'mall_mgr/members@get_haiwang_application',
         param:{
-            start_time: stTime || 0,
-            end_time: edTime || Date.now(),
+            start_time: stTime,
+            end_time: edTime,
             time_type
         }
     };
@@ -498,12 +498,13 @@ export const getWithdrawTotal = (start_time:number,end_time:number) => {
 /**
  * 获取提现申请列表
  */
-export const getWithdrawApply = (stTime?:number,edTime?:number) => {
+export const getWithdrawApply = (stTime:number,edTime:number,time_type:number) => {
     const msg = {
         type:'mall_mgr/members@get_withdraw_info',
         param:{
-            start_time:stTime || 0,
-            end_time:edTime || Date.now()
+            start_time:stTime,
+            end_time:edTime,
+            time_type
         }
     };
 
@@ -739,11 +740,12 @@ export const getExportTime = () => {
 };
 
 // 取消订单
-export const quitOrder = (orderId:number) => {
+export const quitOrder = (orderId:number,reason:string) => {
     const msg = {
         type:'console_cancel_order',
         param:{
-            id:orderId
+            id:orderId,
+            reason
         }
     };
     
@@ -1714,4 +1716,19 @@ export const setRefundStatus = (id:number) => {
 export const getCheckInLog = (time:number) => {
     
     return fetch(`http://${sourceIp}:${httpPort}/console/get_check_in_log?end=${time}`).then(r => r.json());
+};
+
+// 获取订单拒绝理由
+export const getOrderReason = (oids:any) => {
+    const msg = {
+        type:'mall_mgr/manager@get_order_cancel_reason',
+        param:{
+            oids
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        return unicode2Str(r.value[0]);
+    });
+
 };

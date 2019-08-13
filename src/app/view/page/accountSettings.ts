@@ -64,7 +64,6 @@ export class AccountSetting extends Widget {
     }
     // 导出全部数据
     public exportUser() {
-        
         getAllUser().then(r => {
             const jsonHead = this.props.showTitleList;
             const aoa = [jsonHead];

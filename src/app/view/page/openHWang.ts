@@ -44,7 +44,7 @@ export class OpenHWang extends Widget {
         showDataList:[
             // ['123456','张三','15534429570','四川省成都市金牛区XX街道XX小区XX','申请中']
         ],
-        showTitleList:['用户ID','姓名','手机号','地址信息','微信名','邀请人id','申请时间','受理状态','拒绝理由'],
+        showTitleList:['用户ID','姓名','手机号','地址信息','微信名','邀请人id','申请时间','受理状态','拒绝理由','处理时间'],
         activeTab:0,
         datas:[],
         btn1:'',
@@ -112,11 +112,12 @@ export class OpenHWang extends Widget {
             this.props.allCount = r.haiw_count;
             this.paint();
         });
-        getHWangApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime),this.props.active).then(r => {
+        getHWangApply(this.props.active,Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
             this.props.datas = [];
             this.props.showDataList = [];
             if (r.value && r.value.length > 0) {
                 this.props.datas = r.value.map(item => {
+                  
                     return [
                         item[0],    // 记录id
                         item[1],    // 用户uid
@@ -127,7 +128,8 @@ export class OpenHWang extends Widget {
                         item[7],    // 邀请人id
                         dateToString(item[6],1), // 申请时间
                         Status[item[5]],  // 状态
-                        unicode2Str(item[9])  // 拒绝理由
+                        unicode2Str(item[9]),  // 拒绝理由
+                        dateToString(item[10],1)// 处理时间
                     ];
                 });
                 this.changeTab(this.props.activeTab);
@@ -264,6 +266,7 @@ export class OpenHWang extends Widget {
     public filterTime(e:any) {
         this.props.active = e.value;
         this.props.showFilterBox = false;
+        this.getData();
         this.paint();
     }
 

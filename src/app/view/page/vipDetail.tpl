@@ -57,9 +57,9 @@
 
     <div w-class="tabRow" style="margin:20px 0 10px;">
         <div style="flex:1;display:flex;">
-            <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)" on-down="onShow">ta的海王</div>
-            <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)" on-down="onShow">ta的海宝</div>
-            <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)" on-down="onShow">ta的白客</div>
+            <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)" on-down="onShow">ta的海王{{it.activeTab==0?'('+it.showDataList.length+')':''}}</div>
+            <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)" on-down="onShow">ta的海宝{{it.activeTab==1?'('+it.showDataList.length+')':''}}</div>
+            <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)" on-down="onShow">ta的白客{{it.activeTab==2?'('+it.showDataList.length+')':''}}</div>
             <div w-class="tabBar {{it.activeTab==3?'activeTab':''}}" on-tap="changeTab(3)" on-down="onShow">资金</div>
             <div w-class="tabBar {{it.activeTab==4?'activeTab':''}}" on-tap="changeTab(4)" on-down="onShow">海贝</div>
             <div w-class="tabBar {{it.activeTab==5?'activeTab':''}}" on-tap="changeTab(5)" on-down="onShow">积分</div>

@@ -31,6 +31,9 @@ interface Props {
     allDataWithdrawIdList:any;// 过滤后的未处理的提现单号列表
     auth:any;// 权限值
     pool:any;// 提现汇总数据
+    optionsList:string[]; // 下拉框
+    showFilterBox:boolean;  // 展开过滤器
+    active:number;
 }
 const Status = [
     '申请中',
@@ -56,7 +59,7 @@ export class Withdraw extends Widget {
         showDataList:[
             // ['123456','￥500.00','现金','2017-12-25 14:35','申请中']
         ],
-        showTitleList:['用户ID','提现金额','手续费','提现渠道','提交时间','受理状态','拒绝理由','微信支付单号','处理时间'],
+        showTitleList:['用户ID','提现金额','手续费','提现渠道','申请时间','受理状态','拒绝理由','微信支付单号','处理时间','身份'],
         activeTab:0,
         withdrawIdList:[],
         datas:[],
@@ -76,7 +79,10 @@ export class Withdraw extends Widget {
         allData:[],
         allDataWithdrawIdList:[],
         auth:getStore('flags/auth'),
-        pool:[]
+        pool:[],
+        optionsList:['申请时间','处理时间'],
+        showFilterBox:false,
+        active:0
     };
 
     public create() {
@@ -158,7 +164,7 @@ export class Withdraw extends Widget {
                 { key:'实际月提现金额',value:priceFormat(r.success_month_total),src:'../../res/images/money.png' }  
             ];
         });
-        getWithdrawApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
+        getWithdrawApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime),this.props.active).then(r => {
             this.props.datas = [];
             this.props.showDataList = [];
             if (r.value && r.value.length > 0) {
@@ -195,6 +201,11 @@ export class Withdraw extends Widget {
         const uid = this.props.showDataList[e.num + this.props.curPage  * this.props.perPage][0];
         if (id && uid) {
             if (e.fg === 1) {
+                if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.finance) === -1) {
+                    popNewMessage('暂无权限');
+
+                    return;
+                }
                 popNew('app-components-modalBoxInput',{ title:`确认拒绝用户“<span style="color:#1991EB">${uid}</span>”的提现申请`,placeHolder:'请输入拒绝理由', errMessage:'请输入拒绝理由' },async (r) => {
                     if (!r) {
                         popNewMessage('请输入拒绝理由！');
@@ -202,8 +213,10 @@ export class Withdraw extends Widget {
                         await changeWithdrawState(id, uid, 3, r).then(r => { // 拒绝
                             if (r.result === 1) {
                                 popNewMessage('处理完成');
-                            } else if (r.result === 6008) {
+                            } else if (r.type === 6008) {
                                 popNewMessage('当日提现金额到达微信上限');
+                            } else if (r.type === 6002) {
+                                popNewMessage('当日提现金额到达配置上限');
                             } else {
                                 popNewMessage('处理失败');
                             }
@@ -225,8 +238,10 @@ export class Withdraw extends Widget {
                         console.log(r);
                         if (r.result === 1) {
                             popNewMessage('处理完成');
-                        } else if (r.result === 6008) {
+                        } else if (r.type === 6008) {
                             popNewMessage('当日提现金额到达微信上限');
+                        } else if (r.type  === 6002) {
+                            popNewMessage('当日提现金额到达配置上限');
                         } else {
                             popNewMessage('处理失败');
                         }
@@ -242,10 +257,14 @@ export class Withdraw extends Widget {
                     }
                     popNew('app-components-modalBox',{ content:`确认同意用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
                         await changeWithdrawState(id, uid, 2,'').then(r => {
-                            if (r.result !== 1) {
-                                popNewMessage('处理失败');
-                            } else {
+                            if (r.result === 1) {
                                 popNewMessage('处理完成');
+                            } else if (r.type === 6008) {
+                                popNewMessage('当日提现金额到达微信上限');
+                            } else if (r.type === 6002) {
+                                popNewMessage('当日提现金额到达配置上限');
+                            } else {
+                                popNewMessage('处理失败');
                             }
                         }).catch(e => {
                             popNewMessage('处理失败');
@@ -263,10 +282,21 @@ export class Withdraw extends Widget {
         // TODO:
         const id = this.props.withdrawIdList[e.num + this.props.curPage * this.props.perPage];
         const uid = this.props.showDataList[e.num + this.props.curPage * this.props.perPage][0];
+        if (this.props.auth[0] !== 0 && this.props.auth.indexOf(RightsGroups.operation) === -1) {
+            popNewMessage('暂无权限');
+
+            return;
+        }
         popNew('app-components-modalBox',{ content:`确认重新处理用户“<span style="color:#1991EB">${uid}</span>”的提现申请` },async () => {
             await changeWithdrawState(id, uid, 1, '').then(r => {
-                if (r.result !== 1) {
-                    popNewMessage(r.error_code);
+                if (r.result === 1) {
+                    popNewMessage('处理完成');
+                } else if (r.type === 6008) {
+                    popNewMessage('当日提现金额到达微信上限');
+                } else if (r.type === 6002) {
+                    popNewMessage('当日提现金额到达配置上限');
+                } else {
+                    popNewMessage('处理失败');
                 }
             }).catch(e => {
                 popNewMessage(e.error_code);
@@ -335,6 +365,7 @@ export class Withdraw extends Widget {
         }
         this.props.showDateBox = false;
         this.props.expandIndex = [false,false];
+        this.props.showFilterBox = false;
         this.paint();
     }
 
@@ -403,5 +434,18 @@ export class Withdraw extends Widget {
     // 动画效果执行
     public onShow(e:any) {
         rippleShow(e);
+    }
+    public filterTime(e:any) {
+        this.props.active = e.value;
+        this.props.showFilterBox = false;
+        this.getData();
+        this.paint();
+    }
+
+        // 过滤器
+    public changeFilterBox(e:any) {
+        this.pageClick();
+        this.props.showFilterBox = e.value;
+        this.paint();
     }
 }

@@ -71,8 +71,8 @@ export const RightsGroupsShow = {
     returnGoods:'退货',
     vipManage:'会员',
     withdraw:'提现',
-    operation:'提现(运营)',
-    finance:'提现(财务)'
+    operation:'运营',
+    finance:'财务'
 };
 
 // 所有页面

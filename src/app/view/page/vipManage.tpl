@@ -44,11 +44,14 @@
             <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn2:"查看详情" }</widget>
         </div>
         {{end}}
-    {{if Math.ceil(it.showDataList.length/it.perPage)}}
-    <div ev-changeCurrent="changePage" w-class="pagination-box" ev-perPage="perPage" ev-expand="expand">
-        <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}},expand:{{it.expandIndex}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
+
+    <div w-class="ctroller">
+        <div w-class="searchleft" on-tap="exportAllInfo" on-down="onShow">导出全部信息</div>
+        <div ev-changeCurrent="changePage" w-class="pagination" ev-perPage="perPage" ev-expand="expand">
+            <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}},expand:{{it.expandIndex}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
+        </div>
     </div>
-    {{end}}
+
     {{else}}
     <div ev-change-userType="getDatas(true)">
         <widget w-tag="app-view-page-vipDetail">{uid:{{it.uid}},userLabel:{{it.userLabel}} }</widget>

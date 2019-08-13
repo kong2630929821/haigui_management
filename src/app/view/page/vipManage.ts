@@ -5,7 +5,7 @@ import { perPage } from '../../components/pagination';
 import { getVipMember } from '../../net/pull';
 import { getStore, register, setStore } from '../../store/memstore';
 import { timestampFormat, unicode2ReadStr } from '../../utils/logic';
-import { addressFormat, rippleShow } from '../../utils/tools';
+import { addressFormat, exportExcel, rippleShow } from '../../utils/tools';
 export const forelet = new Forelet();
 
 interface Props {
@@ -277,6 +277,23 @@ export class VipManage extends Widget {
     // 动画效果执行
     public onShow(e:any) {
         rippleShow(e);
+    }
+
+    // 导出全部数据
+    public exportAllInfo() {
+        const jsonHead = this.props.showTitleList;
+        const aoa = [jsonHead];
+        const jsonData = this.props.showDataList;
+        for (const v of jsonData) {
+            for (let i = 0;i < v.length;i++) {
+                if (v[i]) {
+                    v[i] = v[i].toString();
+                }  
+            }
+            aoa.push(v);
+        }
+        console.log(aoa);
+        exportExcel(aoa,`${this.props.optionsList[this.props.active]}信息.xlsx`);
     }
 }
 
