@@ -1,7 +1,8 @@
 // tslint:disable-next-line:missing-jsdoc
+import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { addShop, changeShop, getAllArea,  getAllBrand, getShopSale, searchProduct } from '../../net/pull';
+import { addShop, changeShop, getAllArea,  getAllBrand, getFreightInfo, getShopSale, searchProduct } from '../../net/pull';
 import { popNewMessage, timeConvert, transitTimeStamp, unicode2Str } from '../../utils/logic';
 import { rippleShow } from '../../utils/tools';
 interface Props {
@@ -251,7 +252,7 @@ export class OnShelvesImg extends Widget {
     }
     // 下一步
     // tslint:disable-next-line:max-func-body-length
-    public next(e:any) {
+    public async next(e:any) {
         this.close();
         const img = [this.props.thumbnail[0],...this.props.mainPicture];
         // '商品名称','品牌ID','成本价','普通售价','会员价','折扣价'
@@ -332,29 +333,17 @@ export class OnShelvesImg extends Widget {
             return;
         }
         const arr = [name,brand,area,supplier,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
-        if (this.props.style) {
-            addShop(JSON.stringify(arr)).then(r => {
-                if (r.result === 1) {
-                    popNewMessage('添加成功');
-                    notify(e.node,'ev-change-showShop',{});
-                } else {
-                    popNewMessage('添加失败');
-                }
-
-            }).catch(e => {
-                popNewMessage('添加失败');
-            });
-        } else {
-            arr.unshift(this.props.shopId);
-            changeShop(JSON.stringify(arr)).then(r => {
-                if (r.result === 1) {
-                    popNewMessage('修改成功');
-                    notify(e.node,'ev-change-showShop',{});
-                } else {
-                    popNewMessage('修改失败');
-                }
-            });
-        }
+        // 判断该供应商是否存在邮费
+        await getFreightInfo(this.props.selectData[0][0],this.props.bondedActiveIndex).then(r => {
+            if (!r.length) {
+                const title = this.props.goodsType[this.props.bondedActiveIndex].text;
+                popNew('app-components-modalBox',{ content:`该供应商未配置“<span style="color:#1991EB">${title}</span>”的邮费` },() => {
+                    this.saveShopping(e,arr);
+                });
+            } else {
+                this.saveShopping(e,arr);
+            }
+        });
     }
     // 取消
     public gotoShop(e:any) {
@@ -471,5 +460,41 @@ export class OnShelvesImg extends Widget {
     // 动画效果执行
     public onShow(e:any) {
         rippleShow(e);
+    }
+
+    // 保存商品
+    public saveShopping(e:any,arr:any) {
+        if (this.props.style) {
+            addShop(JSON.stringify(arr)).then(r => {
+                if (r.result === 1) {
+                    popNewMessage('添加成功');
+                    notify(e.node,'ev-change-showShop',{});
+                } else {
+                    popNewMessage('添加失败');
+                }
+            }).catch(e => {
+                if (e.type === 3016) {
+                    popNewMessage('存在正在使用的SKU');
+                } else {
+                    popNewMessage('添加失败');
+                }  
+            });
+        } else {
+            arr.unshift(this.props.shopId);
+            changeShop(JSON.stringify(arr)).then(r => {
+                if (r.result === 1) {
+                    popNewMessage('修改成功');
+                    notify(e.node,'ev-change-showShop',{});
+                } else {
+                    popNewMessage('添加失败');
+                }
+            }).catch(e => {
+                if (e.type === 3016) {
+                    popNewMessage('存在正在使用的SKU');
+                } else {
+                    popNewMessage('添加失败');
+                }
+            });
+        }
     }
 }
