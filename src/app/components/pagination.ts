@@ -37,7 +37,7 @@ export class Pagination extends Widget {
         };
         super.setProps(this.props);
         this.props.pagesList = [0,1,2,3,4];
-        if (this.props.pages < 4) {
+        if (this.props.pages <= 4) {
             this.props.pagesList.splice(this.props.pages);
         } else if (this.props.currentIndex > 4) {
             this.props.pagesList = [this.props.currentIndex];
