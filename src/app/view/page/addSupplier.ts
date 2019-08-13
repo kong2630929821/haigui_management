@@ -72,7 +72,7 @@ export class AddSupplier extends Widget {
             this.props.currentData[1][0] = unicode2Str(this.props.currentData[1][0]);
             this.props.currentData[1][2] = unicode2Str(this.props.currentData[1][2]);
         }
-        for (let i = 0;i < 3;i++) {
+        for (let i = 0;i < 4;i++) {
             getFreightInfo(this.props.currentData[0],i).then(r => {
                 this.props.dataList[i] = r;
                 // 如果执行到第3次时
