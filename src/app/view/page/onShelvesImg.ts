@@ -340,9 +340,12 @@ export class OnShelvesImg extends Widget {
                 } else {
                     popNewMessage('添加失败');
                 }
-
             }).catch(e => {
-                popNewMessage('添加失败');
+                if (e.type === 3016) {
+                    popNewMessage('存在正在使用的SKU');
+                } else {
+                    popNewMessage('添加失败');
+                }  
             });
         } else {
             arr.unshift(this.props.shopId);
@@ -351,7 +354,13 @@ export class OnShelvesImg extends Widget {
                     popNewMessage('修改成功');
                     notify(e.node,'ev-change-showShop',{});
                 } else {
-                    popNewMessage('修改失败');
+                    popNewMessage('添加失败');
+                }
+            }).catch(e => {
+                if (e.type === 3016) {
+                    popNewMessage('存在正在使用的SKU');
+                } else {
+                    popNewMessage('添加失败');
                 }
             });
         }

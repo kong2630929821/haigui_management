@@ -11,7 +11,8 @@ import { RightsGroups } from '../base/home';
 export type GoodsDetails = [number,string,number,number,string,string,number,number,number,number,
     [[number,string][],[number,string][]],   // 【一级分组，二级分组】
     [string,string,string],  // 【退货地址，姓名，电话】
-    [number,number,any,number]   // 【供应商SKU，供应商商品ID，保质期，最近修改时间】
+    [number,number,any,number],   // 【供应商SKU，供应商商品ID，保质期，最近修改时间】
+    number// 供货价
 ]; 
 
 // 返利用户id，返利用户昵称，返利类型，返利金额，返利时间
