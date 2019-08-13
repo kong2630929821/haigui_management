@@ -66,6 +66,7 @@ export class InputImg extends Widget {
                 
             }
         });
+        <any>getRealNode(this.tree).querySelector('#inputBox').reset();
     }
     
     // 删除图片

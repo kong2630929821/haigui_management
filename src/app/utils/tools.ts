@@ -1,9 +1,10 @@
+import { deepCopy } from '../../pi/util/util';
 import { getRealNode } from '../../pi/widget/painter';
 import { GoodsDetail, setStore } from '../store/memstore';
 import { RightsGroups, RightsGroupsShow } from '../view/base/home';
 import { OrderDetailBase, OrderDetailGoods, OrderDetailRebate } from '../view/page/orderDetail';
 import { Order, OrderShow, OrderStatus, OrderStatusShow } from '../view/page/totalOrders';
-import { CashLogType, getCashLogName, popNewMessage, priceFormat, timeConvert, unicode2ReadStr, unicode2Str } from './logic';
+import { CashLogType, getCashLogName, popNewMessage, priceFormat, timeConvert, transitTimeStamp, unicode2ReadStr, unicode2Str } from './logic';
 
 /**
  * 常用工具
@@ -189,9 +190,10 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
         const goods: OrderDetailGoods = [v[0], v[1], v[4], v[5], v[12][1],goodsType, group.join(','),v[3],time,priceFormat(v[7]),priceFormat(v[8]),priceFormat(v[9]),v[11][0],v[11][1],v[11][2],priceFormat(v[13])];
         orderGoods.push(goods);
     }
-    
+    const data = deepCopy(info[25]);
+    data.length ? data.pop() :'';
     // 返利信息
-    for (const v of info[25]) {
+    for (const v of data) {
         let moeny = priceFormat(v[3]);
         if (v[2] === 2) {
             moeny = JSON.stringify(v[3]);
@@ -203,7 +205,8 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
     return {
         orderBase,
         orderGoods,
-        orderRebate
+        orderRebate,
+        type:info[25][3]
     };
 };
 
@@ -637,58 +640,27 @@ export const analysisInventoryData = (res) => {
         const amount = Number(content[i][titleInventory]);
         const supplierPrice = Number(content[i][titleSupplierPrice]) * 100;
         const Lable1 = content[i][titleLable1];
-        const shelfLife  = content[i][titleshelfLife] ? content[i][titleshelfLife] :'';
+        const shelfLife  = content[i][titleshelfLife] ? content[i][titleshelfLife].split(',') :'';
         const supplierSku  = content[i][titlesupplierSku];
         const supplierGoodsId  = content[i][titlesupplierGoodsId];
         const returnAddress = content[i][titlereturnAddress];
         const people =  content[i][titlePeople];
         const phone = content[i][titlePhone];
-        if (id !== 0 && !id) {
-            popNewMessage(`第${i + 2}行id为空或类型不正确`);
+        const data = [];
+        if (shelfLife !== '' && shelfLife.length !== 2) {
+            popNewMessage(`第${i + 2}行有效期为空或类型不正确`);
 
+            return ;
+        }
+        const fg = isReturn(i,id,amount,supplierPrice,Lable1,supplierSku,supplierGoodsId,returnAddress,people,phone);
+        if (fg) {
             return;
         }
-        if (amount !== 0 && !amount) {
-            popNewMessage(`第${i + 2}行库存为空或类型不正确`);
-
-            return;
+        if (shelfLife !== '') {
+            data.push(transitTimeStamp(shelfLife[0]));
+            data.push(transitTimeStamp(shelfLife[1]));
         }
-        if (supplierPrice !== 0 && !supplierPrice) {
-            popNewMessage(`第${i + 2}行供货价为空或类型不正确`);
-
-            return;
-        }
-        if (!Lable1) {
-            popNewMessage(`每行至少填一个标签`);
-
-            return;
-        }
-        if (supplierSku === '') {
-            popNewMessage(`第${i + 2}行供应商SKU为空或类型不正确`);
-
-            return;
-        }
-        if (supplierGoodsId === '') {
-            popNewMessage(`第${i + 2}行供应商商品ID为空或类型不正确`);
-
-            return;
-        }
-        if (returnAddress === '') {
-            popNewMessage(`第${i + 2}行退货信息为空或类型不正确`);
-
-            return;
-        }
-        if (people === '') {
-            popNewMessage(`第${i + 2}行收货人为空或类型不正确`);
-
-            return;
-        }
-        if (phone === '' || !/^1[3456789]\d{9}$/.test(phone)) {
-            popNewMessage(`第${i + 2}行手机号码为空或类型不正确`);
-
-            return;
-        }
-        const tmp = [id, sku, Lable1, amount, supplierPrice,shelfLife,supplierSku,supplierGoodsId,[returnAddress,people,phone]];
+        const tmp = [id, sku, Lable1, amount, supplierPrice,data,supplierSku,supplierGoodsId,[returnAddress,people,phone]];
         arr[i] = tmp;
     }
     const len = Math.ceil(arr.length / maxNum);
@@ -698,6 +670,54 @@ export const analysisInventoryData = (res) => {
     }
 
     return groups;
+};
+
+const isReturn = (i,id,amount,supplierPrice,Lable1,supplierSku,supplierGoodsId,returnAddress,people,phone) => {
+    if (id !== 0 && !id) {
+        popNewMessage(`第${i + 2}行id为空或类型不正确`);
+
+        return 1;
+    }
+    if (amount !== 0 && !amount) {
+        popNewMessage(`第${i + 2}行库存为空或类型不正确`);
+
+        return 1;
+    }
+    if (supplierPrice !== 0 && !supplierPrice) {
+        popNewMessage(`第${i + 2}行供货价为空或类型不正确`);
+
+        return 1;
+    }
+    if (!Lable1) {
+        popNewMessage(`每行至少填一个标签`);
+
+        return 1;
+    }
+    if (supplierSku === '') {
+        popNewMessage(`第${i + 2}行供应商SKU为空或类型不正确`);
+
+        return 1;
+    }
+    if (supplierGoodsId === '') {
+        popNewMessage(`第${i + 2}行供应商商品ID为空或类型不正确`);
+
+        return 1;
+    }
+    if (returnAddress === '') {
+        popNewMessage(`第${i + 2}行退货信息为空或类型不正确`);
+
+        return 1;
+    }
+    if (people === '') {
+        popNewMessage(`第${i + 2}行收货人为空或类型不正确`);
+
+        return 1;
+    }
+    if (phone === '' || !/^1[3456789]\d{9}$/.test(phone)) {
+        popNewMessage(`第${i + 2}行手机号码为空或类型不正确`);
+
+        return 1;
+    }
 };
 /**
  * 解析商品信息

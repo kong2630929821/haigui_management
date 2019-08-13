@@ -228,17 +228,17 @@ export class OnShelvesImg extends Widget {
     // 缩略图替换/上传
     public updataImg(e:any) {
         this.props.thumbnail[0] = [`${e.src}`,1,1];
-        this.paint();
+        this.paint(true);
     }
     // 主图替换
     public updataImgMain(index:number,e:any) {
         this.props.mainPicture[index] = [`${e.src}`,2,2];
-        this.paint();
+        this.paint(true);
     }
     // 详细图替换
     public updataImgInfo(index:number,e:any) {
         this.props.infoPicture[index] = ['','',[`${e.src}`,3,3]];
-        this.paint();
+        this.paint(true);
     }
     // 添加主图
     public addMainImg(e:any) {
@@ -337,7 +337,7 @@ export class OnShelvesImg extends Widget {
         await getFreightInfo(this.props.selectData[0][0],this.props.bondedActiveIndex).then(r => {
             if (!r.length) {
                 const title = this.props.goodsType[this.props.bondedActiveIndex].text;
-                popNew('app-components-modalBox',{ content:`该供应商未配置“<span style="color:#1991EB">${title}</span>”的邮费` },() => {
+                popNew('app-components-modalBox',{ content:`该供应商未配置“<span style="color:#1991EB">${title}</span>”的邮费,是否继续保存` },() => {
                     this.saveShopping(e,arr);
                 });
             } else {

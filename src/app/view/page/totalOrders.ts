@@ -69,7 +69,7 @@ export const OrderStatusShow = {
  */
 export class TotalOrder extends Widget {
     public props:any = {
-        showTitleList:['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','收货人','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号','金额','商品类型','运费','运单号','供货价','成本价'],
+        showTitleList:['订单编号','商品ID','商品名称','商品数量','商品SKU','商品规格','供货商ID','下单时间','用户ID','收货人','手机号','地址信息','订单状态','订单总金额','微信支付单号','姓名','身份证号','金额','商品类型','运费','物流单号','供货价','成本价'],
         contentList:[],   // 展示的原始数据
         contentShowList:[], // 展示的数据
         supplierList:[],
@@ -204,7 +204,7 @@ export class TotalOrder extends Widget {
         const titleList = JSON.parse(JSON.stringify(this.props.showTitleList));
         if (status === OrderStatus.PENDINGDELIVERED) {
             this.props.contentShowList = await getOrder(supplierId,2,[...oidsSet]);
-            titleList.push('物流单号');
+            // titleList.push('物流单号');
         }
         
         const aoa = [titleList];
@@ -254,7 +254,7 @@ export class TotalOrder extends Widget {
         const titleList = JSON.parse(JSON.stringify(this.props.showTitleList));
         if (status === OrderStatus.PENDINGDELIVERED) {
             this.props.contentShowList = await getOrder(supplierId,2,[]);
-            titleList.push('物流单号');
+            // titleList.push('物流单号');
         }
         
         const aoa = [titleList];
@@ -282,8 +282,9 @@ export class TotalOrder extends Widget {
         this.closeClick();
         const orderId = this.props.inputOrderId;
         if (!orderId) {
-            
-            this.pageChangeQuery(1);
+
+            const index = this.props.currentPageIndex * this.props.perPage;
+            this.pageChangeQuery(index === 0 ? 1 :index);
             // this.filterOrderQuery(1);
 
             return;
