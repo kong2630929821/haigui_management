@@ -262,7 +262,7 @@ export const getOrderById  = (orderId:any) => {
             console.log('ordersShow =====',ordersShow);
             console.log('orders =====',infos);
     
-            return [[infos],ordersShow];
+            return [infos,ordersShow];
         }). catch (e => {
             return [[],[]];
         });
