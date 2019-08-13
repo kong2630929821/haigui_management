@@ -42,4 +42,10 @@ export class GoodsInfo extends CommodityLibrary {
     public onShow(e:any) {
         rippleShow(e);
     }
+
+    // 修改商品id列表
+    public goodsIdChange() {
+        this.props.editGoodsId = true;
+        this.paint();
+    }
 }
