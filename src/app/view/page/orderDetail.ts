@@ -25,6 +25,7 @@ interface Props {
     dataList:Order;
     auth:boolean;
     oid:number;  // 订单id
+    title:string;
 }
 
 /**
@@ -40,7 +41,8 @@ export class OrderDetail extends Widget {
         rebateDataList:[],  // 返利信息
         dataList:null,
         auth:false,
-        oid:null
+        oid:null,
+        title:'已返利信息'
     };
 
     public async setProps(props:any) {
@@ -59,6 +61,11 @@ export class OrderDetail extends Widget {
                 this.props.baseDataList = orderShow.orderBase;
                 this.props.goodsDataList = orderShow.orderGoods;
                 this.props.rebateDataList = orderShow.orderRebate;
+                if (orderShow.type) {
+                    this.props.title = '已返利信息';
+                } else {
+                    this.props.title = '待返利信息';
+                }
                 this.paint();
                 console.log('!!!!!!!!!!!!!OrderDetail',this.props);
 
@@ -70,6 +77,11 @@ export class OrderDetail extends Widget {
         this.props.baseDataList = orderShow.orderBase;
         this.props.goodsDataList = orderShow.orderGoods;
         this.props.rebateDataList = orderShow.orderRebate;
+        if (orderShow.type) {
+            this.props.title = '已返利信息';
+        } else {
+            this.props.title = '待返利信息';
+        }
         getOrderReason([this.props.baseDataList[0]]).then(r => {
             this.props.baseDataList[this.props.baseDataList.length - 1] = r;
             this.paint();

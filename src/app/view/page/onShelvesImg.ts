@@ -228,17 +228,17 @@ export class OnShelvesImg extends Widget {
     // 缩略图替换/上传
     public updataImg(e:any) {
         this.props.thumbnail[0] = [`${e.src}`,1,1];
-        this.paint();
+        this.paint(true);
     }
     // 主图替换
     public updataImgMain(index:number,e:any) {
         this.props.mainPicture[index] = [`${e.src}`,2,2];
-        this.paint();
+        this.paint(true);
     }
     // 详细图替换
     public updataImgInfo(index:number,e:any) {
         this.props.infoPicture[index] = ['','',[`${e.src}`,3,3]];
-        this.paint();
+        this.paint(true);
     }
     // 添加主图
     public addMainImg(e:any) {
