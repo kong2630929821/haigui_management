@@ -204,7 +204,7 @@ export class TotalOrder extends Widget {
         const titleList = JSON.parse(JSON.stringify(this.props.showTitleList));
         if (status === OrderStatus.PENDINGDELIVERED) {
             this.props.contentShowList = await getOrder(supplierId,2,[...oidsSet]);
-            titleList.push('物流单号');
+            // titleList.push('物流单号');
         }
         
         const aoa = [titleList];
@@ -254,7 +254,7 @@ export class TotalOrder extends Widget {
         const titleList = JSON.parse(JSON.stringify(this.props.showTitleList));
         if (status === OrderStatus.PENDINGDELIVERED) {
             this.props.contentShowList = await getOrder(supplierId,2,[]);
-            titleList.push('物流单号');
+            // titleList.push('物流单号');
         }
         
         const aoa = [titleList];

@@ -337,7 +337,7 @@ export class OnShelvesImg extends Widget {
         await getFreightInfo(this.props.selectData[0][0],this.props.bondedActiveIndex).then(r => {
             if (!r.length) {
                 const title = this.props.goodsType[this.props.bondedActiveIndex].text;
-                popNew('app-components-modalBox',{ content:`该供应商未配置“<span style="color:#1991EB">${title}</span>”的邮费` },() => {
+                popNew('app-components-modalBox',{ content:`该供应商未配置“<span style="color:#1991EB">${title}</span>”的邮费,是否继续保存` },() => {
                     this.saveShopping(e,arr);
                 });
             } else {
