@@ -456,7 +456,7 @@ export const dealGroup = (goodsCate) => {
  */
 const maxNum = 30;   // 每次导入最大条数
 export const analysisSupliertData = (res) => {
-    const title = res[0];// "供应商id" "供应商名称" "供应商详细描述"
+    const title = res[0];// "供应商id" "供应商名称" "供应商详细描述" "手机号码"
     const content = res[1];
     // 表不为空验证
     if (!content.length) {
@@ -473,18 +473,31 @@ export const analysisSupliertData = (res) => {
     const supplierId = title[0];
     const supplierName = title[1];
     const supplierDetail = title[2];
+    const phoneTitle = title[3];
     const arr = [];
     for (let i = 0; i < content.length; i++) {
         const id = Number(content[i][supplierId]);
+        const name = content[i][supplierName];
+        const detail = content[i][supplierDetail];
+        const phone = content[i][phoneTitle];
         if (id !== 0 && !id) {
             popNewMessage(`第${i + 2}行id为空或类型不正确`);
 
             return;
         }
-        const name = content[i][supplierName];
-        const detail = content[i][supplierDetail];
+        if (detail === '') {
+            popNewMessage(`第${i + 2}行供应商详细描述为空或类型不正确`);
+
+            return;
+        }
+        if (phone === '' || /^1[3456789]\d{9}$/.test(phone) === false) {
+            popNewMessage(`第${i + 2}行手机号码为空或类型不正确`);
+
+            return;
+        }
+        
         const images = [];
-        const tmp = [id, name, detail, images];
+        const tmp = [id, name, detail, images,phone];
         arr[i] = tmp;
     }
     const len = Math.ceil(arr.length / maxNum);
@@ -585,14 +598,21 @@ export const analysisGrandData = (res) => {
 /**
  * 解析库存信息
  */
+// tslint:disable-next-line:cyclomatic-complexity
 export const analysisInventoryData = (res) => {
-    const title = res[0];// "供应商id" "sku" "库存" "供货价" "标签1" "标签2" "标签3" "标签4" "标签5" "标签6" "标签7" "标签8" "标签9" "标签10"
+    const title = res[0];// "供应商id" "sku" "库存" "供货价" "sku名" "保质期" "供应商sku" "供应商商品id" "退货信息" "收件人" "联系电话" "标签8" "标签9" "标签10"
     const content = res[1];
     const titleSupplierId = title[0];
     const titleSKU = title[1];
     const titleInventory = title[2];
     const titleSupplierPrice = title[3];
     const titleLable1 = title[4];
+    const titleshelfLife  = title[5];
+    const titlesupplierSku  = title[6];
+    const titlesupplierGoodsId  = title[7];
+    const titlereturnAddress = title[8];
+    const titlePeople = title[9];
+    const titlePhone = title[10];
     // 表不为空验证
     if (!content.length) {
         popNewMessage('导入了空表');
@@ -617,6 +637,12 @@ export const analysisInventoryData = (res) => {
         const amount = Number(content[i][titleInventory]);
         const supplierPrice = Number(content[i][titleSupplierPrice]) * 100;
         const Lable1 = content[i][titleLable1];
+        const shelfLife  = content[i][titleshelfLife] ? content[i][titleshelfLife] :'';
+        const supplierSku  = content[i][titlesupplierSku];
+        const supplierGoodsId  = content[i][titlesupplierGoodsId];
+        const returnAddress = content[i][titlereturnAddress];
+        const people =  content[i][titlePeople];
+        const phone = content[i][titlePhone];
         if (id !== 0 && !id) {
             popNewMessage(`第${i + 2}行id为空或类型不正确`);
 
@@ -637,7 +663,32 @@ export const analysisInventoryData = (res) => {
 
             return;
         }
-        const tmp = [id, sku, lable, amount, supplierPrice];
+        if (supplierSku === '') {
+            popNewMessage(`第${i + 2}行供应商SKU为空或类型不正确`);
+
+            return;
+        }
+        if (supplierGoodsId === '') {
+            popNewMessage(`第${i + 2}行供应商商品ID为空或类型不正确`);
+
+            return;
+        }
+        if (returnAddress === '') {
+            popNewMessage(`第${i + 2}行退货信息为空或类型不正确`);
+
+            return;
+        }
+        if (people === '') {
+            popNewMessage(`第${i + 2}行收货人为空或类型不正确`);
+
+            return;
+        }
+        if (phone === '' || !/^1[3456789]\d{9}$/.test(phone)) {
+            popNewMessage(`第${i + 2}行手机号码为空或类型不正确`);
+
+            return;
+        }
+        const tmp = [id, sku, Lable1, amount, supplierPrice,shelfLife,supplierSku,supplierGoodsId,[returnAddress,people,phone]];
         arr[i] = tmp;
     }
     const len = Math.ceil(arr.length / maxNum);

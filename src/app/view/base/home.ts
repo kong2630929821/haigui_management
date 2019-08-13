@@ -108,7 +108,7 @@ const pages = [
         { name: '399商品列表', page: PAGE.hBaoGoodsList, img:'chart.png' },
         { name: '绑定商户邀请码', page: PAGE.hBaoGoodsSetting, img:'chart.png' }
     ] },
-    // { name: '导入Excel', page: PAGE.importExcel, img:'chart.png'  },
+    { name: '导入Excel', page: PAGE.importExcel, img:'chart.png'  },
     { name:RightsGroupsShow[RightsGroups[1006]], page: PAGE.totalOrders, img:'chart.png' },
     { name:RightsGroupsShow[RightsGroups[1007]], page: PAGE.openHWang, img:'chart.png'  },
     { name: RightsGroupsShow[RightsGroups[1008]], page: PAGE.returnGoods, img:'chart.png' },
