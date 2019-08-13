@@ -160,7 +160,7 @@ export class GoodsInfo extends Widget {
 
     // 解析退款申请
     public parseRefund(refundOrders:any) {
-        this.props.showTitleList = ['订单id','用户id','退款金额','状态','微信支付单号','备注','申请退款时间'];
+        this.props.showTitleList = ['订单id','用户id','退款金额','状态','退款单号','备注','申请退款时间'];
         refundOrders.forEach((v,i) => {
             v.forEach((r,j) => {
                 if (j === 2) { // 退款金额

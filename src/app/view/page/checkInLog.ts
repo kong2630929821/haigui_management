@@ -14,6 +14,7 @@ interface Props {
     currentIndex:number;
     expandIndex:boolean[];
     perPageIndex:number;// 分页的下标
+    startTime:string; // 开始时间
     endTime:string; // 截止时间
     changeDateFg:boolean;  // 修改过时间 重新请求数据标记
 }
@@ -31,6 +32,7 @@ export class CheckInLog extends Widget {
         currentIndex:0,
         expandIndex:[false,false],
         perPageIndex:0,
+        startTime:'2019-8-13',
         endTime:dateToString(Date.now(),1),
         changeDateFg:false
     };
@@ -46,7 +48,7 @@ export class CheckInLog extends Widget {
         this.props.sum = 0;
         this.props.showDataList = [];
         this.paint();
-        getCheckInLog(new Date(this.props.endTime).getTime()).then(r => {
+        getCheckInLog(new Date(this.props.startTime).getTime(), new Date(this.props.endTime).getTime()).then(r => {
             const list = r.value || [];
             list.forEach(v => {
                 v[2] = unicode2ReadStr(v[2]);
@@ -113,10 +115,11 @@ export class CheckInLog extends Widget {
 
     // 修改截止时间
     public changeDate(e:any) {
-        if (this.props.endTime !== e.value) {
+        if (this.props.startTime !== e.value[0] || this.props.endTime !== e.value[1]) {
             this.props.changeDateFg = true;
         }
-        this.props.endTime = e.value;
+        this.props.startTime = e.value[0];
+        this.props.endTime = e.value[1];
         this.paint();
     }
 }

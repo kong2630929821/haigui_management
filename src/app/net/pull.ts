@@ -1713,9 +1713,9 @@ export const setRefundStatus = (id:number) => {
 /**
  * 获取签到记录
  */
-export const getCheckInLog = (time:number) => {
+export const getCheckInLog = (stTime:number,edTime:number) => {
     
-    return fetch(`http://${sourceIp}:${httpPort}/console/get_check_in_log?end=${time}`).then(r => r.json());
+    return fetch(`http://${sourceIp}:${httpPort}/console/get_check_in_log?start=${stTime}&end=${edTime}`).then(r => r.json());
 };
 
 // 获取订单拒绝理由
