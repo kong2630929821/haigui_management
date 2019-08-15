@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <div w-class="item">
-                    <div w-class="title">供应商商品id</div>
+                    <div w-class="title">外码</div>
                     <div w-class="input" ev-input-change="supplierIdChange">
                         <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[9]}},disabled:{{it.status==1?true:false}}}</widget>
                     </div>

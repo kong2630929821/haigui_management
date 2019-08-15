@@ -1,6 +1,6 @@
 import { Widget } from '../../../pi/widget/widget';
 import { getIncome, haiWangSetting } from '../../net/pull';
-import { popNewMessage } from '../../utils/logic';
+import { popNewMessage, priceFormat } from '../../utils/logic';
 import { rippleShow } from '../../utils/tools';
 
 // tslint:disable-next-line:missing-jsdoc
@@ -26,8 +26,8 @@ export class RebateSetting extends Widget {
         haiWang:[],
         haiBao:[],
         shopping:[],
-        haiBaoTitle:['新海宝（积分）','上级海宝（现金，分）','上级海王（现金，分）','平级海王（海贝）'],
-        haiWangTitle:['新海王（积分）','上级海王（现金，分）','平级海王（海贝）'],
+        haiBaoTitle:['新海宝（积分）','上级海宝（现金）','上级海王（现金）','平级海王（海贝）'],
+        haiWangTitle:['新海王（积分）','上级海王（现金）','平级海王（海贝）'],
         shoppingTitle:['上级海宝（%）','上级海王（%）','平级海王（%）'],
         style:[true,true,true]
     };
@@ -45,6 +45,10 @@ export class RebateSetting extends Widget {
                 this.props.haiWang = r.up1;
                 this.props.haiBao = r.up2;
                 this.props.shopping = r.shopping;
+                
+                this.props.haiWang[1] = priceFormat(r.up1[1]);
+                this.props.haiBao[1] = priceFormat(r.up2[1]);
+                this.props.haiBao[2] = priceFormat(r.up2[2]);
                 this.paint();
             }
         });
@@ -56,12 +60,12 @@ export class RebateSetting extends Widget {
     }
 
     // 0海宝编辑 1海王编辑 2购物收益编辑
-    public haiWangChange(fg:number,index:number,e:any) {
+    public rebateChange(fg:number,index:number,e:any) {
         const value = e.value;
         if (fg === 0) {
-            this.props.haiWang[index] =  value;
-        } else if (fg === 1) {
             this.props.haiBao[index] =  value;
+        } else if (fg === 1) {
+            this.props.haiWang[index] =  value;
         } else {
             this.props.shopping[index] = value;
         }
@@ -91,11 +95,25 @@ export class RebateSetting extends Widget {
             str = '购物';
             cfgName = cfg.shopping;
         }
+        let breakFg = false;
+        const curData = [];  // 处理后数据 传给后端
         data.forEach((v,i) => {
-            data[i] = Number(data[i]);
+            curData[i] = Number(v);
+            if (curData[i] < 0) {
+                breakFg = true;
+            }
+
+            if (fg === 0 && (i === 1 || i === 2)) curData[i] = curData[i] * 100;  // 海宝收益 上级海宝|上级海王
+            if (fg === 1 && i === 1) curData[i] = curData[i] * 100;  // 海王收益 上级海王
         });
+
+        if (breakFg) {
+            popNewMessage('返利不能存在负数');
+
+            return;
+        }
         // 保存海王
-        haiWangSetting(cfgName,JSON.stringify(data)).then(r => {
+        haiWangSetting(cfgName,JSON.stringify(curData)).then(r => {
             if (r.result === 1) {
                 popNewMessage(`修改${str}收益成功`);
                 this.props.style = [true,true,true];

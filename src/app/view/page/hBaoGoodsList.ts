@@ -25,7 +25,7 @@ export class HBaoGoodsSetting extends Widget {
         showDataList:[],
         shopNum:0,
         perPage:perPage[0],
-        showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商ID','供应商SKU','供应商商品ID','保质期'],
+        showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商ID','供应商SKU','外码','保质期'],
         inputValue:'',
         currentIndex:0,
         expandIndex:false,
@@ -50,7 +50,7 @@ export class HBaoGoodsSetting extends Widget {
                 getCurrentGood(String(v[0])).then(res => {
                     list.push({
                         user: v[1],
-                        goods: res[0]
+                        goods: res[1][0]
                     });
                     
                     this.props.showDataList = list;

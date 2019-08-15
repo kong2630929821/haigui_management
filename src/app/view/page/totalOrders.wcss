@@ -51,10 +51,8 @@
     background: #273142;
     color:#fff;
 }
-
 .searchBox{
     margin:20px 0;
-    height: 150px;
     background: #fff;
 }
 .input{
@@ -63,25 +61,13 @@
     border:1px solid rgba(0,0,0,0.1);
     display: inline-block;
 }
-.search{
-    width:150px;
-    height:48px;
-    line-height: 48px;
-    text-align: center;
-    color: #fff;
-    font-size: 18px;
-    background:#1991EB;
-    float: right;
-    margin: 25px;
-}
-
 .btnBox{
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 }
 .select{
-    margin: 25px;
-}
-.dataBox{
+    margin:0 25px 20px;
 }
 .import-btn{
     width:150px;

@@ -2,11 +2,8 @@
     <div w-class="tabRow">
         {{for i,v of it.pool}}
         <div w-class="tab">
-            <img src="{{v.src}}" w-class="tabImg"/>
-            <div>
-                <div w-class="tabTitle">{{v.key}}</div>
-                <div w-class="amount">{{v.value}}</div>
-            </div>
+            <div w-class="tabTitle">{{v.key}}</div>
+            <div w-class="amount">{{v.value}}</div>
         </div>
         {{end}}
     </div>

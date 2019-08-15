@@ -1,7 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
-import { getExportTime, importArea, importBrand, importFreight, importGoods, importGoodsCate, importInventory, importSupplier } from '../../net/pull';
+import { getExportTime, importArea, importBrand, importGoods, importInventory, importSupplier } from '../../net/pull';
 import { popNewMessage, timeConvert } from '../../utils/logic';
-import { analysisAreatData, analysisFreightData, analysisGoodsCatetData, analysisGoodsData, analysisGrandData, analysisInventoryData, analysisSupliertData, importRead } from '../../utils/tools';
+import { analysisAreatData, analysisGoodsData, analysisGrandData, analysisInventoryData, analysisSupliertData, importRead } from '../../utils/tools';
 
 /**
  * 导入excel
@@ -88,6 +88,12 @@ export class ImportExcel extends Widget {
                         const str = JSON.stringify(data[index++]);
                         importGoods(str).then(() => {
                             func();
+                        }).catch(r => {
+                            if (r.type === 3016) {
+                                popNewMessage('SKU已经被使用过');
+                            } else {
+                                popNewMessage('商品导入失败');
+                            }
                         });
                     } 
                 };

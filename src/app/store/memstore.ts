@@ -156,6 +156,7 @@ export interface GoodsDetail {
     skus:any[];  // SKU列表
     area:number;  // 地区ID
     onSaleTime:string;// 上架时间
+    spu:string;  // SPU
 }
 /******************************store初始化**********************************/
 // 海龟一号store
@@ -197,5 +198,8 @@ export interface SkuInfo {
     skuData:SkuListInfo[]; // sku列表数据
 }
 // SKU列表信息
-// '供应商id','SKU','sku名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'
+// '供应商id','SKU','sku名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','外码','收货地址','收件人','联系电话'
 type SkuListInfo = [number,string,string,number,number,number,string,string,number,number,string,string,string];
+
+// 商品类型
+export const GoodsType = ['普通商品','保税商品','海外购','一般贸易'];

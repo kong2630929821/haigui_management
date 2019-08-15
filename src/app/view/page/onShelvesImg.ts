@@ -51,11 +51,11 @@ export class OnShelvesImg extends Widget {
         bondedActiveIndex:0,
         expandIndex:[false,false,false],
         selectData:[],
-        showDataTitle : ['供应商id','SKU','SKU名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','供应商商品ID','收货地址','收件人','联系电话'],
+        showDataTitle : ['供应商id','SKU','SKU名','已下单未支付数量','总销量','库存','供货价','保质期','修改时间','供应商sku','外码','收货地址','收件人','联系电话'],
         style:true,
         data:['','','','',''],
         spreadList:[],
-        inputTitle:['商品名称','成本价(元)','普通售价(元)','会员价(元)','折扣价(元)'],
+        inputTitle:['商品ID','商品名称','成本价(元)','普通售价(元)','会员价(元)','折扣价(元)','SPU'],
         path:'',
         thumbnail:[],
         mainPicture:[],
@@ -153,7 +153,7 @@ export class OnShelvesImg extends Widget {
         }
         // ['商品名称','品牌ID','成本价','普通售价','会员价','折扣价']
         const price = arr.skus[0][2].split('/');
-        this.props.data = [arr.name,Number(price[0]),Number(price[1]),Number(price[2]),Number(arr.discount)];
+        this.props.data = [arr.id, arr.name,Number(price[0]),Number(price[1]),Number(price[2]),Number(arr.discount),arr.spu];
         this.props.tax = Number(arr.tax);
         if (this.props.dataList.shopType === '保税商品') {
             this.props.bondedActiveIndex = 1;
@@ -218,6 +218,9 @@ export class OnShelvesImg extends Widget {
     }
     // 输入框变化
     public inputChange(index:number,e:any) {
+        // if (index === 6 && !/^[0-9a-zA-Z]*$/.test(e.value)) {
+        //     popNewMessage('SPU只能支持数字和字母');
+        // }
         this.props.data[index] = e.value;
     }
     // 差价输入变化
@@ -257,7 +260,7 @@ export class OnShelvesImg extends Widget {
         const img = [this.props.thumbnail[0],...this.props.mainPicture];
         // '商品名称','品牌ID','成本价','普通售价','会员价','折扣价'
         let flag = false;// 判断输入的是否有空
-        this.props.data.forEach(v => {
+        this.props.data.forEach((v,i) => {
             if (v === '') {
                 flag = true;
 
@@ -265,7 +268,7 @@ export class OnShelvesImg extends Widget {
             }
         });
         if (flag) {
-            popNewMessage('请输入信息');
+            popNewMessage('请输入完整信息');
 
             return;
         }
@@ -300,20 +303,22 @@ export class OnShelvesImg extends Widget {
     
         //     return ;
         // }
-        const name = this.props.data[0];// 商品名称
+        const goodsid = Number(this.props.data[0]); // 商品ID
+        const name = this.props.data[1];// 商品名称
         const brand = this.props.brandId[this.props.brandTypeIndex];
         const area = Number(this.props.areaIdList[this.props.areaIdActiveIndex]);// 地址ID
         const supplier = this.props.selectData[0][0];// 供应商ID
         const pay_type = 1;// 支付方式
-        const cost = Math.round(Number(this.props.data[1]) * 100);// 成本价
-        const origin = Math.round(Number(this.props.data[2]) * 100);// 普通售价
-        const vip_price = Math.round(Number(this.props.data[3]) * 100);// 会员价
-        const has_tax = this.props.bondedActiveIndex;// 是否报税
+        const cost = Math.round(Number(this.props.data[2]) * 100);// 成本价
+        const origin = Math.round(Number(this.props.data[3]) * 100);// 普通售价
+        const vip_price = Math.round(Number(this.props.data[4]) * 100);// 会员价
+        const goodsType = this.props.bondedActiveIndex;// 商品类型
         let tax = Math.round(Number(this.props.tax) * 100);// 税费
-        if (has_tax === 0) {
+        if (goodsType === 0) {
             tax = 0;
         }
-        const discount = this.props.data[4] ? Math.round(Number(this.props.data[4]) * 100) :0;// 折扣价
+        const discount = this.props.data[5] ? Math.round(Number(this.props.data[5]) * 100) :0;// 折扣价
+        const spu = this.props.data[6]; // SPU
         const labels = [];// 规格
         this.props.spreadList.forEach(v => {
             labels.push([v[0],Math.round(Number(v[1]) * 100)]);
@@ -332,7 +337,7 @@ export class OnShelvesImg extends Widget {
 
             return;
         }
-        const arr = [name,brand,area,supplier,pay_type,cost,origin,vip_price,has_tax,tax,discount,labels,images,intro,spec,detail];
+        const arr = [goodsid,name,brand,area,supplier,pay_type,cost,origin,vip_price,goodsType,tax,discount,labels,images,intro,spec,detail,spu];
         // 判断该供应商是否存在邮费
         await getFreightInfo(this.props.selectData[0][0],this.props.bondedActiveIndex).then(r => {
             if (!r.length) {
@@ -480,7 +485,7 @@ export class OnShelvesImg extends Widget {
                 }  
             });
         } else {
-            arr.unshift(this.props.shopId);
+            // arr.unshift(this.props.shopId);
             changeShop(JSON.stringify(arr)).then(r => {
                 if (r.result === 1) {
                     popNewMessage('修改成功');

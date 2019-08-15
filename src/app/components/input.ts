@@ -46,6 +46,9 @@ export class Input extends Widget {
         if (props.input || Number(props.input) === 0) {
             currentValue = props.input;
         }
+        if (props.disabled && props.placeHolder) {
+            this.props.placeHolder = '';  // 禁用则不显示提示语
+        }
         this.props.decimalLength = props.decimalLength || 2;
         this.state = {
             currentValue,

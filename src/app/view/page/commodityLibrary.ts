@@ -15,7 +15,8 @@ interface Props {
     currentIndex:number;// 当前分页下标
     perPage:number;// 每页多少条数据
     showDateTitle:any;// 标题
-    showDataList:any;// 数据
+    showDataList:any;// 当前页显示数据
+    orgDataList:any; // 当前页导出数据
     showDateBox:boolean;// 时间选择
     startTime:string;
     endTime:string;
@@ -40,9 +41,10 @@ export class CommodityLibrary extends Widget {
         shopNum:123,
         currentIndex:0,
         perPage:perPage[0],
-        showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商ID','供应商SKU','供应商商品ID','保质期'],
+        showDateTitle:['规格','SKU','价格（成本/普通价/会员价）','实际差价','库存','供应商ID','供应商SKU','外码','保质期'],
         // ['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品'],['超闪亮钛合金版本','300000/200000','300/200','西米急急风米西亚','保税商品']
         showDataList:[],
+        orgDataList:[],
         showDateBox:false,
         startTime:'',  // 查询开始时间
         endTime:'', // 查询结束时间
@@ -54,7 +56,7 @@ export class CommodityLibrary extends Widget {
         perPageIndex:0
     };
     private exportAllDatas:any = [
-        ['商品ID','商品名称','商品规格(SKU/规格/差价)','商品类型','供应商id','供应商名称','品牌id','地区id','库存数量','供货价','成本价','原价','会员价','折后价','税费','分组列表','上架状态','上架时间','保质期','供应商sku','供应商商品id']
+        ['商品ID','商品名称','商品规格(SKU/规格/差价)','商品类型','供应商id','供应商名称','品牌id','地区id','库存数量','供货价','成本价','原价','会员价','折后价','税费','分组列表','上架状态','上架时间','保质期','供应商sku','外码','SPU']
     ];  
     private loadding:any;
 
@@ -177,8 +179,8 @@ export class CommodityLibrary extends Widget {
             const data = JSON.parse(r1.value);
             this.props.shopNum = data[1];   // 商品总数
             getAllGoods(index === 1 ? 0 :data[0],this.props.perPage,status,star_time,end_time).then(r => {
-                const shop = r[1];
-                this.props.showDataList = shop;
+                this.props.orgDataList = r[0];
+                this.props.showDataList = r[1];
                 this.paint();
             });
         });
@@ -194,7 +196,8 @@ export class CommodityLibrary extends Widget {
             return ;
         }
         getCurrentGood(this.props.inputValue).then(r => {
-            this.props.showDataList = r;
+            this.props.orgDataList = r[0];
+            this.props.showDataList = r[1];
             this.props.shopNum = this.props.showDataList.length;
             this.paint();
         }).catch(e => {
@@ -244,6 +247,7 @@ export class CommodityLibrary extends Widget {
     // 导出全部数据
     public exportAllGoods() {
         this.close();
+        this.exportAllDatas.splice(1);  // 只保留标题
         this.loadding = popNew('app-components-loading',{ text:'商品导出中……' });
         this.exportShop(1);
     }
@@ -280,6 +284,22 @@ export class CommodityLibrary extends Widget {
             });
         }
         
+    }
+
+    /**
+     * 导出当前也的商品
+     */
+    public exportGoods () {
+        this.loadding = popNew('app-components-loading',{ text:'商品导出中……' });
+        this.exportAllDatas.splice(1);
+        for (const v of this.props.orgDataList) {
+            for (const i in v) {
+                v[i] = typeof(v[i]) !== 'string' ? JSON.stringify(v[i]) :v[i];
+            }
+            this.exportAllDatas.push(v);
+        }
+        exportExcel(this.exportAllDatas,`商品信息表.xlsx`);
+        this.loadding && this.loadding.callback(this.loadding.widget);
     }
     
     // 过滤器

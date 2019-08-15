@@ -7,8 +7,8 @@
                 {{for i,v of it.haiBaoTitle}}
                 <div w-class="row">
                     <div w-class="title">{{v}}</div>
-                    <div w-class="input" ev-input-change="haiWangChange(0,{{i}},e)" style="width:160px;margin-left:20px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.haiBao[i]}},disabled:{{it.style[0]}},itype:"integer"}</widget>
+                    <div w-class="input" ev-input-change="rebateChange(0,{{i}},e)" style="width:160px;margin-left:20px;">
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.haiBao[i]}},disabled:{{it.style[0]}},itype:{{i==1 || i==2?"number":"integer"}} }</widget>
                     </div>
                 </div>
                 {{end}}
@@ -27,8 +27,8 @@
             {{for i,v of it.haiWangTitle}}
             <div w-class="row">
                 <div w-class="title">{{v}}</div>
-                <div w-class="input" ev-input-change="haiWangChange(1,{{i}},e)">
-                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.haiWang[i]}},disabled:{{it.style[1]}},itype:"integer"}</widget>
+                <div w-class="input" ev-input-change="rebateChange(1,{{i}},e)">
+                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.haiWang[i]}},disabled:{{it.style[1]}},itype:{{i==1?"number":"integer"}} }</widget>
                 </div>
             </div>
             {{end}}
@@ -46,8 +46,8 @@
             {{for i,v of it.shoppingTitle}}
             <div w-class="row">
                 <div w-class="title">{{v}}</div>
-                <div w-class="input" ev-input-change="haiWangChange(2,{{i}},e)">
-                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.shopping[i]}},disabled:{{it.style[2]}},itype:"integer"}</widget>
+                <div w-class="input" ev-input-change="rebateChange(2,{{i}},e)">
+                    <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.shopping[i]}},disabled:{{it.style[2]}},itype:"number"}</widget>
                 </div>
             </div>
             {{end}}

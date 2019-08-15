@@ -18,7 +18,8 @@
                 <div w-class="item1">
                     <div w-class="title">{{v}}</div>
                     <div w-class="input" ev-input-change="inputChange({{i}},e)" style="width: 382px;margin-left: 20px;">
-                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[i]}},disabled:{{it.disable}},itype:{{i==0?'text':'number'}} }</widget>
+                        {{%===============================编辑时商品ID不能修改=============================}}
+                        <widget w-tag="app-components-input">{placeHolder:"请输入",input:{{it.data[i]}},disabled:{{i==0 && !it.style?true :it.disable}},itype:{{i==1 || i==6?'text':'number'}} }</widget>
                     </div>
                 </div>
             {{end}}
@@ -28,6 +29,7 @@
                     <widget w-tag="app-components-simpleFilter1">{options:{{it.areaId}},activeIndex:{{it.areaIdActiveIndex}},expand:{{it.expandIndex[0]}},disabled:{{it.disable}} }</widget>
                 </div>
             </div>
+            
             {{if it.disable}}
                 <div w-class="item1">分类：{{it.dataList.typeName}}</div>
             {{end}}

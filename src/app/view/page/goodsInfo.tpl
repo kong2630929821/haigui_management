@@ -15,7 +15,6 @@
                     <widget w-tag="app-components-input">{placeHolder:"查询商品ID"}</widget>
                 </div>
                 <div w-class="search" on-tap="search" on-down="onShow">查询</div>
-                <div w-class="search" style="margin-left:200px;" on-tap="goodsIdChange" on-down="onShow">编辑</div>
             </div>
         </div>
 

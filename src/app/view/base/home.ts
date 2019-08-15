@@ -77,8 +77,8 @@ export const RightsGroupsShow = {
 
 // 所有页面
 const pages = [
-    { name: RightsGroupsShow[RightsGroups[1001]], page: PAGE.activitySettings, img:'chart.png',children:[
-        { name:'大转盘设置',page:PAGE.activitySettings },
+    { name: RightsGroupsShow[RightsGroups[1001]], page: PAGE.rebateSetting, img:'chart.png',children:[
+        // { name:'大转盘设置',page:PAGE.activitySettings },
         { name:'邀请奖励设置',page:PAGE.invitationSettings },
         { name:'返利设置',page:PAGE.rebateSetting },
         { name:'签到记录',page:PAGE.checkInLog }],
@@ -87,8 +87,8 @@ const pages = [
     {name:RightsGroupsShow[RightsGroups[1002]],page:PAGE.accountSettings,img:'chart.png',children:[
         { name: '账号设置', page: PAGE.accountSettings, img:'chart.png' },
         { name: '账号类型', page: PAGE.createRightsGroups, img:'chart.png'  },
-        { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' }
-        // { name: '操作日志', page: PAGE.operationLog, img:'chart.png' }
+        { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' },
+        { name: '操作日志', page: PAGE.operationLog, img:'chart.png' }
     ],
         show:false
     },

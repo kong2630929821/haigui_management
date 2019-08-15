@@ -80,7 +80,7 @@ export class Withdraw extends Widget {
         allDataWithdrawIdList:[],
         auth:getStore('flags/auth'),
         pool:[],
-        optionsList:['申请时间','处理时间'],
+        optionsList:['申请时间'],
         showFilterBox:false,
         active:0
     };
@@ -109,6 +109,11 @@ export class Withdraw extends Widget {
     // 切换过滤
     public changeTab(num:number) {
         this.pageClick();
+        if (num === 2) {
+            this.props.optionsList = ['申请时间','处理时间'];
+        } else {
+            this.props.optionsList = ['申请时间'];
+        }
         if (this.props.activeTab !== num) {
             this.props.curPage = 0;   // 切换了tab就显示第一页
         }
@@ -146,7 +151,8 @@ export class Withdraw extends Widget {
             // }
         } 
         this.props.allDataWithdrawIdList = this.props.withdrawIdList;
-        this.changePage({ value:this.props.curPage });
+        const pages = Math.ceil(this.props.showDataList.length / this.props.perPage);
+        this.changePage({ value:this.props.curPage < pages ? this.props.curPage :pages - 1 });
     }
 
     // 获取数据
@@ -156,13 +162,16 @@ export class Withdraw extends Widget {
         // monthTotal:string; // 本月提现金额
         getWithdrawTotal(Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
             this.props.pool = [
-                { key:'申请提现人数',value:r.day_count,src:'../../res/images/defultUser.png' },
-                { key:'申请提现金额',value:priceFormat(r.day_money),src:'../../res/images/money.png' },
-                { key:'申请月提现金额',value:priceFormat(r.month_total),src:'../../res/images/money.png' },
-                { key:'实际提现人数',value:r.success_day_count,src:'../../res/images/defultUser.png' },
-                { key:'实际提现金额 ',value:priceFormat(r.success_day_money),src:'../../res/images/money.png' },
-                { key:'实际月提现金额',value:priceFormat(r.success_month_total),src:'../../res/images/money.png' }  
+                { key:'当日提现人数',value:r.day_count,src:'../../res/images/defultUser.png' },
+                { key:'当日提现金额',value:priceFormat(r.day_money),src:'../../res/images/money.png' },
+                { key:'当月提现金额',value:priceFormat(r.month_total),src:'../../res/images/money.png' },
+                { key:'未提现总金额',value:priceFormat(r.balance_total),src:'../../res/images/money.png' },  
+                { key:'申请提现人数',value:r.value2[0],src:'../../res/images/defultUser.png' },
+                { key:'实际提现人数 ',value:r.value2[1],src:'../../res/images/money.png' },
+                { key:'申请提现金额',value:priceFormat(r.value2[2]),src:'../../res/images/money.png' },
+                { key:'实际提现金额',value:priceFormat(r.value2[3]),src:'../../res/images/money.png' }
             ];
+            this.paint();
         });
         getWithdrawApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime),this.props.active).then(r => {
             this.props.datas = [];
@@ -354,7 +363,7 @@ export class Withdraw extends Widget {
     }
 
     // 改变时间
-    public  changeDate(e:any) {
+    public changeDate(e:any) {
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
     }

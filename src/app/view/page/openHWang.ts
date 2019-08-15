@@ -62,7 +62,7 @@ export class OpenHWang extends Widget {
         perPage:perPage[0],
         expandIndex:false,
         perPageIndex:0,
-        optionsList:['申请时间','处理时间'],
+        optionsList:['申请时间'],
         showFilterBox:false,
         active:0
     };
@@ -77,6 +77,12 @@ export class OpenHWang extends Widget {
     // 切换tab
     public changeTab(num:number) {
         this.pageClick();
+        if (num === 2) {
+            this.props.optionsList = ['申请时间','处理时间'];
+        } else {
+            this.props.optionsList = ['申请时间'];
+        }
+
         if (this.props.activeTab !== num) {
             this.props.curPage = 0;
         }
@@ -101,7 +107,8 @@ export class OpenHWang extends Widget {
             }
         });
         
-        this.changePage({ value:this.props.curPage });
+        const pages = Math.ceil(this.props.showDataList.length / this.props.perPage);
+        this.changePage({ value:this.props.curPage < pages ? this.props.curPage :pages - 1 });
     }
 
     // 获取数据
@@ -223,12 +230,15 @@ export class OpenHWang extends Widget {
     }
 
     // 改变时间
-    public  changeDate(e:any) {
+    public  changeDate(e:any) {        
         this.props.startTime = e.value[0];
         this.props.endTime = e.value[1];
     }
 
     public pageClick() {
+        if (this.props.showDateBox) {
+            this.getData();
+        }
         this.props.showDateBox = false;
         this.props.expandIndex = false;
         this.props.showFilterBox = false;

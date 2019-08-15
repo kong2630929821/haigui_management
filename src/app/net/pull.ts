@@ -495,20 +495,24 @@ export const getWithdrawTotal = (start_time:number,end_time:number) => {
 
     return requestAsync(msg);
 };
+
 /**
  * 获取提现申请列表
  */
 export const getWithdrawApply = (stTime:number,edTime:number,time_type:number) => {
-    const msg = {
-        type:'mall_mgr/members@get_withdraw_info',
-        param:{
-            start_time:stTime,
-            end_time:edTime,
-            time_type
-        }
-    };
+    // const msg = {
+    //     type:'mall_mgr/members@get_withdraw_info',
+    //     param:{
+    //         start_time:stTime,
+    //         end_time:edTime,
+    //         time_type
+    //     }
+    // };
 
-    return requestAsync(msg);
+    // return requestAsync(msg);
+
+    return fetch(`http://${sourceIp}:${httpPort}/members/get_withdraw_info?start_time=${stTime}&end_time=${edTime}&time_type=${time_type}`).then(res => res.json());
+
 };
 
 /**
@@ -658,7 +662,7 @@ export const getCurrentGood = (shopValue:string) => {
     return requestAsync(msg).then(r => {
         const data = JSON.parse(r.value);
     
-        return analyzeGoods(data);
+        return [parseGoodsList(deepCopy(data)), analyzeGoods(deepCopy(data))];
     }).catch(e => {
         console.log(e);
     });
@@ -812,10 +816,11 @@ export const getAllProduct = (start_time:number,end_time:number) => {
 export const searchProduct = (keyValue:any) => {
     let product_id = 0;
     let sku = '';
-    if (keyValue.indexOf('1011') === -1 && keyValue.indexOf('3011') === -1) {
-        sku = keyValue;
+    if (/^[1,3]?011\d*$/.test(keyValue)) {
+        product_id = parseInt(keyValue);  // 供应商ID
+        
     } else {
-        product_id = parseInt(keyValue);
+        sku = keyValue;
     }
 
     return fetch(`http://${sourceIp}:${httpPort}/console/select_inventory?id=${product_id}&name=${sku}`).then(res => {

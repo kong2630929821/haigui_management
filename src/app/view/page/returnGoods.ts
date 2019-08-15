@@ -40,6 +40,12 @@ export class GoodsInfo extends Widget {
         this.props.startTime = '2019-05-01';
         console.log('3333333333333333333333333333333333333',this.props.startTime);
         this.init(1,transitTimeStamp(this.props.startTime),time);
+        
+        getAllRefundOrder(0,1,transitTimeStamp(this.props.startTime),time,1).then(r => {
+            const refundOrder = JSON.parse(r.value);
+            this.props.refundApplyNum = refundOrder.length;  // 退款申请总数
+            this.paint();
+        });
     }
     public init(status:number,startTime:number,time:number) {
         if (status > 3) {
@@ -53,7 +59,7 @@ export class GoodsInfo extends Widget {
                 this.props.dataList = refundOrder;
                 this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
                 if (status === 4) {
-                    this.props.refundApplyNum = this.props.showDataList.length;
+                    this.props.refundApplyNum = refundOrder.length;
                 }
                 this.paint();
             });
@@ -68,7 +74,7 @@ export class GoodsInfo extends Widget {
                 this.props.dataList = returnGoods;
                 this.props.showDataList = this.props.dataList.slice(0,this.props.perPage);
                 if (status === 1) {
-                    this.props.returnApplyNum = this.props.showDataList.length;
+                    this.props.returnApplyNum = returnGoods.length;
                 }
                 this.paint();
             });

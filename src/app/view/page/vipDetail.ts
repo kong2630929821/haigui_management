@@ -108,7 +108,8 @@ export class VipDetail extends Widget {
                     { th:'总收益',td:`现金(￥${priceFormat(v[5][0])}) 海贝(${v[5][1]}) 积分(${v[5][2]})` },
                     { th:'地址信息',td:addressFormat(unicode2Str(v[3])) },
                     { th:'身份证号',td:v[7][1] },
-                    { th:'邀请码',td:v[11] }
+                    { th:'邀请码',td:v[11] },
+                    { th:'最新关系变动时间',td:timestampFormat(v[13]) }
                 ];
             } 
             if (r.sub_tree) {
