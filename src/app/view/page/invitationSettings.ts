@@ -36,7 +36,7 @@ export class InvitationSetting extends Widget {
         goodsConfig:[],
         showTitleList:[],
         realSum:0,
-        activeTab:0,
+        activeTab:1,
         dataList:[]
     };
 
@@ -55,12 +55,7 @@ export class InvitationSetting extends Widget {
                     data.push([cfg[index][i],...v]);
                     arr.push(v);
                 });
-                if (index === 0) {
-                    // 特殊商品设置去掉第一行和最后一行
-                    data.shift();
-                    data.pop();
-                }
-                
+               
                 this.props.goodsConfig = data;
                 this.props.dataList = arr;
                 this.props.realSum = r[index].length;
@@ -86,7 +81,7 @@ export class InvitationSetting extends Widget {
             popNew('app-components-addShopping',{ title:'编辑配置',currentData:deepCopy(e.value),sureText:'修改',style:index + 1 },(val) => {
                 popNewMessage('修改成功');
                 this.props.goodsConfig[e.num] = [str,...val];
-                this.props.dataList[e.num + 1] = val;
+                this.props.dataList[e.num] = val;
                 this.props.style = true;
                 this.paint();
             });

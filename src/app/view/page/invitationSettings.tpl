@@ -3,10 +3,14 @@
         <div w-class="tableTitle">类别</div>
         <div w-class="filterBox">
             <div w-class="tabRow" style="margin:20px 20px;">
+                {{if 1==2}}
                 <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)" on-down="onShow">特殊商品</div>
+                {{end}}
                 <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)" on-down="onShow">海王每周权益</div>
                 <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)" on-down="onShow">海宝每周权益</div>
+                {{if 1==2}}
                 <div w-class="tabBar {{it.activeTab==3?'activeTab':''}}" on-tap="changeTab(3)" on-down="onShow">普通用户</div>
+                {{end}}
             </div>
         </div>
     </div>
