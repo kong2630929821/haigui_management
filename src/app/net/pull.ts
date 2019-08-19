@@ -1,7 +1,7 @@
 import { httpPort, sourceIp } from '../config';
 import { deepCopy, setStore } from '../store/memstore';
 import { popNewMessage, priceFormat, timestampFormat, unicode2Str } from '../utils/logic';
-import { analyzeGoods, brandProcessing, parseGoodsList, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShoppingTop10, processingShopSetting, processingUser, processingUserLevelChange, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
+import { analyzeGoods, brandProcessing, parseGoodsList, parseOrderShow, processingBalanceLog, processingGroupingType, processingLogs, processingPostage, processingShare, processingShoppingTop10, processingShopSetting, processingUser, processingUserLevelChange, processingUserType, processingVip, supplierProcessing } from '../utils/tools';
 import { Order, OrderStatus } from '../view/page/totalOrders';
 import { requestAsync } from './login';
 
@@ -1441,7 +1441,7 @@ export const getVipTurnover = () => {
     return requestAsync(msg).then(r => {
         if (r.result === 1) {
             const invite_top10 = processingVip(r.invite_top10);
-            const share_top10 = processingVip(r.share_top10);
+            const share_top10 = processingShare(r.share_top10);
             const member_total = r.member_total;
             
             return [invite_top10,share_top10,member_total];
