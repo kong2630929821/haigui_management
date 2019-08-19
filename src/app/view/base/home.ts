@@ -86,8 +86,7 @@ const pages = [
     },
     {name:RightsGroupsShow[RightsGroups[1002]],page:PAGE.accountSettings,img:'chart.png',children:[
         { name: '账号设置', page: PAGE.accountSettings, img:'chart.png' },
-        { name: '账号类型', page: PAGE.createRightsGroups, img:'chart.png'  },
-        { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' }
+        { name: '账号类型', page: PAGE.createRightsGroups, img:'chart.png'  }
         // { name: '操作日志', page: PAGE.operationLog, img:'chart.png' }
     ],
         show:false
@@ -101,7 +100,8 @@ const pages = [
     },
     { name:RightsGroupsShow[RightsGroups[1004]], page: PAGE.commodityLibrary, img:'chart.png',children:[
         { name:'商品库',page:PAGE.commodityLibrary },
-        { name:'SKU库',page:PAGE.productLibrary }],
+        { name:'SKU库',page:PAGE.productLibrary },
+        { name: '数据统计', page: PAGE.dataStatistics, img:'chart.png' }],
         show:false 
     },
     { name: RightsGroupsShow[RightsGroups[1005]], page: PAGE.hBaoGoodsList, img:'chart.png',children:[

@@ -339,6 +339,8 @@ export class Withdraw extends Widget {
             this.paint();
         } else {
             this.getData();
+            this.props.timeTypeActiveIndex = 0;
+            this.paint();
         }
     }
 

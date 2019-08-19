@@ -298,11 +298,6 @@ export class OnShelvesImg extends Widget {
     
             return ;
         }
-        // if (this.props.selectData.length !== this.props.spreadList.length) {
-        //     popNewMessage('请填写差价');
-    
-        //     return ;
-        // }
         const goodsid = Number(this.props.data[0]); // 商品ID
         const name = this.props.data[1];// 商品名称
         const brand = this.props.brandId[this.props.brandTypeIndex];
@@ -327,10 +322,9 @@ export class OnShelvesImg extends Widget {
         const intro = [];// 商品介绍
         const spec = [];//
         const detail = this.props.infoPicture;// 详情图片
-        if (cost > origin || cost > discount || cost > vip_price || origin < vip_price || origin < discount) {
-            popNewMessage('请填写正确的价格');
-    
-            return ;
+        if (this.isPrice(cost,origin,discount,vip_price)) {
+        
+            return;
         }
         if (tax < 0) {
             popNewMessage('税费不能为负数');
@@ -516,5 +510,30 @@ export class OnShelvesImg extends Widget {
                 }
             });
         }
+    }
+
+    public isPrice(cost:number,origin:number,discount:number,vip_price:number) {
+        if (cost > origin) {
+            popNewMessage('成本价大于普通售价');
+    
+            return true;
+        }
+        if (cost > discount) {
+            popNewMessage('成本价大于折扣价');
+    
+            return true;
+        }
+        if (cost > vip_price) {
+            popNewMessage('成本价大于会员价');
+    
+            return true;
+        }
+        if (origin < vip_price || origin < discount) {
+            popNewMessage('普通售价会员价或小于折扣价');
+    
+            return true;
+        }
+
+        return false;
     }
 }
