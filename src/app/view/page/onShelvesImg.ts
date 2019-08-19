@@ -337,6 +337,21 @@ export class OnShelvesImg extends Widget {
 
             return;
         }
+
+        // 添加商品时售价小于SKU供货价无提示信息
+        this.props.selectData.forEach(v => {
+            if (origin / 100 < JSON.parse(v[6].substring(1))) {
+                flag = true;
+
+                return ;
+            }
+        });
+        if (flag) {
+            popNewMessage('普通售价小于SKU供货价');
+            
+            return;
+        }
+
         const arr = [goodsid,name,brand,area,supplier,pay_type,cost,origin,vip_price,goodsType,tax,discount,labels,images,intro,spec,detail,spu];
         // 判断该供应商是否存在邮费
         await getFreightInfo(this.props.selectData[0][0],this.props.bondedActiveIndex).then(r => {
