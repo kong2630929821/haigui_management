@@ -211,7 +211,11 @@ export class AddProduct extends Widget {
                     popNewMessage('添加失败');
                 }
             }).catch(e => {
-                popNewMessage('添加失败');
+                if (e.type === 3016) {
+                    popNewMessage('SKU已存在');
+                } else {
+                    popNewMessage('添加失败');
+                }  
             });
         } else if (this.props.status === 2) {
             // 修改
