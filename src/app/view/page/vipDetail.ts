@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { perPage } from '../../components/pagination';
 import { changeBindding, getAmountDetail, getUserLevelChange, getVipDetail,  userLevelChange } from '../../net/pull';
 import { popNewMessage, priceFormat, timestampFormat, unicode2ReadStr, unicode2Str } from '../../utils/logic';
-import { addressFormat, getUserType, rippleShow } from '../../utils/tools';
+import { addressFormat, exportExcel, getUserType, rippleShow } from '../../utils/tools';
 interface Props {
     userData:any[];  // 个人数据
     showDataList:any[];  // 显示数据
@@ -27,8 +27,8 @@ interface Props {
     perPage:number;// 每页多少条数据
     expandIndex:boolean;// 分页下拉显示
     perPageIndex:number;// 一页显示多少个的下标
-    indirectPeople:number;// 间推人数    
-    
+    indirectPeople:number;// 间推人数   
+    title:any; 
 }
 const UserTypeLabel = ['白客','海宝','海宝（体验）','海王','市代理','省代理','海王（体验）'];
 const tableTitle = [
@@ -72,7 +72,8 @@ export class VipDetail extends Widget {
         perPage:perPage[0],
         expandIndex:false,
         perPageIndex:0,
-        indirectPeople:0
+        indirectPeople:0,
+        title:['海王','海宝','白客','资金明细','海贝明细','积分明细']
     };
 
     public setProps(props:any) {
@@ -307,5 +308,22 @@ export class VipDetail extends Widget {
     // 动画效果执行
     public onShow(e:any) {
         rippleShow(e);
+    }
+
+    // 导出全部数据
+    public exportAllInfo() {
+        const jsonHead = this.props.showTitleList;
+        const aoa = [jsonHead];
+        const jsonData = this.props.showDataList;
+        for (const v of jsonData) {
+            for (let i = 0;i < v.length;i++) {
+                if (v[i]) {
+                    v[i] = v[i].toString();
+                }  
+            }
+            aoa.push(v);
+        }
+        console.log(aoa);
+        exportExcel(aoa,`${this.props.title[this.props.activeTab]}信息.xlsx`);
     }
 }
