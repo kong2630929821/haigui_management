@@ -183,7 +183,7 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
         if (v[2] === 2) {
             moeny = JSON.stringify(v[3]);
         }
-        const rebate:OrderDetailRebate = [v[0],unicode2ReadStr(v[1]),RebateType[v[2]],moeny,timestampFormat(v[4])];
+        const rebate:OrderDetailRebate = [v[0],unicode2ReadStr(v[1]),RebateType[v[2]],moeny,v[4]===0 ? '' :timestampFormat(v[4])];
         orderRebate.push(rebate);
     }
 
@@ -1139,4 +1139,18 @@ export const rippleShow = (e:any) => {
     setTimeout(() => {
         getRealNode(e.node).classList.remove('ripple');
     }, 500);
+};
+
+// 处理会员流水
+export const processingShare = (r:any) => {
+    if (!r.length) {
+
+        return [];
+    }
+    const data = [];
+    r.forEach((v,i) => {
+        data.push([i + 1,v[0],unicode2Str(v[1]),v[4]]);
+    });
+
+    return data;
 };

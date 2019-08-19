@@ -99,6 +99,7 @@ export class CommodityLibrary extends Widget {
     public filterTimeType(e:any) {
         this.props.expandIndex[0] = false;
         this.props.statusTypeActiveIndex = e.activeIndex;
+        this.props.inputValue = '';
         this.init(1);
     }
 

@@ -9,9 +9,9 @@
     </div>
 
     <div w-class="tabRow" style="margin:20px 0 10px;">
-        <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0)" on-down="onShow">提现申请</div>
-        <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1)" on-down="onShow">处理中</div>
-        <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2)" on-down="onShow">处理完成</div>
+        <div w-class="tabBar {{it.activeTab==0?'activeTab':''}}" on-tap="changeTab(0,e)" on-down="onShow">提现申请</div>
+        <div w-class="tabBar {{it.activeTab==1?'activeTab':''}}" on-tap="changeTab(1,e)" on-down="onShow">处理中</div>
+        <div w-class="tabBar {{it.activeTab==2?'activeTab':''}}" on-tap="changeTab(2,e)" on-down="onShow">处理完成</div>
     </div>
 
     <div w-class="searchBox">

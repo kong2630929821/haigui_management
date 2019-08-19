@@ -339,6 +339,8 @@ export class Withdraw extends Widget {
             this.paint();
         } else {
             this.getData();
+            this.props.timeTypeActiveIndex = 0;
+            this.paint();
         }
     }
 
@@ -371,6 +373,7 @@ export class Withdraw extends Widget {
     public pageClick() {
         if (this.props.showDateBox) {
             this.getData();
+            this.props.timeTypeActiveIndex = 0;
         }
         this.props.showDateBox = false;
         this.props.expandIndex = [false,false];

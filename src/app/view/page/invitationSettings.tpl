@@ -21,6 +21,6 @@
     </div>
     <div w-class="ctroller">
             {{%<!-- <div w-class="searchleft" on-tap="addGradientOut">添加</div> -->}}
-        <div w-class="searchleft" on-tap="application" on-down="onShow">应用</div>
+        {{%<!-- <div w-class="searchleft" on-tap="application" on-down="onShow">应用</div> -->}}
     </div>
 </div>

@@ -70,12 +70,12 @@
     </div>
 
     <div ev-table-detail="goDetail">
-        {{:typeList = ["海王","海宝","白客","资金明细","海贝明细","积分明细"]}}
-        <div w-class="tableTitle">{{typeList[it.activeTab]}}列表</div>
+        <div w-class="tableTitle">{{it.title[it.activeTab]}}列表</div>
         <widget w-tag="app-components-tableDeal">{datas: {{it.curShowDataList}},title:{{it.showTitleList}},needCheckBox:false,inlineBtn2:{{it.activeTab < 3 ? '详情':''}} }</widget>
     </div>
     {{if Math.ceil(it.showDataList.length/it.perPage) > 0}}
     <div w-class="ctroller">
+        <div w-class="searchleft" on-tap="exportAllInfo" on-down="onShow">导出全部信息</div>
         <div ev-changeCurrent="changePage" w-class="pagination"  ev-perPage="perPage" ev-expand="expand">
             <widget w-tag="app-components-pagination">{pages:{{Math.ceil(it.showDataList.length/it.perPage)}},filterShow:true, currentIndex:{{it.curPage}},expand:{{it.expandIndex}},numberCheckActiveIndex:{{it.perPageIndex}} }</widget>
         </div>
