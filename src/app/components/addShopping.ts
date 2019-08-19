@@ -120,7 +120,18 @@ export class AddShopping extends Widget {
             str = this.props.postageActiveIndex;
             arr.splice(1,0,str);
         }
-        
+        // 判断是否出现负数
+        let flag = false;
+        arr.forEach(v => {
+            if (v < 0) {
+                flag = true;
+            }
+        });
+        if (flag) {
+            popNewMessage('参数不能为负数');
+            
+            return;
+        }
         this.ok && this.ok(arr);
     }
 
