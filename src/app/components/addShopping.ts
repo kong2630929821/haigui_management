@@ -80,7 +80,7 @@ export class AddShopping extends Widget {
             this.props.title = this.props.data[0];
             this.props.data.shift();
             this.props.postageActiveIndex = this.props.data[1];
-            this.props.data.splice(2,1);
+            this.props.data.splice(1,1);
         }
     }
 

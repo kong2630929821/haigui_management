@@ -42,7 +42,7 @@ export class InvitationSetting extends Widget {
 
     public create() {
         super.create();
-        this.init(0);
+        this.init(this.props.activeTab);
     }
 
     // 初始化
@@ -79,11 +79,14 @@ export class InvitationSetting extends Widget {
         if (e.fg === 1) {
             // 编辑
             popNew('app-components-addShopping',{ title:'编辑配置',currentData:deepCopy(e.value),sureText:'修改',style:index + 1 },(val) => {
-                popNewMessage('修改成功');
-                this.props.goodsConfig[e.num] = [str,...val];
                 this.props.dataList[e.num] = val;
-                this.props.style = true;
-                this.paint();
+                this.application();
+                this.init(index);
+                // popNewMessage('修改成功');
+                // this.props.goodsConfig[e.num] = [str,...val];
+                // this.props.dataList[e.num] = val;
+                // this.props.style = true;
+                // this.paint();
             });
         } else {
            // 删除
@@ -97,10 +100,10 @@ export class InvitationSetting extends Widget {
 
     // 应用
     public application() {
-        if (!this.props.style) {
+        // if (!this.props.style) {
 
-            return;
-        }
+        //     return;
+        // }
         if (this.props.activeTab === 0) {
             changeGiftSetting('goods',JSON.stringify(this.props.dataList)).then(r => {
                 if (r.result === 1) {
