@@ -108,7 +108,8 @@ export class OpenHWang extends Widget {
         });
         
         const pages = Math.ceil(this.props.showDataList.length / this.props.perPage);
-        this.changePage({ value:this.props.curPage < pages ? this.props.curPage :pages - 1 });
+        const value = this.props.curPage < pages ? this.props.curPage :pages - 1;
+        this.changePage({ value:value < 0 ? 0 :value });
     }
 
     // 获取数据
