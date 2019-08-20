@@ -805,6 +805,8 @@ export const getAllProduct = (start_time:number,end_time:number) => {
                 } else {
                     arr[index][7] = '无';
                 }
+                // 已下单未支付数量不能为负数
+                arr[index][3] = arr[index][3] < 0 ? 0 :arr[index][3];
             });
                 
             return [num,arr];
