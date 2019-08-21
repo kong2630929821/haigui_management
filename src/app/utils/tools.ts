@@ -183,7 +183,7 @@ export const parseOrderDetailShow = (info: Order, status: OrderStatus) => {
         if (v[2] === 2) {
             moeny = JSON.stringify(v[3]);
         }
-        const rebate:OrderDetailRebate = [v[0],unicode2ReadStr(v[1]),RebateType[v[2]],moeny,v[4]===0 ? '' :timestampFormat(v[4])];
+        const rebate:OrderDetailRebate = [v[0],unicode2ReadStr(v[1]),RebateType[v[2]],moeny,v[4] === 0 ? '' :timestampFormat(v[4])];
         orderRebate.push(rebate);
     }
 
@@ -637,9 +637,14 @@ export const analysisInventoryData = (res) => {
 
             return ;
         }
-        const fg = isReturn([id,amount,supplierPrice,Lable1,supplierSku,supplierGoodsId,returnAddress,people,phone],i);
+        const fg = isReturn([id,supplierPrice,Lable1,supplierSku,supplierGoodsId,returnAddress,people,phone],i);
         if (fg) {  // 有错误退出
             return;
+        }
+        if (amount < 0) {
+            popNewMessage(`第${i + 2}行有库存为负数或类型不正确`);
+
+            return ;
         }
         if (shelfLife !== '') {
             data.push(transitTimeStamp(shelfLife[0]));
@@ -662,20 +667,19 @@ const isReturn = (arr,ind) => {
         if (!arr[i]) {
             switch (i) {
                 case 0: popNewMessage(`第${ind + 2}行id为空或类型不正确`); break;
-                case 1: popNewMessage(`第${ind + 2}行库存为空或类型不正确`); break;
-                case 2: popNewMessage(`第${ind + 2}行供货价为空或类型不正确`); break;
-                case 3: popNewMessage(`第${ind + 2}行sku名为空或类型不正确`); break;
-                case 4: popNewMessage(`第${ind + 2}行供应商SKU为空或类型不正确`); break;
-                case 5: popNewMessage(`第${ind + 2}行供应商商品ID为空或类型不正确`); break;
-                case 6: popNewMessage(`第${ind + 2}行退货信息为空或类型不正确`); break;
-                case 7: popNewMessage(`第${ind + 2}行收货人为空或类型不正确`); break;
-                case 8: popNewMessage(`第${ind + 2}行手机号码为空或类型不正确`); break;
+                case 1: popNewMessage(`第${ind + 2}行供货价为空或类型不正确`); break;
+                case 2: popNewMessage(`第${ind + 2}行sku名为空或类型不正确`); break;
+                case 3: popNewMessage(`第${ind + 2}行供应商SKU为空或类型不正确`); break;
+                case 4: popNewMessage(`第${ind + 2}行供应商商品ID为空或类型不正确`); break;
+                case 5: popNewMessage(`第${ind + 2}行退货信息为空或类型不正确`); break;
+                case 6: popNewMessage(`第${ind + 2}行收货人为空或类型不正确`); break;
+                case 7: popNewMessage(`第${ind + 2}行手机号码为空或类型不正确`); break;
                 default:
             }
 
             return true;
 
-        } else if (!/^1[3456789]\d{9}$/.test(arr[8])) {
+        } else if (!/^1[3456789]\d{9}$/.test(arr[7])) {
             popNewMessage(`第${ind + 2}行手机号码为空或类型不正确`);
 
             return true;
