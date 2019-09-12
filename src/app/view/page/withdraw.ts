@@ -152,7 +152,7 @@ export class Withdraw extends Widget {
         } 
         this.props.allDataWithdrawIdList = this.props.withdrawIdList;
         const pages = Math.ceil(this.props.showDataList.length / this.props.perPage);
-        this.changePage({ value:this.props.curPage < pages ? this.props.curPage :pages - 1 });
+        this.changePage({ value:this.props.curPage < pages ? (this.props.curPage < 0 ? 0 :this.props.curPage) :pages - 1 });
     }
 
     // 获取数据
@@ -160,7 +160,7 @@ export class Withdraw extends Widget {
         // userNum:number; // 今日提现人数
         // dayMoney:string; // 今日提现金额
         // monthTotal:string; // 本月提现金额
-        getWithdrawTotal(Date.parse(this.props.startTime),Date.parse(this.props.endTime)).then(r => {
+        getWithdrawTotal(Date.parse(this.props.startTime),Date.parse(this.props.endTime),this.props.active).then(r => {
             this.props.pool = [
                 { key:'当日提现人数',value:r.day_count,src:'../../res/images/defultUser.png' },
                 { key:'当日提现金额',value:priceFormat(r.day_money),src:'../../res/images/money.png' },
@@ -176,6 +176,7 @@ export class Withdraw extends Widget {
         getWithdrawApply(Date.parse(this.props.startTime),Date.parse(this.props.endTime),this.props.active).then(r => {
             this.props.datas = [];
             this.props.showDataList = [];
+            this.props.curShowDataList = [];
             if (r.value && r.value.length > 0) {
                 this.props.datas = r.value.map(item => {
                     return [

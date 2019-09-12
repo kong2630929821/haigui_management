@@ -182,9 +182,10 @@ export class OnShelvesImg extends Widget {
         arr.skus.forEach(v => {
             searchProduct(v[1]).then(r => {
                 this.props.selectData.push(r[0]);
+                this.props.spreadList.push([v[1],Number(v[3])]);
                 this.paint();
             });
-            this.props.spreadList.push([v[1],Number(v[3])]);
+            
         });
         // 商品ID
         this.props.shopId = arr.id;
@@ -333,8 +334,9 @@ export class OnShelvesImg extends Widget {
         }
 
         // 添加商品时售价小于SKU供货价无提示信息
-        this.props.selectData.forEach(v => {
-            if (origin / 100 < JSON.parse(v[6].substring(1))) {
+        this.props.selectData.forEach((v,i) => {
+            const min = Math.min(origin,vip_price,discount);
+            if ((min / 100) + Math.round(Number(this.props.spreadList[i][1])) < JSON.parse(v[6].substring(1))) {
                 flag = true;
 
                 return ;

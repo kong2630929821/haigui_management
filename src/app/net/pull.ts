@@ -484,12 +484,13 @@ export const changeHWangState = (id:number,uid:number,state:number,reason:string
 /**
  * 获取提现统计
  */
-export const getWithdrawTotal = (start_time:number,end_time:number) => {
+export const getWithdrawTotal = (start_time:number,end_time:number,time_type:number) => {
     const msg = {
         type:'mall_mgr/members@get_withdraw_total',
         param:{
             start_time,
-            end_time
+            end_time,
+            time_type
         }
     };
 
