@@ -223,6 +223,7 @@ export class TotalOrder extends Widget {
     public async exportAllOrder() {
         this.closeClick();
         this.loadding = popNew('app-components-loading',{ text:'订单导出中……' });
+        this.exportAllDatas = [];
         this.exportAll(1);
     }
 

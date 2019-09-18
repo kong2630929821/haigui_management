@@ -248,6 +248,9 @@ export class CommodityLibrary extends Widget {
     // 导出全部数据
     public exportAllGoods() {
         this.close();
+        this.exportAllDatas = [
+            ['商品ID','商品名称','商品规格(SKU/规格/差价)','商品类型','供应商id','供应商名称','品牌id','地区id','库存数量','供货价','成本价','原价','会员价','折后价','税费','分组列表','上架状态','上架时间','保质期','供应商sku','外码','SPU']
+        ];  
         this.exportAllDatas.splice(1);  // 只保留标题
         this.loadding = popNew('app-components-loading',{ text:'商品导出中……' });
         this.exportShop(1);
@@ -272,6 +275,7 @@ export class CommodityLibrary extends Widget {
                         this.exportAllDatas.push(v);
                     }
                     num += 200;
+                    console.log(`这是导出的全部商品数据${this.exportAllDatas}`);
                     if (num >= this.props.shopNum) {
                         exportExcel(this.exportAllDatas,`商品信息表.xlsx`);
                         this.loadding && this.loadding.callback(this.loadding.widget);
