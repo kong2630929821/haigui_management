@@ -251,7 +251,7 @@ export class TotalOrder extends Widget {
                             v.pop();
                         });
                     }
-                    num += 200;
+                    num += (num === 1 ? 199 :200);
                     if (num >= this.props.totalCount) {
                         const supplierId = Number(this.props.supplierList[this.props.supplierActiveIndex]);
                         const status = this.props.orderType[this.props.orderTypeActiveIndex].status;
